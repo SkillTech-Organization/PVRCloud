@@ -1,0 +1,2 @@
+--eredeti ertek:67u81k45m67u88k
+ update edg_edge set EDG_ETLCODE= '' where ID = 494913

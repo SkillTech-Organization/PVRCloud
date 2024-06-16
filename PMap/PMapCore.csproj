@@ -1,0 +1,435 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3E3FE032-B237-479B-938B-63F693265432}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PMapCore</RootNamespace>
+    <AssemblyName>PMapCore</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>map.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="BCrypt.Net-Next.StrongName, Version=2.1.0.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.StrongName.2.1.0\lib\net452\BCrypt.Net-Next.StrongName.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LZ4, Version=1.0.15.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
+      <HintPath>..\packages\lz4net.1.0.15.93\lib\net4-client\LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.8.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.8.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.8.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=8.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.8.7.0\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SqlClient, Version=4.6.1.4, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.8.4\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Design">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Spatial, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.8.2\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Deployment">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLL\Base\bllBase.cs" />
+    <Compile Include="BLL\bllIDGen.cs" />
+    <Compile Include="BLL\bllPackUnit.cs" />
+    <Compile Include="BLL\bllUser.cs" />
+    <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
+    <Compile Include="BLL\Report\bllRepPlan.cs" />
+    <Compile Include="BO\Base\boXBase.cs" />
+    <Compile Include="BO\boPackUnit.cs" />
+    <Compile Include="BO\boUser.cs" />
+    <Compile Include="BO\Report\boRepPlan.cs" />
+    <Compile Include="Cache\LockForRouteCache.cs" />
+    <Compile Include="Cache\RouteCache.cs" />
+    <Compile Include="Common\AuthCryptoHelper.cs" />
+    <Compile Include="Common\Azure\AzureBllBase.cs" />
+    <Compile Include="Common\AESCryptoHelper.cs" />
+    <Compile Include="Common\PPlan\CTourDetails.cs" />
+    <Compile Include="Common\PPlan\PlanEventArgs.cs" />
+    <Compile Include="Common\PPlan\PlanParams.cs" />
+    <Compile Include="Common\PPlan\PPlanCommonVars.cs" />
+    <Compile Include="LongProcess\CalcRoutesForTour.cs" />
+    <Compile Include="LongProcess\DeleteExpiredRoutesProcess.cs" />
+    <Compile Include="LongProcess\WriteRoutesProcess.cs" />
+    <Compile Include="Common\Attrib\AzureTableFieldAttr.cs" />
+    <Compile Include="BO\DataXChange\boXChkRes.cs" />
+    <Compile Include="BO\DataXChange\boXChkRoute.cs" />
+    <Compile Include="Common\Attrib\WriteFieldAttribute.cs" />
+    <Compile Include="BLL\bllApp.cs" />
+    <Compile Include="BLL\bllCapacityProf.cs" />
+    <Compile Include="BLL\bllCargoType.cs" />
+    <Compile Include="BLL\bllCarrier.cs" />
+    <Compile Include="BLL\bllEtoll.cs" />
+    <Compile Include="BLL\bllOrder.cs" />
+    <Compile Include="BLL\bllOrderType.cs" />
+    <Compile Include="BLL\bllSpeedProf.cs" />
+    <Compile Include="BLL\bllTariffProf.cs" />
+    <Compile Include="BLL\bllZIP.cs" />
+    <Compile Include="BLL\bllDepot.cs" />
+    <Compile Include="BLL\bllOptimize.cs" />
+    <Compile Include="BLL\bllWarehouse.cs" />
+    <Compile Include="BLL\DataXChange\dtXOrder.cs" />
+    <Compile Include="BO\boCargoType.cs" />
+    <Compile Include="BO\boEtoll.cs" />
+    <Compile Include="BO\boNode.cs" />
+    <Compile Include="BO\boOrder.cs" />
+    <Compile Include="BO\boOrderType.cs" />
+    <Compile Include="BO\boTourOrder.cs" />
+    <Compile Include="BO\DataXChange\boXDepotRes.cs" />
+    <Compile Include="BO\DataXChange\boXNewPlan.cs" />
+    <Compile Include="BO\DataXChange\boXOrder.cs" />
+    <Compile Include="BO\DataXChange\boXFullPlan.cs" />
+    <Compile Include="BO\DataXChange\boXPlan.cs" />
+    <Compile Include="BO\DataXChange\boXPlanOrder.cs" />
+    <Compile Include="BO\DataXChange\boXPlanTour.cs" />
+    <Compile Include="BLL\DataXChange\dtXTruck.cs" />
+    <Compile Include="BO\boApp.cs" />
+    <Compile Include="BO\boCapacityProf.cs" />
+    <Compile Include="BO\boCarrier.cs" />
+    <Compile Include="BO\boSpeedProf.cs" />
+    <Compile Include="BO\boTariffProf.cs" />
+    <Compile Include="BO\DataXChange\boXTruck.cs" />
+    <Compile Include="BO\boZIP.cs" />
+    <Compile Include="BO\boActivePlanInfo.cs" />
+    <Compile Include="BO\boDepot.cs" />
+    <Compile Include="BO\boRoute.cs" />
+    <Compile Include="BO\boEdge.cs" />
+    <Compile Include="BO\boOptimize.cs" />
+    <Compile Include="BO\boPlan.cs" />
+    <Compile Include="BO\boSpeedProfValues.cs" />
+    <Compile Include="BO\boPlanTour.cs" />
+    <Compile Include="BO\boPlanTourPoint.cs" />
+    <Compile Include="BO\boTruck.cs" />
+    <Compile Include="BO\boPlanOrder.cs" />
+    <Compile Include="BO\boWarehouse.cs" />
+    <Compile Include="BO\DataXChange\boXDepot.cs" />
+    <Compile Include="Common\ApplicationInfo.cs" />
+    <Compile Include="Common\Attrib\AttribUtils.cs" />
+    <Compile Include="Common\Attrib\DisplayNameAttributeX.cs" />
+    <Compile Include="Common\Attrib\EditorX.cs" />
+    <Compile Include="Common\Attrib\EvalBase.cs" />
+    <Compile Include="Common\Attrib\ItemIDAttr.cs" />
+    <Compile Include="Common\Attrib\PropertyOrderX.cs" />
+    <Compile Include="Common\Attrib\ErrorIfAttrX.cs" />
+    <Compile Include="Common\Attrib\AzureTablePartitionKeyAttr.cs" />
+    <Compile Include="Common\Attrib\AzureTableRowKeyAttr.cs" />
+    <Compile Include="Common\Attrib\AzurePartitionAttr.cs" />
+    <Compile Include="Common\Attrib\AzureRowAttr.cs" />
+    <Compile Include="Common\Azure\AzureItemKeys.cs" />
+    <Compile Include="Common\Azure\AzureTableObjBase.cs" />
+    <Compile Include="Common\Azure\AzureTableStore.cs" />
+    <Compile Include="Common\Azure\AzureLogX.cs" />
+    <Compile Include="Common\Azure\AzureUtils.cs" />
+    <Compile Include="Common\BinarySerializer.cs" />
+    <Compile Include="Common\CSVParser.cs" />
+    <Compile Include="Common\Exceptions.cs" />
+    <Compile Include="Common\LockHolder.cs" />
+    <Compile Include="Common\ObjectValidator.cs" />
+    <Compile Include="Common\PMapLog.cs" />
+    <Compile Include="BLL\DataXChange\dtXResult.cs" />
+    <Compile Include="BLL\DataXChange\dtXDepot.cs" />
+    <Compile Include="DB\Base\DBAccess.cs" />
+    <Compile Include="DB\Base\SQLServerAccess.cs" />
+    <Compile Include="DB\Base\TransactionBlock.cs" />
+    <Compile Include="BLL\bllHistory.cs" />
+    <Compile Include="BLL\bllMapFormPar.cs" />
+    <Compile Include="BLL\bllPlan.cs" />
+    <Compile Include="BLL\bllPlanCheck.cs" />
+    <Compile Include="BLL\bllPlanEdit.cs" />
+    <Compile Include="BLL\bllRoute.cs" />
+    <Compile Include="BLL\bllSemaphore.cs" />
+    <Compile Include="BLL\bllTruck.cs" />
+    <Compile Include="DB\DBLockHolder.cs" />
+    <Compile Include="Common\GlobalLocker.cs" />
+    <Compile Include="Strings\Base\Messages.cs" />
+    <Compile Include="Strings\DXMessages.cs" />
+    <Compile Include="LongProcess\GetTourDetailsProcess.cs" />
+    <Compile Include="LongProcess\CalcPMapRouteProcess.cs" />
+    <Compile Include="LongProcess\InitRouteDataProcess.cs" />
+    <Compile Include="LongProcess\OCAddrProcess.cs" />
+    <Compile Include="LongProcess\StartPMapRoutesByOrders.cs" />
+    <Compile Include="LongProcess\TollExportProcess.cs" />
+    <Compile Include="LongProcess\TourOptimizerProcess.cs" />
+    <Compile Include="Strings\PMapMessages.cs" />
+    <Compile Include="Common\PMapCommonVars.cs" />
+    <Compile Include="Route\CRoutePars.cs" />
+    <Compile Include="Route\RouteData.cs" />
+    <Compile Include="Route\PMapRoutingProvider.cs" />
+    <Compile Include="Route\BasicHeap.cs" />
+    <Compile Include="Route\RouteCalculator.cs" />
+    <Compile Include="Route\HeapNode.cs" />
+    <Compile Include="Common\Global.cs" />
+    <Compile Include="Common\PMapIniParams.cs" />
+    <Compile Include="LongProcess\Base\BaseLongProcess.cs" />
+    <Compile Include="Route\PMRouteInterface.cs" />
+    <Compile Include="Common\INIFile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Common\Util.cs" />
+    <Compile Include="Common\XMLSerializator.cs" />
+    <None Include="sn.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
+      <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
+      <Name>GMap.NET.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\map.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shadow50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bigMarker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flag2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flag3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\editorloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gridloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ppreviewloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="map.ico" />
+    <None Include="Resources\editorloc_hu1.txt" />
+    <None Include="Resources\gridloc_hu1.txt" />
+    <None Include="Resources\ppreviewloc_hu1.txt" />
+    <Content Include="Resources\printer.png" />
+    <None Include="Resources\tray\11.ico" />
+    <None Include="Resources\tray\10.ico" />
+    <None Include="Resources\tray\8.ico" />
+    <None Include="Resources\tray\6.ico" />
+    <None Include="Resources\tray\5.ico" />
+    <None Include="Resources\tray\3.ico" />
+    <None Include="Resources\tray\1.ico" />
+    <None Include="Resources\tray\13.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

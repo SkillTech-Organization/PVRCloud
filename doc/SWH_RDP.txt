@@ -1,0 +1,7 @@
+RDP kapcsolat: softwarehouse.noip.me:3391
+
+usr: pratix1
+
+psw: PTix623779
+
+ 
