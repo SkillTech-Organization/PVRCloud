@@ -1,2 +1,6 @@
+# bin and obj directories
+bin/
+obj/
+
 # mac specific file
 .DS_Store
