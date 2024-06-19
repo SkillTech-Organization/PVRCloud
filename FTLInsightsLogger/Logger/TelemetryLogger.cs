@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using FTLInsightsLogger.Settings;
-using System.Windows.Forms;
 using CommonUtils;
 
 namespace FTLInsightsLogger.Logger

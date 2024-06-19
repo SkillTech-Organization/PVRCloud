@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using System.Diagnostics;
 using PMapCore.Common;
 
@@ -24,14 +23,14 @@ namespace PMapCore.LongProcess.Base
 
 
         protected ThreadPriority m_ThreadPriority;
- 
+
         public BaseLongProcess(ThreadPriority p_ThreadPriority)
         {
             m_ThreadPriority = p_ThreadPriority;
             init();
         }
 
- 
+
         private void init()
         {
 

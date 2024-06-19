@@ -12,7 +12,6 @@ using PMapCore.BLL.Base;
 using PMapCore.Common;
 using System.Globalization;
 using PMapCore.Strings;
-using System.Windows.Forms;
 using PMapCore.BO.DataXChange;
 using System.Runtime.ExceptionServices;
 using PMapCore.Common.PPlan;
@@ -109,7 +108,7 @@ namespace PMapCore.BLL
 
                     if (p_reOrder)
                     {
-                        //CTE-vel átszámolás 
+                        //CTE-vel átszámolás
                         /*
                         string sSQL = "WITH CTE_Main AS ( " + Environment.NewLine +
                                       "select " + Environment.NewLine +
@@ -249,8 +248,8 @@ namespace PMapCore.BLL
         }
 
         /// <summary>
-        /// Különböző árutipus-mennyiségekből rakodási mennyiség generálása. 
-        /// 
+        /// Különböző árutipus-mennyiségekből rakodási mennyiség generálása.
+        ///
         /// Megjegyzés: A QTY4 -es dohányárut jelent, annak nincs mennyisége!!!
         /// /// </summary>
         /// <param name="p_QTY1"></param>
@@ -392,7 +391,7 @@ namespace PMapCore.BLL
         /// <param name="p_TRK_ETOLLCAT">Jármű útdíjkategória</param>
         /// <param name="p_TollMultiplier">Jármű útdíjszorzó</param>
         /// <param name="p_lastETLCODE">A számolandó útvonal előtti útdíjal elszámolt szakasz azonosítója. A Törvény úgy szól, hogy minden megkezdett szakaszra kell kifizetni az útdíjat.
-        /// Amennyiben a kiszámolandó útszakasz egy olyan útvonal KÖZVETLEN folytatása, amelyre már lett útdíj elszámolva, a p_lastETLCODE-adjuk át a legutolsó útdíjazonosítót (és arra már 
+        /// Amennyiben a kiszámolandó útszakasz egy olyan útvonal KÖZVETLEN folytatása, amelyre már lett útdíj elszámolva, a p_lastETLCODE-adjuk át a legutolsó útdíjazonosítót (és arra már
         /// nem számol díjat). A rutin ezt a paramétert visszadja, hogy amennyiben a következő  számítás evvel az útszakasszal kezdődne, ne számoljunk el arra már díjat.</param>
         /// <returns></returns>
         public static double GetToll(List<boEdge> p_Edges, int p_TRK_ETOLLCAT, double p_TollMultiplier, ref string p_lastETLCODE)
@@ -863,9 +862,9 @@ namespace PMapCore.BLL
         }
 
         //Környezetvédelmi kategóriánkénti szorzók (J1 kategória = 0)
-        //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória    
+        //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória
         //A kategória (≥EURO III.)	        0,85	            0,85
-        //B kategória (EURO II.)	        1	                  1   
+        //B kategória (EURO II.)	        1	                  1
         //C kategória (≤ EURO I.)	        1,15	            1,2
 
 
@@ -891,7 +890,7 @@ namespace PMapCore.BLL
                     dMultiplier = 1.2;
 
             }
-             
+
             return dMultiplier;
         }
 
