@@ -10,7 +10,6 @@ using PMapCore.BO;
 using System.Data;
 using PMapCore.Strings;
 using System.IO;
-using System.Windows.Forms;
 using PMapCore.Common;
 
 namespace PMapCore.LongProcess
@@ -46,7 +45,7 @@ namespace PMapCore.LongProcess
             //Környezetvédelmi kategóriánkénti szorzók
             //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória
             //A kategória (≥EURO III.)	        0,85 	            0,85
-            //B kategória (EURO II.)	        1	                  1   
+            //B kategória (EURO II.)	        1	                  1
             //C kategória (≤ EURO I.)	        1,15	            1,2
 
             public double TollJ2_A { get; set; }
@@ -219,7 +218,7 @@ namespace PMapCore.LongProcess
                                     //Környezetvédelmi kategóriánkénti szorzók
                                     //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória
                                     //A kategória (≥EURO III.)	        0,85 	            0,85
-                                    //B kategória (EURO II.)	        1	                  1   
+                                    //B kategória (EURO II.)	        1	                  1
                                     //C kategória (≤ EURO I.)	        1,15	            1,2
 
                                     res.TollJ2_A += edge.Tolls[Global.ETOLLCAT_J2] * 0.85;
@@ -264,7 +263,7 @@ namespace PMapCore.LongProcess
         private void writeExpFile(string p_FileName, List<CResult> p_result)
         {
             TextWriter tw = new StreamWriter(p_FileName, false, Encoding.GetEncoding(Global.PM_ENCODING));
-  
+
             tw.Write("Indulás megnevezés;" +
                 "Érkezés megnevezés;" +
                 "Indulás lng;" +

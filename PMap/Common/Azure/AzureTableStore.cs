@@ -14,7 +14,6 @@ using System.Text;
 using System.Web;
 using System.Net;
 using System.Linq.Expressions;
-using Microsoft.WindowsAzure.Storage.Table.Queryable;
 using System.Threading.Tasks;
 using PMapCore.Common.Attrib;
 using Newtonsoft.Json;
@@ -134,7 +133,7 @@ namespace PMapCore.Common.Azure
 
                         if (propInf.CanWrite)
                         {
-                           
+
                             var val = tp.GetProperty(propInf.Name).GetValue(p_obj, null);
                             if (propInf.PropertyType == typeof(bool?) || propInf.PropertyType == typeof(bool))
                                 TableEntity.Properties.Add(propInf.Name, new EntityProperty((bool?)val));
@@ -379,7 +378,7 @@ namespace PMapCore.Common.Azure
                 InitTableStore();
                 CloudTable table = null;
                 table = m_client.GetTableReference(p_tableName);
-                bool bOK = table.DeleteIfExists();
+                bool bOK = table.DeleteIfExistsAsync().Result;
                 return bOK;
             }
             catch (StorageException sex)
@@ -414,11 +413,11 @@ namespace PMapCore.Common.Azure
                 DynamicTableEntity dynObj = cloneForWrite(p_obj);
                 CloudTable table = null;
                 table = m_client.GetTableReference(p_obj.GetType().Name);
-                table.CreateIfNotExists();
+                table.CreateIfNotExistsAsync().Wait();
 
                 TableOperation insertOperation = TableOperation.InsertOrReplace(dynObj);
 
-                TableResult res = table.Execute(insertOperation);
+                TableResult res = table.ExecuteAsync(insertOperation).Result;
                 bool bOK = parseHttpStatus(res.HttpStatusCode);
                 if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
@@ -457,7 +456,7 @@ namespace PMapCore.Common.Azure
 
             CloudTable table = null;
             table = m_client.GetTableReference(t.Name);
-            table.CreateIfNotExists();
+            _ = table.CreateIfNotExistsAsync().Result;
 
             PropertyInfo PartitionKeyProp = t.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
             if (PartitionKeyProp == null)
@@ -518,7 +517,7 @@ namespace PMapCore.Common.Azure
                     }
 
                     // submit
-                    var results = table.ExecuteBatch(batch);
+                    var results = table.ExecuteBatchAsync(batch).Result;
                     foreach (var res in results)
                     {
                         bool bOK = parseHttpStatus(res.HttpStatusCode);
@@ -567,9 +566,9 @@ namespace PMapCore.Common.Azure
                 dynObj.ETag = "*";
                 CloudTable table = null;
                 table = m_client.GetTableReference(p_obj.GetType().Name);
-                table.CreateIfNotExists();
+                table.CreateIfNotExistsAsync().Wait();
                 TableOperation modifyOperation = TableOperation.Replace(dynObj);
-                TableResult res = table.Execute(modifyOperation);
+                TableResult res = table.ExecuteAsync(modifyOperation).Result;
                 bool bOK = parseHttpStatus(res.HttpStatusCode);
                 if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
@@ -620,9 +619,9 @@ namespace PMapCore.Common.Azure
 
                 CloudTable table = null;
                 table = m_client.GetTableReference(p_obj.GetType().Name);
-                table.CreateIfNotExists();
+                table.CreateIfNotExistsAsync().Wait();
                 TableOperation deleteOperation = TableOperation.Delete(dynObj);
-                TableResult res = table.Execute(deleteOperation);
+                TableResult res = table.ExecuteAsync(deleteOperation).Result;
                 bool bOK = parseHttpStatus(res.HttpStatusCode);
                 if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
@@ -673,7 +672,7 @@ namespace PMapCore.Common.Azure
 
                     CloudTable table = null;
                     table = m_client.GetTableReference(t.Name);
-                    table.CreateIfNotExists();
+                    table.CreateIfNotExistsAsync().Wait();
 
                     Action<IEnumerable<DynamicTableEntity>> processor = entities =>
                     {
@@ -692,7 +691,7 @@ namespace PMapCore.Common.Azure
 
                             if (batch.Count == BATCHSIZE)
                             {
-                                table.ExecuteBatch(batch);
+                                table.ExecuteBatchAsync(batch).Wait();
                                 batches[entity.RowKey] = new TableBatchOperation();
                             }
                         }
@@ -701,7 +700,7 @@ namespace PMapCore.Common.Azure
                         {
                             if (batch.Count > 0)
                             {
-                                table.ExecuteBatch(batch);
+                                table.ExecuteBatchAsync(batch).Wait();
                             }
                         }
                     };
@@ -750,7 +749,7 @@ namespace PMapCore.Common.Azure
 
 
                 var query = new TableQuery<DynamicTableEntity>().Where(segmentFilter).Take(BATCHSIZE);
-                segment = table.ExecuteQuerySegmented<DynamicTableEntity>(query, segment == null ? null : segment.ContinuationToken);
+                segment = table.ExecuteQuerySegmentedAsync(query, segment?.ContinuationToken).Result;
 
                 processor(segment.Results);
             }
@@ -780,7 +779,7 @@ namespace PMapCore.Common.Azure
                 InitTableStore();
                 CloudTable table = null;
                 table = m_client.GetTableReference(typeof(T).Name);
-                table.CreateIfNotExists();
+                table.CreateIfNotExistsAsync().Wait();
 
                 Type t = typeof(T);
 
@@ -792,7 +791,7 @@ namespace PMapCore.Common.Azure
                 TableOperation retrieveOperation = TableOperation.Retrieve<DynamicTableEntity>(
                                 GetValidAzureKeyValue(PartitionKeyProp.PropertyType, p_partitionKey),
                                 GetValidAzureKeyValue(RowKeyProp == null ? typeof(string) : RowKeyProp.PropertyType, p_rowKey));
-                TableResult res = table.Execute(retrieveOperation);
+                TableResult res = table.ExecuteAsync(retrieveOperation).Result;
                 if (parseHttpStatus(res.HttpStatusCode) && res.Result != null)
                 {
                     var o = getFromDynamic<T>((DynamicTableEntity)res.Result);
@@ -816,11 +815,11 @@ namespace PMapCore.Common.Azure
         // Nagy tömegű, szegmentált lekérdezés:http://stackoverflow.com/questions/33162412/can-you-expose-azure-table-storage-iqueryable-table-createquery-as-poco
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        /// 
+        ///
 
 
         public List<T> RetrieveList<T>()
@@ -852,7 +851,7 @@ namespace PMapCore.Common.Azure
                 InitTableStore();
                 CloudTable table = null;
                 table = m_client.GetTableReference(typeof(T).Name);
-                table.CreateIfNotExists();
+                table.CreateIfNotExistsAsync().Wait();
 
                 TableQuery<DynamicTableEntity> query;
                 if (p_where != "")
@@ -864,7 +863,8 @@ namespace PMapCore.Common.Azure
                 {
                     query = new TableQuery<DynamicTableEntity>();
                 }
-                var res = table.ExecuteQuery(query);
+                var originalRes = table.GetType().GetMethod("ExecuteQuery").Invoke(table, [query]);
+                var res = originalRes as IEnumerable<DynamicTableEntity>;
                 if (res.Any())
                 {
                     foreach (DynamicTableEntity item in res)
@@ -963,7 +963,7 @@ namespace PMapCore.Common.Azure
 
                     CloudTable table = null;
                     table = m_client.GetTableReference(t.Name);
-                    table.CreateIfNotExists();
+                    table.CreateIfNotExistsAsync().Wait();
 
                     Action<IEnumerable<DynamicTableEntity>> processor = entities =>
                     {
@@ -982,7 +982,7 @@ namespace PMapCore.Common.Azure
 
                             if (batch.Count == BATCHSIZE)
                             {
-                                table.ExecuteBatch(batch);
+                                table.ExecuteBatchAsync(batch).Wait();
                                 batches[entity.RowKey] = new TableBatchOperation();
                             }
                         }
@@ -991,7 +991,7 @@ namespace PMapCore.Common.Azure
                         {
                             if (batch.Count > 0)
                             {
-                                var lstRes = table.ExecuteBatch(batch);
+                                var lstRes = table.ExecuteBatchAsync(batch).Result;
                                 foreach (var res in lstRes)
                                 {
                                     if (parseHttpStatus(res.HttpStatusCode) && res.Result != null)

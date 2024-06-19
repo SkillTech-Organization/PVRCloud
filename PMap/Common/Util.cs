@@ -13,7 +13,6 @@ using System.Diagnostics;
 using System.Reflection;
 using Microsoft.Win32;
 using System.Security.AccessControl;
-using System.Windows.Forms;
 using System.IO.Compression;
 using System.Globalization;
 using System.Net;
@@ -63,7 +62,7 @@ namespace PMapCore.Common
         );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="p_tosplit"></param>
         /// <param name="p_splitby"></param>
@@ -113,7 +112,7 @@ namespace PMapCore.Common
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="p_s"></param>
         /// <param name="p_file"></param>
@@ -196,7 +195,7 @@ namespace PMapCore.Common
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
@@ -230,7 +229,7 @@ namespace PMapCore.Common
 
             StringBuilder s = new StringBuilder();
 
-            const int MAX_BUFFER = 1048576; //1MB 
+            const int MAX_BUFFER = 1048576; //1MB
             byte[] buffer = new byte[MAX_BUFFER];
             int bytesRead;
             int cycle = 0;
@@ -261,7 +260,7 @@ namespace PMapCore.Common
             return ret;
         }
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="filename"></param>
             /// <returns></returns>
@@ -339,7 +338,7 @@ namespace PMapCore.Common
         }
 
         /// <summary>
-        /// Ketteoszt egy tombot: a,1,b,2,c,3 => a,b,c/1,2,3 
+        /// Ketteoszt egy tombot: a,1,b,2,c,3 => a,b,c/1,2,3
         /// </summary>
         /// <param name="input">Bemeneti tomb</param>
         /// <param name="output1">Kimeneti tomb1</param>
@@ -404,7 +403,7 @@ namespace PMapCore.Common
             return temp;
         }
 
-     
+
         /// <summary>
         /// Decimal-e egy string
         /// </summary>
@@ -659,7 +658,7 @@ namespace PMapCore.Common
             return Math.Abs((Xp * (Ya - Yb) + Yp * (Xb - Xa) + (Xa * Yb - Xb * Ya))
                     / div);
         }
-      
+
 
 
         private static double FindDistanceToSegment(PointF pt, PointF p1, PointF p2, out PointF closest)
@@ -702,7 +701,7 @@ namespace PMapCore.Common
 
             return Math.Sqrt(dx * dx + dy * dy);
         }
-        /* 
+        /*
         //Compute the dot product AB . AC
         private static double DotProduct(double[] pointA, double[] pointB, double[] pointC)
         {
@@ -1047,7 +1046,9 @@ namespace PMapCore.Common
         }
         public static int GetObjectSize(object TestObject)
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             BinaryFormatter bf = new BinaryFormatter();
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             MemoryStream ms = new MemoryStream();
             byte[] Array;
             bf.Serialize(ms, TestObject);
@@ -1191,8 +1192,8 @@ namespace PMapCore.Common
             Type typeDest = p_destination.GetType();
             Type typeSrc = p_source.GetType();
 
-            // Iterate the Properties of the source instance and  
-            // populate them from their desination counterparts  
+            // Iterate the Properties of the source instance and
+            // populate them from their desination counterparts
             PropertyInfo[] srcProps = typeSrc.GetProperties();
             foreach (PropertyInfo srcProp in srcProps)
             {
