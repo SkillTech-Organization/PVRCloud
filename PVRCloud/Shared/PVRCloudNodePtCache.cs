@@ -1,15 +1,17 @@
-﻿namespace PVRCloud.Shared;
+﻿using System.Collections.Concurrent;
 
-public class FTLNodePtCache
+namespace PVRCloud.Shared;
+
+public class PVRCloudNodePtCache
 {
     public static object Locker = new object();
 
-    public System.Collections.Concurrent.ConcurrentDictionary<string, int> Items = null;
+    public ConcurrentDictionary<string, int> Items = null;
 
-    private static readonly Lazy<FTLNodePtCache> m_instance = new Lazy<FTLNodePtCache>(() => new FTLNodePtCache(), true);
+    private static readonly Lazy<PVRCloudNodePtCache> m_instance = new Lazy<PVRCloudNodePtCache>(() => new PVRCloudNodePtCache(), true);
 
 
-    static public FTLNodePtCache Instance
+    static public PVRCloudNodePtCache Instance
     {
         get
         {
@@ -17,8 +19,8 @@ public class FTLNodePtCache
         }
     }
 
-    private FTLNodePtCache()
+    private PVRCloudNodePtCache()
     {
-        Items = new System.Collections.Concurrent.ConcurrentDictionary<string, int>();
+        Items = new ConcurrentDictionary<string, int>();
     }
 }

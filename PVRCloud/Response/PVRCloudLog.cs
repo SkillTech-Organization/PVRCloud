@@ -3,7 +3,7 @@ using Newtonsoft.Json.Converters;
 
 namespace PVRCloud.Response;
 
-public class FTLLog
+public class PVRCloudLog
 {
     public DateTime Timestamp { get; set; }
 

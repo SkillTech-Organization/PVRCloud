@@ -5,11 +5,11 @@ using System.Runtime.Serialization;
 namespace PVRCloud.Response;
 
 [Serializable]
-[KnownType(typeof(List<FTLCalcTask>))]
-[KnownType(typeof(FTLResErrMsg))]
-public class FTLResult
+[KnownType(typeof(List<PVRCloudCalcTask>))]
+[KnownType(typeof(PVRCloudResErrMsg))]
+public class PVRCloudResult
 {
-    public enum FTLResultStatus
+    public enum PVRCloudResultStatus
     {
         [Description("RESULT")]
         RESULT,
@@ -24,7 +24,7 @@ public class FTLResult
     };
 
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
-    public FTLResultStatus Status { get; set; }
+    public PVRCloudResultStatus Status { get; set; }
     public string ObjectName { get; set; }
     public string ItemID { get; set; }
     public object Data { get; set; }

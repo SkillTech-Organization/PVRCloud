@@ -1,7 +1,7 @@
 ﻿namespace PVRCloud.Response;
 
 [Serializable]
-public class FTLResErrMsg
+public class PVRCloudResErrMsg
 {
     public string Field { get; set; }
     public string Message { get; set; }

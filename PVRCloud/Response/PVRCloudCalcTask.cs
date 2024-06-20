@@ -3,15 +3,15 @@
 namespace PVRCloud.Response;
 
 [Serializable]
-public class FTLCalcTask
+public class PVRCloudCalcTask
 {
-    public FTLCalcTask()
+    public PVRCloudCalcTask()
     {
-        CalcTours = new List<FTLCalcTour>();
+        CalcTours = new List<PVRCloudCalcTour>();
     }
 
-    public FTLTask Task { get; set; }
-    public List<FTLCalcTour> CalcTours { get; set; }
+    public PVRCloudTask Task { get; set; }
+    public List<PVRCloudCalcTour> CalcTours { get; set; }
 
 
 }

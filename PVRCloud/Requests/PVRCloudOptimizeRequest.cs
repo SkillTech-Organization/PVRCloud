@@ -6,7 +6,7 @@ public class PVRCloudOptimizeRequest
 {
     public int MaxTruckDistance { get; init; }
 
-    public List<FTLTask> TaskList { get; init; } = [];
+    public List<PVRCloudTask> TaskList { get; init; } = [];
 
-    public List<FTLTruck> TruckList { get; init; } = [];
+    public List<PVRCloudTruck> TruckList { get; init; } = [];
 }

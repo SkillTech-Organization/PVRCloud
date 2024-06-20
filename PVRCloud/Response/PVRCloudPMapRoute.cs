@@ -3,7 +3,7 @@
 namespace PVRCloud.Response;
 
 [Serializable]
-internal class FTLPMapRoute
+internal class PVRCloudPMapRoute
 {
     public class FTLToll
     {
@@ -12,7 +12,7 @@ internal class FTLPMapRoute
         public double Toll { get; set; }                           //Útdíj
     }
 
-    public FTLPMapRoute()
+    public PVRCloudPMapRoute()
     {
         route = null;
     }
@@ -39,7 +39,7 @@ internal class FTLPMapRoute
     public override bool Equals(object obj)
     {
         if (obj == null) return false;
-        FTLPMapRoute rk = (FTLPMapRoute)obj;
+        PVRCloudPMapRoute rk = (PVRCloudPMapRoute)obj;
         return fromNOD_ID == rk.fromNOD_ID && toNOD_ID == rk.toNOD_ID &&
             RZN_ID_LIST == rk.RZN_ID_LIST && GVWR == rk.GVWR && Height == rk.Height && Width == rk.Width;
     }

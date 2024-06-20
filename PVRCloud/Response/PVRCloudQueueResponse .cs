@@ -2,9 +2,9 @@
 
 namespace PVRCloud.Response;
 
-public class FTLQueueResponse
+public class PVRCloudQueueResponse
 {
-    public enum FTLQueueResponseStatus
+    public enum PVRCloudQueueResponseStatus
     {
         [Description("ERROR")]          //végstátusz
         ERROR,
@@ -13,8 +13,8 @@ public class FTLQueueResponse
         [Description("LOG")]
         LOG
     };
-    public FTLQueueResponseStatus Status { get; set; }
+    public PVRCloudQueueResponseStatus Status { get; set; }
     public string RequestID { get; set; }
-    public FTLLog Log { get; set; }
+    public PVRCloudLog Log { get; set; }
     public string Link { get; set; }
 }

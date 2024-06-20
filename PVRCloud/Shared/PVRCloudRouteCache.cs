@@ -3,15 +3,15 @@ using System.Collections.Concurrent;
 
 namespace PVRCloud.Shared;
 
-public class FTLRouteCache
+public class PVRCloudRouteCache
 {
 
     private ConcurrentDictionary<string, boRoute> Items = null;
 
-    private static readonly Lazy<FTLRouteCache> m_instance = new Lazy<FTLRouteCache>(() => new FTLRouteCache(), true);
+    private static readonly Lazy<PVRCloudRouteCache> m_instance = new Lazy<PVRCloudRouteCache>(() => new PVRCloudRouteCache(), true);
 
 
-    static public FTLRouteCache Instance
+    static public PVRCloudRouteCache Instance
     {
         get
         {
@@ -19,7 +19,7 @@ public class FTLRouteCache
         }
     }
 
-    private FTLRouteCache()
+    private PVRCloudRouteCache()
     {
         Items = new ConcurrentDictionary<string, boRoute>();
     }

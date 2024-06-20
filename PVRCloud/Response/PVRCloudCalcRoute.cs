@@ -5,10 +5,10 @@ namespace PVRCloud.Response;
 
 //Eredmény útvonalak
 [Serializable]
-public class FTLCalcRoute
+public class PVRCloudCalcRoute
 {
 
-    public FTLCalcRoute()
+    public PVRCloudCalcRoute()
     {
         TPoint = null;
         Arrival = DateTime.MinValue;
@@ -26,7 +26,7 @@ public class FTLCalcRoute
     }
 
     [DisplayNameAttributeX(Name = "Túrapont", Order = 1)]
-    public FTLPoint TPoint { get; set; }
+    public PVRCloudPoint TPoint { get; set; }
 
     [DisplayNameAttributeX(Name = "Érkezés", Order = 2)]
     public DateTime Arrival { get; set; }
@@ -62,7 +62,7 @@ public class FTLCalcRoute
     public string RoutePoints { get; set; }
 
     /* munkamező */
-    internal FTLPMapRoute PMapRoute { get; set; }
+    internal PVRCloudPMapRoute PMapRoute { get; set; }
     internal bool ErrDriveTime { get; set; } = false;
 
 }

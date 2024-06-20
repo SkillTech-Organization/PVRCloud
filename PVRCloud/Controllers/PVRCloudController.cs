@@ -9,8 +9,8 @@ namespace PVRCloud.Controllers;
 public class PVRCloudController : ControllerBase
 {
     [HttpPost]
-    [ProducesResponseType<FTLResponse>(StatusCodes.Status200OK)]
-    [ProducesResponseType<FTLResponse>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<PVRCloudResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PVRCloudResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult OptimizeRequest(PVRCloudOptimizeRequest request)
@@ -19,7 +19,7 @@ public class PVRCloudController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType<FTLQueueResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PVRCloudQueueResponse>(StatusCodes.Status200OK)]
     public IActionResult OptimizeResult()
     {
         return Ok();

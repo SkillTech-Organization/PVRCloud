@@ -1,6 +1,6 @@
 ﻿namespace PVRCloud.Response;
 
-public static class FTLMessages
+public static class PVRCloudMessages
 {
     public const string M_CALCROUTES = "Útvonalak számítása";
     public const string E_TRKTYPE = "Járműtípus miatt nem teljesítheti a túrát!";

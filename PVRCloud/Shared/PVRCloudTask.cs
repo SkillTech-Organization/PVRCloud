@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 namespace PVRCloud.Shared;
 
 [Serializable]
-public class FTLTask
+public class PVRCloudTask
 {
-    public FTLTask ShallowCopy()
+    public PVRCloudTask ShallowCopy()
     {
-        return (FTLTask)MemberwiseClone();
+        return (PVRCloudTask)MemberwiseClone();
     }
 
 
@@ -32,7 +32,7 @@ public class FTLTask
 
     [DisplayNameAttributeX(Name = "Túrapontok", Order = 6)]
     [Required(ErrorMessage = "Kötelező mező:TPoints")]
-    public List<FTLPoint> TPoints { get; set; } = new List<FTLPoint>();
+    public List<PVRCloudPoint> TPoints { get; set; } = new List<PVRCloudPoint>();
 
     [DisplayNameAttributeX(Name = "Engedélyező járműtulajdonságok", Order = 7)]
     public string InclTruckProps { get; set; } = "";

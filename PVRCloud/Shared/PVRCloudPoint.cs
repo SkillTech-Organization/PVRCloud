@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace PVRCloud.Shared;
 
 [Serializable]
-public class FTLPoint
+public class PVRCloudPoint
 {
     [ItemIDAttr]
     [DisplayNameAttributeX(Name = "Túrapont azonosító", Order = 1)]
@@ -57,9 +57,9 @@ public class FTLPoint
     internal int NOD_ID { get; set; }
     internal DateTime RealClose { get { return Close.AddMinutes(ExtraPeriod); } }
 
-    public FTLPoint ShallowCopy()
+    public PVRCloudPoint ShallowCopy()
     {
-        return (FTLPoint)MemberwiseClone();
+        return (PVRCloudPoint)MemberwiseClone();
     }
 
 }
