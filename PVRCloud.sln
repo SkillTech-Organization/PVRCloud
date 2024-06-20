@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
@@ -61,6 +61,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtils", "CommonUtils\CommonUtils.csproj", "{96B74E91-3B4F-4321-9B7C-6624D1BE7D45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobUtils", "BlobManager\BlobUtils.csproj", "{E0619808-77AE-4E3B-919B-6A3D2130B77D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRCloud", "PVRCloud\PVRCloud.csproj", "{C7349DC9-69A2-4738-B4F3-86D75379AC73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -229,6 +231,22 @@ Global
 		{E0619808-77AE-4E3B-919B-6A3D2130B77D}.Release|x64.Build.0 = Release|Any CPU
 		{E0619808-77AE-4E3B-919B-6A3D2130B77D}.Release|x86.ActiveCfg = Release|Any CPU
 		{E0619808-77AE-4E3B-919B-6A3D2130B77D}.Release|x86.Build.0 = Release|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Debug|x64.Build.0 = Debug|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Debug|x86.Build.0 = Debug|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|x64.ActiveCfg = Release|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|x64.Build.0 = Release|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|x86.ActiveCfg = Release|Any CPU
+		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

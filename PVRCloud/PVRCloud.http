@@ -1,0 +1,6 @@
+@PVRCloud_HostAddress = http://localhost:5082
+
+GET {{PVRCloud_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
