@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FTLApiTester.Services
+namespace PVRCloudApiTester.Services;
+
+internal interface IApiTesterService
 {
-    internal interface IApiTesterService
-    {
-        Task DoWork(CancellationToken cancellationToken = default);
-    }
+    Task DoWork(CancellationToken cancellationToken = default);
 }

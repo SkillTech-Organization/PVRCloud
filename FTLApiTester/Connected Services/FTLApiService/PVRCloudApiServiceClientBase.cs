@@ -5,22 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FTLApiService
+namespace PVRCloudApiService;
+
+public class PVRCloudApiServiceClientBase
 {
-    public class FTLApiServiceClientBase
+    private readonly IConfiguration _configuration;
+
+    protected string BaseUrl;
+
+    protected string ApiKey;
+
+    public PVRCloudApiServiceClientBase(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
 
-        protected string BaseUrl;
-
-        protected string ApiKey;
-
-        public FTLApiServiceClientBase(IConfiguration configuration)
-        {
-            _configuration = configuration;
-
-            BaseUrl = configuration.GetSection("FTLApiTester").GetValue<string>("FTLApiBaseUrl");
-            ApiKey = configuration.GetValue<string>("ApiKey");
-        }
+        BaseUrl = configuration.GetSection("FTLApiTester").GetValue<string>("FTLApiBaseUrl");
+        ApiKey = configuration.GetValue<string>("ApiKey");
     }
 }

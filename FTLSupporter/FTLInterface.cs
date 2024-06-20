@@ -11,21 +11,21 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using FTLInsightsLogger.Logger;
 using PMapCore.Properties;
-using FTLInsightsLogger.Settings;
 using static FTLSupporter.FTLResult;
 using CommonUtils;
+using PVRCloudInsightsLogger.Logger;
+using PVRCloudInsightsLogger.Settings;
 
 namespace FTLSupporter
 {
     public class FTLInterface
     {
         private static ITelemetryLogger Logger { get; set; }
-        private static FTLLoggerSettings LoggerSettings { get; set; }
+        private static PVRCloudLoggerSettings LoggerSettings { get; set; }
         private static string RequestID { get; set; }
 
-        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings)
+        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, PVRCloudLoggerSettings loggerSettings)
         {
             if (Logger == null)
             {
@@ -242,7 +242,7 @@ namespace FTLSupporter
                     {
                         result.Add(getValidationError(tsk, "TPoints", FTLMessages.E_FEWPOINTS));
                     }
-                    
+
                 }
 
                 //Validálás, koordináta feloldás:jármű aktuális pozíció, szállítási feladat
@@ -550,14 +550,14 @@ namespace FTLSupporter
                                         lstPMapRoutes.Add(pmr5);
                                 }
 
-                              
+
                             }
                             else
                             {
                                 /********************************************/
                                 /* FTLTruck.eTruckTaskType.Available esetén */
                                 /********************************************/
-    
+
                                 //4.5 Aktuális pozíció -> beosztandó első túrapont (átállás)
                                 var pmr6 = new FTLPMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width};
                                 if (lstPMapRoutes.IndexOf(pmr6) < 0)
@@ -602,7 +602,7 @@ namespace FTLSupporter
                     }
                     lstPMapRoutes.RemoveAll(x => x.route == null); //amelyiknek nincs Route-juk,
                                                                    //kitöröljük, mert a számítás eredményével
-                                                                   //fel fogjuk tölteni 
+                                                                   //fel fogjuk tölteni
 
                     if (lstCalcPMapRoutes.Count > 0)
                     {
@@ -648,7 +648,7 @@ namespace FTLSupporter
                                     Current = false
                                 });
 
-                                //6.1.2 : második pont->utolsó teljesített pont 
+                                //6.1.2 : második pont->utolsó teljesített pont
 
                                 for (int i = 1; i < trk.TPointCompleted - 1; i++)
                                 {
@@ -679,7 +679,7 @@ namespace FTLSupporter
                                     });
 
 
-                                    //6.1.4  Curr --> első teljesítetlen túrapont 
+                                    //6.1.4  Curr --> első teljesítetlen túrapont
                                     rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == trk.CurrTPoints[trk.TPointCompleted].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                                     clctour.T1CalcRoute.Add(new FTLCalcRoute()
                                     {
@@ -739,7 +739,7 @@ namespace FTLSupporter
                                 Current = false
                             };
 
-                            //6.3 : második pont->utolsó teljesített pont 
+                            //6.3 : második pont->utolsó teljesített pont
 
                             for (int i = 1; i < clctsk.Task.TPoints.Count; i++)
                             {
@@ -755,7 +755,7 @@ namespace FTLSupporter
                                 });
                             }
 
-                            //6.4 : Nem irányos túra esetén tervezett utolsó pont -> futó első pont 
+                            //6.4 : Nem irányos túra esetén tervezett utolsó pont -> futó első pont
                             if (!trk.CurrIsOneWay)
                             {
                                 FTLPMapRoute rtx2;
@@ -815,7 +815,7 @@ namespace FTLSupporter
                     }
 
                     Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Hibák beállítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
-                    
+
                     dtPhaseStart = DateTime.UtcNow;
 
                     /***************/
@@ -1012,12 +1012,12 @@ namespace FTLSupporter
                                 retclr.DrivingDuration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                                 retclr.RestDuration = calcDriveTimes(trk, retclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                 retclr.Arrival = dtPrevTime.AddMinutes(retclr.DrivingDuration + retclr.RestDuration);
-                                if (retclr.TPoint != null && retclr.Arrival < retclr.TPoint.Open)       //Ha a visszatérés túrapontra történik és hamarabb érkezünk vissza, mint a nyitva tartás kezdete, várunk 
+                                if (retclr.TPoint != null && retclr.Arrival < retclr.TPoint.Open)       //Ha a visszatérés túrapontra történik és hamarabb érkezünk vissza, mint a nyitva tartás kezdete, várunk
                                     retclr.WaitingDuration = Convert.ToInt32((retclr.TPoint.Open - retclr.Arrival).TotalMinutes);
                                 else
                                     retclr.WaitingDuration = 0;
 
-                                retclr.SrvDuration = 0;                             //visszatérés esetén nincs kiszolgálás 
+                                retclr.SrvDuration = 0;                             //visszatérés esetén nincs kiszolgálás
                                 retclr.Departure = dtPrevTime.AddMinutes(retclr.DrivingDuration + retclr.WaitingDuration + retclr.SrvDuration + retclr.RestDuration);
 
                                 dtPrevTime = retclr.Departure;
@@ -1152,7 +1152,7 @@ namespace FTLSupporter
                     /****************************/
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
-                        //Útvonalpontok 
+                        //Útvonalpontok
                         clctsk.CalcTours.ForEach(x =>
                                 {
                                     x.T1CalcRoute.Where(w => w.PMapRoute != null).ToList()
@@ -1406,7 +1406,7 @@ namespace FTLSupporter
                             //Amennyiben van hozzárendelhető jármű, megnézzük, hogy más taskban szerepel-e jobb eredménnyel?
                             foreach (var calcTask2 in calcTaskList.Where(i => i != calcTask).ToList())
                             {
-                                //Ha a kérdéses jármű másutt is első, de jobba a költségmutatói, akkor 
+                                //Ha a kérdéses jármű másutt is első, de jobba a költségmutatói, akkor
                                 //nem választjuk ki, és a következő ciklusban a sorban következő lesz a hozzárendelt járművet vesszük
 
                                 //Az első jármű lekérdezése
@@ -1449,7 +1449,7 @@ namespace FTLSupporter
                     {
                         // calcTask.CalcTours.Clear();
                         calcTask.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
-                        
+
                     }
                 }
             }
@@ -1555,7 +1555,7 @@ namespace FTLSupporter
                     //ha a harmadik ciklusban elfogyott a felhasználható munkaidő, akkor a túrapon teljesíjthetetlen, amit egy státusz beállításával jelzünk.
                     clr.ErrDriveTime = true;
                 }
- 
+
             }
             usedDriveTime += clr.DrivingDuration;
             return retRestTime;
@@ -1570,11 +1570,11 @@ namespace FTLSupporter
         /// <param name="r_diff"></param>
         /// <returns></returns>
 
-        //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy 
+        //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy
         //      boEdge[] tömbön. Kb 2x olyan gyors.
 
         public static  int FTLGetNearestReachableNOD_IDForTruck(boEdge[] EdgesList, PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width)
-            
+
         {
             //Legyünk következetesek, a PMAp-os térkép esetében:
             //X --> lng, Y --> lat
@@ -1584,7 +1584,7 @@ namespace FTLSupporter
             //TODO: Nézzük meg, hogy koordiáta alaján pontosan megtaláljuk-e node-ot. (utána lenne a legközelebbi élhez található móka)
 
             //A legközlebbi élhez található közelebb eső node megkeresése. Azért van így megoldva, mert hosszú országúti szakaszoknál,
-            //egy, az él 'mellett' lévő koordináta (pl. egy kanyarban van a jármű) esetén az útvonal edge legyen kiválaszva, ne egy legközelebbi 
+            //egy, az él 'mellett' lévő koordináta (pl. egy kanyarban van a jármű) esetén az útvonal edge legyen kiválaszva, ne egy legközelebbi
             //település pontja (ami közelebb van, mint az országúti szakasz kezdő- vagy végpontja) Hortobágy és Balmazújváros problémakör
 
 
@@ -1625,7 +1625,7 @@ namespace FTLSupporter
         }
 
 
-        //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy 
+        //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy
         //      boEdge[] tömbön. Kb 2x olyan gyors.
         public static int FTLGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
         {

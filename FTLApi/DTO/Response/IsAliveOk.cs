@@ -1,11 +1,9 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace FTLApi.DTO.Response
+namespace PVRCloudApi.DTO.Response;
+
+public class IsAliveOk
 {
-    public class IsAliveOk
-    {
-        [JsonProperty("version")]
-        public string Version;
-    }
+    [JsonProperty("version")]
+    public string Version;
 }

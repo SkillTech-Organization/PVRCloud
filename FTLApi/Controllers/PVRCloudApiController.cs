@@ -15,20 +15,20 @@
 
 namespace FTLApi
 {
-    using FTLApi.Attributes;
-    using FTLApi.DTO.Request;
-    using FTLApi.Handlers;
     using FTLSupporter;
     using Microsoft.AspNetCore.Mvc;
+    using PVRCloudApi.Attributes;
+    using PVRCloudApi.DTO.Request;
+    using PVRCloudApi.Handlers;
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
 
     public partial class FTLApiController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
-        private IFTLApiHandler _implementation;
+        private IPVRCloudApiHandler _implementation;
 
-        public FTLApiController(IFTLApiHandler fTLApiHandler)
+        public FTLApiController(IPVRCloudApiHandler fTLApiHandler)
         {
             _implementation = fTLApiHandler;
         }
@@ -41,10 +41,10 @@ namespace FTLApi
         /// <returns></returns>
         [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
-        public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body)
+        public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] PVRCloudSupportRequest body)
         {
-            var result = await _implementation.FTLSupportAsync(body, CancellationToken.None);
-            
+            var result = await _implementation.PVRCloudSupportAsync(body, CancellationToken.None);
+
             if (result.HasError)
             {
                 return new BadRequestObjectResult(result);
@@ -76,9 +76,9 @@ namespace FTLApi
         /// <returns></returns>
         [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
-        public async Task<ActionResult<FTLResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body)
+        public async Task<ActionResult<FTLResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] PVRCloudSupportRequest body)
         {
-            var result = await _implementation.FTLSupportXAsync(body, CancellationToken.None);
+            var result = await _implementation.PVRCloudSupportXAsync(body, CancellationToken.None);
 
             if (result.HasError)
             {
@@ -103,7 +103,7 @@ namespace FTLApi
 
     }
 
-    
+
 
 
 }

@@ -1,7 +1,8 @@
 using FTLApi.Handlers;
-using FTLApi.Util;
-using FTLInsightsLogger.Settings;
+using PVRCloudApi.Util;
 using Microsoft.OpenApi.Models;
+using PVRCloudApi.Handlers;
+using PVRCloudInsightsLogger.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,10 +37,10 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.Configure<FTLLoggerSettings>(
+builder.Services.Configure<PVRCloudLoggerSettings>(
     builder.Configuration.GetSection("FTLLogger"));
 
-builder.Services.AddTransient<IFTLApiHandler, FTLApiHandler>();
+builder.Services.AddTransient<IPVRCloudApiHandler, PVRCloudApiHandler>();
 
 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 

@@ -1,124 +1,116 @@
-﻿using Azure.Core;
-using Azure.Storage.Queues;
-using FTLInsightsLogger.Settings;
+﻿using Azure.Storage.Queues;
 using System;
-using System.Collections.Generic;
-using System.IO.Compression;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommonUtils;
+using PVRCloudInsightsLogger.Settings;
 
-namespace FTLInsightsLogger.Logger
+namespace PVRCloudInsightsLogger.Logger;
+
+
+public interface IQueueLogger
 {
+    void Log(string message, string requestId = "");
 
-    public interface IQueueLogger
+    void LogAsync(string message, string requestId = "");
+
+    void Log(object message, string requestId = "");
+
+    void LogAsync(object message, string requestId = "");
+
+    void SetLogger(ITelemetryLogger telemetryLogger);
+}
+
+public class QueueLogger : IQueueLogger
+{
+    private readonly PVRCloudLoggerSettings settings;
+    private readonly QueueClient queueClient;
+    private ITelemetryLogger logger;
+
+    public QueueLogger(PVRCloudLoggerSettings s)
     {
-        void Log(string message, string requestId = "");
-
-        void LogAsync(string message, string requestId = "");
-
-        void Log(object message, string requestId = "");
-
-        void LogAsync(object message, string requestId = "");
-
-        void SetLogger(ITelemetryLogger telemetryLogger);
+        settings = s;
+        queueClient = new QueueClient(settings.AzureStorageConnectionString, settings.QueueName);
     }
 
-    public class QueueLogger: IQueueLogger
+    public void SetLogger(ITelemetryLogger telemetryLogger)
     {
-        private readonly FTLLoggerSettings settings;
-        private readonly QueueClient queueClient;
-        private ITelemetryLogger logger;
+        logger = telemetryLogger;
+    }
 
-        public QueueLogger(FTLLoggerSettings s)
+    public void Log(string message, string requestId = "")
+    {
+        try
         {
-            settings = s;
-            queueClient = new QueueClient(settings.AzureStorageConnectionString, settings.QueueName);
-        }
-
-        public void SetLogger(ITelemetryLogger telemetryLogger)
-        {
-            this.logger = telemetryLogger;
-        }
-
-        public void Log(string message, string requestId = "")
-        {
-            try
+            if (queueClient.Exists())
             {
-                if (queueClient.Exists())
+                if (string.IsNullOrWhiteSpace(message))
                 {
-                    if (string.IsNullOrWhiteSpace(message))
-                    {
-                        throw new Exception("Queue message is empty string or null!");
-                    }
-                    queueClient.SendMessage(message);
+                    throw new Exception("Queue message is empty string or null!");
                 }
-            }
-            catch(Exception ex)
-            {
-                logger?.Exception(ex, logger.GetExceptionProperty(requestId));
+                queueClient.SendMessage(message);
             }
         }
-
-        public async void LogAsync(string message, string requestId = "")
+        catch (Exception ex)
         {
-            try
+            logger?.Exception(ex, logger.GetExceptionProperty(requestId));
+        }
+    }
+
+    public async void LogAsync(string message, string requestId = "")
+    {
+        try
+        {
+            if (await queueClient.ExistsAsync())
             {
-                if (await queueClient.ExistsAsync())
+                if (string.IsNullOrWhiteSpace(message))
                 {
-                    if (string.IsNullOrWhiteSpace(message))
-                    {
-                        throw new Exception("Queue message is empty string or null!");
-                    }
-                    queueClient.SendMessageAsync(message);
+                    throw new Exception("Queue message is empty string or null!");
                 }
-            }
-            catch (Exception ex)
-            {
-                logger?.Exception(ex, logger.GetExceptionProperty(requestId));
+                queueClient.SendMessageAsync(message);
             }
         }
-
-        public void Log(object message, string requestId = "")
+        catch (Exception ex)
         {
-            try
+            logger?.Exception(ex, logger.GetExceptionProperty(requestId));
+        }
+    }
+
+    public void Log(object message, string requestId = "")
+    {
+        try
+        {
+            if (queueClient.Exists())
             {
-                if (queueClient.Exists())
+                var m = message.ToJson();
+                if (string.IsNullOrWhiteSpace(m))
                 {
-                    var m = message.ToJson();
-                    if (string.IsNullOrWhiteSpace(m))
-                    {
-                        throw new Exception("Queue message is empty string or null!");
-                    }
-                    queueClient.SendMessage(m);
+                    throw new Exception("Queue message is empty string or null!");
                 }
-            }
-            catch (Exception ex)
-            {
-                logger?.Exception(ex, logger.GetExceptionProperty(requestId));
+                queueClient.SendMessage(m);
             }
         }
-
-        public async void LogAsync(object message, string requestId = "")
+        catch (Exception ex)
         {
-            try
+            logger?.Exception(ex, logger.GetExceptionProperty(requestId));
+        }
+    }
+
+    public async void LogAsync(object message, string requestId = "")
+    {
+        try
+        {
+            if (await queueClient.ExistsAsync())
             {
-                if (await queueClient.ExistsAsync())
+                var m = message.ToJson();
+                if (string.IsNullOrWhiteSpace(m))
                 {
-                    var m = message.ToJson();
-                    if (string.IsNullOrWhiteSpace(m))
-                    {
-                        throw new Exception("Queue message is empty string or null!");
-                    }
-                    queueClient.SendMessageAsync(m);
+                    throw new Exception("Queue message is empty string or null!");
                 }
+                queueClient.SendMessageAsync(m);
             }
-            catch (Exception ex)
-            {
-                logger?.Exception(ex, logger.GetExceptionProperty(requestId));
-            }
+        }
+        catch (Exception ex)
+        {
+            logger?.Exception(ex, logger.GetExceptionProperty(requestId));
         }
     }
 }

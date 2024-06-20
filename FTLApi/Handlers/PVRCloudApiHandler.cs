@@ -1,29 +1,30 @@
-﻿using FTLApi.DTO.Request;
-using FTLApi.DTO.Response;
-using FTLInsightsLogger.Logger;
-using FTLInsightsLogger.Settings;
-using FTLSupporter;
+﻿using FTLSupporter;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using PVRCloudApi.DTO.Request;
+using PVRCloudApi.DTO.Response;
+using PVRCloudApi.Handlers;
+using PVRCloudInsightsLogger.Logger;
+using PVRCloudInsightsLogger.Settings;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
 
 namespace FTLApi.Handlers
 {
-    public class FTLApiHandler : IFTLApiHandler
+    public class PVRCloudApiHandler : IPVRCloudApiHandler
     {
-        private FTLLoggerSettings Settings { get; set; }
+        private PVRCloudLoggerSettings Settings { get; set; }
 
         private ITelemetryLogger Logger { get; set; }
 
-        public FTLApiHandler(IOptions<FTLLoggerSettings> options)
+        public PVRCloudApiHandler(IOptions<PVRCloudLoggerSettings> options)
         {
             Settings = options.Value;
             Logger = TelemetryClientFactory.Create(Settings);
             Logger.LogToQueueMessage = FTLInterface.LogToQueueMessage;
         }
 
-        public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
+        public Task<FTLResponse> PVRCloudSupportAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default)
         {
 
             var response = new FTLResponse();
@@ -59,7 +60,7 @@ namespace FTLApi.Handlers
                 //var json = Logger.Blob.GetLoggedString(id).Result;
                 //Logger.Info("From blob JSON: " + json, Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
                 //response = Newtonsoft.Json.JsonConvert.DeserializeObject<FTLResponse>(json);
-                //Logger.Info("From blob is null: " + (response == null).ToString(), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);                
+                //Logger.Info("From blob is null: " + (response == null).ToString(), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
                 response = Logger.Blob.GetLoggedJsonAs<FTLResponse>(id).Result;
                 //var asd = response.ToJson();
                 response?.Result.ForEach(x =>
@@ -90,7 +91,7 @@ namespace FTLApi.Handlers
             return Task.FromResult(response);
         }
 
-        public Task<FTLResponse> FTLSupportXAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
+        public Task<FTLResponse> PVRCloudSupportXAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default)
         {
             var response = new FTLResponse();
             try

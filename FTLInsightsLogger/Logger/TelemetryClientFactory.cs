@@ -1,33 +1,32 @@
 ﻿using System;
-using FTLInsightsLogger.Settings;
+using PVRCloudInsightsLogger.Settings;
 
-namespace FTLInsightsLogger.Logger
+namespace PVRCloudInsightsLogger.Logger;
+
+public class TelemetryClientFactory
 {
-    public class TelemetryClientFactory
+    private static IQueueLogger CreateQueueLogger(PVRCloudLoggerSettings settings)
     {
-        private static IQueueLogger CreateQueueLogger(FTLLoggerSettings settings)
+        if (settings.UseQueue && !string.IsNullOrWhiteSpace(settings.QueueName) && !string.IsNullOrWhiteSpace(settings.AzureStorageConnectionString))
         {
-            if (settings.UseQueue && !string.IsNullOrWhiteSpace(settings.QueueName) && !string.IsNullOrWhiteSpace(settings.AzureStorageConnectionString))
-            {
-                return new QueueLogger(settings);
-            }
-            return null;
+            return new QueueLogger(settings);
         }
+        return null;
+    }
 
-        public static ITelemetryLogger Create(FTLLoggerSettings settings)
+    public static ITelemetryLogger Create(PVRCloudLoggerSettings settings)
+    {
+        try
         {
-            try
+            if (settings == null || string.IsNullOrWhiteSpace(settings.ApplicationInsightsConnectionString))
             {
-                if (settings == null || string.IsNullOrWhiteSpace(settings.ApplicationInsightsConnectionString))
-                {
-                    return new TelemetryLoggerMock();
-                }
-                return new TelemetryLogger(settings, CreateQueueLogger(settings));
+                return new TelemetryLoggerMock();
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return new TelemetryLogger(settings, CreateQueueLogger(settings));
+        }
+        catch (Exception ex)
+        {
+            return null;
         }
     }
 }

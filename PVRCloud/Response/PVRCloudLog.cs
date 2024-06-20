@@ -1,5 +1,5 @@
-﻿using FTLInsightsLogger.Logger;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json.Converters;
+using PVRCloudInsightsLogger.Logger;
 
 namespace PVRCloud.Response;
 

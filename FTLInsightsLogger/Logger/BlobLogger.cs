@@ -1,83 +1,79 @@
 ﻿using BlobUtils;
 using CommonUtils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace FTLInsightsLogger.Logger
+namespace PVRCloudInsightsLogger.Logger;
+
+public class BlobLogger
 {
-    public class BlobLogger
+    public BlobHandler BlobHandler { get; private set; }
+
+    public string ContainerName { get; set; }
+
+    private ITelemetryLogger logger;
+
+    public BlobLogger(string connectionString, ITelemetryLogger parentLogger, string containerName = null)
     {
-        public BlobHandler BlobHandler { get; private set; }
-
-        public string ContainerName { get; set; }
-
-        private ITelemetryLogger logger;
-
-        public BlobLogger(string connectionString, ITelemetryLogger parentLogger, string containerName = null)
+        BlobHandler = new BlobHandler(connectionString);
+        logger = parentLogger;
+        if (!string.IsNullOrEmpty(containerName))
         {
-            BlobHandler = new BlobHandler(connectionString);
-            logger = parentLogger;
-            if (!string.IsNullOrEmpty(containerName))
-            {
-                ContainerName = containerName;
-            }
+            ContainerName = containerName;
         }
+    }
 
-        public async Task<string> LogString(string content, string container, string name)
+    public async Task<string> LogString(string content, string container, string name)
+    {
+        try
         {
-            try
-            {
-                await BlobHandler.UploadString(container, content, name);
-                return BlobHandler.GetUrl(name);
-            }
-            catch (Exception ex)
-            {
-                logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
-                return null;
-            }
+            await BlobHandler.UploadString(container, content, name);
+            return BlobHandler.GetUrl(name);
         }
-
-        public async Task<string> LogString(string content, string name)
+        catch (Exception ex)
         {
-            try
-            {
-                await BlobHandler.UploadString(ContainerName, content, name);
-                return BlobHandler.GetUrl(name);
-            }
-            catch (Exception ex)
-            {
-                logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
-                return null;
-            }
+            logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
+            return null;
         }
+    }
 
-        public async Task<string> GetLoggedString(string name)
+    public async Task<string> LogString(string content, string name)
+    {
+        try
         {
-            try
-            {
-                return await BlobHandler.DownloadToText(ContainerName, name);
-            }
-            catch (Exception ex)
-            {
-                logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
-                return null;
-            }
+            await BlobHandler.UploadString(ContainerName, content, name);
+            return BlobHandler.GetUrl(name);
         }
-
-        public async Task<T> GetLoggedJsonAs<T>(string name)
+        catch (Exception ex)
         {
-            try
-            {
-                return BlobHandler.DownloadToText(ContainerName, name).Result.ToDeserializedJson<T>();
-            }
-            catch (Exception ex)
-            {
-                logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
-                return default;
-            }
+            logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
+            return null;
+        }
+    }
+
+    public async Task<string> GetLoggedString(string name)
+    {
+        try
+        {
+            return await BlobHandler.DownloadToText(ContainerName, name);
+        }
+        catch (Exception ex)
+        {
+            logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
+            return null;
+        }
+    }
+
+    public async Task<T> GetLoggedJsonAs<T>(string name)
+    {
+        try
+        {
+            return BlobHandler.DownloadToText(ContainerName, name).Result.ToDeserializedJson<T>();
+        }
+        catch (Exception ex)
+        {
+            logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
+            return default;
         }
     }
 }
