@@ -1,6 +1,6 @@
 ﻿using PMapCore.BO;
 
-namespace PVRCloud.Response;
+namespace PVRCloud;
 
 [Serializable]
 internal class PVRCloudPMapRoute

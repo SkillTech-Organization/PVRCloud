@@ -1,4 +1,4 @@
-﻿namespace PVRCloud.Response;
+﻿namespace PVRCloud;
 
 [Serializable]
 public class PVRCloudResErrMsg

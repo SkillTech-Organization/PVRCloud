@@ -1,7 +1,6 @@
 ﻿using PMapCore.Common.Attrib;
-using PVRCloud.Shared;
 
-namespace PVRCloud.Response;
+namespace PVRCloud;
 
 //Eredmény útvonalak
 [Serializable]

@@ -1,4 +1,4 @@
-﻿using PVRCloud.Shared;
+﻿using PVRCloud;
 
 namespace PVRCloudApi.DTO.Response;
 

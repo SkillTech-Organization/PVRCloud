@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FTLSupporter\FTLSupporter.csproj" />
+    <ProjectReference Include="..\PVRCloud\PVRCloud.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="PMAP.ini">

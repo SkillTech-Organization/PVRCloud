@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 using PMapCore.Common.Attrib;
-using PVRCloud.Shared;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace PVRCloud.Response;
+namespace PVRCloud;
 
 
 /// <summary>

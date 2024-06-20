@@ -1,4 +1,4 @@
-﻿namespace PVRCloud.Response;
+﻿namespace PVRCloud;
 
 public static class PVRCloudMessages
 {

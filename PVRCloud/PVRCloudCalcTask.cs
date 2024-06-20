@@ -1,6 +1,4 @@
-﻿using PVRCloud.Shared;
-
-namespace PVRCloud.Response;
+﻿namespace PVRCloud;
 
 [Serializable]
 public class PVRCloudCalcTask

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace PVRCloud.Response;
+namespace PVRCloud;
 
 [Serializable]
 [KnownType(typeof(List<PVRCloudCalcTask>))]

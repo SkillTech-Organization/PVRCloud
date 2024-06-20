@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace PVRCloud.Shared;
+namespace PVRCloud;
 
 public class PVRCloudNodePtCache
 {

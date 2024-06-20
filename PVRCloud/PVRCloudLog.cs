@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Converters;
 using PVRCloudInsightsLogger.Logger;
 
-namespace PVRCloud.Response;
+namespace PVRCloud;
 
 public class PVRCloudLog
 {

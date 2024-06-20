@@ -1,7 +1,7 @@
 ﻿using PMapCore.Common.Attrib;
 using System.ComponentModel.DataAnnotations;
 
-namespace PVRCloud.Shared;
+namespace PVRCloud;
 
 [Serializable]
 public class PVRCloudTask
