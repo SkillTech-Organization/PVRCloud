@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
-using PVRCloud;
 
-namespace PVRCloudApi.DTO.Response;
+namespace PVRCloud;
 
 public class PVRCloudQueueResponse
 {

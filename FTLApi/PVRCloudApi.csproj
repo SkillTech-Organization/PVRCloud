@@ -19,7 +19,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FTLSupporter\FTLSupporter.csproj" />
     <ProjectReference Include="..\PVRCloud\PVRCloud.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
-﻿using FTLSupporter;
-using Microsoft.AspNetCore.Mvc;
-using PVRCloudApi.DTO.Request;
+﻿using PVRCloudApi.DTO.Request;
+using PVRCloudApi.DTO.Response;
 
 namespace PVRCloudApi.Handlers;
 
@@ -16,27 +15,27 @@ public interface IPVRCloudApiHandler
     /// <param name="accept"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<FTLResponse> PVRCloudSupportAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default);
+    Task<PVRCloudResponse> PVRCloudSupportAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get calculation result
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<FTLResponse> Result(string id);
+    Task<PVRCloudResponse> Result(string id);
 
     /// <summary>
-    /// Calculate by FTLSupporterX engine
+    /// Calculate by PVRCloudSupporterX engine
     /// </summary>
     /// <param name="body"></param>
     /// <param name="content_Type"></param>
     /// <param name="accept"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<FTLResponse> PVRCloudSupportXAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default);
+    Task<PVRCloudResponse> PVRCloudSupportXAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// get the 'isalive' status of the FTLSupporter service
+    /// get the 'isalive' status of the PVRCloudSupporter service
     /// </summary>
     /// <param name="accept"></param>
     /// <param name="cancellationToken"></param>

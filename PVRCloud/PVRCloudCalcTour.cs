@@ -12,7 +12,7 @@ namespace PVRCloud;
 [Serializable]
 public class PVRCloudCalcTour
 {
-    public enum FTLCalcTourStatus
+    public enum PVRCloudCalcTourStatus
     {
         [Description("OK")]
         OK,
@@ -21,7 +21,7 @@ public class PVRCloudCalcTour
     };
     public PVRCloudCalcTour()
     {
-        StatusEnum = FTLCalcTourStatus.OK;
+        StatusEnum = PVRCloudCalcTourStatus.OK;
         Msg = new List<string>();
 
         Rank = 0;
@@ -65,7 +65,7 @@ public class PVRCloudCalcTour
     //    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     [JsonIgnore]
     [IgnoreDataMember]
-    public FTLCalcTourStatus StatusEnum { get; set; }
+    public PVRCloudCalcTourStatus StatusEnum { get; set; }
 
     [DisplayNameAttributeX(Name = "Státusz", Order = 1)]
     public string Status { get { return StatusEnum.ToString(); } }
