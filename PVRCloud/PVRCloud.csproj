@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../FTLInsightsLogger/PVRCloudInsightsLogger.csproj" />
     <ProjectReference Include="..\PMap\PMapCore.csproj" />
-    <ProjectReference Include="..\FTLInsightsLogger\FTLInsightsLogger.csproj" />
   </ItemGroup>
 
 </Project>
