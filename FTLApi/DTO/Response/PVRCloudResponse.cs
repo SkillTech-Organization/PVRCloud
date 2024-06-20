@@ -1,6 +1,6 @@
 ﻿using PVRCloud.Shared;
 
-namespace PVRCloud.Response;
+namespace PVRCloudApi.DTO.Response;
 
 public class PVRCloudResponse
 {

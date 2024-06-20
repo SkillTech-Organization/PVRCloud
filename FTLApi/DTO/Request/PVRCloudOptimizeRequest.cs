@@ -1,6 +1,6 @@
 using PVRCloud.Shared;
 
-namespace PVRCloud.Requests;
+namespace PVRCloudApi.DTO.Request;
 
 public class PVRCloudOptimizeRequest
 {

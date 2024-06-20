@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PVRCloud.Requests;
-using PVRCloud.Response;
+using PVRCloudApi.DTO.Request;
+using PVRCloudApi.DTO.Response;
 
-namespace PVRCloud.Controllers;
+namespace PVRCloudApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
