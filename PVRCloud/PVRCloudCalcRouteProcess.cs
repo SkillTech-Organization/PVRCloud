@@ -14,7 +14,7 @@ using System.Text;
 
 namespace PVRCloud;
 
-internal class FTLCalcRouteProcess : BaseLongProcess
+internal class PVRCloudCalcRouteProcess : BaseLongProcess
 {
 
     public bool Completed { get; set; }
@@ -24,7 +24,7 @@ internal class FTLCalcRouteProcess : BaseLongProcess
 
     List<FTLPMapRoute> m_lstRoutes = new List<FTLPMapRoute>();
 
-    internal FTLCalcRouteProcess(List<FTLPMapRoute> p_lstRoutes)
+    internal PVRCloudCalcRouteProcess(List<FTLPMapRoute> p_lstRoutes)
         : base(ThreadPriority.Normal)
     {
 
@@ -95,7 +95,7 @@ internal class FTLCalcRouteProcess : BaseLongProcess
                     foreach (FTLPMapRoute ftr in lstFTLR)
                     {
 
-                        FTLRouteCache.Instance.Add(route);
+                        PVRCloudRouteCache.Instance.Add(route);
 
                         ftr.route = route;
                     }
