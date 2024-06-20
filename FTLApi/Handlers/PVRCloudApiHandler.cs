@@ -20,7 +20,7 @@ public class PVRCloudApiHandler : IPVRCloudApiHandler
     {
         Settings = options.Value;
         Logger = TelemetryClientFactory.Create(Settings);
-        Logger.LogToQueueMessage = FTLInterface.LogToQueueMessage;
+        Logger.LogToQueueMessage = PVRCloudInterface.LogToQueueMessage;
     }
 
     public Task<PVRCloudResponse> PVRCloudSupportAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default)
@@ -30,7 +30,7 @@ public class PVRCloudApiHandler : IPVRCloudApiHandler
         try
         {
 
-            var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
+            var initResult = PVRCloudInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
             if (initResult != null)
             {
                 response = initResult;
@@ -40,7 +40,7 @@ public class PVRCloudApiHandler : IPVRCloudApiHandler
 
             if (initResult != null && !initResult.HasError)
             {
-                Task.Run(() => FTLInterface.FTLSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
+                Task.Run(() => PVRCloudInterface.FTLSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
             }
         }
         catch (Exception ex)
@@ -67,9 +67,9 @@ public class PVRCloudApiHandler : IPVRCloudApiHandler
                 //Logger.Info("Data: " + Newtonsoft.Json.JsonConvert.SerializeObject(x.Data), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
                 if (x.Data != null)
                 {
-                    if (x.Status == FTLResult.FTLResultStatus.RESULT)
+                    if (x.Status == PVRCloudResult.PVRCloudResultStatus.RESULT)
                     {
-                        x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                        x.Data = ((JToken)x.Data).ToObject<List<PVRCloudCalcTask>>();
                     }
                     else
                     {
@@ -95,7 +95,7 @@ public class PVRCloudApiHandler : IPVRCloudApiHandler
         var response = new PVRCloudResponse();
         try
         {
-            var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
+            var initResult = PVRCloudInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
             if (initResult != null)
             {
                 response = initResult;
@@ -105,7 +105,7 @@ public class PVRCloudApiHandler : IPVRCloudApiHandler
 
             if (initResult != null && !initResult.HasError)
             {
-                Task.Run(() => FTLInterface.FTLSupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
+                Task.Run(() => PVRCloudInterface.FTLSupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
             }
         }
         catch (Exception ex)
