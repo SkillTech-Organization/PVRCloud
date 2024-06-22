@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace PVRCloudApi.Attributes;
+namespace PVRPCloudApi.Attributes;
 
 [AttributeUsage(validOn: AttributeTargets.Method)]
 public class ApiKeyAttribute : Attribute, IAsyncActionFilter

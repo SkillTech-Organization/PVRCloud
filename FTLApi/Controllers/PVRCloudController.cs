@@ -1,20 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PVRCloudApi.DTO.Request;
-using PVRCloudApi.DTO.Response;
 using PVRPCloud;
+using PVRPCloudApi.DTO.Request;
 
-namespace PVRCloudApi.Controllers;
+namespace PVRPCloudApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PVRCloudController : ControllerBase
+public class PVRPCloudController : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType<PVRPCloudResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<PVRPCloudResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult OptimizeRequest(PVRCloudOptimizeRequest request)
+    public IActionResult OptimizeRequest(PVRPCloudOptimizeRequest request)
     {
         return Ok();
     }

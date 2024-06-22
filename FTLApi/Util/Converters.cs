@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using static PVRPCloud.PVRPCloudResult;
 
-namespace PVRCloudApi.Util;
+namespace PVRPCloudApi.Util;
 
 public class DateTimeConverter : JsonConverter<DateTime>
 {

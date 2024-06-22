@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PVRCloudApi.DTO.Response;
+namespace PVRPCloudApi.DTO.Response;
 
 public class IsAliveOk
 {

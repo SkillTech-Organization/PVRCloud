@@ -13,98 +13,93 @@
 #pragma warning disable 3016 // Disable "CS3016 Arrays as attribute arguments is not CLS-compliant"
 #pragma warning disable 8603 // Disable "CS8603 Possible null reference return"
 
-namespace FTLApi
+namespace PVRPCloudApi;
+
+using Microsoft.AspNetCore.Mvc;
+using PVRPCloud;
+using PVRPCloudApi.Attributes;
+using PVRPCloudApi.DTO.Request;
+using PVRPCloudApi.Handlers;
+using System = global::System;
+
+[System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+
+public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.ControllerBase
 {
-    using Microsoft.AspNetCore.Mvc;
-    using PVRCloudApi.Attributes;
-    using PVRCloudApi.DTO.Request;
-    using PVRCloudApi.Handlers;
-    using PVRPCloud;
-    using System = global::System;
+    private IPVRPCloudApiHandler _implementation;
 
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-
-    public partial class FTLApiController : Microsoft.AspNetCore.Mvc.ControllerBase
+    public PVRPCloudApiController(IPVRPCloudApiHandler fTLApiHandler)
     {
-        private IPVRCloudApiHandler _implementation;
-
-        public FTLApiController(IPVRCloudApiHandler fTLApiHandler)
-        {
-            _implementation = fTLApiHandler;
-        }
-
-        /// <summary>
-        /// Calculate by FTLSupporter engine
-        /// </summary>
-        /// <param name="body"></param>
-        /// <param name="maxTruckDistance"></param>
-        /// <returns></returns>
-        [ApiKey]
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
-        public async Task<ActionResult<PVRPCloudResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] PVRCloudSupportRequest body)
-        {
-            var result = await _implementation.PVRCloudSupportAsync(body, CancellationToken.None);
-
-            if (result.HasError)
-            {
-                return new BadRequestObjectResult(result);
-            }
-            else
-            {
-                return new OkObjectResult(result);
-            }
-        }
-
-        /// <summary>
-        /// Get calculation result
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [ApiKey]
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/Result/{id}")]
-        public async Task<ActionResult<PVRPCloudResponse>> Result([FromRoute] string id)
-        {
-            var result = await _implementation.Result(id);
-            return new OkObjectResult(result);
-        }
-
-        /// <summary>
-        /// Calculate by FTLSupporterX engine
-        /// </summary>
-        /// <param name="body"></param>
-        /// <param name="maxTruckDistance"></param>
-        /// <returns></returns>
-        [ApiKey]
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
-        public async Task<ActionResult<PVRPCloudResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] PVRCloudSupportRequest body)
-        {
-            var result = await _implementation.PVRCloudSupportXAsync(body, CancellationToken.None);
-
-            if (result.HasError)
-            {
-                return new BadRequestObjectResult(result);
-            }
-            else
-            {
-                return new OkObjectResult(result);
-            }
-        }
-
-        /// <summary>
-        /// get the 'isalive' status of the FTLSupporter service
-        /// </summary>
-        /// <returns></returns>
-        [ApiKey]
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("IsAlive")]
-        public System.Threading.Tasks.Task IsAlive()
-        {
-            return _implementation.IsAliveAsync(CancellationToken.None);
-        }
-
+        _implementation = fTLApiHandler;
     }
 
+    /// <summary>
+    /// Calculate by FTLSupporter engine
+    /// </summary>
+    /// <param name="body"></param>
+    /// <param name="maxTruckDistance"></param>
+    /// <returns></returns>
+    [ApiKey]
+    [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
+    public async Task<ActionResult<PVRPCloudResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] PVRPCloudSupportRequest body)
+    {
+        var result = await _implementation.PVRCloudSupportAsync(body, CancellationToken.None);
 
+        if (result.HasError)
+        {
+            return new BadRequestObjectResult(result);
+        }
+        else
+        {
+            return new OkObjectResult(result);
+        }
+    }
 
+    /// <summary>
+    /// Get calculation result
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [ApiKey]
+    [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/Result/{id}")]
+    public async Task<ActionResult<PVRPCloudResponse>> Result([FromRoute] string id)
+    {
+        var result = await _implementation.Result(id);
+        return new OkObjectResult(result);
+    }
+
+    /// <summary>
+    /// Calculate by FTLSupporterX engine
+    /// </summary>
+    /// <param name="body"></param>
+    /// <param name="maxTruckDistance"></param>
+    /// <returns></returns>
+    [ApiKey]
+    [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
+    public async Task<ActionResult<PVRPCloudResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] PVRPCloudSupportRequest body)
+    {
+        var result = await _implementation.PVRCloudSupportXAsync(body, CancellationToken.None);
+
+        if (result.HasError)
+        {
+            return new BadRequestObjectResult(result);
+        }
+        else
+        {
+            return new OkObjectResult(result);
+        }
+    }
+
+    /// <summary>
+    /// get the 'isalive' status of the FTLSupporter service
+    /// </summary>
+    /// <returns></returns>
+    [ApiKey]
+    [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("IsAlive")]
+    public System.Threading.Tasks.Task IsAlive()
+    {
+        return _implementation.IsAliveAsync(CancellationToken.None);
+    }
 
 }
 

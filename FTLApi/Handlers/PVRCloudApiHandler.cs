@@ -1,29 +1,29 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using PVRCloudApi.DTO.Request;
-using PVRCloudApi.DTO.Response;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
 using PVRPCloud;
 using PVRPCloudInsightsLogger.Logger;
 using PVRPCloudInsightsLogger.Settings;
+using PVRPCloudApi.DTO.Request;
+using PVRPCloudApi.DTO.Response;
 
-namespace PVRCloudApi.Handlers;
+namespace PVRPCloudApi.Handlers;
 
-public class PVRCloudApiHandler : IPVRCloudApiHandler
+public class PVRPCloudApiHandler : IPVRPCloudApiHandler
 {
     private PVRPCloudLoggerSettings Settings { get; set; }
 
     private ITelemetryLogger Logger { get; set; }
 
-    public PVRCloudApiHandler(IOptions<PVRPCloudLoggerSettings> options)
+    public PVRPCloudApiHandler(IOptions<PVRPCloudLoggerSettings> options)
     {
         Settings = options.Value;
         Logger = TelemetryClientFactory.Create(Settings);
         Logger.LogToQueueMessage = PVRPCloudInterface.LogToQueueMessage;
     }
 
-    public Task<PVRPCloudResponse> PVRCloudSupportAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default)
+    public Task<PVRPCloudResponse> PVRCloudSupportAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default)
     {
 
         var response = new PVRPCloudResponse();
@@ -90,7 +90,7 @@ public class PVRCloudApiHandler : IPVRCloudApiHandler
         return Task.FromResult(response);
     }
 
-    public Task<PVRPCloudResponse> PVRCloudSupportXAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default)
+    public Task<PVRPCloudResponse> PVRCloudSupportXAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default)
     {
         var response = new PVRPCloudResponse();
         try

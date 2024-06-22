@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using PVRPCloud;
 
-namespace PVRCloudApi.DTO.Request;
+namespace PVRPCloudApi.DTO.Request;
 
 // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
-public class PVRCloudSupportRequest
+public class PVRPCloudSupportRequest
 {
     [JsonProperty("maxTruckDistance")]
     public int MaxTruckDistance { get; set; }

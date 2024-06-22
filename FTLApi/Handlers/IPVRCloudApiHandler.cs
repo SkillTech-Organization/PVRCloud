@@ -1,10 +1,10 @@
-﻿using PVRCloudApi.DTO.Request;
-using PVRPCloud;
+﻿using PVRPCloud;
+using PVRPCloudApi.DTO.Request;
 
-namespace PVRCloudApi.Handlers;
+namespace PVRPCloudApi.Handlers;
 
 [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-public interface IPVRCloudApiHandler
+public interface IPVRPCloudApiHandler
 {
 
     /// <summary>
@@ -15,7 +15,7 @@ public interface IPVRCloudApiHandler
     /// <param name="accept"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<PVRPCloudResponse> PVRCloudSupportAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default);
+    Task<PVRPCloudResponse> PVRCloudSupportAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get calculation result
@@ -32,7 +32,7 @@ public interface IPVRCloudApiHandler
     /// <param name="accept"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<PVRPCloudResponse> PVRCloudSupportXAsync(PVRCloudSupportRequest body, CancellationToken cancellationToken = default);
+    Task<PVRPCloudResponse> PVRCloudSupportXAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// get the 'isalive' status of the PVRCloudSupporter service
