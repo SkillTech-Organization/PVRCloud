@@ -1,17 +1,9 @@
-﻿using CommandLine.Text;
-using CommandLine;
+﻿using CommandLine;
 using PVRPCloudApiService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using PVRPCloudApiTester.Settings;
 using PVRPCloudApiTester.Util;
@@ -226,7 +218,7 @@ internal class ApiTesterService : IApiTesterService
                                 {
                                     if (x.Status == FTLResultStatus.RESULT)
                                     {
-                                        x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                                        x.Data = ((JToken)x.Data).ToObject<List<PVRPCloud.PVRPCloudCalcTask>>();
                                     }
                                     else
                                     {

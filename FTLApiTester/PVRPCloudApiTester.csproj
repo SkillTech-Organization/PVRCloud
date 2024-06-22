@@ -34,6 +34,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonUtils\CommonUtils.csproj" />
-    <ProjectReference Include="..\FTLSupporter\FTLSupporter.csproj" />
+    <ProjectReference Include="..\PVRPCloud\PVRPCloud.csproj" />
   </ItemGroup>
 </Project>
