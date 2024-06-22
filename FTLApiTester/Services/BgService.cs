@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace PVRCloudApiTester.Services;
+namespace PVRPCloudApiTester.Services;
 
 internal class BgService : BackgroundService
 {

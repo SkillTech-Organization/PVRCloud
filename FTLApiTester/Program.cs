@@ -1,11 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using PVRCloudApiService;
+using PVRPCloudApiService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PVRCloudApiTester.Services;
-using PVRCloudApiTester.Settings;
+using PVRPCloudApiTester.Services;
+using PVRPCloudApiTester.Settings;
 
 CreateHostBuilder(args).Build().Run();
 
@@ -28,9 +28,9 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         {
             services.AddHttpClient();
             //services.Configure<FTLApiTesterSettings>(hostContext.Configuration.GetSection("FTLApiTester"));
-            services.AddTransient<PVRCloudApiTesterSettings>();
+            services.AddTransient<PVRPCloudApiTesterSettings>();
             services.AddLogging();
-            services.AddTransient<PVRCloudApiServiceClient>();
+            services.AddTransient<PVRPCloudApiServiceClient>();
             services.AddTransient<IApiTesterService, ApiTesterService>();
             services.AddHostedService<BgService>();
         });

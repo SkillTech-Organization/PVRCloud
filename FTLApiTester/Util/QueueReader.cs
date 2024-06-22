@@ -3,9 +3,9 @@ using FTLSupporter;
 using Serilog;
 using Microsoft.Extensions.Configuration;
 using CommonUtils;
-using PVRCloudApiTester.Settings;
+using PVRPCloudApiTester.Settings;
 
-namespace PVRCloudApiTester.Util;
+namespace PVRPCloudApiTester.Util;
 
 internal class GetResultResponse
 {
@@ -25,10 +25,10 @@ internal class GetResultResponse
 internal class QueueReader
 {
     private readonly QueueClient queueClient;
-    private readonly PVRCloudApiTesterSettings settings;
+    private readonly PVRPCloudApiTesterSettings settings;
     private readonly ILogger _logger;
 
-    public QueueReader(PVRCloudApiTesterSettings s, IConfiguration configuration)
+    public QueueReader(PVRPCloudApiTesterSettings s, IConfiguration configuration)
     {
         settings = s;
         queueClient = new QueueClient(settings.AzureStorageConnectionString, settings.QueueName);

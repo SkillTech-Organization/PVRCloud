@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PVRCloudApiService;
+namespace PVRPCloudApiService;
 
-public class PVRCloudApiServiceClientBase
+public class PVRPCloudApiServiceClientBase
 {
     private readonly IConfiguration _configuration;
 
@@ -15,7 +15,7 @@ public class PVRCloudApiServiceClientBase
 
     protected string ApiKey;
 
-    public PVRCloudApiServiceClientBase(IConfiguration configuration)
+    public PVRPCloudApiServiceClientBase(IConfiguration configuration)
     {
         _configuration = configuration;
 

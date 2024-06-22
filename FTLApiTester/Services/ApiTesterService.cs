@@ -1,6 +1,6 @@
 ﻿using CommandLine.Text;
 using CommandLine;
-using PVRCloudApiService;
+using PVRPCloudApiService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Serilog;
@@ -13,10 +13,10 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using PVRCloudApiTester.Settings;
-using PVRCloudApiTester.Util;
+using PVRPCloudApiTester.Settings;
+using PVRPCloudApiTester.Util;
 
-namespace PVRCloudApiTester.Services;
+namespace PVRPCloudApiTester.Services;
 
 
 internal class Args
@@ -42,8 +42,8 @@ internal class TestData
 
 internal class ApiTesterService : IApiTesterService
 {
-    private PVRCloudApiServiceClient _client;
-    private PVRCloudApiTesterSettings _settings;
+    private PVRPCloudApiServiceClient _client;
+    private PVRPCloudApiTesterSettings _settings;
     private readonly ILogger _logger;
 
     private const string Delimeter = "_";
@@ -57,7 +57,7 @@ internal class ApiTesterService : IApiTesterService
 
     public JsonSerializerSettings isoDateTimeConverter { get; set; }
 
-    public ApiTesterService(PVRCloudApiServiceClient client, PVRCloudApiTesterSettings settings, IConfiguration configuration)
+    public ApiTesterService(PVRPCloudApiServiceClient client, PVRPCloudApiTesterSettings settings, IConfiguration configuration)
     {
         _client = client;
         _settings = settings;

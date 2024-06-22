@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace PVRCloudApiTester.Settings;
+namespace PVRPCloudApiTester.Settings;
 
-public class PVRCloudApiTesterSettings
+public class PVRPCloudApiTesterSettings
 {
-    public PVRCloudApiTesterSettings(IConfiguration configuration)
+    public PVRPCloudApiTesterSettings(IConfiguration configuration)
     {
         configuration.Bind("FTLApiTester", this);
     }

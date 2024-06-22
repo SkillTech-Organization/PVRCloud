@@ -13,19 +13,19 @@
 #pragma warning disable 3016 // Disable "CS3016 Arrays as attribute arguments is not CLS-compliant"
 #pragma warning disable 8603 // Disable "CS8603 Possible null reference return"
 
-namespace PVRCloudApiService;
+namespace PVRPCloudApiService;
 
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel;
 using System = global::System;
 
 [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class PVRCloudApiServiceClient : PVRCloudApiServiceClientBase
+public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
 {
     private System.Net.Http.HttpClient _httpClient;
     private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-    public PVRCloudApiServiceClient(System.Net.Http.HttpClient httpClient, IConfiguration configuration) : base(configuration)
+    public PVRPCloudApiServiceClient(System.Net.Http.HttpClient httpClient, IConfiguration configuration) : base(configuration)
     {
         _httpClient = httpClient;
         _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
