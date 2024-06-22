@@ -62,7 +62,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtils", "CommonUtils\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobUtils", "BlobManager\BlobUtils.csproj", "{E0619808-77AE-4E3B-919B-6A3D2130B77D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRCloud", "PVRCloud\PVRCloud.csproj", "{C7349DC9-69A2-4738-B4F3-86D75379AC73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRPCloud", "PVRCloud\PVRPCloud.csproj", "{C7349DC9-69A2-4738-B4F3-86D75379AC73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
