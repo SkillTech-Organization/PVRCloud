@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "FTLApi": {
+    "PVRPCloudApi": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

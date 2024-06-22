@@ -48,25 +48,25 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1PVRPCloudPVRPCloudSupportAsync(PVRPCloudRequest body)
+    public virtual System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudPVRPCloudSupportAsync(PVRPCloudRequest body)
     {
-        return ApiV1FTLSupporterFTLSupportAsync(body, System.Threading.CancellationToken.None);
+        return ApiV1PVRPCloudSupporterPVRPCloudSupportAsync(body, System.Threading.CancellationToken.None);
     }
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual FTLResponse ApiV1FTLSupporterFTLSupport(PVRPCloudRequest body)
+    public virtual PVRPCloudResponse ApiV1PVRPCloudSupporterPVRPCloudSupport(PVRPCloudRequest body)
     {
-        return System.Threading.Tasks.Task.Run(async () => await ApiV1FTLSupporterFTLSupportAsync(body, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
+        return System.Threading.Tasks.Task.Run(async () => await ApiV1PVRPCloudSupporterPVRPCloudSupportAsync(body, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
     }
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterFTLSupportAsync(PVRPCloudRequest body, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudSupporterPVRPCloudSupportAsync(PVRPCloudRequest body, System.Threading.CancellationToken cancellationToken)
     {
         var urlBuilder_ = new System.Text.StringBuilder();
-        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/FTLSupporter/FTLSupport");
+        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/PVRPCloudSupporter/PVRPCloudSupport");
 
         var client_ = _httpClient;
         var disposeClient_ = false;
@@ -106,7 +106,7 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<FTLResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<PVRPCloudResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -135,28 +135,28 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1PVRPCloudResultAsync(string id)
+    public virtual System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudResultAsync(string id)
     {
-        return ApiV1FTLSupporterResultAsync(id, System.Threading.CancellationToken.None);
+        return ApiV1PVRPCloudSupporterResultAsync(id, System.Threading.CancellationToken.None);
     }
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual FTLResponse ApiV1FTLSupporterResult(string id)
+    public virtual PVRPCloudResponse ApiV1PVRPCloudSupporterResult(string id)
     {
-        return System.Threading.Tasks.Task.Run(async () => await ApiV1FTLSupporterResultAsync(id, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
+        return System.Threading.Tasks.Task.Run(async () => await ApiV1PVRPCloudSupporterResultAsync(id, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
     }
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterResultAsync(string id, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudSupporterResultAsync(string id, System.Threading.CancellationToken cancellationToken)
     {
         if (id == null)
             throw new System.ArgumentNullException("id");
 
         var urlBuilder_ = new System.Text.StringBuilder();
-        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/FTLSupporter/Result/{id}");
+        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/PVRPCloudSupporter/Result/{id}");
         urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
         var client_ = _httpClient;
@@ -193,7 +193,7 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<FTLResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<PVRPCloudResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -222,25 +222,25 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1PVRPCloudPVRPCloudXAsync(PVRPCloudRequest body)
+    public virtual System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudPVRPCloudXAsync(PVRPCloudRequest body)
     {
-        return ApiV1FTLSupporterFTLSupportXAsync(body, System.Threading.CancellationToken.None);
+        return ApiV1PVRPCloudSupporterPVRPCloudSupportXAsync(body, System.Threading.CancellationToken.None);
     }
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual FTLResponse ApiV1FTLSupporterFTLSupportX(PVRPCloudRequest body)
+    public virtual PVRPCloudResponse ApiV1PVRPCloudSupporterPVRPCloudSupportX(PVRPCloudRequest body)
     {
-        return System.Threading.Tasks.Task.Run(async () => await ApiV1FTLSupporterFTLSupportXAsync(body, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
+        return System.Threading.Tasks.Task.Run(async () => await ApiV1PVRPCloudSupporterPVRPCloudSupportXAsync(body, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
     }
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterFTLSupportXAsync(PVRPCloudRequest body, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudSupporterPVRPCloudSupportXAsync(PVRPCloudRequest body, System.Threading.CancellationToken cancellationToken)
     {
         var urlBuilder_ = new System.Text.StringBuilder();
-        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/FTLSupporter/FTLSupportX");
+        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/PVRPCloudSupporter/PVRPCloudSupportX");
 
         var client_ = _httpClient;
         var disposeClient_ = false;
@@ -280,7 +280,7 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<FTLResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<PVRPCloudResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -500,7 +500,7 @@ public enum ETruckTaskType
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class FTLPoint
+public partial class PVRPCloudPoint
 {
     [Newtonsoft.Json.JsonProperty("tpid", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -543,7 +543,7 @@ public partial class FTLPoint
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class FTLResponse
+public partial class PVRPCloudResponse
 {
     [Newtonsoft.Json.JsonProperty("requestID", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public string RequestID { get; set; }
@@ -634,7 +634,7 @@ public partial class PVRPCloudTask
 
     [Newtonsoft.Json.JsonProperty("tPoints", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required]
-    public System.Collections.Generic.ICollection<FTLPoint> TPoints { get; set; } = new System.Collections.ObjectModel.Collection<FTLPoint>();
+    public System.Collections.Generic.ICollection<PVRPCloudPoint> TPoints { get; set; } = new System.Collections.ObjectModel.Collection<PVRPCloudPoint>();
 
     [Newtonsoft.Json.JsonProperty("inclTruckProps", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public string InclTruckProps { get; set; }
@@ -749,7 +749,7 @@ public partial class PVRPCloudTruck
 
     [Newtonsoft.Json.JsonProperty("currTPoints", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required]
-    public System.Collections.Generic.ICollection<FTLPoint> CurrTPoints { get; set; } = new System.Collections.ObjectModel.Collection<FTLPoint>();
+    public System.Collections.Generic.ICollection<PVRPCloudPoint> CurrTPoints { get; set; } = new System.Collections.ObjectModel.Collection<PVRPCloudPoint>();
 
     [Newtonsoft.Json.JsonProperty("tPointCompleted", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public int TPointCompleted { get; set; }

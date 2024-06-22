@@ -1,32 +1,32 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "FTLSupport API",
-    "description": "An ASP.NET 6 Web API for FTLSupport",
+    "title": "PVRPCloudSupport API",
+    "description": "An ASP.NET 6 Web API for PVRPCloudSupport",
     "version": "v1"
   },
   "paths": {
-    "/api/v1/FTLSupporter/FTLSupport": {
+    "/api/v1/PVRPCloudSupporter/PVRPCloudSupport": {
       "post": {
         "tags": [
-          "FTLApi"
+          "PVRPCloudApi"
         ],
-        "operationId": "FTLSupport",
+        "operationId": "PVRPCloudSupport",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FTLSupportRequest"
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/FTLSupportRequest"
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/FTLSupportRequest"
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
               }
             }
           }
@@ -37,17 +37,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               }
             }
@@ -55,10 +55,10 @@
         }
       }
     },
-    "/api/v1/FTLSupporter/Result": {
+    "/api/v1/PVRPCloudSupporter/Result": {
       "get": {
         "tags": [
-          "FTLApi"
+          "PVRPCloudApi"
         ],
         "operationId": "Result",
         "parameters": [
@@ -76,17 +76,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               }
             }
@@ -94,27 +94,27 @@
         }
       }
     },
-    "/api/v1/FTLSupporter/FTLSupportX": {
+    "/api/v1/PVRPCloudSupporter/PVRPCloudSupportX": {
       "post": {
         "tags": [
-          "FTLApi"
+          "PVRPCloudApi"
         ],
-        "operationId": "FTLSupportX",
+        "operationId": "PVRPCloudSupportX",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FTLSupportRequest"
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/FTLSupportRequest"
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/FTLSupportRequest"
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
               }
             }
           }
@@ -125,17 +125,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FTLResponse"
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
                 }
               }
             }
@@ -146,7 +146,7 @@
     "/IsAlive": {
       "get": {
         "tags": [
-          "FTLApi"
+          "PVRPCloudApi"
         ],
         "operationId": "IsAlive",
         "responses": {
@@ -168,7 +168,7 @@
           2
         ]
       },
-      "FTLPoint": {
+      "PVRPCloudPoint": {
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -226,7 +226,7 @@
           }
         }
       },
-      "FTLResponse": {
+      "PVRPCloudResponse": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -238,14 +238,14 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/FTLTask"
+              "$ref": "#/components/schemas/PVRPCloudTask"
             }
           },
           "truckList": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/FTLTruck"
+              "$ref": "#/components/schemas/PVRPCloudTruck"
             }
           },
           "maxTruckDistance": {
@@ -256,7 +256,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/FTLResult"
+              "$ref": "#/components/schemas/PVRPCloudResult"
             }
           },
           "hasError": {
@@ -265,12 +265,12 @@
           }
         }
       },
-      "FTLResult": {
+      "PVRPCloudResult": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "status": {
-            "$ref": "#/components/schemas/FTLResultStatus"
+            "$ref": "#/components/schemas/PVRPCloudResultStatus"
           },
           "objectName": {
             "type": "string",
@@ -285,7 +285,7 @@
           }
         }
       },
-      "FTLResultStatus": {
+      "PVRPCloudResultStatus": {
         "type": "integer",
         "format": "int32",
         "enum": [
@@ -296,7 +296,7 @@
           4
         ]
       },
-      "FTLSupportRequest": {
+      "PVRPCloudSupportRequest": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -308,19 +308,19 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/FTLTask"
+              "$ref": "#/components/schemas/PVRPCloudTask"
             }
           },
           "truckList": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/FTLTruck"
+              "$ref": "#/components/schemas/PVRPCloudTruck"
             }
           }
         }
       },
-      "FTLTask": {
+      "PVRPCloudTask": {
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -350,7 +350,7 @@
           "tPoints": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FTLPoint"
+              "$ref": "#/components/schemas/PVRPCloudPoint"
             }
           },
           "inclTruckProps": {
@@ -363,7 +363,7 @@
           }
         }
       },
-      "FTLTruck": {
+      "PVRPCloudTruck": {
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -502,7 +502,7 @@
           "currTPoints": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FTLPoint"
+              "$ref": "#/components/schemas/PVRPCloudPoint"
             }
           },
           "tPointCompleted": {
