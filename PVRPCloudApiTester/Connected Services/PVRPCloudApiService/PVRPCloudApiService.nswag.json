@@ -1,0 +1,516 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PVRPCloudSupport API",
+    "description": "An ASP.NET 6 Web API for PVRPCloudSupport",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/PVRPCloudSupporter/PVRPCloudSupport": {
+      "post": {
+        "tags": [
+          "PVRPCloudApi"
+        ],
+        "operationId": "PVRPCloudSupport",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/PVRPCloudSupporter/Result": {
+      "get": {
+        "tags": [
+          "PVRPCloudApi"
+        ],
+        "operationId": "Result",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/PVRPCloudSupporter/PVRPCloudSupportX": {
+      "post": {
+        "tags": [
+          "PVRPCloudApi"
+        ],
+        "operationId": "PVRPCloudSupportX",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PVRPCloudSupportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PVRPCloudResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/IsAlive": {
+      "get": {
+        "tags": [
+          "PVRPCloudApi"
+        ],
+        "operationId": "IsAlive",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "eTruckTaskType": {
+        "type": "integer",
+        "format": "int32",
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "PVRPCloudPoint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "open",
+          "tpid"
+        ],
+        "properties": {
+          "tpid": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "addr": {
+            "type": "string",
+            "nullable": true
+          },
+          "open": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "close": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "srvDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "extraPeriod": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lat": {
+            "type": "number",
+            "format": "double"
+          },
+          "lng": {
+            "type": "number",
+            "format": "double"
+          },
+          "realArrival": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "realDeparture": {
+            "type": "string",
+            "readOnly": true,
+            "format": "date-time"
+          },
+          "arrInExtraPeriod": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        }
+      },
+      "PVRPCloudResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requestID": {
+            "type": "string",
+            "nullable": true
+          },
+          "taskList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PVRPCloudTask"
+            }
+          },
+          "truckList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PVRPCloudTruck"
+            }
+          },
+          "maxTruckDistance": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "result": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PVRPCloudResult"
+            }
+          },
+          "hasError": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        }
+      },
+      "PVRPCloudResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/PVRPCloudResultStatus"
+          },
+          "objectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemID": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "nullable": true
+          }
+        }
+      },
+      "PVRPCloudResultStatus": {
+        "type": "integer",
+        "format": "int32",
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "PVRPCloudSupportRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "maxTruckDistance": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "taskList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PVRPCloudTask"
+            }
+          },
+          "truckList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PVRPCloudTruck"
+            }
+          }
+        }
+      },
+      "PVRPCloudTask": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cargoType",
+          "taskID",
+          "tPoints"
+        ],
+        "properties": {
+          "taskID": {
+            "type": "string"
+          },
+          "cargoType": {
+            "type": "string"
+          },
+          "truckTypes": {
+            "type": "string",
+            "nullable": true
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "client": {
+            "type": "string",
+            "nullable": true
+          },
+          "tPoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PVRPCloudPoint"
+            }
+          },
+          "inclTruckProps": {
+            "type": "string",
+            "nullable": true
+          },
+          "exclTruckProps": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PVRPCloudTruck": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cargoTypes",
+          "currTime",
+          "currTPoints",
+          "remainingDriveTime",
+          "truckID",
+          "truckTaskType",
+          "truckType"
+        ],
+        "properties": {
+          "truckID": {
+            "type": "string"
+          },
+          "gvwr": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "truckType": {
+            "type": "string"
+          },
+          "cargoTypes": {
+            "type": "string"
+          },
+          "fixCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "kmCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "relocateCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxKM": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxDuration": {
+            "type": "number",
+            "format": "double"
+          },
+          "engineEuro": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "eTollCat": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rZones": {
+            "type": "string",
+            "nullable": true
+          },
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "truckProps": {
+            "type": "string",
+            "nullable": true
+          },
+          "remainingDriveTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingRestTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingTimeToStartDailyRest": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingDailyDriveTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingDailyRestTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingWeeklyDriveTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingWeeklyRestTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingTwoWeeklyDriveTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingTwoWeeklyRestTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingRestTimeToCompensate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "truckTaskType": {
+            "$ref": "#/components/schemas/eTruckTaskType"
+          },
+          "runningTaskID": {
+            "type": "string",
+            "nullable": true
+          },
+          "currIsOneWay": {
+            "type": "boolean"
+          },
+          "currTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currLat": {
+            "type": "number",
+            "format": "double"
+          },
+          "currLng": {
+            "type": "number",
+            "format": "double"
+          },
+          "currTPoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PVRPCloudPoint"
+            }
+          },
+          "tPointCompleted": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      }
+    }
+  }
+}

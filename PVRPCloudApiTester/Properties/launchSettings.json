@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PVRPCloudApiTester": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}
