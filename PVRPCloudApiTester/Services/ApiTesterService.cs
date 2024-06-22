@@ -25,11 +25,11 @@ internal class Args
 
 internal class TestData
 {
-    public FTLSupportRequest Request { get; set; }
+    public PVRPCloudRequest Request { get; set; }
 
-    public List<FTLResult> Result { get; set; }
+    public List<PVRPCloudResult> Result { get; set; }
 
-    public bool IsFTLSupport { get; set; }
+    public bool IsPVRPCloudSupport { get; set; }
 }
 
 internal class ApiTesterService : IApiTesterService
@@ -124,7 +124,7 @@ internal class ApiTesterService : IApiTesterService
 
     private void DoTestRequests(Dictionary<string, TestData> data)
     {
-        _logger.Information($"Initiating test requests towards API. Base URL: {_settings.FTLApiBaseUrl}");
+        _logger.Information($"Initiating test requests towards API. Base URL: {_settings.PVRPCloudApiBaseUrl}");
 
         var timer = new Stopwatch();
         var timerResult = new Stopwatch();
@@ -142,7 +142,7 @@ internal class ApiTesterService : IApiTesterService
 
             var testCase = test.Value;
 
-            var endpoint = test.Value.IsFTLSupport ? "FTLSupport" : "FTLSupportX";
+            var endpoint = test.Value.IsPVRPCloudSupport ? "PVRPCloudSupport" : "PVRPCloudSupportX";
             _logger.Information($"Sending request for test data with ID {test.Key}, to endpoint {endpoint}");
             _logger.Verbose("Request content: " + JsonConvert.SerializeObject(testCase.Request));
 
@@ -155,8 +155,8 @@ internal class ApiTesterService : IApiTesterService
                     _logger.Information("Queue cleared.");
                 }
 
-                var response = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
-                    : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
+                var response = testCase.IsPVRPCloudSupport ? _client.ApiV1PVRPCloudPVRPCloudSupportAsync(testCase.Request).Result
+                    : _client.ApiV1PVRPCloudPVRPCloudXAsync(testCase.Request).Result;
                 _logger.Information("Request was successful.");
 
                 var resp = new GetResultResponse();
@@ -204,19 +204,19 @@ internal class ApiTesterService : IApiTesterService
 
                         if (!string.IsNullOrWhiteSpace(link))
                         {
-                            _logger.Information($"Getting FTLResponse from API...");
+                            _logger.Information($"Getting PVRPCloudResponse from API...");
 
-                            var ftlResponse = _client.ApiV1FTLSupporterResultAsync(link.Split('/')[^1]).Result;
+                            var pvrpCloudResponse = _client.ApiV1PVRPCloudResultAsync(link.Split('/')[^1]).Result;
 
-                            if (ftlResponse != null)
+                            if (pvrpCloudResponse != null)
                             {
-                                _logger.Information("Processing FTLResponse...");
+                                _logger.Information("Processing PVRPCloudResponse...");
 
-                                var results = ftlResponse.Result.ToList();
+                                var results = pvrpCloudResponse.Result.ToList();
 
                                 testCase.Result.ForEach(x =>
                                 {
-                                    if (x.Status == FTLResultStatus.RESULT)
+                                    if (x.Status == PVRPCloudResultStatus.RESULT)
                                     {
                                         x.Data = ((JToken)x.Data).ToObject<List<PVRPCloud.PVRPCloudCalcTask>>();
                                     }
@@ -250,12 +250,12 @@ internal class ApiTesterService : IApiTesterService
                             }
                             else
                             {
-                                _logger.Error("Request failed: FTLResponse is null!");
+                                _logger.Error("Request failed: PVRPCloudResponse is null!");
                             }
                         }
                         else
                         {
-                            _logger.Error("Link in FTLQueueResponse is empty or null!");
+                            _logger.Error("Link in PVRPCloudQueueResponse is empty or null!");
                         }
                     }
                     catch (Exception ex)
@@ -306,25 +306,25 @@ internal class ApiTesterService : IApiTesterService
     private TestData GetTestData(string id)
     {
         TestData data = new TestData();
-        data.Request = new FTLSupportRequest
+        data.Request = new PVRPCloudRequest
         {
-            TaskList = new List<FTLTask>(),
-            TruckList = new List<FTLTruck>()
+            TaskList = new List<PVRPCloudTask>(),
+            TruckList = new List<PVRPCloudTruck>()
         };
 
-        data.IsFTLSupport = File.Exists(Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + _settings.FTLSupportFileSuffix + "." + _settings.FileExtension));
-        var fileEnding = data.IsFTLSupport ?
-            _settings.FTLSupportFileSuffix : _settings.FTLSupportXFileSuffix;
+        data.IsPVRPCloudSupport = File.Exists(Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + _settings.PVRPCloudSupportFileSuffix + "." + _settings.FileExtension));
+        var fileEnding = data.IsPVRPCloudSupport ?
+            _settings.PVRPCloudSupportFileSuffix : _settings.PVRPCloudSupportXFileSuffix;
         fileEnding = fileEnding + "." + _settings.FileExtension;
 
-        _logger.Information("Test type: " + (data.IsFTLSupport ? "FTLSupport" : "FTLSupportX"));
+        _logger.Information("Test type: " + (data.IsPVRPCloudSupport ? "PVRPCloudSupport" : "PVRPCloudSupportX"));
 
         _logger.Information("Loading task data...");
 
         var taskPath = Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + fileEnding);
         if (File.Exists(taskPath))
         {
-            var tasks = JsonConvert.DeserializeObject<List<FTLTask>>(File.ReadAllText(taskPath), isoDateTimeConverter);
+            var tasks = JsonConvert.DeserializeObject<List<PVRPCloudTask>>(File.ReadAllText(taskPath), isoDateTimeConverter);
             data.Request.TaskList = tasks;
         }
         else
@@ -338,7 +338,7 @@ internal class ApiTesterService : IApiTesterService
         var truckPath = Path.Combine(TestDataPath, id + _settings.TruckFileIdentifier + fileEnding);
         if (File.Exists(truckPath))
         {
-            var trucks = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath), isoDateTimeConverter);
+            var trucks = JsonConvert.DeserializeObject<List<PVRPCloudTruck>>(File.ReadAllText(truckPath), isoDateTimeConverter);
             data.Request.TruckList = trucks;
         }
         else
@@ -352,7 +352,7 @@ internal class ApiTesterService : IApiTesterService
         var resultPath = Path.Combine(TestDataPath, id + _settings.ResultFileIdentifier + fileEnding);
         if (File.Exists(resultPath))
         {
-            var result = JsonConvert.DeserializeObject<List<FTLResult>>(File.ReadAllText(resultPath), isoDateTimeConverter);
+            var result = JsonConvert.DeserializeObject<List<PVRPCloudResult>>(File.ReadAllText(resultPath), isoDateTimeConverter);
             data.Result = result;
         }
         else

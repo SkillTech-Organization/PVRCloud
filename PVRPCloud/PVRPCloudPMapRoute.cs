@@ -5,7 +5,7 @@ namespace PVRPCloud;
 [Serializable]
 internal class PVRPCloudPMapRoute
 {
-    public class FTLToll
+    public class PVRPCloudToll
     {
         public int ETollCat { get; set; }                          //A díjszámításnál használandó járműkategória.
         public int EngineEuro { get; set; }                        //Jármű motor EURO kategória

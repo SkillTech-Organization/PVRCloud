@@ -48,14 +48,14 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterFTLSupportAsync(FTLSupportRequest body)
+    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1PVRPCloudPVRPCloudSupportAsync(PVRPCloudRequest body)
     {
         return ApiV1FTLSupporterFTLSupportAsync(body, System.Threading.CancellationToken.None);
     }
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual FTLResponse ApiV1FTLSupporterFTLSupport(FTLSupportRequest body)
+    public virtual FTLResponse ApiV1FTLSupporterFTLSupport(PVRPCloudRequest body)
     {
         return System.Threading.Tasks.Task.Run(async () => await ApiV1FTLSupporterFTLSupportAsync(body, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
     }
@@ -63,7 +63,7 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterFTLSupportAsync(FTLSupportRequest body, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterFTLSupportAsync(PVRPCloudRequest body, System.Threading.CancellationToken cancellationToken)
     {
         var urlBuilder_ = new System.Text.StringBuilder();
         urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/FTLSupporter/FTLSupport");
@@ -135,7 +135,7 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterResultAsync(string id)
+    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1PVRPCloudResultAsync(string id)
     {
         return ApiV1FTLSupporterResultAsync(id, System.Threading.CancellationToken.None);
     }
@@ -222,14 +222,14 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterFTLSupportXAsync(FTLSupportRequest body)
+    public virtual System.Threading.Tasks.Task<FTLResponse> ApiV1PVRPCloudPVRPCloudXAsync(PVRPCloudRequest body)
     {
         return ApiV1FTLSupporterFTLSupportXAsync(body, System.Threading.CancellationToken.None);
     }
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual FTLResponse ApiV1FTLSupporterFTLSupportX(FTLSupportRequest body)
+    public virtual FTLResponse ApiV1FTLSupporterFTLSupportX(PVRPCloudRequest body)
     {
         return System.Threading.Tasks.Task.Run(async () => await ApiV1FTLSupporterFTLSupportXAsync(body, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
     }
@@ -237,7 +237,7 @@ public partial class PVRPCloudApiServiceClient : PVRPCloudApiServiceClientBase
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterFTLSupportXAsync(FTLSupportRequest body, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<FTLResponse> ApiV1FTLSupporterFTLSupportXAsync(PVRPCloudRequest body, System.Threading.CancellationToken cancellationToken)
     {
         var urlBuilder_ = new System.Text.StringBuilder();
         urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/FTLSupporter/FTLSupportX");
@@ -549,16 +549,16 @@ public partial class FTLResponse
     public string RequestID { get; set; }
 
     [Newtonsoft.Json.JsonProperty("taskList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<FTLTask> TaskList { get; set; }
+    public System.Collections.Generic.ICollection<PVRPCloudTask> TaskList { get; set; }
 
     [Newtonsoft.Json.JsonProperty("truckList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<FTLTruck> TruckList { get; set; }
+    public System.Collections.Generic.ICollection<PVRPCloudTruck> TruckList { get; set; }
 
     [Newtonsoft.Json.JsonProperty("maxTruckDistance", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public int MaxTruckDistance { get; set; }
 
     [Newtonsoft.Json.JsonProperty("result", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<FTLResult> Result { get; set; }
+    public System.Collections.Generic.ICollection<PVRPCloudResult> Result { get; set; }
 
     [Newtonsoft.Json.JsonProperty("hasError", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public bool HasError { get; set; }
@@ -566,10 +566,10 @@ public partial class FTLResponse
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class FTLResult
+public partial class PVRPCloudResult
 {
     [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public FTLResultStatus Status { get; set; }
+    public PVRPCloudResultStatus Status { get; set; }
 
     [Newtonsoft.Json.JsonProperty("objectName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public string ObjectName { get; set; }
@@ -584,7 +584,7 @@ public partial class FTLResult
 
 // NOTODO NSwagger fails to generate this enum correctly, the fields must be copied here after generation.
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public enum FTLResultStatus
+public enum PVRPCloudResultStatus
 {
     [Description("RESULT")]
     RESULT,
@@ -599,21 +599,21 @@ public enum FTLResultStatus
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class FTLSupportRequest
+public partial class PVRPCloudRequest
 {
     [Newtonsoft.Json.JsonProperty("maxTruckDistance", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public int MaxTruckDistance { get; set; }
 
     [Newtonsoft.Json.JsonProperty("taskList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<FTLTask> TaskList { get; set; }
+    public System.Collections.Generic.ICollection<PVRPCloudTask> TaskList { get; set; }
 
     [Newtonsoft.Json.JsonProperty("truckList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<FTLTruck> TruckList { get; set; }
+    public System.Collections.Generic.ICollection<PVRPCloudTruck> TruckList { get; set; }
 
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class FTLTask
+public partial class PVRPCloudTask
 {
     [Newtonsoft.Json.JsonProperty("taskID", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -645,7 +645,7 @@ public partial class FTLTask
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class FTLTruck
+public partial class PVRPCloudTruck
 {
     [Newtonsoft.Json.JsonProperty("truckID", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]

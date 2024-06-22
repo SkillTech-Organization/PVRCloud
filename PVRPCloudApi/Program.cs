@@ -20,8 +20,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "FTLSupport API",
-        Description = "An ASP.NET 6 Web API for FTLSupport",
+        Title = "PVRPCloudSupport API",
+        Description = "An ASP.NET 6 Web API for PVRPCloudSupport",
         //TermsOfService = new Uri("https://example.com/terms"),
         //Contact = new OpenApiContact
         //{
@@ -37,7 +37,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.Configure<PVRPCloudLoggerSettings>(
-    builder.Configuration.GetSection("FTLLogger"));
+    builder.Configuration.GetSection("PVRPCloudLogger"));
 
 builder.Services.AddTransient<IPVRPCloudApiHandler, PVRPCloudApiHandler>();
 

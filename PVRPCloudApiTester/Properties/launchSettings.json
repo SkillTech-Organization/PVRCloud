@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "FTLApiTester": {
+    "PVRPCloudApiTester": {
       "commandName": "Project",
       "commandLineArgs": ""
     }

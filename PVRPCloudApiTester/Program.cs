@@ -27,7 +27,7 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         .ConfigureServices((hostContext, services) =>
         {
             services.AddHttpClient();
-            //services.Configure<FTLApiTesterSettings>(hostContext.Configuration.GetSection("FTLApiTester"));
+            //services.Configure<PVRPCloudApiTesterSettings>(hostContext.Configuration.GetSection("PVRPCloudApiTester"));
             services.AddTransient<PVRPCloudApiTesterSettings>();
             services.AddLogging();
             services.AddTransient<PVRPCloudApiServiceClient>();

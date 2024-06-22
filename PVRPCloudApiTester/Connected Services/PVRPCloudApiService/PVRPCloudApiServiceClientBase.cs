@@ -19,7 +19,7 @@ public class PVRPCloudApiServiceClientBase
     {
         _configuration = configuration;
 
-        BaseUrl = configuration.GetSection("FTLApiTester").GetValue<string>("FTLApiBaseUrl");
+        BaseUrl = configuration.GetSection("PVRPCloudApiTester").GetValue<string>("PVRPCloudApiBaseUrl");
         ApiKey = configuration.GetValue<string>("ApiKey");
     }
 }

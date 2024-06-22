@@ -30,16 +30,16 @@ class Program
         // lstTrk.First().GVWR = 0;
         // lstTrk.Last().CargoTypes = null;
 
-        var res = PVRPCloudInterface.FTLInit(lstTsk, lstTrk, 10000, null);
+        var res = PVRPCloudInterface.PVRPCloudInit(lstTsk, lstTrk, 10000, null);
         var str = JsonConvert.SerializeObject(res);
     }
 
     static void SWHTest(bool p_bestTruck = false)
     {
-        FileInfo fi = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Tasks_dump.bin");
+        FileInfo fi = new FileInfo(@"d:\work\source\PMap\PVRPCloudSupporterTest\input\Tasks_dump.bin");
         //FileInfo fi = new FileInfo(@"d:\temp\SWH\ori\4617936_boXRoute.json");
         var lstTsk = (List<PVRPCloudTask>)BinarySerializer.Deserialize(fi);
-        FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
+        FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\PVRPCloudSupporterTest\input\Trucks_dump.bin");
         //FileInfo fi2 = new FileInfo(@"d:\temp\SWH\ori\4617936_boXTruck.json");
         var lstTrk = (List<PVRPCloudTruck>)BinarySerializer.Deserialize(fi2);
         RunTest(lstTsk, lstTrk, p_bestTruck);
@@ -789,7 +789,7 @@ class Program
         //var dd = route.GetNearestReachableNOD_IDForTruck(new PointLatLng(47.647828, 21.48993), "", out diff);
         //var lstTskx = new List<PVRPCloudTask> { tsk4 };
         //var lstTrkx = new List<PVRPCloudTruck> { trkErr1 };
-        //var resx = PVRPCloudInterface.FTLSupportX(lstTskx, lstTrkx, "", "DB0", true);
+        //var resx = PVRPCloudInterface.PVRPCloudSupportX(lstTskx, lstTrkx, "", "DB0", true);
 
         /*
                     if (p_bestTruck)
@@ -827,13 +827,13 @@ class Program
         /*besttruck eredmény */
 
         /*
-        res = PVRPCloudInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
+        res = PVRPCloudInterface.PVRPCloudSupportX(lstTsk, lstTrk, "", "DB0", true);
         bestTruckConsole(res.FirstOrDefault());
         Console.ReadKey();
         return;
          */
         /*
-            res = PVRPCloudInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
+            res = PVRPCloudInterface.PVRPCloudSupportX(lstTsk, lstTrk, "", "DB0", true);
             FileInfo fi = new FileInfo( "res.res");
             BinarySerializer.Serialize(fi, res);
         */
@@ -844,13 +844,13 @@ class Program
         bestTruckConsole(res.FirstOrDefault());
 
         if (p_bestTruck)
-            PVRPCloudInterface.FTLSetBestTruck(res);
+            PVRPCloudInterface.PVRPCloudSetBestTruck(res);
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("********************");
         bestTruckConsole(res.FirstOrDefault());
 
         List<PVRPCloudTask> lstTsk2 = new List<PVRPCloudTask>();
-        var lstTrk2 = PVRPCloudInterface.FTLGenerateTrucksFromCalcTours(res);
+        var lstTrk2 = PVRPCloudInterface.PVRPCloudGenerateTrucksFromCalcTours(res);
 
         var calcResult = res.Where(x => x.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT).FirstOrDefault();
         if (calcResult != null)
@@ -859,7 +859,7 @@ class Program
             lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Count == 0).Select(s => s.Task));
         }
 
-        var res2 = PVRPCloudInterface.FTLSupport(lstTsk2, lstTrk2, "", "DB0", true);
+        var res2 = PVRPCloudInterface.PVRPCloudSupport(lstTsk2, lstTrk2, "", "DB0", true);
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("********************");
         bestTruckConsole(res2.FirstOrDefault());
@@ -896,10 +896,10 @@ class Program
         Console.BufferHeight = 600;
         p_bestTruck = false;
         if (p_bestTruck)
-            res = PVRPCloudInterface.FTLSupportX(lstTsk, lstTrk, 10000);
+            res = PVRPCloudInterface.PVRPCloudSupportX(lstTsk, lstTrk, 10000);
         else
-            res = PVRPCloudInterface.FTLSupport(lstTsk, lstTrk, 10000);
-        Console.WriteLine("FTLSupport  időtartam:" + (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString());
+            res = PVRPCloudInterface.PVRPCloudSupport(lstTsk, lstTrk, 10000);
+        Console.WriteLine("PVRPCloudSupport  időtartam:" + (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString());
 
         int i = 1;
         foreach (var rr in res)

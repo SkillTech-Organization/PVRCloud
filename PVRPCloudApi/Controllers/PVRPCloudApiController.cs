@@ -28,20 +28,20 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
 {
     private IPVRPCloudApiHandler _implementation;
 
-    public PVRPCloudApiController(IPVRPCloudApiHandler fTLApiHandler)
+    public PVRPCloudApiController(IPVRPCloudApiHandler PvrpCloudApiHandler)
     {
-        _implementation = fTLApiHandler;
+        _implementation = PvrpCloudApiHandler;
     }
 
     /// <summary>
-    /// Calculate by FTLSupporter engine
+    /// Calculate by PVRPCloudSupporter engine
     /// </summary>
     /// <param name="body"></param>
     /// <param name="maxTruckDistance"></param>
     /// <returns></returns>
     [ApiKey]
-    [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
-    public async Task<ActionResult<PVRPCloudResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] PVRPCloudSupportRequest body)
+    [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/PVRPCloudSupporter/PVRPCloudSupport")]
+    public async Task<ActionResult<PVRPCloudResponse>> PVRPCloudSupport([Microsoft.AspNetCore.Mvc.FromBody] PVRPCloudSupportRequest body)
     {
         var result = await _implementation.PVRCloudSupportAsync(body, CancellationToken.None);
 
@@ -61,7 +61,7 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
     /// <param name="id"></param>
     /// <returns></returns>
     [ApiKey]
-    [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/Result/{id}")]
+    [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/PVRPCloudSupporter/Result/{id}")]
     public async Task<ActionResult<PVRPCloudResponse>> Result([FromRoute] string id)
     {
         var result = await _implementation.Result(id);
@@ -69,14 +69,14 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
     }
 
     /// <summary>
-    /// Calculate by FTLSupporterX engine
+    /// Calculate by PVRPCloudSupporterX engine
     /// </summary>
     /// <param name="body"></param>
     /// <param name="maxTruckDistance"></param>
     /// <returns></returns>
     [ApiKey]
-    [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
-    public async Task<ActionResult<PVRPCloudResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] PVRPCloudSupportRequest body)
+    [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/PVRPCloudSupporter/PVRPCloudSupportX")]
+    public async Task<ActionResult<PVRPCloudResponse>> PVRPCloudSupportX([Microsoft.AspNetCore.Mvc.FromBody] PVRPCloudSupportRequest body)
     {
         var result = await _implementation.PVRCloudSupportXAsync(body, CancellationToken.None);
 
@@ -91,7 +91,7 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
     }
 
     /// <summary>
-    /// get the 'isalive' status of the FTLSupporter service
+    /// get the 'isalive' status of the PVRPCloudSupporter service
     /// </summary>
     /// <returns></returns>
     [ApiKey]

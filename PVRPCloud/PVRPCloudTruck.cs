@@ -23,7 +23,7 @@ public class PVRPCloudTruck
             {
                 if (RetPoint == null)
                 {
-                    FTLPoint firstPt = m_currTPoints.FirstOrDefault();
+                    PVRPCloudPoint firstPt = m_currTPoints.FirstOrDefault();
                     if (firstPt != null)
                         RetPoint = new PointLatLng(firstPt.Lat, firstPt.Lng);
                 }
@@ -229,7 +229,7 @@ public class PVRPCloudTruck
         }
     }
 
-    //internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
+    //internal ObservableCollection<PVRPCloudPoint> m_currTPoints = new ObservableCollection<PVRPCloudPoint>();
     [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 33)]
     [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
     public List<PVRPCloudPoint> CurrTPoints { get; set; } = new List<PVRPCloudPoint>();

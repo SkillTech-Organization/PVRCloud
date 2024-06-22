@@ -30,7 +30,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
         try
         {
 
-            var initResult = PVRPCloudInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
+            var initResult = PVRPCloudInterface.PVRPCloudInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
             if (initResult != null)
             {
                 response = initResult;
@@ -40,7 +40,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
 
             if (initResult != null && !initResult.HasError)
             {
-                Task.Run(() => PVRPCloudInterface.FTLSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
+                Task.Run(() => PVRPCloudInterface.PVRPCloudSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
             }
         }
         catch (Exception ex)
@@ -95,7 +95,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
         var response = new PVRPCloudResponse();
         try
         {
-            var initResult = PVRPCloudInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
+            var initResult = PVRPCloudInterface.PVRPCloudInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
             if (initResult != null)
             {
                 response = initResult;
@@ -105,7 +105,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
 
             if (initResult != null && !initResult.HasError)
             {
-                Task.Run(() => PVRPCloudInterface.FTLSupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
+                Task.Run(() => PVRPCloudInterface.PVRPCloudSupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
             }
         }
         catch (Exception ex)

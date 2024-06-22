@@ -6,19 +6,19 @@ public class PVRPCloudApiTesterSettings
 {
     public PVRPCloudApiTesterSettings(IConfiguration configuration)
     {
-        configuration.Bind("FTLApiTester", this);
+        configuration.Bind("PVRPCloudApiTester", this);
     }
 
     public string AzureStorageConnectionString { get; set; }
     public string QueueName { get; set; }
     public string TestDataPath { get; set; }
-    public string FTLApiBaseUrl { get; set; }
+    public string PVRPCloudApiBaseUrl { get; set; }
     public string ResultFileIdentifier { get; set; }
     public string TaskFileIdentifier { get; set; }
     public string TruckFileIdentifier { get; set; }
     public string TestResultFileIdentifier { get; set; }
-    public string FTLSupportFileSuffix { get; set; }
-    public string FTLSupportXFileSuffix { get; set; }
+    public string PVRPCloudSupportFileSuffix { get; set; }
+    public string PVRPCloudSupportXFileSuffix { get; set; }
     public string FileExtension { get; set; }
     public int? MaxTruckDistance { get; set; }
     public int MaxMessagesFromQueueAtOnce { get; set; }

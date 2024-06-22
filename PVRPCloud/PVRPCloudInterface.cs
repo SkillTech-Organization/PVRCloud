@@ -24,7 +24,7 @@ public class PVRPCloudInterface
     private static PVRPCloudLoggerSettings LoggerSettings { get; set; }
     private static string RequestID { get; set; }
 
-    public static PVRPCloudResponse FTLInit(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
+    public static PVRPCloudResponse PVRPCloudInit(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
     {
         if (Logger == null)
         {
@@ -101,7 +101,7 @@ public class PVRPCloudInterface
         return m.ToJson();
     }
 
-    private static void HandleResult(DateTime dtStart, List<PVRPCloudResult> res, bool isFtlSupport, List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static void HandleResult(DateTime dtStart, List<PVRPCloudResult> res, bool isPvrpCloudSupport, List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
         var ret = new PVRPCloudResponse();
 
@@ -119,7 +119,7 @@ public class PVRPCloudInterface
 
         if (saveSuccess)
         {
-            var msg = string.Format(isFtlSupport ? "FTLSupport Időtartam:{0}" : "FTLSupportX TELJES Időtartam:{0}", (DateTime.UtcNow - dtStart).ToString());
+            var msg = string.Format(isPvrpCloudSupport ? "PVRPCloudSupport Időtartam:{0}" : "PVRPCloudSupportX TELJES Időtartam:{0}", (DateTime.UtcNow - dtStart).ToString());
 
             Logger.Info(msg, Logger.GetEndProperty(RequestID), false);
 
@@ -159,43 +159,43 @@ public class PVRPCloudInterface
         }
     }
 
-    public static List<PVRPCloudResult> FTLSupport(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    public static List<PVRPCloudResult> PVRPCloudSupport(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
         DateTime dtStart = DateTime.UtcNow;
         PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
-        Logger.Info(string.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetStartProperty(RequestID));
+        Logger.Info(string.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "PVRPCloudSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetStartProperty(RequestID));
 
-        var res = FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
+        var res = PVRPCloudSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
         HandleResult(dtStart, res, true, p_TaskList, p_TruckList, p_maxTruckDistance);
 
         return res;
     }
 
-    //Az eredményfeldolgozásban különbözik a FTLSupport-től
-    public static List<PVRPCloudResult> FTLSupportX(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    //Az eredményfeldolgozásban különbözik a PVRPCloudSupport-től
+    public static List<PVRPCloudResult> PVRPCloudSupportX(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
         DateTime dtStart = DateTime.UtcNow;
         PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
-        Logger.Info(string.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetStartProperty(RequestID));
+        Logger.Info(string.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "PVRPCloudSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetStartProperty(RequestID));
 
-        var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
+        var res = PVRPCloudSupportX_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
         HandleResult(dtStart, res, false, p_TaskList, p_TruckList, p_maxTruckDistance);
 
         return res;
     }
 
-    private static List<PVRPCloudResult> FTLSupport_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static List<PVRPCloudResult> PVRPCloudSupport_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
 
         List<PVRPCloudResult> result = new List<PVRPCloudResult>();
 
         try
         {
-            Logger.Info(string.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
+            Logger.Info(string.Format("{0} {1}", "PVRPCloudSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
             DateTime dtStart = DateTime.UtcNow;
             RouteData.Instance.InitFromFiles(PMapIniParams.Instance.MapJSonDir, PMapIniParams.Instance.dicSpeed, false);
@@ -223,7 +223,7 @@ public class PVRPCloudInterface
                         //int diff = 0;
                         if (pt.NOD_ID == 0)
                         {
-                            int NOD_ID = FTLGetNearestNOD_ID(EdgesArr, new PointLatLng(pt.Lat, pt.Lng));
+                            int NOD_ID = PVRPCloudGetNearestNOD_ID(EdgesArr, new PointLatLng(pt.Lat, pt.Lng));
                             if (NOD_ID == 0)
                             {
                                 result.Add(getValidationError(pt,
@@ -296,7 +296,7 @@ public class PVRPCloudInterface
                         trk.RZN_ID_LIST = RouteData.Instance.RZN_ID_LIST[Global.RST_NORESTRICT];
                 }
 
-                Logger.Info(string.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű zónalistájának összeállítása", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "PVRPCloudSupport", "Jármű zónalistájának összeállítása", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
                 dtXDate2 = DateTime.UtcNow;
 
@@ -313,20 +313,20 @@ public class PVRPCloudInterface
                 if (trk.NOD_ID_CURR == 0)
                 {
 
-                    trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(EdgesArr, new PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
+                    trk.NOD_ID_CURR = PVRPCloudGetNearestReachableNOD_IDForTruck(EdgesArr, new PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     if (trk.NOD_ID_CURR == 0)
                         result.Add(getValidationError(trk,
                             string.Format("Jármű:{0}, aktuális poz:{1}", trk.TruckID,
                             new PointLatLng(trk.CurrLat, trk.CurrLng).ToString()), PVRPCloudMessages.E_WRONGCOORD));
                 }
 
-                Logger.Info(string.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Teljesített koordináta feloldás és ellenőrzés", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "PVRPCloudSupport", "Teljesített koordináta feloldás és ellenőrzés", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
                 dtXDate2 = DateTime.UtcNow;
 
                 if (trk.RET_NOD_ID == 0)
                 {
-                    trk.RET_NOD_ID = FTLGetNearestReachableNOD_IDForTruck(EdgesArr, trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
+                    trk.RET_NOD_ID = PVRPCloudGetNearestReachableNOD_IDForTruck(EdgesArr, trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     if (trk.RET_NOD_ID == 0)
                         result.Add(getValidationError(trk,
                             string.Format("Jármű:{0}, visszetérés poz:{1}", trk.TruckID,
@@ -337,7 +337,7 @@ public class PVRPCloudInterface
                 {
                     if (pt.NOD_ID == 0)
                     {
-                        pt.NOD_ID = FTLGetNearestNOD_ID(EdgesArr, new PointLatLng(pt.Lat, pt.Lng));
+                        pt.NOD_ID = PVRPCloudGetNearestNOD_ID(EdgesArr, new PointLatLng(pt.Lat, pt.Lng));
                         if (pt.NOD_ID == 0)
                         {
                             result.Add(getValidationError(pt,
@@ -347,12 +347,12 @@ public class PVRPCloudInterface
                     }
                 }
 
-                Logger.Info(string.Format("{0} {1} Jármű:{2}, Időtartam:{3}, pontok száma:{4}", "FTLSupport", "Jármű túrapontok koordináta feloldás és ellenőrzés2", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString(), trk.CurrTPoints.Count.ToString()), Logger.GetStatusProperty(RequestID));
-                Logger.Info(string.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű teljes koordináta feloldás", trk.TruckID, (DateTime.UtcNow - dtXDate).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Jármű:{2}, Időtartam:{3}, pontok száma:{4}", "PVRPCloudSupport", "Jármű túrapontok koordináta feloldás és ellenőrzés2", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString(), trk.CurrTPoints.Count.ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "PVRPCloudSupport", "Jármű teljes koordináta feloldás", trk.TruckID, (DateTime.UtcNow - dtXDate).ToString()), Logger.GetStatusProperty(RequestID));
 
             }
 
-            Logger.Info(string.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Koordináta feloldás", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+            Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", "Koordináta feloldás", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
             dtPhaseStart = DateTime.UtcNow;
 
@@ -381,7 +381,7 @@ public class PVRPCloudInterface
             }
 
             Logger.Info(
-                string.Format("{0} {1} Időtartam:{2}", "FTLSupport", $"Távoli járművek kitörlése (törölt járművek száma:{delTrucks.Count})", (DateTime.UtcNow - dtPhaseStart).ToString()),
+                string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", $"Távoli járművek kitörlése (törölt járművek száma:{delTrucks.Count})", (DateTime.UtcNow - dtPhaseStart).ToString()),
                 Logger.GetStatusProperty(RequestID));
 
             dtPhaseStart = DateTime.UtcNow;
@@ -408,7 +408,7 @@ public class PVRPCloudInterface
                     }
                 }
 
-                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Előkészítés", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", "Előkészítés", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
                 dtPhaseStart = DateTime.UtcNow;
 
@@ -585,7 +585,7 @@ public class PVRPCloudInterface
                     Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " zónák:" + r.RZN_ID_LIST);
                 */
 
-                // 5.1 Megnézzük, mely számítandó FTL útvonalaknak nincs Route-juk (ezeket ki kell számolni)
+                // 5.1 Megnézzük, mely számítandó PVRPCloud útvonalaknak nincs Route-juk (ezeket ki kell számolni)
                 //
                 foreach (PVRPCloudPMapRoute r in lstPMapRoutes)
                 {
@@ -611,7 +611,7 @@ public class PVRPCloudInterface
 
                 lstPMapRoutes.AddRange(lstCalcPMapRoutes);
 
-                Logger.Info(string.Format("{0} {1} Számítandó távolságok:{2} Időtartam:{3}", "FTLSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás", lstCalcPMapRoutes.Count, (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Számítandó távolságok:{2} Időtartam:{3}", "PVRPCloudSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás", lstCalcPMapRoutes.Count, (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
                 dtPhaseStart = DateTime.UtcNow;
 
@@ -774,7 +774,7 @@ public class PVRPCloudInterface
                     }
                 }
 
-                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmény összeállítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", "Eredmény összeállítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
                 dtPhaseStart = DateTime.UtcNow;
 
@@ -813,7 +813,7 @@ public class PVRPCloudInterface
                                        .ForEach(x => { x.StatusEnum = PVRPCloudCalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(PVRPCloudMessages.E_RETMISSROUTE); });
                 }
 
-                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Hibák beállítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", "Hibák beállítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
                 dtPhaseStart = DateTime.UtcNow;
 
@@ -1142,7 +1142,7 @@ public class PVRPCloudInterface
 
                 }
 
-                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Időpontok számítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", "Időpontok számítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
                 dtPhaseStart = DateTime.UtcNow;
 
@@ -1172,7 +1172,7 @@ public class PVRPCloudInterface
                     clctsk.CalcTours.Where(x => x.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
                 }
 
-                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmények véglegesítése", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", "Eredmények véglegesítése", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
                 dtPhaseStart = DateTime.UtcNow;
 
@@ -1253,10 +1253,10 @@ public class PVRPCloudInterface
         return itemRes;
     }
 
-    private static List<PVRPCloudResult> FTLSupportX_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static List<PVRPCloudResult> PVRPCloudSupportX_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
 
-        List<PVRPCloudResult> res = FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
+        List<PVRPCloudResult> res = PVRPCloudSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
 
         /*
@@ -1272,15 +1272,15 @@ public class PVRPCloudInterface
         var calcResult = res.Where(i => i.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT).FirstOrDefault();
         if (calcResult != null)
         {
-            FTLSetBestTruck(res);
+            PVRPCloudSetBestTruck(res);
             List<PVRPCloudCalcTask> calcTaskList = (List<PVRPCloudCalcTask>)calcResult.Data;
 
             while (calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
             {
                 List<PVRPCloudTask> lstTsk2 = new List<PVRPCloudTask>();
-                var lstTrk2 = FTLGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
+                var lstTrk2 = PVRPCloudGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
                 lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
-                List<PVRPCloudResult> res2 = FTLSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
+                List<PVRPCloudResult> res2 = PVRPCloudSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
 
                 var calcResult2 = res2.Where(x => x.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT).FirstOrDefault();
                 if (calcResult2 != null)
@@ -1288,7 +1288,7 @@ public class PVRPCloudInterface
                     //Elvileg itt már kell, hogy legyen result típusú tétel, mert a validálás az előző menetben megrtörtént.
 
 
-                    FTLSetBestTruck(res2);
+                    PVRPCloudSetBestTruck(res2);
 
                     List<PVRPCloudCalcTask> calcTaskList2 = (List<PVRPCloudCalcTask>)calcResult2.Data;
 
@@ -1359,7 +1359,7 @@ public class PVRPCloudInterface
             }
         }
 
-        Logger.Info(string.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "Legjobb jármű számítás összesen", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+        Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupportX", "Legjobb jármű számítás összesen", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
         return res;
     }
@@ -1367,7 +1367,7 @@ public class PVRPCloudInterface
 
 
 
-    public static void FTLSetBestTruck(List<PVRPCloudResult> p_calcResult)
+    public static void PVRPCloudSetBestTruck(List<PVRPCloudResult> p_calcResult)
     {
 
         DateTime dtBestTruckStart = DateTime.UtcNow;
@@ -1452,12 +1452,12 @@ public class PVRPCloudInterface
                 }
             }
         }
-        Logger.Info(string.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "FTLSetBestTruck (legjobban teljesítő járművek megállapítása):", (DateTime.UtcNow - dtBestTruckStart).ToString()), Logger.GetStatusProperty(RequestID));
+        Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupportX", "PVRPCloudSetBestTruck (legjobban teljesítő járművek megállapítása):", (DateTime.UtcNow - dtBestTruckStart).ToString()), Logger.GetStatusProperty(RequestID));
 
 
     }
 
-    public static List<PVRPCloudTruck> FTLGenerateTrucksFromCalcTours(List<PVRPCloudTruck> p_TruckList, List<PVRPCloudCalcTask> p_calcTaskList)
+    public static List<PVRPCloudTruck> PVRPCloudGenerateTrucksFromCalcTours(List<PVRPCloudTruck> p_TruckList, List<PVRPCloudCalcTask> p_calcTaskList)
     {
         List<PVRPCloudTruck> res = new List<PVRPCloudTruck>();
         List<PVRPCloudCalcTour> ctList = new List<PVRPCloudCalcTour>();
@@ -1505,7 +1505,7 @@ public class PVRPCloudInterface
     pihenőidő : nem számolható
     Fontos megjegyzések:
     1. minden változót csak akkor veszünk figyelembe, ha értéke nagyobb, mint nulla. Ha pl a RemainingTwoWeeklyDriveTime értéke nulla, akkor az nem vesz részt a számításokban)
-    2.Az FTLSupport percben számol. A kapott másodperekbők minden megkezdett perc számít.
+    2.Az PVRPCloudSupport percben számol. A kapott másodperekbők minden megkezdett perc számít.
     */
     private static void fillDriveTimes(PVRPCloudTruck p_trk, int workCycle, out int o_driveTime, out int o_restTime)
     {
@@ -1572,7 +1572,7 @@ public class PVRPCloudInterface
     //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy
     //      boEdge[] tömbön. Kb 2x olyan gyors.
 
-    public static int FTLGetNearestReachableNOD_IDForTruck(boEdge[] EdgesList, PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width)
+    public static int PVRPCloudGetNearestReachableNOD_IDForTruck(boEdge[] EdgesList, PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width)
 
     {
         //Legyünk következetesek, a PMAp-os térkép esetében:
@@ -1626,7 +1626,7 @@ public class PVRPCloudInterface
 
     //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy
     //      boEdge[] tömbön. Kb 2x olyan gyors.
-    public static int FTLGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
+    public static int PVRPCloudGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
     {
 
         //Legyünk következetesek, a PMAp-os térkép esetében:
