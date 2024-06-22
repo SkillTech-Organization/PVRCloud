@@ -1,7 +1,7 @@
 using PVRCloudApi.Util;
 using Microsoft.OpenApi.Models;
 using PVRCloudApi.Handlers;
-using PVRCloudInsightsLogger.Settings;
+using PVRPCloudInsightsLogger.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.Configure<PVRCloudLoggerSettings>(
+builder.Services.Configure<PVRPCloudLoggerSettings>(
     builder.Configuration.GetSection("FTLLogger"));
 
 builder.Services.AddTransient<IPVRCloudApiHandler, PVRCloudApiHandler>();

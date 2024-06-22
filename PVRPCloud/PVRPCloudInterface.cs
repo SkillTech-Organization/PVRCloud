@@ -13,18 +13,18 @@ using System.Reflection;
 using System.Text;
 using PMapCore.Properties;
 using CommonUtils;
-using PVRCloudInsightsLogger.Logger;
-using PVRCloudInsightsLogger.Settings;
+using PVRPCloudInsightsLogger.Logger;
+using PVRPCloudInsightsLogger.Settings;
 
 namespace PVRPCloud;
 
 public class PVRPCloudInterface
 {
     private static ITelemetryLogger Logger { get; set; }
-    private static PVRCloudLoggerSettings LoggerSettings { get; set; }
+    private static PVRPCloudLoggerSettings LoggerSettings { get; set; }
     private static string RequestID { get; set; }
 
-    public static PVRPCloudResponse FTLInit(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance, PVRCloudLoggerSettings loggerSettings)
+    public static PVRPCloudResponse FTLInit(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
     {
         if (Logger == null)
         {

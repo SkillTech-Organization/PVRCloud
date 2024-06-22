@@ -2,21 +2,21 @@
 using Newtonsoft.Json.Linq;
 using PVRCloudApi.DTO.Request;
 using PVRCloudApi.DTO.Response;
-using PVRCloudInsightsLogger.Logger;
-using PVRCloudInsightsLogger.Settings;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
 using PVRPCloud;
+using PVRPCloudInsightsLogger.Logger;
+using PVRPCloudInsightsLogger.Settings;
 
 namespace PVRCloudApi.Handlers;
 
 public class PVRCloudApiHandler : IPVRCloudApiHandler
 {
-    private PVRCloudLoggerSettings Settings { get; set; }
+    private PVRPCloudLoggerSettings Settings { get; set; }
 
     private ITelemetryLogger Logger { get; set; }
 
-    public PVRCloudApiHandler(IOptions<PVRCloudLoggerSettings> options)
+    public PVRCloudApiHandler(IOptions<PVRPCloudLoggerSettings> options)
     {
         Settings = options.Value;
         Logger = TelemetryClientFactory.Create(Settings);

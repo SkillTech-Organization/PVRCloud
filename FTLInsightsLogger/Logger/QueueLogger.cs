@@ -1,9 +1,9 @@
 ﻿using Azure.Storage.Queues;
 using System;
 using CommonUtils;
-using PVRCloudInsightsLogger.Settings;
+using PVRPCloudInsightsLogger.Settings;
 
-namespace PVRCloudInsightsLogger.Logger;
+namespace PVRPCloudInsightsLogger.Logger;
 
 
 public interface IQueueLogger
@@ -21,11 +21,11 @@ public interface IQueueLogger
 
 public class QueueLogger : IQueueLogger
 {
-    private readonly PVRCloudLoggerSettings settings;
+    private readonly PVRPCloudLoggerSettings settings;
     private readonly QueueClient queueClient;
     private ITelemetryLogger logger;
 
-    public QueueLogger(PVRCloudLoggerSettings s)
+    public QueueLogger(PVRPCloudLoggerSettings s)
     {
         settings = s;
         queueClient = new QueueClient(settings.AzureStorageConnectionString, settings.QueueName);

@@ -3,7 +3,7 @@ using CommonUtils;
 using System;
 using System.Threading.Tasks;
 
-namespace PVRCloudInsightsLogger.Logger;
+namespace PVRPCloudInsightsLogger.Logger;
 
 public class BlobLogger
 {

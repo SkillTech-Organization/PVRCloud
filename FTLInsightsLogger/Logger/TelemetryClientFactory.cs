@@ -1,11 +1,11 @@
 ﻿using System;
-using PVRCloudInsightsLogger.Settings;
+using PVRPCloudInsightsLogger.Settings;
 
-namespace PVRCloudInsightsLogger.Logger;
+namespace PVRPCloudInsightsLogger.Logger;
 
 public class TelemetryClientFactory
 {
-    private static IQueueLogger CreateQueueLogger(PVRCloudLoggerSettings settings)
+    private static IQueueLogger CreateQueueLogger(PVRPCloudLoggerSettings settings)
     {
         if (settings.UseQueue && !string.IsNullOrWhiteSpace(settings.QueueName) && !string.IsNullOrWhiteSpace(settings.AzureStorageConnectionString))
         {
@@ -14,7 +14,7 @@ public class TelemetryClientFactory
         return null;
     }
 
-    public static ITelemetryLogger Create(PVRCloudLoggerSettings settings)
+    public static ITelemetryLogger Create(PVRPCloudLoggerSettings settings)
     {
         try
         {

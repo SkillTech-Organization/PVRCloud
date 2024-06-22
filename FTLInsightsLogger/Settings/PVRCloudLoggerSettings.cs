@@ -1,6 +1,6 @@
-﻿namespace PVRCloudInsightsLogger.Settings;
+﻿namespace PVRPCloudInsightsLogger.Settings;
 
-public class PVRCloudLoggerSettings
+public class PVRPCloudLoggerSettings
 {
     public string ApplicationInsightsConnectionString { get; set; }
 

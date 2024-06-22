@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using CommonUtils;
-using PVRCloudInsightsLogger.Settings;
+using PVRPCloudInsightsLogger.Settings;
 
-namespace PVRCloudInsightsLogger.Logger;
+namespace PVRPCloudInsightsLogger.Logger;
 
 public delegate object MessageToQueueMessage(params object[] args);
 
@@ -67,7 +67,7 @@ public class TelemetryLogger : ITelemetryLogger, IDisposable
 {
     public MessageToQueueMessage LogToQueueMessage { get; set; }
 
-    private PVRCloudLoggerSettings Settings { get; set; }
+    private PVRPCloudLoggerSettings Settings { get; set; }
 
     public IQueueLogger QueueLogger { get; private set; }
 
@@ -82,7 +82,7 @@ public class TelemetryLogger : ITelemetryLogger, IDisposable
     public string IdPropertyLabel { get; set; } = "RequestID";
     public string TypePropertyLabel { get; set; } = "Type";
 
-    internal TelemetryLogger(PVRCloudLoggerSettings settings, IQueueLogger queueLogger = null)
+    internal TelemetryLogger(PVRPCloudLoggerSettings settings, IQueueLogger queueLogger = null)
     {
         Settings = settings;
 

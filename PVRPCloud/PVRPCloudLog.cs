@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Converters;
-using PVRCloudInsightsLogger.Logger;
+using PVRPCloudInsightsLogger.Logger;
 
 namespace PVRPCloud;
 

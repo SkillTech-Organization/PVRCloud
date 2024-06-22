@@ -14,18 +14,18 @@ using System.Text;
 using PMapCore.Properties;
 using static FTLSupporter.FTLResult;
 using CommonUtils;
-using PVRCloudInsightsLogger.Logger;
-using PVRCloudInsightsLogger.Settings;
+using PVRPCloudInsightsLogger.Logger;
+using PVRPCloudInsightsLogger.Settings;
 
 namespace FTLSupporter
 {
     public class FTLInterface
     {
         private static ITelemetryLogger Logger { get; set; }
-        private static PVRCloudLoggerSettings LoggerSettings { get; set; }
+        private static PVRPCloudLoggerSettings LoggerSettings { get; set; }
         private static string RequestID { get; set; }
 
-        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, PVRCloudLoggerSettings loggerSettings)
+        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
         {
             if (Logger == null)
             {
