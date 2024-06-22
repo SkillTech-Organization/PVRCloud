@@ -54,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FTLSupporter", "FTLSupporte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudInsightsLogger", "PVRPCloudInsightsLogger\PVRPCloudInsightsLogger.csproj", "{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRCloudApiTester", "FTLApiTester\PVRCloudApiTester.csproj", "{61864368-6F5C-4D2F-AD5C-69FB44555A87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudApiTester", "FTLApiTester\PVRPCloudApiTester.csproj", "{61864368-6F5C-4D2F-AD5C-69FB44555A87}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapJsonGen", "MapJsonGen\MapJsonGen.csproj", "{BB5F9D9A-9580-4E8A-8525-FFAE5FDD7352}"
 EndProject
