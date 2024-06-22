@@ -1,13 +1,13 @@
 ﻿using PMapCore.Common.Attrib;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
 //Eredmény útvonalak
 [Serializable]
-public class PVRCloudCalcRoute
+public class PVRPCloudCalcRoute
 {
 
-    public PVRCloudCalcRoute()
+    public PVRPCloudCalcRoute()
     {
         TPoint = null;
         Arrival = DateTime.MinValue;
@@ -25,7 +25,7 @@ public class PVRCloudCalcRoute
     }
 
     [DisplayNameAttributeX(Name = "Túrapont", Order = 1)]
-    public PVRCloudPoint TPoint { get; set; }
+    public PVRPCloudPoint TPoint { get; set; }
 
     [DisplayNameAttributeX(Name = "Érkezés", Order = 2)]
     public DateTime Arrival { get; set; }
@@ -61,7 +61,7 @@ public class PVRCloudCalcRoute
     public string RoutePoints { get; set; }
 
     /* munkamező */
-    internal PVRCloudPMapRoute PMapRoute { get; set; }
+    internal PVRPCloudPMapRoute PMapRoute { get; set; }
     internal bool ErrDriveTime { get; set; } = false;
 
 }

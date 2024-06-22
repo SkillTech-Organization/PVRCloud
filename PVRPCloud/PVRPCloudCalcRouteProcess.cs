@@ -12,9 +12,9 @@ using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Text;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
-internal class PVRCloudCalcRouteProcess : BaseLongProcess
+internal class PVRPCloudCalcRouteProcess : BaseLongProcess
 {
 
     public bool Completed { get; set; }
@@ -22,9 +22,9 @@ internal class PVRCloudCalcRouteProcess : BaseLongProcess
     //TODO refakt     private bllRoute m_bllRoute;
     //TODO refakt        private bool m_cacheRoutes;
 
-    List<PVRCloudPMapRoute> m_lstRoutes = new List<PVRCloudPMapRoute>();
+    List<PVRPCloudPMapRoute> m_lstRoutes = new List<PVRPCloudPMapRoute>();
 
-    internal PVRCloudCalcRouteProcess(List<PVRCloudPMapRoute> p_lstRoutes)
+    internal PVRPCloudCalcRouteProcess(List<PVRPCloudPMapRoute> p_lstRoutes)
         : base(ThreadPriority.Normal)
     {
 
@@ -89,13 +89,13 @@ internal class PVRCloudCalcRouteProcess : BaseLongProcess
                 {
 
                     //leválogatjuk, mely útvonalakra tartozik a konkrét számítás
-                    List<PVRCloudPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO
+                    List<PVRPCloudPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO
                                                                 && x.RZN_ID_LIST == routePar.RZN_ID_LIST && x.GVWR == routePar.Weight && x.Height == routePar.Height && x.Width == routePar.Width).ToList();
                     //és feltöltjuk a ROUTE-ját
-                    foreach (PVRCloudPMapRoute ftr in lstFTLR)
+                    foreach (PVRPCloudPMapRoute ftr in lstFTLR)
                     {
 
-                        PVRCloudRouteCache.Instance.Add(route);
+                        PVRPCloudRouteCache.Instance.Add(route);
 
                         ftr.route = route;
                     }

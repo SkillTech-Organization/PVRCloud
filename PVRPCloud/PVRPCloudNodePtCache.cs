@@ -1,17 +1,17 @@
 ﻿using System.Collections.Concurrent;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
-public class PVRCloudNodePtCache
+public class PVRPCloudNodePtCache
 {
     public static object Locker = new object();
 
     public ConcurrentDictionary<string, int> Items = null;
 
-    private static readonly Lazy<PVRCloudNodePtCache> m_instance = new Lazy<PVRCloudNodePtCache>(() => new PVRCloudNodePtCache(), true);
+    private static readonly Lazy<PVRPCloudNodePtCache> m_instance = new Lazy<PVRPCloudNodePtCache>(() => new PVRPCloudNodePtCache(), true);
 
 
-    static public PVRCloudNodePtCache Instance
+    static public PVRPCloudNodePtCache Instance
     {
         get
         {
@@ -19,7 +19,7 @@ public class PVRCloudNodePtCache
         }
     }
 
-    private PVRCloudNodePtCache()
+    private PVRPCloudNodePtCache()
     {
         Items = new ConcurrentDictionary<string, int>();
     }

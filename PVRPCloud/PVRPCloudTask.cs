@@ -1,14 +1,14 @@
 ﻿using PMapCore.Common.Attrib;
 using System.ComponentModel.DataAnnotations;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
 [Serializable]
-public class PVRCloudTask
+public class PVRPCloudTask
 {
-    public PVRCloudTask ShallowCopy()
+    public PVRPCloudTask ShallowCopy()
     {
-        return (PVRCloudTask)MemberwiseClone();
+        return (PVRPCloudTask)MemberwiseClone();
     }
 
 
@@ -32,7 +32,7 @@ public class PVRCloudTask
 
     [DisplayNameAttributeX(Name = "Túrapontok", Order = 6)]
     [Required(ErrorMessage = "Kötelező mező:TPoints")]
-    public List<PVRCloudPoint> TPoints { get; set; } = new List<PVRCloudPoint>();
+    public List<PVRPCloudPoint> TPoints { get; set; } = new List<PVRPCloudPoint>();
 
     [DisplayNameAttributeX(Name = "Engedélyező járműtulajdonságok", Order = 7)]
     public string InclTruckProps { get; set; } = "";

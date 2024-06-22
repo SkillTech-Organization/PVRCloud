@@ -1,17 +1,17 @@
 ﻿using PMapCore.BO;
 using System.Collections.Concurrent;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
-public class PVRCloudRouteCache
+public class PVRPCloudRouteCache
 {
 
     private ConcurrentDictionary<string, boRoute> Items = null;
 
-    private static readonly Lazy<PVRCloudRouteCache> m_instance = new Lazy<PVRCloudRouteCache>(() => new PVRCloudRouteCache(), true);
+    private static readonly Lazy<PVRPCloudRouteCache> m_instance = new Lazy<PVRPCloudRouteCache>(() => new PVRPCloudRouteCache(), true);
 
 
-    static public PVRCloudRouteCache Instance
+    static public PVRPCloudRouteCache Instance
     {
         get
         {
@@ -19,7 +19,7 @@ public class PVRCloudRouteCache
         }
     }
 
-    private PVRCloudRouteCache()
+    private PVRPCloudRouteCache()
     {
         Items = new ConcurrentDictionary<string, boRoute>();
     }

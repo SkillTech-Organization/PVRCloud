@@ -1,9 +1,9 @@
 ﻿using PMapCore.BO;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
 [Serializable]
-internal class PVRCloudPMapRoute
+internal class PVRPCloudPMapRoute
 {
     public class FTLToll
     {
@@ -12,7 +12,7 @@ internal class PVRCloudPMapRoute
         public double Toll { get; set; }                           //Útdíj
     }
 
-    public PVRCloudPMapRoute()
+    public PVRPCloudPMapRoute()
     {
         route = null;
     }
@@ -39,7 +39,7 @@ internal class PVRCloudPMapRoute
     public override bool Equals(object obj)
     {
         if (obj == null) return false;
-        PVRCloudPMapRoute rk = (PVRCloudPMapRoute)obj;
+        PVRPCloudPMapRoute rk = (PVRPCloudPMapRoute)obj;
         return fromNOD_ID == rk.fromNOD_ID && toNOD_ID == rk.toNOD_ID &&
             RZN_ID_LIST == rk.RZN_ID_LIST && GVWR == rk.GVWR && Height == rk.Height && Width == rk.Width;
     }

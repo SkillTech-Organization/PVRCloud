@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json.Converters;
 using PVRCloudInsightsLogger.Logger;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
-public class PVRCloudLog
+public class PVRPCloudLog
 {
     public DateTime Timestamp { get; set; }
 

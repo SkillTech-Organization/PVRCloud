@@ -16,10 +16,10 @@
 namespace FTLApi
 {
     using Microsoft.AspNetCore.Mvc;
-    using PVRCloud;
     using PVRCloudApi.Attributes;
     using PVRCloudApi.DTO.Request;
     using PVRCloudApi.Handlers;
+    using PVRPCloud;
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -41,7 +41,7 @@ namespace FTLApi
         /// <returns></returns>
         [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
-        public async Task<ActionResult<PVRCloudResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] PVRCloudSupportRequest body)
+        public async Task<ActionResult<PVRPCloudResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] PVRCloudSupportRequest body)
         {
             var result = await _implementation.PVRCloudSupportAsync(body, CancellationToken.None);
 
@@ -62,7 +62,7 @@ namespace FTLApi
         /// <returns></returns>
         [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/Result/{id}")]
-        public async Task<ActionResult<PVRCloudResponse>> Result([FromRoute] string id)
+        public async Task<ActionResult<PVRPCloudResponse>> Result([FromRoute] string id)
         {
             var result = await _implementation.Result(id);
             return new OkObjectResult(result);
@@ -76,7 +76,7 @@ namespace FTLApi
         /// <returns></returns>
         [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
-        public async Task<ActionResult<PVRCloudResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] PVRCloudSupportRequest body)
+        public async Task<ActionResult<PVRPCloudResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] PVRCloudSupportRequest body)
         {
             var result = await _implementation.PVRCloudSupportXAsync(body, CancellationToken.None);
 

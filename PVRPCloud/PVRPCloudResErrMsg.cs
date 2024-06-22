@@ -1,7 +1,7 @@
-﻿namespace PVRCloud;
+﻿namespace PVRPCloud;
 
 [Serializable]
-public class PVRCloudResErrMsg
+public class PVRPCloudResErrMsg
 {
     public string Field { get; set; }
     public string Message { get; set; }

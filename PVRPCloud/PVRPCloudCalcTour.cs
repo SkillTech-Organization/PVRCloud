@@ -3,14 +3,14 @@ using PMapCore.Common.Attrib;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
 
 /// <summary>
 /// Túraajánlat
 /// </summary>
 [Serializable]
-public class PVRCloudCalcTour
+public class PVRPCloudCalcTour
 {
     public enum PVRCloudCalcTourStatus
     {
@@ -19,7 +19,7 @@ public class PVRCloudCalcTour
         [Description("ERR")]
         ERR
     };
-    public PVRCloudCalcTour()
+    public PVRPCloudCalcTour()
     {
         StatusEnum = PVRCloudCalcTourStatus.OK;
         Msg = new List<string>();
@@ -32,7 +32,7 @@ public class PVRCloudCalcTour
         T1FullDuration = 0;
         T1Start = DateTime.MinValue;
         T1End = DateTime.MinValue;
-        T1CalcRoute = new List<PVRCloudCalcRoute>();
+        T1CalcRoute = new List<PVRPCloudCalcRoute>();
 
         RelM = 0;
         RelToll = 0;
@@ -41,7 +41,7 @@ public class PVRCloudCalcTour
         RelFullDuration = 0;
         RelStart = DateTime.MinValue;
         RelEnd = DateTime.MinValue;
-        RelCalcRoute = new PVRCloudCalcRoute();
+        RelCalcRoute = new PVRPCloudCalcRoute();
 
         T2M = 0;
         T2Toll = 0;
@@ -50,7 +50,7 @@ public class PVRCloudCalcTour
         T2FullDuration = 0;
         T2Start = DateTime.MinValue;
         T2End = DateTime.MinValue;
-        T2CalcRoute = new List<PVRCloudCalcRoute>();
+        T2CalcRoute = new List<PVRPCloudCalcRoute>();
 
         RetM = 0;
         RetToll = 0;
@@ -59,7 +59,7 @@ public class PVRCloudCalcTour
         RetFullDuration = 0;
         RetStart = DateTime.MinValue;
         RetEnd = DateTime.MinValue;
-        RetCalcRoute = new PVRCloudCalcRoute();
+        RetCalcRoute = new PVRPCloudCalcRoute();
     }
 
     //    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
@@ -77,7 +77,7 @@ public class PVRCloudCalcTour
     public int Rank { get; set; }
 
     [DisplayNameAttributeX(Name = "Jármű", Order = 4)]
-    public PVRCloudTruck Truck { get; set; }
+    public PVRPCloudTruck Truck { get; set; }
 
     #region túrarészletezők
     [DisplayNameAttributeX(Name = "I.túra hossz (m)", Order = 5)]
@@ -102,7 +102,7 @@ public class PVRCloudCalcTour
     public DateTime T1End { get; set; }
 
     [DisplayNameAttributeX(Name = "I.túra részletek", Order = 12)]
-    public List<PVRCloudCalcRoute> T1CalcRoute { get; set; }
+    public List<PVRPCloudCalcRoute> T1CalcRoute { get; set; }
 
     [DisplayNameAttributeX(Name = "Átállás hossz (m)", Order = 13)]
     public double RelM { get; set; }
@@ -126,7 +126,7 @@ public class PVRCloudCalcTour
     public DateTime RelEnd { get; set; }
 
     [DisplayNameAttributeX(Name = "Átállás részletek", Order = 20)]
-    public PVRCloudCalcRoute RelCalcRoute { get; set; }
+    public PVRPCloudCalcRoute RelCalcRoute { get; set; }
 
     [DisplayNameAttributeX(Name = "II.túra hossz (m)", Order = 21)]
     public double T2M { get; set; }
@@ -150,7 +150,7 @@ public class PVRCloudCalcTour
     public DateTime T2End { get; set; }
 
     [DisplayNameAttributeX(Name = "II.túra részletek", Order = 28)]
-    public List<PVRCloudCalcRoute> T2CalcRoute { get; set; }
+    public List<PVRPCloudCalcRoute> T2CalcRoute { get; set; }
 
     [DisplayNameAttributeX(Name = "Visszatérés hossz (m)", Order = 29)]
     public double RetM { get; set; }
@@ -174,7 +174,7 @@ public class PVRCloudCalcTour
     public DateTime RetEnd { get; set; }
 
     [DisplayNameAttributeX(Name = "Visszatérés részletek", Order = 36)]
-    public PVRCloudCalcRoute RetCalcRoute { get; set; }
+    public PVRPCloudCalcRoute RetCalcRoute { get; set; }
 
     #endregion
 

@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
-public class PVRCloudQueueResponse
+// todo rename type
+public class PVRPCloudQueueResponse
 {
-    public enum PVRCloudQueueResponseStatus
+    public enum PVRPCloudQueueResponseStatus
     {
         [Description("ERROR")]          //végstátusz
         ERROR,
@@ -13,8 +14,8 @@ public class PVRCloudQueueResponse
         [Description("LOG")]
         LOG
     };
-    public PVRCloudQueueResponseStatus Status { get; set; }
+    public PVRPCloudQueueResponseStatus Status { get; set; }
     public string RequestID { get; set; }
-    public PVRCloudLog Log { get; set; }
+    public PVRPCloudLog Log { get; set; }
     public string Link { get; set; }
 }

@@ -3,10 +3,10 @@ using PMapCore.Common;
 using PMapCore.Common.Attrib;
 using System.ComponentModel.DataAnnotations;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
 [Serializable]
-public class PVRCloudTruck
+public class PVRPCloudTruck
 {
     public enum eTruckTaskType
     {
@@ -15,7 +15,7 @@ public class PVRCloudTruck
         Running                     // Futó
     }
 
-    public PVRCloudTruck()
+    public PVRPCloudTruck()
     {
         /*
         m_currTPoints.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
@@ -31,9 +31,9 @@ public class PVRCloudTruck
          */
     }
 
-    public PVRCloudTruck ShallowCopy()
+    public PVRPCloudTruck ShallowCopy()
     {
-        return (PVRCloudTruck)MemberwiseClone();
+        return (PVRPCloudTruck)MemberwiseClone();
     }
 
 
@@ -152,7 +152,7 @@ public class PVRCloudTruck
         {
             if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás időpontja */
             {
-                PVRCloudPoint firstPt = CurrTPoints.FirstOrDefault();
+                PVRPCloudPoint firstPt = CurrTPoints.FirstOrDefault();
                 if (firstPt != null)
                     return firstPt.RealDeparture;
                 else
@@ -180,7 +180,7 @@ public class PVRCloudTruck
         {
             if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás helye */
             {
-                PVRCloudPoint firstPt = CurrTPoints.FirstOrDefault();
+                PVRPCloudPoint firstPt = CurrTPoints.FirstOrDefault();
                 if (firstPt != null)
                     return firstPt.Lat;
                 else
@@ -209,7 +209,7 @@ public class PVRCloudTruck
         {
             if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás helye */
             {
-                PVRCloudPoint firstPt = CurrTPoints.FirstOrDefault();
+                PVRPCloudPoint firstPt = CurrTPoints.FirstOrDefault();
                 if (firstPt != null)
                     return firstPt.Lng;
                 else
@@ -232,7 +232,7 @@ public class PVRCloudTruck
     //internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
     [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 33)]
     [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
-    public List<PVRCloudPoint> CurrTPoints { get; set; } = new List<PVRCloudPoint>();
+    public List<PVRPCloudPoint> CurrTPoints { get; set; } = new List<PVRPCloudPoint>();
 
 
     [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 34)]
@@ -292,7 +292,7 @@ public class PVRCloudTruck
                         break;
                     case eTruckTaskType.Planned:
                     case eTruckTaskType.Running:
-                        PVRCloudPoint firstPt = CurrTPoints.FirstOrDefault();
+                        PVRPCloudPoint firstPt = CurrTPoints.FirstOrDefault();
                         if (firstPt != null)
                             m_retPoint = new PointLatLng(firstPt.Lat, firstPt.Lng);
 

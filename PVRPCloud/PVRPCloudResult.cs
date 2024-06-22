@@ -2,14 +2,14 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
 [Serializable]
-[KnownType(typeof(List<PVRCloudCalcTask>))]
-[KnownType(typeof(PVRCloudResErrMsg))]
-public class PVRCloudResult
+[KnownType(typeof(List<PVRPCloudCalcTask>))]
+[KnownType(typeof(PVRPCloudResErrMsg))]
+public class PVRPCloudResult
 {
-    public enum PVRCloudResultStatus
+    public enum PVRPCloudResultStatus
     {
         [Description("RESULT")]
         RESULT,
@@ -24,7 +24,7 @@ public class PVRCloudResult
     };
 
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
-    public PVRCloudResultStatus Status { get; set; }
+    public PVRPCloudResultStatus Status { get; set; }
     public string ObjectName { get; set; }
     public string ItemID { get; set; }
     public object Data { get; set; }

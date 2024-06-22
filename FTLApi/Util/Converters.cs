@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static PVRCloud.PVRCloudResult;
+using static PVRPCloud.PVRPCloudResult;
 
 namespace PVRCloudApi.Util;
 
@@ -18,14 +18,14 @@ public class DateTimeConverter : JsonConverter<DateTime>
     }
 }
 
-public class EnumConverter : JsonConverter<PVRCloudResultStatus>
+public class EnumConverter : JsonConverter<PVRPCloudResultStatus>
 {
-    public override PVRCloudResultStatus Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override PVRPCloudResultStatus Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return (PVRCloudResultStatus)Enum.Parse(typeof(PVRCloudResultStatus), reader.GetString());
+        return (PVRPCloudResultStatus)Enum.Parse(typeof(PVRPCloudResultStatus), reader.GetString());
     }
 
-    public override void Write(Utf8JsonWriter writer, PVRCloudResultStatus value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, PVRPCloudResultStatus value, JsonSerializerOptions options)
     {
         writer.WriteStringValue(value.ToString());
     }

@@ -1,5 +1,5 @@
-﻿using PVRCloud;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using PVRPCloud;
 
 namespace PVRCloudApi.DTO.Request;
 
@@ -10,8 +10,8 @@ public class PVRCloudSupportRequest
     public int MaxTruckDistance { get; set; }
 
     [JsonProperty("taskList")]
-    public List<PVRCloudTask> TaskList { get; set; }
+    public List<PVRPCloudTask> TaskList { get; set; }
 
     [JsonProperty("truckList")]
-    public List<PVRCloudTruck> TruckList { get; set; }
+    public List<PVRPCloudTruck> TruckList { get; set; }
 }

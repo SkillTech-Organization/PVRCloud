@@ -1,15 +1,15 @@
-﻿namespace PVRCloud;
+﻿namespace PVRPCloud;
 
 [Serializable]
-public class PVRCloudCalcTask
+public class PVRPCloudCalcTask
 {
-    public PVRCloudCalcTask()
+    public PVRPCloudCalcTask()
     {
-        CalcTours = new List<PVRCloudCalcTour>();
+        CalcTours = new List<PVRPCloudCalcTour>();
     }
 
-    public PVRCloudTask Task { get; set; }
-    public List<PVRCloudCalcTour> CalcTours { get; set; }
+    public PVRPCloudTask Task { get; set; }
+    public List<PVRPCloudCalcTour> CalcTours { get; set; }
 
 
 }

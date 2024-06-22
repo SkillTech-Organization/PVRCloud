@@ -1,10 +1,10 @@
 ﻿using PMapCore.Common.Attrib;
 using System.ComponentModel.DataAnnotations;
 
-namespace PVRCloud;
+namespace PVRPCloud;
 
 [Serializable]
-public class PVRCloudPoint
+public class PVRPCloudPoint
 {
     [ItemIDAttr]
     [DisplayNameAttributeX(Name = "Túrapont azonosító", Order = 1)]
@@ -57,9 +57,9 @@ public class PVRCloudPoint
     internal int NOD_ID { get; set; }
     internal DateTime RealClose { get { return Close.AddMinutes(ExtraPeriod); } }
 
-    public PVRCloudPoint ShallowCopy()
+    public PVRPCloudPoint ShallowCopy()
     {
-        return (PVRCloudPoint)MemberwiseClone();
+        return (PVRPCloudPoint)MemberwiseClone();
     }
 
 }
