@@ -1,17 +1,17 @@
 ﻿using Azure.Storage.Queues;
-using FTLSupporter;
 using Serilog;
 using Microsoft.Extensions.Configuration;
 using CommonUtils;
 using PVRPCloudApiTester.Settings;
+using PVRPCloud;
 
 namespace PVRPCloudApiTester.Util;
 
 internal class GetResultResponse
 {
-    public FTLQueueResponse Result { get; set; }
+    public PVRPCloudQueueResponse Result { get; set; }
 
-    public List<FTLResult> FTLResults { get; set; }
+    public List<PVRPCloudResult> PVRPCloudResults { get; set; }
 
     public bool NoMoreMessages { get; set; } = false;
 
@@ -79,19 +79,19 @@ internal class QueueReader
                         try
                         {
                             _logger.Debug("Parsing message...");
-                            var queueResponse = msgText.ToDeserializedJson<FTLQueueResponse>();
+                            var queueResponse = msgText.ToDeserializedJson<PVRPCloudQueueResponse>();
                             _logger.Debug("Parsing message...done");
 
                             if (queueResponse == null)
                             {
-                                _logger.Information("Message from queue is not FTLResult.");
+                                _logger.Information("Message from queue is not PVRPCloudResult.");
                             }
                             else
                             {
                                 var res = queueResponse;
                                 if (res != null)
                                 {
-                                    if (res.Status == FTLQueueResponse.FTLQueueResponseStatus.RESULT)
+                                    if (res.Status == PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.RESULT)
                                     {
                                         _logger.Information("Result found.");
 
@@ -99,7 +99,7 @@ internal class QueueReader
                                         resp.ResultReceived = true;
                                         return resp;
                                     }
-                                    else if (res.Status == FTLQueueResponse.FTLQueueResponseStatus.ERROR)
+                                    else if (res.Status == PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.ERROR)
                                     {
                                         _logger.Information("Error found.");
 
@@ -114,7 +114,7 @@ internal class QueueReader
                                 }
                                 else
                                 {
-                                    _logger.Information("Result field in FTLQueueResponse is null or empty.");
+                                    _logger.Information("Result field in PVRPCloudQueueResponse is null or empty.");
                                 }
                             }
                         }
