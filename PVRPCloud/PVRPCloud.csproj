@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../FTLInsightsLogger/PVRPCloudInsightsLogger.csproj" />
+    <ProjectReference Include="../PVRPCloudInsightsLogger/PVRPCloudInsightsLogger.csproj" />
     <ProjectReference Include="..\PMap\PMapCore.csproj" />
   </ItemGroup>
 
