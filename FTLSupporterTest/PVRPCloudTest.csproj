@@ -16,9 +16,9 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../FTLInsightsLogger/PVRPCloudInsightsLogger.csproj" />
-    <ProjectReference Include="..\FTLSupporter\FTLSupporter.csproj" />
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj" />
     <ProjectReference Include="..\PMap\PMapCore.csproj" />
+    <ProjectReference Include="..\PVRPCloud\PVRPCloud.csproj" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
