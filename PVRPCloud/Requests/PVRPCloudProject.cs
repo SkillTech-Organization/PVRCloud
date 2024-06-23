@@ -2,7 +2,7 @@
 
 public class PVRPCloudProject
 {
-    public string Projectname { get; init; } = string.Empty;
+    public string ProjectName { get; init; } = string.Empty;
     public int MinTime { get; init; }
     public int MaxTime { get; init; }
     public int MaxTourDuration { get; init; }
