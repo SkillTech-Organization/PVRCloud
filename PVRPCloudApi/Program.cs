@@ -1,5 +1,6 @@
 using Microsoft.OpenApi.Models;
 using PVRPCloudInsightsLogger.Settings;
+using PVRPCloudApi;
 using PVRPCloudApi.Handlers;
 using PVRPCloudApi.Util;
 
@@ -12,6 +13,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
     options.JsonSerializerOptions.Converters.Add(new EnumConverter());
 });
+
+builder.Services.AddValidation();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -41,7 +44,7 @@ builder.Services.Configure<PVRPCloudLoggerSettings>(
 
 builder.Services.AddTransient<IPVRPCloudApiHandler, PVRPCloudApiHandler>();
 
-System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
+Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
 var app = builder.Build();
 
