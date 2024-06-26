@@ -31,24 +31,26 @@ jobs:
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: | 
-            8.0.x
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Install dependencies
+        run: dotnet restore    
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release PVRPCloudApi
 
       - name: Run tests
-        run: dotnet test --framework netcoreapp8.0 --verbosity normal
+        run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
         # --no-build
 
       - name: dotnet publish
-        run: dotnet publish -c Release
+        run: dotnet publish -c Release PVRPCloudApi
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: /home/runner/work/bbxBE/bbxBE/bbxBE.WebApi/bin/Release/netcoreapp3.1/publish
+          path: /home/runner/work/PVRCloud/PVRCloud/PVRPCloudApi/bin/Release/net8.0/publish/
 
   deploy:
     if: ${{ github.event.pull_request.merged }}
