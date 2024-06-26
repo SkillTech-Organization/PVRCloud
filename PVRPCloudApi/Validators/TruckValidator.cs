@@ -15,13 +15,7 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
 
         RuleFor(x => x.TruckName)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .NotEmpty();
-
-        RuleFor(x => x.StartDepotID)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
-
-        RuleFor(x => x.ArrDepotID)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
 
         RuleFor(x => x.ArrDepotMaxTime)
             .GreaterThan(0).WithMessage(PVRPCloudMessages.ERR_ZERO);

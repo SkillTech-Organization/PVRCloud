@@ -6,7 +6,7 @@ namespace PVRPCloudApi.Validators;
 
 public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
 {
-    private readonly string[] _restrictedZones = [
+    private readonly IEnumerable<string> _restrictedZones = [
         "KP1",
         "ÉP1",
         "DB1",
@@ -45,13 +45,18 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
         RuleFor(x => x.XWidth)
             .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE);
 
-        // ask
-        RuleFor(x => x.SpeedValues);
+        RuleFor(x => x.SpeedValues)
+            .Must(CheckRoadValues).WithMessage(PVRPCloudMessages.ERR_RANGE);
     }
 
     private bool EmptyOrContainsRestrictionZones(IReadOnlyCollection<string> incomingZones)
     {
         return incomingZones.Count == 0 ||
             incomingZones.All(zone => _restrictedZones.Contains(zone));
+    }
+
+    private static bool CheckRoadValues(IReadOnlyDictionary<int, int> speedValues)
+    {
+        return speedValues.Keys.All(roadType => roadType is >= 1 and <= 7);
     }
 }

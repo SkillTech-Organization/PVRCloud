@@ -8,7 +8,6 @@ public sealed class CostProfileValidator : AbstractValidator<PVRPCloudCostProfil
 {
     public CostProfileValidator()
     {
-        // todo: mihez képest egyedi?
         RuleFor(x => x.ID)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);

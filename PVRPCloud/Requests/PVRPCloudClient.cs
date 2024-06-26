@@ -1,6 +1,6 @@
 namespace PVRPCloud.Requests;
 
-public class PVRPCloudClient
+public sealed class PVRPCloudClient
 {
     public int ID { get; init; }
     public string ClientName { get; init; } = string.Empty;

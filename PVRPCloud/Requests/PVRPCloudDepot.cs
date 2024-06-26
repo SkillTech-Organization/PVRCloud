@@ -1,6 +1,6 @@
 namespace PVRPCloud.Requests;
 
-public class PVRPCloudDepot
+public sealed class PVRPCloudDepot
 {
     public int ID { get; init; }
     public string DepotName { get; init; } = string.Empty;
