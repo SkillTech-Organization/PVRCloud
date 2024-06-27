@@ -20,6 +20,8 @@ builder.Services.AddValidation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.CustomSchemaIds(type => type.ToString());
+
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PVRPCloud;
-using PVRPCloudApi.DTO.Request;
+using PVRPCloud.Requests;
+using PVRPCloudApi.DTO.Response;
 
 namespace PVRPCloudApi.Controllers;
 
@@ -9,13 +10,17 @@ namespace PVRPCloudApi.Controllers;
 public class PVRPCloudController : ControllerBase
 {
     [HttpPost]
-    [ProducesResponseType<PVRPCloudResponse>(StatusCodes.Status200OK)]
-    [ProducesResponseType<PVRPCloudResponse>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<PVRPCloudOptimizeRequestResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PVRPCloudOptimizeRequestResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult OptimizeRequest(PVRPCloudOptimizeRequest request)
+    public IActionResult OptimizeRequest(PVRPCloudProject request)
     {
-        return Ok();
+        return Ok(new PVRPCloudOptimizeRequestResponse
+        {
+            RequestID = "12345678",
+            Project = request
+        });
     }
 
     [HttpGet]
