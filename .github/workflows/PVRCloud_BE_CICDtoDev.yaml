@@ -91,5 +91,5 @@ jobs:
         uses: azure/webapps-deploy@0b651ed7546ecfc75024011f76944cb9b381ef1e
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.PVRPCLOUDWEBAPI_DEPLOY_KEY_DEV_ENV }}
+          publish-profile: ${{ secrets.PVRPCLOUDWEBAPI_DEPLOY_KEY_DEV_ENV }} ## ez nem jo, ide mas kell!!
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
