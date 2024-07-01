@@ -27,9 +27,10 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
     public TruckTypeValidator()
     {
         RuleFor(x => x.ID)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
 
-        RuleFor(x => x.TruckName)
+        RuleFor(x => x.TruckTypeName)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
 

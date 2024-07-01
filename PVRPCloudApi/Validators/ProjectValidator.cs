@@ -40,6 +40,12 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
         RuleFor(x => x.Orders)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
 
+        ValidateTruckTypes();
+
+        ValidateCapacityProfiles();
+
+        ValidateClients();
+
         ValidateCostProfileIds();
 
         ValidateTrucks();
@@ -49,16 +55,27 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
         ValidateOrders();
     }
 
+    private void ValidateTruckTypes()
+    {
+        RuleFor(x => x.TruckTypes)
+            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
+    }
+
     private void ValidateCostProfileIds()
     {
-        static bool CheckUniquness(List<PVRPCloudCostProfile> costProfiles)
-        {
-            var values = costProfiles.Select(x => x.ID).ToHashSet();
-
-            return values.Count == costProfiles.Count;
-        }
-
         RuleFor(x => x.CostProfiles)
+            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
+    }
+
+    private void ValidateCapacityProfiles()
+    {
+        RuleFor(x => x.CapacityProfiles)
+            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
+    }
+
+    private void ValidateClients()
+    {
+        RuleFor(x => x.Clients)
             .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
     }
 
@@ -82,7 +99,20 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
         static bool AreLatestStartsCorrect(PVRPCloudProject project, List<PVRPCloud.Requests.PVRPCloudTruck> trucks) => trucks
             .All(truck => truck.LatestStart < project.MaxTime);
 
+        static bool AreTruckTypesIdsValid(PVRPCloudProject project, List<PVRPCloud.Requests.PVRPCloudTruck> trucks)
+        {
+            var truckTypeIds = project.TruckTypes
+                .Select(x => x.ID)
+                .ToArray();
+
+            return trucks
+                .Select(x => x.TruckTypeID)
+                .All(x => truckTypeIds.Contains(x));
+        }
+
         RuleFor(x => x.Trucks)
+            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .Must(AreTruckTypesIdsValid).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .Must(AreTruckTimesCorrect).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
             .Must(AreCapacityProdileIdsValid).WithMessage(PVRPCloudMessages.ERR_RANGE)
             .Must(AreLatestStartsCorrect).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL);
@@ -99,7 +129,7 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
 
     private void ValidateOrders()
     {
-        bool AreClientIdsCorrect(PVRPCloudProject project, List<PVRPCloudOrder> orders)
+        static bool AreClientIdsCorrect(PVRPCloudProject project, List<PVRPCloudOrder> orders)
         {
             var clientIds = project.Clients
                 .Select(x => x.ID)
@@ -108,7 +138,31 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
             return orders.All(order => clientIds.Contains(order.ClientID));
         }
 
+        static bool AreTruckIdsCorrect(PVRPCloudProject project, List<PVRPCloudOrder> orders)
+        {
+            if (orders.Count == 0)
+                return true;
+
+            var truckIds = project.Trucks
+                .Select(x => x.ID)
+                .ToArray();
+
+            return orders
+                .SelectMany(x => x.TruckList)
+                .Distinct()
+                .All(x => truckIds.Contains(x));
+        }
+
         RuleFor(x => x.Orders)
-            .Must(AreClientIdsCorrect).WithMessage(PVRPCloudMessages.ERR_RANGE);
+            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .Must(AreClientIdsCorrect).WithMessage(PVRPCloudMessages.ERR_RANGE)
+            .Must(AreTruckIdsCorrect).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
+    }
+
+    private bool CheckUniquness(IReadOnlyCollection<IIdentifiable> values)
+    {
+        var hashedValues = values.Select(x => x.ID).ToHashSet();
+
+        return values.Count == hashedValues.Count;
     }
 }

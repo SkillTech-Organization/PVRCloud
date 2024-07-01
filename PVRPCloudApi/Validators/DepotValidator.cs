@@ -23,9 +23,6 @@ public sealed class DepotValidator : AbstractValidator<PVRPCloudDepot>
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .InclusiveBetween(-180, 190).WithMessage(PVRPCloudMessages.ERR_RANGE);
 
-        RuleFor(x => x.IsCentral)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
-
         RuleFor(x => x.ServiceFixTime)
             .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL);
 
