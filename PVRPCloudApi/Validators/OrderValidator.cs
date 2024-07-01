@@ -20,9 +20,6 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
         RuleFor(x => x.ReadyTime)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
 
-        RuleFor(x => x.Trucks)
-            .Must(x => x.Count >= 1).WithMessage(PVRPCloudMessages.ERR_EMPTY);
-
         RuleFor(x => x.OrderServiceTime)
             .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL);
 
