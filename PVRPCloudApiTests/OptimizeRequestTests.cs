@@ -200,7 +200,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
                     Quantity1 = 1000,
                     Quantity2 = 0,
                     ReadyTime = 0,
-                    Trucks = ["TRK1", "TRK2", "TRK3"],
+                    TruckList = ["TRK1", "TRK2", "TRK3"],
                     OrderServiceTime = 10,
                     OrderMinTime = 480,
                     OrderMaxTime = 960,
@@ -213,7 +213,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
                     Quantity1 = 2000,
                     Quantity2 = 0,
                     ReadyTime = 0,
-                    Trucks = ["TRK1", "TRK2", "TRK3"],
+                    TruckList = ["TRK1", "TRK2", "TRK3"],
                     OrderServiceTime = 10,
                     OrderMinTime = 480,
                     OrderMaxTime = 960,
@@ -226,7 +226,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
                     Quantity1 = 3000,
                     Quantity2 = 0,
                     ReadyTime = 0,
-                    Trucks = ["TRK1", "TRK2", "TRK3"],
+                    TruckList = ["TRK1", "TRK2", "TRK3"],
                     OrderServiceTime = 10,
                     OrderMinTime = 480,
                     OrderMaxTime = 960,
@@ -239,7 +239,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
                     Quantity1 = 1,
                     Quantity2 = 0,
                     ReadyTime = 0,
-                    Trucks = [],
+                    TruckList = [],
                     OrderServiceTime = 10,
                     OrderMinTime = 480,
                     OrderMaxTime = 960,
@@ -253,6 +253,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
     {
         var client = _factory.CreateClient();
 
+        var project = CreateValidProject();
         string content = JsonSerializer.Serialize(project);
 
         var response = await client.PostAsync("/pvrpcloud/optimizerequest", new StringContent(content, Encoding.UTF8, "application/json"));
