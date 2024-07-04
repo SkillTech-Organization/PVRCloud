@@ -4,7 +4,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApi.Validators;
 
-public sealed class CostProfileValidator : AbstractValidator<PVRPCloudCostProfile>
+public sealed class CostProfileValidator : ValidatorBase<PVRPCloudCostProfile>
 {
     public CostProfileValidator()
     {

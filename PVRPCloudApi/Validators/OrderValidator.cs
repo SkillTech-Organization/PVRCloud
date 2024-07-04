@@ -4,7 +4,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApi.Validators;
 
-public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
+public sealed class OrderValidator : ValidatorBase<PVRPCloudOrder>
 {
     public OrderValidator()
     {

@@ -4,7 +4,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApi.Validators;
 
-public sealed class CapacityProfileValidator : AbstractValidator<PVRPCloudCapacityProfile>
+public sealed class CapacityProfileValidator : ValidatorBase<PVRPCloudCapacityProfile>
 {
     public CapacityProfileValidator()
     {

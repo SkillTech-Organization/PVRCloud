@@ -4,7 +4,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApi.Validators;
 
-public sealed class DepotValidator : AbstractValidator<PVRPCloudDepot>
+public sealed class DepotValidator : ValidatorBase<PVRPCloudDepot>
 {
     public DepotValidator()
     {

@@ -4,7 +4,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApi.Validators;
 
-public sealed class ClientValidator : AbstractValidator<PVRPCloudClient>
+public sealed class ClientValidator : ValidatorBase<PVRPCloudClient>
 {
     public ClientValidator()
     {

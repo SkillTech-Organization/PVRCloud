@@ -3,7 +3,7 @@ using PVRPCloud;
 
 namespace PVRPCloudApi.Validators;
 
-public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCloudTruck>
+public sealed class TruckValidator : ValidatorBase<PVRPCloud.Requests.PVRPCloudTruck>
 {
     public TruckValidator()
     {
