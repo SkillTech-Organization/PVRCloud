@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Converters;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace PVRPCloud;
@@ -23,10 +22,8 @@ public class PVRPCloudResult
         LOG
     };
 
-    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
+    // [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public PVRPCloudResultStatus Status { get; set; }
-    public string ObjectName { get; set; }
-    public string ItemID { get; set; }
-    public object Data { get; set; }
-
+    public string ItemID { get; set; } = string.Empty;
+    public required object Data { get; set; }
 }
