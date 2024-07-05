@@ -5,27 +5,36 @@ using PVRPCloud.Requests;
 namespace PVRPCloudApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[action]")]
 public class PVRPCloudController : ControllerBase
 {
-    [HttpPost("optimizerequest")]
+    [HttpPost]
     [ProducesResponseType<PVRPCloudResponse>(StatusCodes.Status202Accepted)]
     [ProducesResponseType<PVRPCloudResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult OptimizeRequest(PVRPCloudProject request)
+    public IActionResult PVRPCloudRequest(PVRPCloudProject request)
     {
-        return Ok(new PVRPCloudResponse
+        return Accepted(new PVRPCloudResponse
         {
             RequestID = "12345678",
-            Results = [ PVRPCloudResult.Success(request) ]
+            Results = [ PVRPCloud.PVRPCloudResult.Success(request) ]
         });
     }
 
-    [HttpGet("optimizeresult")]
+    [HttpGet("{requestId}")]
     [ProducesResponseType<PVRPCloudQueueResponse>(StatusCodes.Status200OK)]
-    public IActionResult OptimizeResult()
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult PVRPCloudResult(string requestId)
     {
-        return Ok();
+        return Ok(new PVRPCloudResponse
+        {
+            RequestID = requestId,
+            Results = [
+                PVRPCloud.PVRPCloudResult.Success(new PVRPCloudProjectRes())
+            ]
+        });
     }
 }
