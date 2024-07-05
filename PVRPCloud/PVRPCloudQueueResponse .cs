@@ -2,20 +2,20 @@
 
 namespace PVRPCloud;
 
-// todo rename type
-public class PVRPCloudQueueResponse
+public sealed class PVRPCloudQueueResponse
 {
     public enum PVRPCloudQueueResponseStatus
     {
-        [Description("ERROR")]          //végstátusz
+        [Description("ERROR")]
         ERROR,
-        [Description("RESULT")]         //végstátusz
+        [Description("RESULT")]
         RESULT,
         [Description("LOG")]
         LOG
     };
+
     public PVRPCloudQueueResponseStatus Status { get; set; }
-    public string RequestID { get; set; }
+    public string RequestID { get; set; } = string.Empty;
     public PVRPCloudLog Log { get; set; }
-    public string Link { get; set; }
+    public string Link { get; set; } = string.Empty;
 }
