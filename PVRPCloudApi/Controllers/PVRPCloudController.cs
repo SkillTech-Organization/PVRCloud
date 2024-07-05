@@ -8,7 +8,7 @@ namespace PVRPCloudApi.Controllers;
 [Route("[controller]")]
 public class PVRPCloudController : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("optimizerequest")]
     [ProducesResponseType<PVRPCloudResponse>(StatusCodes.Status202Accepted)]
     [ProducesResponseType<PVRPCloudResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -18,17 +18,11 @@ public class PVRPCloudController : ControllerBase
         return Ok(new PVRPCloudResponse
         {
             RequestID = "12345678",
-            Results = [
-                new()
-                {
-                    Status = PVRPCloudResult.PVRPCloudResultStatus.RESULT,
-                    Data = request
-                }
-            ]
+            Results = [ PVRPCloudResult.Success(request) ]
         });
     }
 
-    [HttpGet]
+    [HttpGet("optimizeresult")]
     [ProducesResponseType<PVRPCloudQueueResponse>(StatusCodes.Status200OK)]
     public IActionResult OptimizeResult()
     {

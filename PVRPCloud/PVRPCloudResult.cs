@@ -6,7 +6,7 @@ namespace PVRPCloud;
 [Serializable]
 [KnownType(typeof(List<PVRPCloudCalcTask>))]
 [KnownType(typeof(PVRPCloudResErrMsg))]
-public class PVRPCloudResult
+public sealed class PVRPCloudResult
 {
     public enum PVRPCloudResultStatus
     {
@@ -22,8 +22,25 @@ public class PVRPCloudResult
         LOG
     };
 
-    // [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public PVRPCloudResultStatus Status { get; set; }
     public string ItemID { get; set; } = string.Empty;
     public required object Data { get; set; }
+
+    public static PVRPCloudResult Success(object obj) => new()
+    {
+        Status = PVRPCloudResultStatus.RESULT,
+        Data = obj
+    };
+
+    public static PVRPCloudResult ValidationError(PVRPCloudResErrMsg error) => new()
+    {
+        Status = PVRPCloudResultStatus.VALIDATIONERROR,
+        Data = error,
+    };
+
+    public static PVRPCloudResult Exception(PVRPCloudResErrMsg error) => new()
+    {
+        Status = PVRPCloudResultStatus.EXCEPTION,
+        Data = error,
+    };
 }

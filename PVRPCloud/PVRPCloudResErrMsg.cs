@@ -7,11 +7,13 @@ public sealed class PVRPCloudResErrMsg
     public string Message { get; private init; } = string.Empty;
     public string CallStack { get; private init; } = string.Empty;
 
+    private PVRPCloudResErrMsg() { }
+
     public static PVRPCloudResErrMsg FromException(Exception ex)
     {
         string message = ex.Message;
         if (ex.InnerException is not null)
-            message += "\ninner exception:" + ex.InnerException.Message;
+            message += "\nInner exception:" + ex.InnerException.Message;
 
         return new()
         {
