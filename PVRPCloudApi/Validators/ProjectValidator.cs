@@ -40,7 +40,8 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
         RuleFor(x => x.Orders)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
 
-        ValidateTruckTypes();
+        TruckTypeValidator? truckTypeValidator = null;
+        RuleForEach(x => x.TruckTypes).SetValidator(project => truckTypeValidator ??= new TruckTypeValidator(project));
 
         ValidateCapacityProfiles();
 
@@ -54,12 +55,6 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
         ValidateDepot();
 
         ValidateOrders();
-    }
-
-    private void ValidateTruckTypes()
-    {
-        RuleFor(x => x.TruckTypes)
-            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
     }
 
     private void ValidateCostProfileIds()

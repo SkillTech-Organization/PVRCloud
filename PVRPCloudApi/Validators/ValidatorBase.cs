@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using PVRPCloud.Requests;
 
 namespace PVRPCloudApi.Validators;
 
@@ -33,6 +32,4 @@ public abstract class ValidatorBase<T> : AbstractValidator<T> where T : class, n
 
         return result;
     }
-
-    protected string GetIdentifiableId(IIdentifiable identifiable) => identifiable.ID;
 }

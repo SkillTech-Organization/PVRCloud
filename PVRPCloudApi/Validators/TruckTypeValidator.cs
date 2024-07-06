@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using PVRPCloud;
 using PVRPCloud.Requests;
+using static PVRPCloudApi.Validators.ValidationHelpers;
 
 namespace PVRPCloudApi.Validators;
 
@@ -24,30 +25,39 @@ public sealed class TruckTypeValidator : ValidatorBase<PVRPCloudTruckType>
         "P35",
     ];
 
-    public TruckTypeValidator()
+    public TruckTypeValidator(PVRPCloudProject project)
     {
+        var truckTypeIds = IdsToArray(project.TruckTypes);
         RuleFor(x => x.ID)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .Must(IsUnique(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .WithState(GetIdentifiableId);
 
         RuleFor(x => x.TruckTypeName)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(GetIdentifiableId);
 
         RuleFor(x => x.RestrictedZones)
-            .Must(EmptyOrContainsRestrictionZones).WithMessage("PVRPCloudMessages.err_");
+            .Must(EmptyOrContainsRestrictionZones).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Weight)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE);
+            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .WithState(GetIdentifiableId);
 
         RuleFor(x => x.XHeight)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE);
+            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .WithState(GetIdentifiableId);
 
         RuleFor(x => x.XWidth)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE);
+            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .WithState(GetIdentifiableId);
 
         RuleFor(x => x.SpeedValues)
-            .Must(CheckRoadValues).WithMessage(PVRPCloudMessages.ERR_RANGE);
+            .Must(CheckRoadValues).WithMessage(PVRPCloudMessages.ERR_RANGE)
+            .WithState(GetIdentifiableId);
     }
 
     private bool EmptyOrContainsRestrictionZones(IReadOnlyCollection<string> incomingZones)

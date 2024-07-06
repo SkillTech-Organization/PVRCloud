@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using PVRPCloud;
 using PVRPCloud.Requests;
+using static PVRPCloudApi.Validators.ValidationHelpers;
 
 namespace PVRPCloudApi.Validators;
 
@@ -8,16 +9,16 @@ public sealed class TruckValidator : ValidatorBase<PVRPCloud.Requests.PVRPCloudT
 {
     public TruckValidator(PVRPCloudProject project)
     {
-        var truckIds = GetIdsToArray(project.Trucks);
+        var truckIds = IdsToArray(project.Trucks);
         RuleFor(x => x.ID)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .Must(x => truckIds.Count(y => y == x) == 1).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .Must(IsUnique(truckIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
-        var truckTypeIds = GetIdsToArray(project.TruckTypes);
+        var truckTypeIds = IdsToArray(project.TruckTypes);
         RuleFor(x => x.TruckTypeID)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .Must(x => truckTypeIds.Contains(x)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .Must(Contains(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.TruckName)
@@ -31,10 +32,10 @@ public sealed class TruckValidator : ValidatorBase<PVRPCloud.Requests.PVRPCloudT
             .LessThanOrEqualTo(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
             .WithState(GetIdentifiableId);
 
-        var capacityProfileIds = GetIdsToArray(project.CapacityProfiles);
+        var capacityProfileIds = IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.CapacityProfileID)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .Must(x => capacityProfileIds.Contains(x)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .Must(Contains(capacityProfileIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.MaxWorkTime)
@@ -53,8 +54,4 @@ public sealed class TruckValidator : ValidatorBase<PVRPCloud.Requests.PVRPCloudT
             .LessThan(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
             .WithState(GetIdentifiableId);
     }
-
-    private IEnumerable<string> GetIdsToArray(IEnumerable<IIdentifiable> identifiables) => identifiables
-        .Select(GetIdentifiableId)
-        .ToArray();
 }
