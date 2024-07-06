@@ -48,7 +48,8 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
 
         ValidateClients();
 
-        ValidateCostProfileIds();
+        CostProfileValidator? costProfileValidator = null;
+        RuleForEach(x => x.CostProfiles).SetValidator(project => costProfileValidator ??= new CostProfileValidator(project));
 
         TruckValidator? truckValidator = null;
         RuleForEach(x => x.Trucks).SetValidator(project => truckValidator ??= new TruckValidator(project));
@@ -56,12 +57,6 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
         ValidateDepot();
 
         ValidateOrders();
-    }
-
-    private void ValidateCostProfileIds()
-    {
-        RuleFor(x => x.CostProfiles)
-            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
     }
 
     private void ValidateClients()
