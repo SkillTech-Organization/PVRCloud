@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
 namespace PVRPCloudApi;
@@ -21,6 +22,6 @@ public static class ServiceCollectionExtensions
 
         services.AddFluentValidationAutoValidation();
 
-        services.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+        services.AddScoped<IValidator<PVRPCloudProject>, ProjectValidator>();
     }
 }

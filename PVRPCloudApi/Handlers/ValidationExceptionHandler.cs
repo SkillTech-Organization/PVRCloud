@@ -18,8 +18,11 @@ public sealed class ValidationExceptionHandler : IExceptionHandler
         PVRPCloudResponse response = new()
         {
             Results = validationException.Errors
-                .Select(x => PVRPCloudResErrMsg.ValidationError(x.PropertyName, x.ErrorMessage))
-                .Select(x => PVRPCloudResult.ValidationError(x))
+                .Select(error => (
+                    ErrorMessage: PVRPCloudResErrMsg.ValidationError(error.PropertyName, error.ErrorMessage),
+                    Error: error
+                ))
+                .Select(errorTuple => PVRPCloudResult.ValidationError(errorTuple.ErrorMessage, (string)errorTuple.Error.CustomState))
                 .ToList()
         };
 

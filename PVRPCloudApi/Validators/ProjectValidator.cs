@@ -48,7 +48,8 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
 
         ValidateCostProfileIds();
 
-        ValidateTrucks();
+        TruckValidator? truckValidator = null;
+        RuleForEach(x => x.Trucks).SetValidator(project => truckValidator ??= new TruckValidator(project));
 
         ValidateDepot();
 
@@ -77,45 +78,6 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
     {
         RuleFor(x => x.Clients)
             .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
-    }
-
-    private void ValidateTrucks()
-    {
-        static bool AreTruckTimesCorrect(PVRPCloudProject project, List<PVRPCloud.Requests.PVRPCloudTruck> trucks) => trucks
-            .All(truck => truck.ArrDepotMaxTime >= project.MinTime && truck.ArrDepotMaxTime <= project.MaxTime);
-
-        static bool AreCapacityProdileIdsValid(PVRPCloudProject project, List<PVRPCloud.Requests.PVRPCloudTruck> trucks)
-        {
-            var capacityProfileIDs = project.CapacityProfiles
-                .Select(capacityProfile => capacityProfile.ID)
-                .ToArray();
-
-            return trucks
-                .Select(truck => truck.CapacityProfileID)
-                .All(truckCapacityProfileID => capacityProfileIDs
-                    .Contains(truckCapacityProfileID));
-        }
-
-        static bool AreLatestStartsCorrect(PVRPCloudProject project, List<PVRPCloud.Requests.PVRPCloudTruck> trucks) => trucks
-            .All(truck => truck.LatestStart < project.MaxTime);
-
-        static bool AreTruckTypesIdsValid(PVRPCloudProject project, List<PVRPCloud.Requests.PVRPCloudTruck> trucks)
-        {
-            var truckTypeIds = project.TruckTypes
-                .Select(x => x.ID)
-                .ToArray();
-
-            return trucks
-                .Select(x => x.TruckTypeID)
-                .All(x => truckTypeIds.Contains(x));
-        }
-
-        RuleFor(x => x.Trucks)
-            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
-            .Must(AreTruckTypesIdsValid).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
-            .Must(AreTruckTimesCorrect).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
-            .Must(AreCapacityProdileIdsValid).WithMessage(PVRPCloudMessages.ERR_RANGE)
-            .Must(AreLatestStartsCorrect).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL);
     }
 
     private void ValidateDepot()

@@ -32,8 +32,9 @@ public sealed class PVRPCloudResult
         Data = obj
     };
 
-    public static PVRPCloudResult ValidationError(PVRPCloudResErrMsg error) => new()
+    public static PVRPCloudResult ValidationError(PVRPCloudResErrMsg error, string itemId) => new()
     {
+        ItemID = itemId,
         Status = PVRPCloudResultStatus.VALIDATIONERROR,
         Data = error,
     };
