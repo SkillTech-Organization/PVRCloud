@@ -55,18 +55,9 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
         TruckValidator? truckValidator = null;
         RuleForEach(x => x.Trucks).SetValidator(project => truckValidator ??= new TruckValidator(project));
 
-        ValidateDepot();
+        RuleFor(x => x.Depot).SetValidator(project => new DepotValidator(project));
 
         ValidateOrders();
-    }
-
-    private void ValidateDepot()
-    {
-        static bool AreDepoTimesCorrect(PVRPCloudProject project, PVRPCloudDepot depot) =>
-            depot.DepotMinTime >= project.MinTime && depot.DepotMaxTime <= project.MinTime;
-
-        RuleFor(x => x.Depot)
-            .Must(AreDepoTimesCorrect).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL);
     }
 
     private void ValidateOrders()
