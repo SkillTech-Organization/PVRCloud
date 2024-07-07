@@ -10,35 +10,45 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
     {
         RuleFor(x => x.ProjectName)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.MinTime)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.MaxTime)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .GreaterThan(x => x.MinTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL);
+            .GreaterThan(x => x.MinTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.MaxTourDuration)
-            .GreaterThan(0).WithMessage(PVRPCloudMessages.ERR_ZERO);
+            .GreaterThan(0).WithMessage(PVRPCloudMessages.ERR_ZERO)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.DistanceLimit)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE);
+            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.CostProfiles)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.Trucks)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.Depot)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.Clients)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(GetProjectName);
 
         RuleFor(x => x.Orders)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(GetProjectName);
 
         var createTruckTypeValidator = CreateValidator(project => new TruckTypeValidator(project));
         RuleForEach(x => x.TruckTypes).SetValidator(createTruckTypeValidator);
@@ -61,6 +71,8 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
         var createOrderValidator = CreateValidator(project => new OrderValidator(project));
         RuleForEach(x => x.Orders).SetValidator(createOrderValidator);
     }
+
+    public string GetProjectName(PVRPCloudProject project) => project.ProjectName;
 
     private Func<PVRPCloudProject, TValidator> CreateValidator<TValidator>(Func<PVRPCloudProject, TValidator> validatorProvider)
         where TValidator : class
