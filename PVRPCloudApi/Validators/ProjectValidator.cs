@@ -40,62 +40,32 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
         RuleFor(x => x.Orders)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY);
 
-        TruckTypeValidator? truckTypeValidator = null;
-        RuleForEach(x => x.TruckTypes).SetValidator(project => truckTypeValidator ??= new TruckTypeValidator(project));
+        var createTruckTypeValidator = CreateValidator(project => new TruckTypeValidator(project));
+        RuleForEach(x => x.TruckTypes).SetValidator(createTruckTypeValidator);
 
-        CapacityProfileValidator? capacityProfileValidator = null;
-        RuleForEach(x => x.CapacityProfiles).SetValidator(project => capacityProfileValidator ??= new CapacityProfileValidator(project));
+        var createCapacityProfileValidator = CreateValidator(project => new CapacityProfileValidator(project));
+        RuleForEach(x => x.CapacityProfiles).SetValidator(createCapacityProfileValidator);
 
-        ClientValidator? clientValidator = null;
-        RuleForEach(x => x.Clients).SetValidator(project => clientValidator ??= new ClientValidator(project));
+        var createClientValidator = CreateValidator(project => new ClientValidator(project));
+        RuleForEach(x => x.Clients).SetValidator(createClientValidator);
 
-        CostProfileValidator? costProfileValidator = null;
-        RuleForEach(x => x.CostProfiles).SetValidator(project => costProfileValidator ??= new CostProfileValidator(project));
+        var createCostProfileValidator = CreateValidator(project => new CostProfileValidator(project));
+        RuleForEach(x => x.CostProfiles).SetValidator(createCostProfileValidator);
 
-        TruckValidator? truckValidator = null;
-        RuleForEach(x => x.Trucks).SetValidator(project => truckValidator ??= new TruckValidator(project));
+        var createTruckValidator = CreateValidator(project => new TruckValidator(project));
+        RuleForEach(x => x.Trucks).SetValidator(createTruckValidator);
 
-        RuleFor(x => x.Depot).SetValidator(project => new DepotValidator(project));
+        var createDepotValidator = CreateValidator(project => new DepotValidator(project));
+        RuleFor(x => x.Depot).SetValidator(createDepotValidator);
 
-        ValidateOrders();
+        var createOrderValidator = CreateValidator(project => new OrderValidator(project));
+        RuleForEach(x => x.Orders).SetValidator(createOrderValidator);
     }
 
-    private void ValidateOrders()
+    private Func<PVRPCloudProject, TValidator> CreateValidator<TValidator>(Func<PVRPCloudProject, TValidator> validatorProvider)
+        where TValidator : class
     {
-        static bool AreClientIdsCorrect(PVRPCloudProject project, List<PVRPCloudOrder> orders)
-        {
-            var clientIds = project.Clients
-                .Select(x => x.ID)
-                .ToArray();
-
-            return orders.All(order => clientIds.Contains(order.ClientID));
-        }
-
-        static bool AreTruckIdsCorrect(PVRPCloudProject project, List<PVRPCloudOrder> orders)
-        {
-            if (orders.Count == 0)
-                return true;
-
-            var truckIds = project.Trucks
-                .Select(x => x.ID)
-                .ToArray();
-
-            return orders
-                .SelectMany(x => x.TruckList)
-                .Distinct()
-                .All(x => truckIds.Contains(x));
-        }
-
-        RuleFor(x => x.Orders)
-            .Must(CheckUniquness).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
-            .Must(AreClientIdsCorrect).WithMessage(PVRPCloudMessages.ERR_RANGE)
-            .Must(AreTruckIdsCorrect).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE);
-    }
-
-    private bool CheckUniquness(IReadOnlyCollection<IIdentifiable> values)
-    {
-        var hashedValues = values.Select(x => x.ID).ToHashSet();
-
-        return values.Count == hashedValues.Count;
+        TValidator? validator = null;
+        return project => validator ??= validatorProvider(project);
     }
 }
