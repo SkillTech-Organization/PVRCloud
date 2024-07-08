@@ -15,6 +15,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddValidation();
+builder.Services.AddExceptionHandler(option => {
+    option.ExceptionHandler = GeneralExceptionHandler.HandleAsync;
+});
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -58,6 +62,8 @@ var app = builder.Build();
 //}
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
