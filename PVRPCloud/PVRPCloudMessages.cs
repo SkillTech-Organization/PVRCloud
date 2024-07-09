@@ -39,4 +39,5 @@ public static class PVRPCloudMessages
     public const string ERR_ZERO = "{PropertyName}: nem lehet nulla.";
     public const string ERR_NEGATIVE = "{PropertyName}: nem lehet negatív.";
     public const string ERR_ID_UNIQUE = "{PropertyName}: az elemek ID-je nem egyedi.";
+    public const string ERR_NOT_FOUND = "{PropertyName}: Nem található.";
 }

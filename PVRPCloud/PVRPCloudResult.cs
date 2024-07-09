@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Converters;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace PVRPCloud;
@@ -7,7 +6,7 @@ namespace PVRPCloud;
 [Serializable]
 [KnownType(typeof(List<PVRPCloudCalcTask>))]
 [KnownType(typeof(PVRPCloudResErrMsg))]
-public class PVRPCloudResult
+public sealed class PVRPCloudResult
 {
     public enum PVRPCloudResultStatus
     {
@@ -23,10 +22,26 @@ public class PVRPCloudResult
         LOG
     };
 
-    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public PVRPCloudResultStatus Status { get; set; }
-    public string ObjectName { get; set; }
-    public string ItemID { get; set; }
-    public object Data { get; set; }
+    public string ItemID { get; set; } = string.Empty;
+    public required object Data { get; set; }
 
+    public static PVRPCloudResult Success(object obj) => new()
+    {
+        Status = PVRPCloudResultStatus.RESULT,
+        Data = obj
+    };
+
+    public static PVRPCloudResult ValidationError(PVRPCloudResErrMsg error, string itemId) => new()
+    {
+        ItemID = itemId,
+        Status = PVRPCloudResultStatus.VALIDATIONERROR,
+        Data = error,
+    };
+
+    public static PVRPCloudResult Exception(PVRPCloudResErrMsg error) => new()
+    {
+        Status = PVRPCloudResultStatus.EXCEPTION,
+        Data = error,
+    };
 }

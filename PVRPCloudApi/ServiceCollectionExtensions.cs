@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-using System.Reflection;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
 namespace PVRPCloudApi;
@@ -15,15 +14,14 @@ public static class ServiceCollectionExtensions
             if (member is null)
                 return "?";
 
-            var labelAttr = member.GetCustomAttribute<DescriptionAttribute>();
-            if (labelAttr is not null)
-                return member.GetCustomAttribute<DescriptionAttribute>()?.Description;
+            if (member.Name is not null)
+                return member.Name;
             else
                 return "?";
         };
 
         services.AddFluentValidationAutoValidation();
 
-        services.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+        services.AddScoped<IValidator<PVRPCloudProject>, ProjectValidator>();
     }
 }

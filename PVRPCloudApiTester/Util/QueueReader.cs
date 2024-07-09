@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using CommonUtils;
 using PVRPCloudApiTester.Settings;
 using PVRPCloud;
+using PVRPCloud.Requests;
 
 namespace PVRPCloudApiTester.Util;
 

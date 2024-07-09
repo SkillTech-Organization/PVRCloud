@@ -35,8 +35,6 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
             {
                 response = initResult;
             }
-            response.TaskList = body.TaskList;
-            response.TruckList = body.TruckList;
 
             if (initResult != null && !initResult.HasError)
             {
@@ -62,7 +60,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
             //Logger.Info("From blob is null: " + (response == null).ToString(), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
             response = Logger.Blob.GetLoggedJsonAs<PVRPCloudResponse>(id).Result;
             //var asd = response.ToJson();
-            response?.Result.ForEach(x =>
+            response?.Results.ForEach(x =>
             {
                 //Logger.Info("Data: " + Newtonsoft.Json.JsonConvert.SerializeObject(x.Data), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
                 if (x.Data != null)
@@ -100,8 +98,6 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
             {
                 response = initResult;
             }
-            response.TaskList = body.TaskList;
-            response.TruckList = body.TruckList;
 
             if (initResult != null && !initResult.HasError)
             {

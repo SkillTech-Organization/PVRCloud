@@ -6,6 +6,7 @@ name: Build and deploy bbxBE to DEV environment
 env:
   AZURE_WEBAPP_NAME: PRVPCloudWebAPITest # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
+  ACTIONS_ID_TOKEN_REQUEST_URL: ""
 
 on:
   pull_request: 
@@ -60,6 +61,10 @@ jobs:
     environment:
       name: "development"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
 
     steps:
       - name: Download artifact from build job
@@ -70,26 +75,31 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.PVRPCLOUDWEBAPI_DEPLOY_KEY_DEV_ENV }}
+          client-id: ${{ secrets.CLIENTID }}
+          tenant-id: ${{ secrets.TENANTID }}
+          subscription-id: ${{ secrets.SUBSCRIPTIONID }}
+          enable-AzPSSession: true
+#          creds: ${{ secrets.PVRPCLOUDWEBAPI_DEPLOY_KEY_DEV_ENV }}
+#          allow-no-subscriptions: true
           
-      - name: Azure WebApp configuration settings
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          #slot-name: 'staging'  # Optional and needed only if the settings have to be configured on the specific deployment slot
-          #app-settings-json: ${{ secrets.BBXBE_DEV_APSETTINGS }}
-          #connection-strings-json: '${{ secrets.BBX_DEV_DB_CONNECTIONSTRING }}'
-          #general-settings-json: '{"alwaysOn": "false", "webSocketsEnabled": "false"}' #'General configuration settings as Key Value pairs'
-        id: settings
+#      - name: Azure WebApp configuration settings
+#        uses: azure/appservice-settings@v1
+#        with:
+#          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+#          #slot-name: 'staging'  # Optional and needed only if the settings have to be configured on the specific deployment slot
+#          #app-settings-json: ${{ secrets.BBXBE_DEV_APSETTINGS }}
+#          #connection-strings-json: '${{ secrets.BBX_DEV_DB_CONNECTIONSTRING }}'
+#          #general-settings-json: '{"alwaysOn": "false", "webSocketsEnabled": "false"}' #'General configuration settings as Key Value pairs'
+#        id: settings
         
       - name: Azure Logout
         run: |
           az logout
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@0b651ed7546ecfc75024011f76944cb9b381ef1e
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.PVRPCLOUDWEBAPI_DEPLOY_KEY_DEV_ENV }} ## ez nem jo, ide mas kell!!
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+#      - name: Deploy to Azure Web App
+#        id: deploy-to-webapp
+#        uses: azure/webapps-deploy@0b651ed7546ecfc75024011f76944cb9b381ef1e
+#        with:
+#          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+#          publish-profile: ${{ secrets.PVRPCLOUDWEBAPI_DEPLOY_KEY_DEV_ENV }} ## ez nem jo, ide mas kell!!
+#          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

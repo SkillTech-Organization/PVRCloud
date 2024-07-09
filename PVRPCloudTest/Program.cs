@@ -908,7 +908,6 @@ class Program
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("VISSZATÉRÉSI ÉRTÉK " + i++.ToString() + "/" + res.Count.ToString());
             Console.WriteLine("Status     :" + rr.Status);
-            Console.WriteLine("Objektumnév:" + rr.ObjectName);
             Console.WriteLine("Elem ID    :" + rr.ItemID);
             if (rr.Data != null)
                 Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája

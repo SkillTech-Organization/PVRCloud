@@ -1,17 +1,10 @@
 ﻿using GMap.NET;
-using Newtonsoft.Json;
 using PMapCore.BLL;
 using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Common.Attrib;
 using PMapCore.Route;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using PMapCore.Properties;
 using CommonUtils;
 using PVRPCloudInsightsLogger.Logger;
 using PVRPCloudInsightsLogger.Settings;
@@ -40,18 +33,17 @@ public class PVRPCloudInterface
 
         var ret = new PVRPCloudResponse();
         //Paraméterek validálása
-        ret.Result.AddRange(ValidateObjList(p_TaskList));
+        ret.Results.AddRange(ValidateObjList(p_TaskList));
         foreach (PVRPCloudTask tsk in p_TaskList)
-            ret.Result.AddRange(ValidateObjList(tsk.TPoints));
+            ret.Results.AddRange(ValidateObjList(tsk.TPoints));
 
-        ret.Result.AddRange(ValidateObjList(p_TruckList));
+        ret.Results.AddRange(ValidateObjList(p_TruckList));
         foreach (PVRPCloudTruck trk in p_TruckList)
         {
-            ret.Result.AddRange(ValidateObjList(trk.CurrTPoints));
+            ret.Results.AddRange(ValidateObjList(trk.CurrTPoints));
 
         }
 
-        ret.MaxTruckDistance = p_maxTruckDistance;
         if (!ret.HasError)
         {
             ret.RequestID = DateTime.UtcNow.Ticks.ToString();
@@ -105,13 +97,7 @@ public class PVRPCloudInterface
     {
         var ret = new PVRPCloudResponse();
 
-        ret.TaskList = new List<PVRPCloudTask>();
-        ret.TruckList = new List<PVRPCloudTruck>();
-        ret.Result = new List<PVRPCloudResult>();
-        ret.TaskList.AddRange(p_TaskList);
-        ret.TruckList.AddRange(p_TruckList);
-        ret.Result.AddRange(res);
-        ret.MaxTruckDistance = p_maxTruckDistance;
+        ret.Results.AddRange(res);
         ret.RequestID = RequestID;
 
         var saveSuccess = !string.IsNullOrWhiteSpace(Logger.Blob.LogString(ret.ToJson(), RequestID).Result);
@@ -1179,7 +1165,6 @@ public class PVRPCloudInterface
                 PVRPCloudResult res = new PVRPCloudResult()
                 {
                     Status = PVRPCloudResult.PVRPCloudResultStatus.RESULT,
-                    ObjectName = "",
                     ItemID = "",
                     Data = tskResult
 
@@ -1190,17 +1175,11 @@ public class PVRPCloudInterface
         catch (Exception ex)
         {
             Util.ExceptionLog(ex);
-            PVRPCloudResErrMsg rm = new PVRPCloudResErrMsg();
-            rm.Field = "";
-            rm.Message = ex.Message;
-            if (ex.InnerException != null)
-                rm.Message += "\ninner exception:" + ex.InnerException.Message;
-            rm.CallStack = ex.StackTrace;
+            var rm = PVRPCloudResErrMsg.FromException(ex);
 
             PVRPCloudResult res = new PVRPCloudResult()
             {
                 Status = PVRPCloudResult.PVRPCloudResultStatus.EXCEPTION,
-                ObjectName = "",
                 ItemID = "",
                 Data = rm
 
@@ -1234,13 +1213,13 @@ public class PVRPCloudInterface
 
     private static PVRPCloudResult getValidationError(object p_obj, string p_field, string p_msg, bool log = true)
     {
-        PVRPCloudResErrMsg msg = new PVRPCloudResErrMsg() { Field = p_field, Message = p_msg, CallStack = "" };
+        var msg = PVRPCloudResErrMsg.ValidationError(p_field, p_msg);
+
         PropertyInfo ItemIDProp = p_obj.GetType().GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(ItemIDAttr))).FirstOrDefault();
 
         PVRPCloudResult itemRes = new PVRPCloudResult()
         {
             Status = PVRPCloudResult.PVRPCloudResultStatus.VALIDATIONERROR,
-            ObjectName = p_obj.GetType().Name,
             ItemID = ItemIDProp != null ? p_obj.GetType().GetProperty(ItemIDProp.Name).GetValue(p_obj, null).ToString() : "???",
             Data = msg
         };
@@ -1339,13 +1318,11 @@ public class PVRPCloudInterface
                 else
                 {
                     //Ha nincs eredmény (Status == RESULT), akkor felveszünk egy hibatételt és kilépünk
-                    PVRPCloudResErrMsg rm = new PVRPCloudResErrMsg();
-                    rm.Field = "";
-                    rm.Message = PVRPCloudMessages.E_ERRINSECONDPHASE;
+                    var rm = PVRPCloudResErrMsg.BusinessError(PVRPCloudMessages.E_ERRINSECONDPHASE);
+
                     PVRPCloudResult resErr = new PVRPCloudResult()
                     {
                         Status = PVRPCloudResult.PVRPCloudResultStatus.ERROR,
-                        ObjectName = "",
                         ItemID = "",
                         Data = rm
 
