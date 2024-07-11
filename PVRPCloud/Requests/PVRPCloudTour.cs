@@ -7,6 +7,6 @@ public sealed class PVRPCloudTour
     public DateTime EndTime { get; init; }
     public int TourLength { get; init; }
     public int TourToll { get; init; }
-    public string Route { get; init; } = string.Empty;
+    public List<PVRPCloudRoutePoint> Route { get; init; } = [];
     public List<PVRPCloudTourPoint> TourPoints { get; init; } = [];
 }
