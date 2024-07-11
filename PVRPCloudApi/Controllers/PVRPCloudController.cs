@@ -52,7 +52,18 @@ public class PVRPCloudController : ControllerBase
                     EndTime = DateTime.Now.AddDays(1),
                     TourLength = 5,
                     TourToll = 5,
-                    Route = "string",
+                    Route = [
+                        new()
+                        {
+                            Lat = 2,
+                            Lng = 2
+                        },
+                        new()
+                        {
+                            Lat = 3,
+                            Lng = 3
+                        }
+                    ],
                     TourPoints = [
                         new PVRPCloudTourPoint()
                         {
@@ -82,13 +93,8 @@ public class PVRPCloudController : ControllerBase
                             Duration = 2,
                             ArrTime = DateTime.Now,
                             ServTime = DateTime.Now,
-                            epTime = DateTime.Now,
+                            DepTime = DateTime.Now,
                             Order = new(),
-                            Qty1 = 1,
-                            Qty2 = 1,
-                            Qty3 = 1,
-                            Qty4 = 1,
-                            Qty5 = 1,
                         },
                         new PVRPCloudTourPoint()
                         {
@@ -118,13 +124,8 @@ public class PVRPCloudController : ControllerBase
                             Duration = 2,
                             ArrTime = DateTime.Now,
                             ServTime = DateTime.Now,
-                            epTime = DateTime.Now,
+                            DepTime = DateTime.Now,
                             Order = new(),
-                            Qty1 = 1,
-                            Qty2 = 1,
-                            Qty3 = 1,
-                            Qty4 = 1,
-                            Qty5 = 1,
                         }
                     ]
                 },
@@ -145,7 +146,18 @@ public class PVRPCloudController : ControllerBase
                     EndTime = DateTime.Now.AddDays(1),
                     TourLength = 5,
                     TourToll = 5,
-                    Route = "string",
+                    Route = [
+                        new()
+                        {
+                            Lat = 2,
+                            Lng = 2
+                        },
+                        new()
+                        {
+                            Lat = 3,
+                            Lng = 3
+                        }
+                    ],
                     TourPoints = [
                         new PVRPCloudTourPoint()
                         {
@@ -175,13 +187,8 @@ public class PVRPCloudController : ControllerBase
                             Duration = 2,
                             ArrTime = DateTime.Now,
                             ServTime = DateTime.Now,
-                            epTime = DateTime.Now,
+                            DepTime = DateTime.Now,
                             Order = new(),
-                            Qty1 = 1,
-                            Qty2 = 1,
-                            Qty3 = 1,
-                            Qty4 = 1,
-                            Qty5 = 1,
                         },
                         new PVRPCloudTourPoint()
                         {
@@ -211,13 +218,8 @@ public class PVRPCloudController : ControllerBase
                             Duration = 2,
                             ArrTime = DateTime.Now,
                             ServTime = DateTime.Now,
-                            epTime = DateTime.Now,
+                            DepTime = DateTime.Now,
                             Order = new(),
-                            Qty1 = 1,
-                            Qty2 = 1,
-                            Qty3 = 1,
-                            Qty4 = 1,
-                            Qty5 = 1,
                         }
                     ]
                 }
