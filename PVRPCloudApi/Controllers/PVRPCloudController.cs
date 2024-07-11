@@ -31,10 +31,10 @@ public class PVRPCloudController : ControllerBase
     {
         var exampleResponse = new PVRPCloudProjectRes()
         {
-            Projectname = "PRJ01",
+            ProjectName = "PRJ01",
             MinTime = DateTime.Now.AddDays(-5),
             MaxTime = DateTime.Now.AddDays(2),
-            PlanTours = [
+            Tours = [
                 new()
                 {
                     Truck = new PVRPCloud.Requests.PVRPCloudTruck
@@ -242,9 +242,6 @@ public class PVRPCloudController : ControllerBase
                     Qty5 = 1,
                 }
             ],
-            CalcInput = "Ez nem tudom mi",
-            CalcOutput = "Ezt sem tudom hogy mi :)",
-            PVRPConsole = "Console"
         };
         return Ok(new PVRPCloudResponse
         {
