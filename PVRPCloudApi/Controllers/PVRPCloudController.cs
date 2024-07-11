@@ -73,7 +73,7 @@ public class PVRPCloudController : ControllerBase
                                 ClientName = "Client name",
                                 Lat = 2,
                                 Lng = 2,
-                                FixService = 2
+                                ServiceFixTime = 2
                             },
                             Lat = 0,
                             Lng = 0,
@@ -109,7 +109,7 @@ public class PVRPCloudController : ControllerBase
                                 ClientName = "Client name",
                                 Lat = 2,
                                 Lng = 2,
-                                FixService = 2
+                                ServiceFixTime = 2
                             },
                             Lat = 0,
                             Lng = 0,
@@ -166,7 +166,7 @@ public class PVRPCloudController : ControllerBase
                                 ClientName = "Client name",
                                 Lat = 2,
                                 Lng = 2,
-                                FixService = 2
+                                ServiceFixTime = 2
                             },
                             Lat = 0,
                             Lng = 0,
@@ -202,7 +202,7 @@ public class PVRPCloudController : ControllerBase
                                 ClientName = "Client name",
                                 Lat = 2,
                                 Lng = 2,
-                                FixService = 2
+                                ServiceFixTime = 2
                             },
                             Lat = 0,
                             Lng = 0,
