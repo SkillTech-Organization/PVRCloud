@@ -11,11 +11,6 @@ public sealed class PVRPCloudTourPoint
     public int Duration { get; init; }
     public DateTime ArrTime { get; init; }
     public DateTime ServTime { get; init; }
-    public DateTime epTime { get; init; }
+    public DateTime DepTime { get; init; }
     public required PVRPCloudOrder Order { get; init; }
-    public int Qty1 { get; init; }
-    public int Qty2 { get; init; }
-    public int Qty3 { get; init; }
-    public int Qty4 { get; init; }
-    public int Qty5 { get; init; }
 }

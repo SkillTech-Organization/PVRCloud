@@ -6,5 +6,5 @@ public sealed class PVRPCloudClient : IIdentifiable
     public string ClientName { get; init; } = string.Empty;
     public double Lat { get; init; }
     public double Lng { get; init; }
-    public int FixService { get; init; }
+    public int ServiceFixTime { get; init; }
 }

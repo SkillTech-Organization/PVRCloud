@@ -32,7 +32,7 @@ public sealed class ClientValidator : ValidatorBase<PVRPCloudClient>
             .InclusiveBetween(-180, 190).WithMessage(PVRPCloudMessages.ERR_RANGE)
             .WithState(GetIdentifiableId);
 
-        RuleFor(x => x.FixService)
+        RuleFor(x => x.ServiceFixTime)
             .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
             .WithState(GetIdentifiableId);
     }

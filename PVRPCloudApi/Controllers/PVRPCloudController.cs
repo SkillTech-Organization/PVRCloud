@@ -31,10 +31,10 @@ public class PVRPCloudController : ControllerBase
     {
         var exampleResponse = new PVRPCloudProjectRes()
         {
-            Projectname = "PRJ01",
+            ProjectName = "PRJ01",
             MinTime = DateTime.Now.AddDays(-5),
             MaxTime = DateTime.Now.AddDays(2),
-            PlanTours = [
+            Tours = [
                 new()
                 {
                     Truck = new PVRPCloud.Requests.PVRPCloudTruck
@@ -52,7 +52,18 @@ public class PVRPCloudController : ControllerBase
                     EndTime = DateTime.Now.AddDays(1),
                     TourLength = 5,
                     TourToll = 5,
-                    Route = "string",
+                    Route = [
+                        new()
+                        {
+                            Lat = 2,
+                            Lng = 2
+                        },
+                        new()
+                        {
+                            Lat = 3,
+                            Lng = 3
+                        }
+                    ],
                     TourPoints = [
                         new PVRPCloudTourPoint()
                         {
@@ -73,7 +84,7 @@ public class PVRPCloudController : ControllerBase
                                 ClientName = "Client name",
                                 Lat = 2,
                                 Lng = 2,
-                                FixService = 2
+                                ServiceFixTime = 2
                             },
                             Lat = 0,
                             Lng = 0,
@@ -82,13 +93,8 @@ public class PVRPCloudController : ControllerBase
                             Duration = 2,
                             ArrTime = DateTime.Now,
                             ServTime = DateTime.Now,
-                            epTime = DateTime.Now,
+                            DepTime = DateTime.Now,
                             Order = new(),
-                            Qty1 = 1,
-                            Qty2 = 1,
-                            Qty3 = 1,
-                            Qty4 = 1,
-                            Qty5 = 1,
                         },
                         new PVRPCloudTourPoint()
                         {
@@ -109,7 +115,7 @@ public class PVRPCloudController : ControllerBase
                                 ClientName = "Client name",
                                 Lat = 2,
                                 Lng = 2,
-                                FixService = 2
+                                ServiceFixTime = 2
                             },
                             Lat = 0,
                             Lng = 0,
@@ -118,13 +124,8 @@ public class PVRPCloudController : ControllerBase
                             Duration = 2,
                             ArrTime = DateTime.Now,
                             ServTime = DateTime.Now,
-                            epTime = DateTime.Now,
+                            DepTime = DateTime.Now,
                             Order = new(),
-                            Qty1 = 1,
-                            Qty2 = 1,
-                            Qty3 = 1,
-                            Qty4 = 1,
-                            Qty5 = 1,
                         }
                     ]
                 },
@@ -145,7 +146,18 @@ public class PVRPCloudController : ControllerBase
                     EndTime = DateTime.Now.AddDays(1),
                     TourLength = 5,
                     TourToll = 5,
-                    Route = "string",
+                    Route = [
+                        new()
+                        {
+                            Lat = 2,
+                            Lng = 2
+                        },
+                        new()
+                        {
+                            Lat = 3,
+                            Lng = 3
+                        }
+                    ],
                     TourPoints = [
                         new PVRPCloudTourPoint()
                         {
@@ -166,7 +178,7 @@ public class PVRPCloudController : ControllerBase
                                 ClientName = "Client name",
                                 Lat = 2,
                                 Lng = 2,
-                                FixService = 2
+                                ServiceFixTime = 2
                             },
                             Lat = 0,
                             Lng = 0,
@@ -175,13 +187,8 @@ public class PVRPCloudController : ControllerBase
                             Duration = 2,
                             ArrTime = DateTime.Now,
                             ServTime = DateTime.Now,
-                            epTime = DateTime.Now,
+                            DepTime = DateTime.Now,
                             Order = new(),
-                            Qty1 = 1,
-                            Qty2 = 1,
-                            Qty3 = 1,
-                            Qty4 = 1,
-                            Qty5 = 1,
                         },
                         new PVRPCloudTourPoint()
                         {
@@ -202,7 +209,7 @@ public class PVRPCloudController : ControllerBase
                                 ClientName = "Client name",
                                 Lat = 2,
                                 Lng = 2,
-                                FixService = 2
+                                ServiceFixTime = 2
                             },
                             Lat = 0,
                             Lng = 0,
@@ -211,13 +218,8 @@ public class PVRPCloudController : ControllerBase
                             Duration = 2,
                             ArrTime = DateTime.Now,
                             ServTime = DateTime.Now,
-                            epTime = DateTime.Now,
+                            DepTime = DateTime.Now,
                             Order = new(),
-                            Qty1 = 1,
-                            Qty2 = 1,
-                            Qty3 = 1,
-                            Qty4 = 1,
-                            Qty5 = 1,
                         }
                     ]
                 }
@@ -225,24 +227,13 @@ public class PVRPCloudController : ControllerBase
             UnplannedOrders = [
                 new()
                 {
-                    Qty1 = 1,
-                    Qty2 = 1,
-                    Qty3 = 1,
-                    Qty4 = 1,
-                    Qty5 = 1,
+                    Order = new(),
                 },
                 new()
                 {
-                    Qty1 = 1,
-                    Qty2 = 1,
-                    Qty3 = 1,
-                    Qty4 = 1,
-                    Qty5 = 1,
+                    Order = new(),
                 }
             ],
-            CalcInput = "Ez nem tudom mi",
-            CalcOutput = "Ezt sem tudom hogy mi :)",
-            PVRPConsole = "Console"
         };
         return Ok(new PVRPCloudResponse
         {
