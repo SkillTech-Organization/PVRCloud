@@ -227,19 +227,11 @@ public class PVRPCloudController : ControllerBase
             UnplannedOrders = [
                 new()
                 {
-                    Qty1 = 1,
-                    Qty2 = 1,
-                    Qty3 = 1,
-                    Qty4 = 1,
-                    Qty5 = 1,
+                    Order = new(),
                 },
                 new()
                 {
-                    Qty1 = 1,
-                    Qty2 = 1,
-                    Qty3 = 1,
-                    Qty4 = 1,
-                    Qty5 = 1,
+                    Order = new(),
                 }
             ],
         };
