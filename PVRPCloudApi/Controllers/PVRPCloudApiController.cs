@@ -39,7 +39,7 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
     /// <param name="body"></param>
     /// <param name="maxTruckDistance"></param>
     /// <returns></returns>
-    [ApiKey]
+    // [ApiKey]
     [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/PVRPCloudSupporter/PVRPCloudSupport")]
     public async Task<ActionResult<PVRPCloudResponse>> PVRPCloudSupport([Microsoft.AspNetCore.Mvc.FromBody] PVRPCloudSupportRequest body)
     {
@@ -60,7 +60,7 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [ApiKey]
+    // [ApiKey]
     [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/PVRPCloudSupporter/Result/{id}")]
     public async Task<ActionResult<PVRPCloudResponse>> Result([FromRoute] string id)
     {
@@ -74,7 +74,7 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
     /// <param name="body"></param>
     /// <param name="maxTruckDistance"></param>
     /// <returns></returns>
-    [ApiKey]
+    // [ApiKey]
     [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/PVRPCloudSupporter/PVRPCloudSupportX")]
     public async Task<ActionResult<PVRPCloudResponse>> PVRPCloudSupportX([Microsoft.AspNetCore.Mvc.FromBody] PVRPCloudSupportRequest body)
     {
@@ -94,7 +94,7 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
     /// get the 'isalive' status of the PVRPCloudSupporter service
     /// </summary>
     /// <returns></returns>
-    [ApiKey]
+    // [ApiKey]
     [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("IsAlive")]
     public System.Threading.Tasks.Task IsAlive()
     {
