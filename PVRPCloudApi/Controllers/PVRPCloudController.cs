@@ -29,6 +29,8 @@ public class PVRPCloudController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult PVRPCloudResult(string requestId)
     {
-        return Ok(PVRPCloudMock.ResponseMock);
+        return requestId == "12345678"
+            ? Ok(PVRPCloudMock.ResponseMock)
+            : NotFound();
     }
 }
