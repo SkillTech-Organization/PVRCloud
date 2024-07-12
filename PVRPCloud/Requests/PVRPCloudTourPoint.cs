@@ -2,8 +2,8 @@ namespace PVRPCloud.Requests;
 
 public sealed class PVRPCloudTourPoint
 {
-    public required PVRPCloudDepot Depot { get; init; }
-    public required PVRPCloudClient Client { get; init; }
+    public PVRPCloudDepot? Depot { get; init; }
+    public PVRPCloudClient? Client { get; init; }
     public double Lat { get; init; }
     public double Lng { get; init; }
     public int TourPointNo { get; init; }
@@ -12,5 +12,5 @@ public sealed class PVRPCloudTourPoint
     public DateTime ArrTime { get; init; }
     public DateTime ServTime { get; init; }
     public DateTime DepTime { get; init; }
-    public required PVRPCloudOrder Order { get; init; }
+    public PVRPCloudOrder? Order { get; init; }
 }
