@@ -19,7 +19,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -43,7 +43,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -67,7 +67,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -91,7 +91,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 },
                 new()
                 {
@@ -99,7 +99,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -123,7 +123,7 @@ public class ClientValidatorTests
                     ClientName = string.Empty,
                     Lat = 0,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -147,7 +147,7 @@ public class ClientValidatorTests
                     ClientName = null!,
                     Lat = 0,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -174,7 +174,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = value,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -200,7 +200,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = value,
                     Lng = 0,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -227,7 +227,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = value,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -253,7 +253,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = value,
-                    FixService = 0
+                    ServiceFixTime = 0
                 }
             ]
         };
@@ -266,7 +266,7 @@ public class ClientValidatorTests
     }
 
     [Fact]
-    public void Validate_FixServiceIsNegative_ThrowsValidationException()
+    public void Validate_ServiceFixTimeIsNegative_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -277,7 +277,7 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    FixService = -1
+                    ServiceFixTime = -1
                 }
             ]
         };

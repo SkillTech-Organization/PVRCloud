@@ -1,5 +1,3 @@
-using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using PVRPCloud.Requests;
 
@@ -164,7 +162,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
                     ClientName = "Client01",
                     Lat = 47.504811,
                     Lng = 18.986218,
-                    FixService = 10,
+                    ServiceFixTime = 10,
                 },
                 new()
                 {
@@ -172,7 +170,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
                     ClientName = "Client02",
                     Lat = 47.504811,
                     Lng = 19.722090,
-                    FixService = 15,
+                    ServiceFixTime = 15,
                 },
                 new()
                 {
@@ -180,7 +178,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
                     ClientName = "Client03",
                     Lat = 46.265335,
                     Lng = 20.110305,
-                    FixService = 5,
+                    ServiceFixTime = 5,
                 },
                 new()
                 {
@@ -188,7 +186,7 @@ public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : ICl
                     ClientName = "Client04",
                     Lat = 46.265335,
                     Lng = 20.110305,
-                    FixService = 5,
+                    ServiceFixTime = 5,
                 },
             ],
             Orders = [
