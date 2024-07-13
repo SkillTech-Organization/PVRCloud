@@ -5,7 +5,7 @@ using static PVRPCloudApi.Validators.ValidationHelpers;
 
 namespace PVRPCloudApi.Validators;
 
-public sealed class TruckTypeValidator : ValidatorBase<PVRPCloudTruckType>
+public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
 {
     private readonly IEnumerable<string> _restrictedZones = [
         "KP1",
