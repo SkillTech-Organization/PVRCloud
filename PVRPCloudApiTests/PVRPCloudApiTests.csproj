@@ -26,8 +26,4 @@
     <ProjectReference Include="..\PVRPCloudApi\PVRPCloudApi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators/" />
-  </ItemGroup>
-
 </Project>

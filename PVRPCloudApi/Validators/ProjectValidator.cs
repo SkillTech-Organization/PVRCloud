@@ -34,6 +34,14 @@ public sealed class ProjectValidator : ValidatorBase<PVRPCloudProject>
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .WithState(GetProjectName);
 
+        RuleFor(x => x.CapacityProfiles)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(GetProjectName);
+
+        RuleFor(x => x.TruckTypes)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(GetProjectName);
+
         RuleFor(x => x.Trucks)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .WithState(GetProjectName);
