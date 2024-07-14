@@ -12,6 +12,7 @@ public sealed class CapacityProfileValidator : ValidatorBase<PVRPCloudCapacityPr
     {
         var ids = IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.ID)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
@@ -19,7 +20,6 @@ public sealed class CapacityProfileValidator : ValidatorBase<PVRPCloudCapacityPr
         RuleFor(x => x.Capacity1)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .WithState(GetIdentifiableId);
-
 
         RuleFor(x => x.Capacity2)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)

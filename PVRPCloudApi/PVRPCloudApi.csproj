@@ -27,4 +27,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="PVRPCloudApiTests" />
+  </ItemGroup>
 </Project>
