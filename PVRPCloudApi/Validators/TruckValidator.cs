@@ -11,18 +11,18 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
     {
         var truckIds = IdsToArray(project.Trucks);
         RuleFor(x => x.ID)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .Must(IsUnique(truckIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         var truckTypeIds = IdsToArray(project.TruckTypes);
         RuleFor(x => x.TruckTypeID)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .Must(Contains(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.TruckName)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .NotEmpty()
             .WithState(GetIdentifiableId);
 
@@ -34,22 +34,22 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
 
         var capacityProfileIds = IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.CapacityProfileID)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .Must(Contains(capacityProfileIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.MaxWorkTime)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .GreaterThan(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.EarliestStart)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.LatestStart)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .GreaterThan(x => x.EarliestStart)
             .LessThan(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_LESS_THAN)
             .WithState(GetIdentifiableId);

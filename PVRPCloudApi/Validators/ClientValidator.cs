@@ -13,23 +13,23 @@ public sealed class ClientValidator : AbstractValidator<PVRPCloudClient>
         var ids = IdsToArray(project.Clients);
         RuleFor(x => x.ID)
             .NotEmpty()
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
 
         RuleFor(x => x.ClientName)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .NotEmpty()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Lat)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .InclusiveBetween(-90, 90)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Lng)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .InclusiveBetween(-180, 190)
             .WithState(GetIdentifiableId);
 

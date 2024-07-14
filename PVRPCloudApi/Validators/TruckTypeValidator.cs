@@ -30,12 +30,12 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
         var truckTypeIds = IdsToArray(project.TruckTypes);
         RuleFor(x => x.ID)
             .NotEmpty()
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .Must(IsUnique(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.TruckTypeName)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .NotEmpty()
             .WithState(GetIdentifiableId);
 

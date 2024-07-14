@@ -13,7 +13,7 @@ public sealed class CostProfileValidator : AbstractValidator<PVRPCloudCostProfil
         var ids = IdsToArray(project.CostProfiles);
         RuleFor(x => x.ID)
             .NotEmpty()
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 

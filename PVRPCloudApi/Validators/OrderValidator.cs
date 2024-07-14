@@ -13,22 +13,22 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
         var ids = IdsToArray(project.Orders);
         RuleFor(x => x.ID)
             .NotEmpty()
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         var clientIds = IdsToArray(project.Clients);
         RuleFor(x => x.ClientID)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .Must(Contains(clientIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Quantity1)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ReadyTime)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.OrderServiceTime)

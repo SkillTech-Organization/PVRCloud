@@ -11,15 +11,15 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
     {
         RuleFor(x => x.ProjectName)
             .NotEmpty()
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .WithState(GetProjectName);
 
         RuleFor(x => x.MinTime)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .WithState(GetProjectName);
 
         RuleFor(x => x.MaxTime)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotNull()
             .GreaterThan(x => x.MinTime)
             .WithState(GetProjectName);
 
@@ -40,7 +40,7 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
             .WithState(GetProjectName);
 
         RuleFor(x => x.Depot)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .WithState(GetProjectName);
 
         RuleFor(x => x.Clients)
