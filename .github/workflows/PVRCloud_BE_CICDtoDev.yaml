@@ -75,9 +75,7 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.PRATIX_AZURE_CLIENTID }}
-          tenant-id: ${{ secrets.PRATIX_AZURE_TENANTID }}
-          subscription-id: ${{ secrets.PRATIX_AZURE_SUBSCRIPTIONID }}
+          creds: ${{ secrets.PVRPCLOUDWEBAPI_DEPLOY_KEY_DEV_ENV }}
           
 #      - name: Azure WebApp configuration settings
 #        uses: azure/appservice-settings@v1
