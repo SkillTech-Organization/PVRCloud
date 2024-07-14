@@ -10,7 +10,7 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
     public ProjectValidator()
     {
         RuleFor(x => x.ProjectName)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .WithState(GetProjectName);
 
@@ -32,11 +32,11 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
             .WithState(GetProjectName);
 
         RuleFor(x => x.CostProfiles)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .WithState(GetProjectName);
 
         RuleFor(x => x.Trucks)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .WithState(GetProjectName);
 
         RuleFor(x => x.Depot)
@@ -44,11 +44,11 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
             .WithState(GetProjectName);
 
         RuleFor(x => x.Clients)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .WithState(GetProjectName);
 
         RuleFor(x => x.Orders)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .WithState(GetProjectName);
 
         var createTruckTypeValidator = CreateValidator(project => new TruckTypeValidator(project));

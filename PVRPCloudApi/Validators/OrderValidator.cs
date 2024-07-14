@@ -12,7 +12,7 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
     {
         var ids = IdsToArray(project.Orders);
         RuleFor(x => x.ID)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);

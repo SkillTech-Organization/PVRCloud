@@ -12,6 +12,7 @@ public sealed class LanguageManager : FluentValidation.Resources.LanguageManager
         AddTranslation("GreaterThanValidator", PVRPCloudMessages.ERR_GREATHER_THAN);
         AddTranslation("GreaterThanOrEqualValidator", PVRPCloudMessages.ERR_GREATER_THAN_OR_EQUAL);
         AddTranslation("InclusiveBetweenValidator", PVRPCloudMessages.ERR_RANGE);
+        AddTranslation("NotEmptyValidator", PVRPCloudMessages.ERR_EMPTY);
     }
 
     public void AddTranslation(string key, string message)

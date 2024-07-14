@@ -12,6 +12,7 @@ public sealed class ClientValidator : AbstractValidator<PVRPCloudClient>
     {
         var ids = IdsToArray(project.Clients);
         RuleFor(x => x.ID)
+            .NotEmpty()
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
@@ -19,7 +20,7 @@ public sealed class ClientValidator : AbstractValidator<PVRPCloudClient>
 
         RuleFor(x => x.ClientName)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Lat)

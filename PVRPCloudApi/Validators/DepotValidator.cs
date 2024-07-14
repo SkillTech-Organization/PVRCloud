@@ -11,13 +11,13 @@ public sealed class DepotValidator : AbstractValidator<PVRPCloudDepot>
     public DepotValidator(PVRPCloudProject project)
     {
         RuleFor(x => x.ID)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.DepotName)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Lat)
