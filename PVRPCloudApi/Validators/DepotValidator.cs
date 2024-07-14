@@ -31,15 +31,15 @@ public sealed class DepotValidator : AbstractValidator<PVRPCloudDepot>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ServiceFixTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ServiceVarTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.DepotMinTime)
-            .GreaterThanOrEqualTo(project.MinTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(project.MinTime)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.DepotMaxTime)

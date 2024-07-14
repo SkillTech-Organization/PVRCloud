@@ -32,15 +32,15 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.OrderServiceTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.OrderMinTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.OrderMaxTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         var truckIds = IdsToArray(project.Trucks);

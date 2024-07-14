@@ -18,15 +18,15 @@ public sealed class CostProfileValidator : AbstractValidator<PVRPCloudCostProfil
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.FixCost)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.HourCost)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.KmCost)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
     }
 }

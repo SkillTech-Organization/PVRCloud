@@ -27,9 +27,9 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ArrDepotMaxTime)
-            .GreaterThan(0).WithMessage(PVRPCloudMessages.ERR_ZERO)
-            .GreaterThanOrEqualTo(project.MinTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
-            .LessThanOrEqualTo(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThan(0)
+            .GreaterThanOrEqualTo(project.MinTime)
+            .LessThanOrEqualTo(project.MaxTime)//.WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
             .WithState(GetIdentifiableId);
 
         var capacityProfileIds = IdsToArray(project.CapacityProfiles);
@@ -40,18 +40,18 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
 
         RuleFor(x => x.MaxWorkTime)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .GreaterThan(0).WithMessage(PVRPCloudMessages.ERR_ZERO)
+            .GreaterThan(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.EarliestStart)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_ZERO)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.LatestStart)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .GreaterThan(x => x.EarliestStart).WithMessage(PVRPCloudMessages.ERR_RANGE)
-            .LessThan(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThan(x => x.EarliestStart)
+            .LessThan(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_LESS_THAN)
             .WithState(GetIdentifiableId);
     }
 }

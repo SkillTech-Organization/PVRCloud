@@ -40,19 +40,31 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.RestrictedZones)
-            .Must(EmptyOrContainsRestrictionZones).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .Must((_, zones, context) => {
+                List<string> invalidValues = new(20);
+                bool isValid = zones.All(x => {
+                    bool contains = _restrictedZones.Contains(x);
+                    if (!contains)
+                        invalidValues.Add(x);
+
+                    return contains;
+                });
+
+                context.MessageFormatter.AppendArgument("CollectionValues", string.Join(",", invalidValues));
+                return isValid;
+            }).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Weight)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.XHeight)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.XWidth)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.SpeedValues)

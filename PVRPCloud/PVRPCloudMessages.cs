@@ -31,13 +31,16 @@ public static class PVRPCloudMessages
 
     public const string ERR_MANDATORY = "{PropertyName}: mező kitöltése kötelező.";
     public const string ERR_MAXLEN = "{PropertyName}: mező mérete nem lehet több, mint {MaxLength}.";
-    public const string ERR_RANGE = "{PropertyName}: mező értéke {from} {to} között lehet. A megadott érték:{PropertyValue}.";
-    public const string ERR_NUMBERINSTRING = "{PropertyName}: mező értékében szám szerepel:{PropertyValue}";
-    public const string ERR_ALPHAINNUMBER = "{PropertyName}: mező értékében csak szám karakter szerepelhet:{PropertyValue}";
-    public const string ERR_DATEINTERVAL = "{PropertyName}: helytelen időszak.";
+    public const string ERR_RANGE = "{PropertyName}: mező értéke {from} {to} között lehet. A megadott érték: {PropertyValue}.";
+    public const string ERR_NUMBERINSTRING = "{PropertyName}: mező értékében szám szerepel: {PropertyValue}";
+    public const string ERR_ALPHAINNUMBER = "{PropertyName}: mező értékében csak szám karakter szerepelhet: {PropertyValue}";
+    public const string ERR_DATEINTERVAL = "{PropertyName}: helytelen időszak. A megadott érték: {PropertyValue}.";
     public const string ERR_EMPTY = "{PropertyName}: nem lehet üres.";
-    public const string ERR_ZERO = "{PropertyName}: nem lehet nulla.";
-    public const string ERR_NEGATIVE = "{PropertyName}: nem lehet negatív.";
+    public const string ERR_ZERO = "{PropertyName}: nullánál nagyobbnak kell lennie. A megadott érték: {PropertyValue}";
+    public const string ERR_NEGATIVE = "{PropertyName}: nem lehet negatív. A megadott érték: {PropertyValue}.";
     public const string ERR_ID_UNIQUE = "{PropertyName}: az elemek ID-je nem egyedi.";
-    public const string ERR_NOT_FOUND = "{PropertyName}: Nem található.";
+    public const string ERR_NOT_FOUND = "{PropertyName}: Nem található. A megadott érték: {CollectionValues}.";
+    public const string ERR_GREATHER_THAN = "{PropertyName}: Nagyobbnak kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}";
+    public const string ERR_GREATER_THAN_OR_EQUAL = "{PropertyName}: Nagyobbnak vagy egyenlőnek kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}.";
+    public const string ERR_LESS_THAN = "{PropertyName}: Kisebbnek kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}";
 }

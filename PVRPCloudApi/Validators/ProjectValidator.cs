@@ -20,15 +20,15 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
 
         RuleFor(x => x.MaxTime)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .GreaterThan(x => x.MinTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThan(x => x.MinTime)
             .WithState(GetProjectName);
 
         RuleFor(x => x.MaxTourDuration)
-            .GreaterThan(0).WithMessage(PVRPCloudMessages.ERR_ZERO)
+            .GreaterThan(0)
             .WithState(GetProjectName);
 
         RuleFor(x => x.DistanceLimit)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetProjectName);
 
         RuleFor(x => x.CostProfiles)

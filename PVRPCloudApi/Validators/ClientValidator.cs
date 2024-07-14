@@ -33,7 +33,7 @@ public sealed class ClientValidator : AbstractValidator<PVRPCloudClient>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ServiceFixTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
     }
 }
