@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using PVRPCloud;
 using PVRPCloud.Requests;
 using static PVRPCloudApi.Validators.ValidationHelpers;
@@ -55,13 +56,21 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
             .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
-        RuleFor(x => x.SpeedValues)
-            .Must(CheckRoadValues).WithMessage(PVRPCloudMessages.ERR_RANGE)
-            .WithState(GetIdentifiableId);
-    }
+        RuleForEach(x => x.SpeedValues)
+            .Custom((value, context) =>
+            {
+                bool isValid = value.Key is >= 1 and <= 7;
 
-    private static bool CheckRoadValues(IReadOnlyDictionary<int, int> speedValues)
-    {
-        return speedValues.Keys.All(roadType => roadType is >= 1 and <= 7);
+                if (isValid)
+                    return;
+
+                context.AddFailure(new ValidationFailure()
+                {
+                    AttemptedValue = value.Key,
+                    CustomState = context.InstanceToValidate.ID,
+                    PropertyName = context.PropertyName,
+                    ErrorMessage = $"{context.DisplayName}: mező értéke 1 és 7 lözött kell legyen. A megadott érték: {value.Key}."
+                });
+            });
     }
 }
