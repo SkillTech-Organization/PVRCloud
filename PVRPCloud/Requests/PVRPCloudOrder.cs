@@ -8,7 +8,7 @@ public sealed class PVRPCloudOrder : IIdentifiable
     public double Quantity1 { get; init; }
     public int Quantity2 { get; init; }
     public int ReadyTime { get; init; }
-    public List<string> TruckList { get; init; } = [];
+    public List<string> TruckIDs { get; init; } = [];
     public int OrderServiceTime { get; init; }
     public int OrderMinTime { get; init; }
     public int OrderMaxTime { get; init; }

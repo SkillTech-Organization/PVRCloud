@@ -45,7 +45,7 @@ public sealed class OrderValidator : ValidatorBase<PVRPCloudOrder>
             .WithState(GetIdentifiableId);
 
         var truckIds = IdsToArray(project.Trucks);
-        RuleFor(x => x.TruckList)
+        RuleFor(x => x.TruckIDs)
             .Must(x => x.All(Contains(truckIds))).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
     }
