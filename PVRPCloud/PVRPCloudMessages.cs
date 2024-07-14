@@ -31,7 +31,7 @@ public static class PVRPCloudMessages
 
     public const string ERR_MANDATORY = "{PropertyName}: mező kitöltése kötelező.";
     public const string ERR_MAXLEN = "{PropertyName}: mező mérete nem lehet több, mint {MaxLength}.";
-    public const string ERR_RANGE = "{PropertyName}: mező értéke {from} {to} között lehet. A megadott érték: {PropertyValue}.";
+    public const string ERR_RANGE = "{PropertyName}: mező értéke {From} és {To} között lehet. A megadott érték: {PropertyValue}.";
     public const string ERR_NUMBERINSTRING = "{PropertyName}: mező értékében szám szerepel: {PropertyValue}";
     public const string ERR_ALPHAINNUMBER = "{PropertyName}: mező értékében csak szám karakter szerepelhet: {PropertyValue}";
     public const string ERR_DATEINTERVAL = "{PropertyName}: helytelen időszak. A megadott érték: {PropertyValue}.";

@@ -22,12 +22,12 @@ public sealed class DepotValidator : AbstractValidator<PVRPCloudDepot>
 
         RuleFor(x => x.Lat)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .InclusiveBetween(-90, 90).WithMessage(PVRPCloudMessages.ERR_RANGE)
+            .InclusiveBetween(-90, 90)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Lng)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .InclusiveBetween(-180, 190).WithMessage(PVRPCloudMessages.ERR_RANGE)
+            .InclusiveBetween(-180, 190)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ServiceFixTime)
