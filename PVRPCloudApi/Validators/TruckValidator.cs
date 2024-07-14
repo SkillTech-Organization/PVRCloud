@@ -29,7 +29,7 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
         RuleFor(x => x.ArrDepotMaxTime)
             .GreaterThan(0)
             .GreaterThanOrEqualTo(project.MinTime)
-            .LessThanOrEqualTo(project.MaxTime)//.WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .LessThanOrEqualTo(project.MaxTime)
             .WithState(GetIdentifiableId);
 
         var capacityProfileIds = IdsToArray(project.CapacityProfiles);
@@ -51,7 +51,7 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
         RuleFor(x => x.LatestStart)
             .NotNull()
             .GreaterThan(x => x.EarliestStart)
-            .LessThan(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_LESS_THAN)
+            .LessThan(project.MaxTime)
             .WithState(GetIdentifiableId);
     }
 }

@@ -43,7 +43,7 @@ public sealed class DepotValidator : AbstractValidator<PVRPCloudDepot>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.DepotMaxTime)
-            .LessThanOrEqualTo(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .LessThanOrEqualTo(project.MaxTime)
             .WithState(GetIdentifiableId);
     }
 }

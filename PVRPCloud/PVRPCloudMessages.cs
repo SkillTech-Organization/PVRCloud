@@ -43,4 +43,5 @@ public static class PVRPCloudMessages
     public const string ERR_GREATHER_THAN = "{PropertyName}: Nagyobbnak kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}";
     public const string ERR_GREATER_THAN_OR_EQUAL = "{PropertyName}: Nagyobbnak vagy egyenlőnek kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}.";
     public const string ERR_LESS_THAN = "{PropertyName}: Kisebbnek kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}";
+    public const string ERR_LESS_THAN_OR_EQUAL = "{PropertyName}: Kisebbnek vagy egyenlőnek kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}";
 }
