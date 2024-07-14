@@ -62,22 +62,22 @@ jobs:
       name: "development"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      contents: read
-      pages: write
+#      contents: read
+#      pages: write
       id-token: write
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: .net-app
           
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_27B614A6609544D7ADCA23BB8CDFAB01 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9F7A3F9D74D94E0E9702065C6D4F0207 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DCE8D96ACD034FDC9405A992A1860FC1 }}
+          client-id: ${{ secrets.PRATIX_AZURE_CLIENTID }}
+          tenant-id: ${{ secrets.PRATIX_AZURE_TENANTID }}
+          subscription-id: ${{ secrets.PRATIX_AZURE_SUBSCRIPTIONID }}
           
 #      - name: Azure WebApp configuration settings
 #        uses: azure/appservice-settings@v1
