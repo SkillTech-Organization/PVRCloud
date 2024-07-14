@@ -40,19 +40,7 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.RestrictedZones)
-            .Must((_, zones, context) => {
-                List<string> invalidValues = new(20);
-                bool isValid = zones.All(x => {
-                    bool contains = _restrictedZones.Contains(x);
-                    if (!contains)
-                        invalidValues.Add(x);
-
-                    return contains;
-                });
-
-                context.MessageFormatter.AppendArgument("CollectionValues", string.Join(",", invalidValues));
-                return isValid;
-            }).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .MustContainAll(_restrictedZones)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Weight)
@@ -70,12 +58,6 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
         RuleFor(x => x.SpeedValues)
             .Must(CheckRoadValues).WithMessage(PVRPCloudMessages.ERR_RANGE)
             .WithState(GetIdentifiableId);
-    }
-
-    private bool EmptyOrContainsRestrictionZones(IReadOnlyCollection<string> incomingZones)
-    {
-        return incomingZones.Count == 0 ||
-            incomingZones.All(zone => _restrictedZones.Contains(zone));
     }
 
     private static bool CheckRoadValues(IReadOnlyDictionary<int, int> speedValues)

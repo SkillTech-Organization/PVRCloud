@@ -12,6 +12,7 @@ public sealed class CapacityProfileValidator : AbstractValidator<PVRPCloudCapaci
     {
         var ids = IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.ID)
+            .NotEmpty()
             .NotNull()
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);

@@ -39,7 +39,8 @@ public static class PVRPCloudMessages
     public const string ERR_ZERO = "{PropertyName}: nullánál nagyobbnak kell lennie. A megadott érték: {PropertyValue}";
     public const string ERR_NEGATIVE = "{PropertyName}: nem lehet negatív. A megadott érték: {PropertyValue}.";
     public const string ERR_ID_UNIQUE = "{PropertyName}: az elemek ID-je nem egyedi.";
-    public const string ERR_NOT_FOUND = "{PropertyName}: Nem található. A megadott érték: {CollectionValues}.";
+    public const string ERR_NOT_FOUND = "{PropertyName}: A megadott érték nem található: {PropertyValue}.";
+    public const string ERR_NOT_FOUND_COLLECTION = "{PropertyName}: A következő értékek nem találhatóak: {CollectionValues}.";
     public const string ERR_GREATHER_THAN = "{PropertyName}: Nagyobbnak kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}";
     public const string ERR_GREATER_THAN_OR_EQUAL = "{PropertyName}: Nagyobbnak vagy egyenlőnek kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}.";
     public const string ERR_LESS_THAN = "{PropertyName}: Kisebbnek kell lennie mint: {ComparisonValue}. A megadott érték: {PropertyValue}";
