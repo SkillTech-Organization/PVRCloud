@@ -27,7 +27,7 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ArrDepotMaxTime)
-            .GreaterThan(0)
+            .GreaterThan(0).WithState(GetIdentifiableId)
             .GreaterThanOrEqualTo(project.MinTime)
             .LessThanOrEqualTo(project.MaxTime)
             .WithState(GetIdentifiableId);
