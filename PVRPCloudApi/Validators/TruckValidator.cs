@@ -4,9 +4,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApi.Validators;
 
-using static ValidationHelpers;
-
-public sealed class TruckValidator : ValidatorBase<PVRPCloud.Requests.PVRPCloudTruck>
+public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCloudTruck>
 {
     public TruckValidator(PVRPCloudProject project)
     {

@@ -6,7 +6,7 @@ namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class OrderValidator : ValidatorBase<PVRPCloudOrder>
+public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
 {
     public OrderValidator(PVRPCloudProject project)
     {
