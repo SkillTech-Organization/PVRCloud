@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using PVRPCloud;
 using PVRPCloud.Requests;
-using static PVRPCloudApi.Validators.ValidationHelpers;
 
 namespace PVRPCloudApi.Validators;
 
@@ -11,12 +10,14 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
     {
         var truckIds = IdsToArray(project.Trucks);
         RuleFor(x => x.ID)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .Must(IsUnique(truckIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         var truckTypeIds = IdsToArray(project.TruckTypes);
         RuleFor(x => x.TruckTypeID)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .Must(Contains(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
@@ -34,6 +35,7 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
 
         var capacityProfileIds = IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.CapacityProfileID)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .Must(Contains(capacityProfileIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);

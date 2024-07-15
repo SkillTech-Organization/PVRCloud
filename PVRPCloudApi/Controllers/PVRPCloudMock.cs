@@ -36,7 +36,7 @@ public static class PVRPCloudMock
             TourLength =  48370,
             //TourToll =  88.4,
             TourToll =  88,
-            Route =  [
+            RoutePoints =  [
                 new()
               {
                 Lat =  47.623782,
@@ -1288,7 +1288,7 @@ public static class PVRPCloudMock
                   Quantity1 = 1000,
                   Quantity2 = 0,
                   ReadyTime = 0,
-                  TruckList = [
+                  TruckIDs = [
                     "TRK1",
                     "TRK2",
                     "TRK3"
@@ -1340,7 +1340,7 @@ public static class PVRPCloudMock
             TourLength =  396000,
             //TourToll =  16969.4,
             TourToll =  16969,
-            Route =  [
+            RoutePoints =  [
               new(){
                 Lat =  47.623782,
                 Lng =  19.120456
@@ -3535,7 +3535,7 @@ public static class PVRPCloudMock
                   Quantity1 = 3000,
                   Quantity2 = 0,
                   ReadyTime = 0,
-                  TruckList = [
+                  TruckIDs = [
                     "TRK1",
                     "TRK2",
                     "TRK3"
@@ -3570,7 +3570,7 @@ public static class PVRPCloudMock
                   Quantity1 = 2000,
                   Quantity2 = 0,
                   ReadyTime = 0,
-                  TruckList = [
+                  TruckIDs = [
                     "TRK1",
                     "TRK2",
                     "TRK3"
@@ -3616,7 +3616,7 @@ public static class PVRPCloudMock
               Quantity1 = 1,
               Quantity2 = 0,
               ReadyTime = 0,
-              TruckList = [],
+              TruckIDs = [],
               OrderServiceTime = 10,
               OrderMinTime = 480,
               OrderMaxTime = 960

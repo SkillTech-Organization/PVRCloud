@@ -19,6 +19,7 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
 
         var clientIds = IdsToArray(project.Clients);
         RuleFor(x => x.ClientID)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
             .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
             .Must(Contains(clientIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
@@ -44,7 +45,7 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
             .WithState(GetIdentifiableId);
 
         var truckIds = IdsToArray(project.Trucks);
-        RuleFor(x => x.TruckList)
+        RuleFor(x => x.TruckIDs)
             .Must(x => x.All(Contains(truckIds))).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
     }

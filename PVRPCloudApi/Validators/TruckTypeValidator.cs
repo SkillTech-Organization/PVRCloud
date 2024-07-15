@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using PVRPCloud;
 using PVRPCloud.Requests;
-using static PVRPCloudApi.Validators.ValidationHelpers;
 
 namespace PVRPCloudApi.Validators;
 
@@ -40,8 +39,9 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.RestrictedZones)
-            .Must(EmptyOrContainsRestrictionZones).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
-            .WithState(GetIdentifiableId);
+            .Must(x => x.All(Contains(_restrictedZones))).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .WithState(GetIdentifiableId)
+            .When(x => x.RestrictedZones.Count > 0);
 
         RuleFor(x => x.Weight)
             .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
@@ -58,12 +58,6 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
         RuleFor(x => x.SpeedValues)
             .Must(CheckRoadValues).WithMessage(PVRPCloudMessages.ERR_RANGE)
             .WithState(GetIdentifiableId);
-    }
-
-    private bool EmptyOrContainsRestrictionZones(IReadOnlyCollection<string> incomingZones)
-    {
-        return incomingZones.Count == 0 ||
-            incomingZones.All(zone => _restrictedZones.Contains(zone));
     }
 
     private static bool CheckRoadValues(IReadOnlyDictionary<int, int> speedValues)
