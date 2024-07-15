@@ -5,7 +5,7 @@ using PVRPCloud.Requests;
 namespace PVRPCloudApi.Controllers;
 
 [ApiController]
-[Route("[action]")]
+[Route("v1/[action]")]      //TODO: Tomi, a végpontokat verziózni kell egyelőre így oldottam meg
 public class PVRPCloudController : ControllerBase
 {
     [HttpPost]
