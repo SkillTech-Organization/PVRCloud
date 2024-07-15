@@ -39,7 +39,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = 1,
                     OrderMaxTime = 1,
-                    TruckList = ["truck1", "truck2"]
+                    TruckIDs = ["truck1", "truck2"]
                 }
             ]
         };
@@ -81,7 +81,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = 1,
                     OrderMaxTime = 1,
-                    TruckList = ["truck1"]
+                    TruckIDs = ["truck1"]
                 }
             ]
         };
@@ -121,7 +121,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = 1,
                     OrderMaxTime = 1,
-                    TruckList = ["truck1"]
+                    TruckIDs = ["truck1"]
                 },
                 new()
                 {
@@ -133,7 +133,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = 1,
                     OrderMaxTime = 1,
-                    TruckList = ["truck1"]
+                    TruckIDs = ["truck1"]
                 }
             ]
         };
@@ -177,7 +177,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = 1,
                     OrderMaxTime = 1,
-                    TruckList = ["truck1", "truck2"]
+                    TruckIDs = ["truck1", "truck2"]
                 }
             ]
         };
@@ -223,7 +223,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = 1,
                     OrderMaxTime = 1,
-                    TruckList = ["truck1", "truck2"]
+                    TruckIDs = ["truck1", "truck2"]
                 }
             ]
         };
@@ -267,7 +267,7 @@ public class OrderValidatorTests
                     OrderServiceTime = -1,
                     OrderMinTime = 1,
                     OrderMaxTime = 1,
-                    TruckList = ["truck1", "truck2"]
+                    TruckIDs = ["truck1", "truck2"]
                 }
             ]
         };
@@ -311,7 +311,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = -1,
                     OrderMaxTime = 1,
-                    TruckList = ["truck1", "truck2"]
+                    TruckIDs = ["truck1", "truck2"]
                 }
             ]
         };
@@ -355,7 +355,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = 1,
                     OrderMaxTime = -1,
-                    TruckList = ["truck1", "truck2"]
+                    TruckIDs = ["truck1", "truck2"]
                 }
             ]
         };
@@ -368,7 +368,7 @@ public class OrderValidatorTests
     }
 
     [Fact]
-    public void Validate_TruckIdsContainsInvalidElement_ThrowsValidationException()
+    public void Validate_TruckIDsContainsInvalidElement_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -399,7 +399,7 @@ public class OrderValidatorTests
                     OrderServiceTime = 1,
                     OrderMinTime = 1,
                     OrderMaxTime = -1,
-                    TruckList = ["truck1", "sajt"]
+                    TruckIDs = ["truck1", "sajt"]
                 }
             ]
         };
