@@ -12,21 +12,21 @@ public sealed class CostProfileValidator : AbstractValidator<PVRPCloudCostProfil
     {
         var ids = IdsToArray(project.CostProfiles);
         RuleFor(x => x.ID)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotEmpty()
+            .NotNull()
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.FixCost)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.HourCost)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.KmCost)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
     }
 }

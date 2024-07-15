@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using PVRPCloud;
 using PVRPCloud.Requests;
 
@@ -28,40 +29,48 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
     {
         var truckTypeIds = IdsToArray(project.TruckTypes);
         RuleFor(x => x.ID)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotEmpty()
+            .NotNull()
             .Must(IsUnique(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.TruckTypeName)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotNull()
+            .NotEmpty()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.RestrictedZones)
-            .Must(x => x.All(Contains(_restrictedZones))).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .MustContainAll(_restrictedZones)
             .WithState(GetIdentifiableId)
             .When(x => x.RestrictedZones.Count > 0);
 
         RuleFor(x => x.Weight)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.XHeight)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.XWidth)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
-        RuleFor(x => x.SpeedValues)
-            .Must(CheckRoadValues).WithMessage(PVRPCloudMessages.ERR_RANGE)
-            .WithState(GetIdentifiableId);
-    }
+        RuleForEach(x => x.SpeedValues)
+            .Custom((value, context) =>
+            {
+                bool isValid = value.Key is >= 1 and <= 7;
 
-    private static bool CheckRoadValues(IReadOnlyDictionary<int, int> speedValues)
-    {
-        return speedValues.Keys.All(roadType => roadType is >= 1 and <= 7);
+                if (isValid)
+                    return;
+
+                context.AddFailure(new ValidationFailure()
+                {
+                    AttemptedValue = value.Key,
+                    CustomState = context.InstanceToValidate.ID,
+                    PropertyName = context.PropertyName,
+                    ErrorMessage = $"{context.DisplayName}: mező értéke 1 és 7 lözött kell legyen. A megadott érték: {value.Key}."
+                });
+            });
     }
 }
