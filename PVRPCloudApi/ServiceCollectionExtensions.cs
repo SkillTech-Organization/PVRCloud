@@ -20,6 +20,8 @@ public static class ServiceCollectionExtensions
                 return "?";
         };
 
+        ValidatorOptions.Global.LanguageManager = new LanguageManager();
+
         services.AddFluentValidationAutoValidation();
 
         services.AddScoped<IValidator<PVRPCloudProject>, ProjectValidator>();

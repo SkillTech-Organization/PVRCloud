@@ -11,39 +11,39 @@ public sealed class DepotValidator : AbstractValidator<PVRPCloudDepot>
     public DepotValidator(PVRPCloudProject project)
     {
         RuleFor(x => x.ID)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotEmpty()
+            .NotNull()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.DepotName)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotNull()
+            .NotEmpty()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Lat)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .InclusiveBetween(-90, 90).WithMessage(PVRPCloudMessages.ERR_RANGE)
+            .NotNull()
+            .InclusiveBetween(-90, 90)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Lng)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
-            .InclusiveBetween(-180, 190).WithMessage(PVRPCloudMessages.ERR_RANGE)
+            .NotNull()
+            .InclusiveBetween(-180, 190)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ServiceFixTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ServiceVarTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.DepotMinTime)
-            .GreaterThanOrEqualTo(project.MinTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(project.MinTime)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.DepotMaxTime)
-            .LessThanOrEqualTo(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .LessThanOrEqualTo(project.MaxTime)
             .WithState(GetIdentifiableId);
     }
 }

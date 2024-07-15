@@ -12,41 +12,41 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
     {
         var ids = IdsToArray(project.Orders);
         RuleFor(x => x.ID)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotEmpty()
+            .NotNull()
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         var clientIds = IdsToArray(project.Clients);
         RuleFor(x => x.ClientID)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotEmpty()
+            .NotNull()
             .Must(Contains(clientIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Quantity1)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ReadyTime)
-            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotNull()
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.OrderServiceTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.OrderMinTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.OrderMaxTime)
-            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
         var truckIds = IdsToArray(project.Trucks);
         RuleFor(x => x.TruckIDs)
-            .Must(x => x.All(Contains(truckIds))).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .MustContainAll(truckIds)
             .WithState(GetIdentifiableId);
     }
 }
