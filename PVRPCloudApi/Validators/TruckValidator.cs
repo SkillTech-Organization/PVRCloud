@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using PVRPCloud;
 using PVRPCloud.Requests;
 
@@ -8,52 +8,52 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
 {
     public TruckValidator(PVRPCloudProject project)
     {
-        var truckIds = IdsToArray(project.Trucks);
+        var truckIds = ValidationHelpers.IdsToArray(project.Trucks);
         RuleFor(x => x.ID)
-            .NotEmpty()
-            .NotNull()
-            .Must(IsUnique(truckIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
-            .WithState(GetIdentifiableId);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .Must(ValidationHelpers.IsUnique(truckIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
-        var truckTypeIds = IdsToArray(project.TruckTypes);
+        var truckTypeIds = ValidationHelpers.IdsToArray(project.TruckTypes);
         RuleFor(x => x.TruckTypeID)
-            .NotEmpty()
-            .NotNull()
-            .Must(Contains(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
-            .WithState(GetIdentifiableId);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .Must(ValidationHelpers.Contains(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.TruckName)
-            .NotNull()
-            .NotEmpty()
-            .WithState(GetIdentifiableId);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.ArrDepotMaxTime)
-            .GreaterThan(0).WithState(GetIdentifiableId)
-            .GreaterThanOrEqualTo(project.MinTime)
-            .LessThanOrEqualTo(project.MaxTime)
-            .WithState(GetIdentifiableId);
+            .GreaterThan(0).WithMessage(PVRPCloudMessages.ERR_ZERO)
+            .GreaterThanOrEqualTo(project.MinTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .LessThanOrEqualTo(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
-        var capacityProfileIds = IdsToArray(project.CapacityProfiles);
+        var capacityProfileIds = ValidationHelpers.IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.CapacityProfileID)
-            .NotNull()
-            .NotEmpty()
-            .Must(Contains(capacityProfileIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
-            .WithState(GetIdentifiableId);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .Must(ValidationHelpers.Contains(capacityProfileIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.MaxWorkTime)
-            .NotNull()
-            .GreaterThan(0)
-            .WithState(GetIdentifiableId);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .GreaterThan(0).WithMessage(PVRPCloudMessages.ERR_ZERO)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.EarliestStart)
-            .NotNull()
-            .GreaterThanOrEqualTo(0)
-            .WithState(GetIdentifiableId);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_ZERO)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.LatestStart)
-            .NotNull()
-            .GreaterThan(x => x.EarliestStart)
-            .LessThan(project.MaxTime)
-            .WithState(GetIdentifiableId);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .GreaterThan(x => x.EarliestStart).WithMessage(PVRPCloudMessages.ERR_RANGE)
+            .LessThan(project.MaxTime).WithMessage(PVRPCloudMessages.ERR_DATEINTERVAL)
+            .WithState(ValidationHelpers.GetIdentifiableId);
     }
 }

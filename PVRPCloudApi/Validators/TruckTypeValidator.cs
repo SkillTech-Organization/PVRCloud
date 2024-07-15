@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+using FluentValidation;
 using PVRPCloud;
 using PVRPCloud.Requests;
 
@@ -27,50 +26,42 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
 
     public TruckTypeValidator(PVRPCloudProject project)
     {
-        var truckTypeIds = IdsToArray(project.TruckTypes);
+        var truckTypeIds = ValidationHelpers.IdsToArray(project.TruckTypes);
         RuleFor(x => x.ID)
-            .NotEmpty()
-            .NotNull()
-            .Must(IsUnique(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
-            .WithState(GetIdentifiableId);
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .Must(ValidationHelpers.IsUnique(truckTypeIds)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.TruckTypeName)
-            .NotNull()
-            .NotEmpty()
-            .WithState(GetIdentifiableId);
+            .NotNull().WithMessage(PVRPCloudMessages.ERR_MANDATORY)
+            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.RestrictedZones)
-            .MustContainAll(_restrictedZones)
-            .WithState(GetIdentifiableId)
+            .Must(x => x.All(ValidationHelpers.Contains(_restrictedZones))).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .WithState(ValidationHelpers.GetIdentifiableId)
             .When(x => x.RestrictedZones.Count > 0);
 
         RuleFor(x => x.Weight)
-            .GreaterThanOrEqualTo(0)
-            .WithState(GetIdentifiableId);
+            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.XHeight)
-            .GreaterThanOrEqualTo(0)
-            .WithState(GetIdentifiableId);
+            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
         RuleFor(x => x.XWidth)
-            .GreaterThanOrEqualTo(0)
-            .WithState(GetIdentifiableId);
+            .GreaterThanOrEqualTo(0).WithMessage(PVRPCloudMessages.ERR_NEGATIVE)
+            .WithState(ValidationHelpers.GetIdentifiableId);
 
-        RuleForEach(x => x.SpeedValues)
-            .Custom((value, context) =>
-            {
-                bool isValid = value.Key is >= 1 and <= 7;
+        RuleFor(x => x.SpeedValues)
+            .Must(CheckRoadValues).WithMessage(PVRPCloudMessages.ERR_RANGE)
+            .WithState(ValidationHelpers.GetIdentifiableId);
+    }
 
-                if (isValid)
-                    return;
-
-                context.AddFailure(new ValidationFailure()
-                {
-                    AttemptedValue = value.Key,
-                    CustomState = context.InstanceToValidate.ID,
-                    PropertyName = context.PropertyName,
-                    ErrorMessage = $"{context.DisplayName}: mező értéke 1 és 7 lözött kell legyen. A megadott érték: {value.Key}."
-                });
-            });
+    private static bool CheckRoadValues(IReadOnlyDictionary<int, int> speedValues)
+    {
+        return speedValues.Keys.All(roadType => roadType is >= 1 and <= 7);
     }
 }
