@@ -19,6 +19,7 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
 
         var clientIds = IdsToArray(project.Clients);
         RuleFor(x => x.ClientID)
+            .NotEmpty()
             .NotNull()
             .Must(Contains(clientIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);

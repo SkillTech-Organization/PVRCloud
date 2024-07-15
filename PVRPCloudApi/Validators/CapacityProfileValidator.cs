@@ -21,7 +21,6 @@ public sealed class CapacityProfileValidator : AbstractValidator<PVRPCloudCapaci
             .NotNull()
             .WithState(GetIdentifiableId);
 
-
         RuleFor(x => x.Capacity2)
             .NotNull()
             .WithState(GetIdentifiableId);

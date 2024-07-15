@@ -64,6 +64,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobUtils", "BlobManager\Bl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRPCloud", "PVRPCloud\PVRPCloud.csproj", "{C7349DC9-69A2-4738-B4F3-86D75379AC73}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRPCloudApiTests", "PVRPCloudApiTests\PVRPCloudApiTests.csproj", "{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -247,6 +249,22 @@ Global
 		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|x64.Build.0 = Release|Any CPU
 		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|x86.ActiveCfg = Release|Any CPU
 		{C7349DC9-69A2-4738-B4F3-86D75379AC73}.Release|x86.Build.0 = Release|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Debug|x64.Build.0 = Debug|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Debug|x86.Build.0 = Debug|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Release|x64.ActiveCfg = Release|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Release|x64.Build.0 = Release|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Release|x86.ActiveCfg = Release|Any CPU
+		{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

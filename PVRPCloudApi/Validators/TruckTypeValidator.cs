@@ -2,7 +2,6 @@
 using FluentValidation.Results;
 using PVRPCloud;
 using PVRPCloud.Requests;
-using static PVRPCloudApi.Validators.ValidationHelpers;
 
 namespace PVRPCloudApi.Validators;
 
@@ -42,7 +41,8 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
 
         RuleFor(x => x.RestrictedZones)
             .MustContainAll(_restrictedZones)
-            .WithState(GetIdentifiableId);
+            .WithState(GetIdentifiableId)
+            .When(x => x.RestrictedZones.Count > 0);
 
         RuleFor(x => x.Weight)
             .GreaterThanOrEqualTo(0)

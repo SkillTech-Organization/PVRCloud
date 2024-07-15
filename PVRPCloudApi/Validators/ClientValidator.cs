@@ -17,7 +17,6 @@ public sealed class ClientValidator : AbstractValidator<PVRPCloudClient>
             .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
-
         RuleFor(x => x.ClientName)
             .NotNull()
             .NotEmpty()
