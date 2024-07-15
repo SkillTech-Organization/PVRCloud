@@ -22,6 +22,8 @@ using PVRPCloudApi.DTO.Request;
 using PVRPCloudApi.Handlers;
 using System = global::System;
 
+/* TODO  egyelõre megjegyzésbe rakom, de késõbb teljesen kiveszem 
+
 [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
 
 public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.ControllerBase
@@ -110,3 +112,4 @@ public partial class PVRPCloudApiController : Microsoft.AspNetCore.Mvc.Controlle
 #pragma warning restore  108
 #pragma warning restore 3016
 #pragma warning restore 8603
+*/

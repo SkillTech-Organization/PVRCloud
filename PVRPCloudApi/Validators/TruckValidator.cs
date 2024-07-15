@@ -8,6 +8,7 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCl
 {
     public TruckValidator(PVRPCloudProject project)
     {
+/* PR teszt I */
         var truckIds = ValidationHelpers.IdsToArray(project.Trucks);
         RuleFor(x => x.ID)
             .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
