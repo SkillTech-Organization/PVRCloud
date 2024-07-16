@@ -109,7 +109,7 @@ public class ProjectValidatorTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void Validate_ProjectNameIsInvalid_ReturnsInvalidResult(string? value)
+    public void Validate_ProjectNameIsInvalid_ThrowsValidationException(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -210,7 +210,7 @@ public class ProjectValidatorTests
     [Theory]
     [InlineData(1)]
     [InlineData(0)]
-    public void Validate_MaxTimeIsLessThanMinTime_ReturnsInvalidResult(int value)
+    public void Validate_MaxTimeIsLessThanMinTime_ThrowsValidationException(int value)
     {
         PVRPCloudProject project = new()
         {
@@ -309,7 +309,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_MaxTourDurationIsLessThan1_ReturnsInvalidResult()
+    public void Validate_MaxTourDurationIsLessThan1_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -408,7 +408,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_DistanceLimitIsNegative_ReturnsInvalidResult()
+    public void Validate_DistanceLimitIsNegative_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -507,7 +507,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_CostProfilesIsEmpty_ReturnsInvalidResult()
+    public void Validate_CostProfilesIsEmpty_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -598,7 +598,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_CapacityProfilesIsEmpty_ReturnsInvalidResult()
+    public void Validate_CapacityProfilesIsEmpty_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -690,7 +690,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_TruckTypesIsEmpty_ReturnsInvalidResult()
+    public void Validate_TruckTypesIsEmpty_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -775,7 +775,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_TrucksIsEmpty_ReturnsInvalidResult()
+    public void Validate_TrucksIsEmpty_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -862,7 +862,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_DepotIsNull_ReturnsInvalidResult()
+    public void Validate_DepotIsNull_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -951,7 +951,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_ClientsIsEmpty_ReturnsInvalidResult()
+    public void Validate_ClientsIsEmpty_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
@@ -1041,7 +1041,7 @@ public class ProjectValidatorTests
     }
 
     [Fact]
-    public void Validate_OrdersIsEmpty_ReturnsInvalidResult()
+    public void Validate_OrdersIsEmpty_ThrowsValidationException()
     {
         PVRPCloudProject project = new()
         {
