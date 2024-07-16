@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
@@ -54,7 +53,7 @@ public class OrderValidatorTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void Validate_IdIsNotValid_ThrowsValidationException(string? value)
+    public void Validate_IdIsNotValid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -88,13 +87,13 @@ public class OrderValidatorTests
 
         OrderValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Orders[0]);
+        var result = sut.Validate(project.Orders[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsNotUnique_ThrowsValidationException()
+    public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -140,13 +139,13 @@ public class OrderValidatorTests
 
         OrderValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Orders[0]);
+        var result = sut.Validate(project.Orders[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_ClientIdNotFoud_ThrowsValidationException()
+    public void Validate_ClientIdNotFoud_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -184,15 +183,15 @@ public class OrderValidatorTests
 
         OrderValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Orders[0]);
+        var result = sut.Validate(project.Orders[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void Validate_ClientIdIsNotValid_ThrowsValidationException(string? value)
+    public void Validate_ClientIdIsNotValid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -230,13 +229,13 @@ public class OrderValidatorTests
 
         OrderValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Orders[0]);
+        var result = sut.Validate(project.Orders[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_OrderServiceTimeIsNegative_ThrowsValidationException()
+    public void Validate_OrderServiceTimeIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -274,13 +273,13 @@ public class OrderValidatorTests
 
         OrderValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Orders[0]);
+        var result = sut.Validate(project.Orders[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_OrderMinTimeIsNegative_ThrowsValidationException()
+    public void Validate_OrderMinTimeIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -318,13 +317,13 @@ public class OrderValidatorTests
 
         OrderValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Orders[0]);
+        var result = sut.Validate(project.Orders[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_OrderMaxTimeIsNegative_ThrowsValidationException()
+    public void Validate_OrderMaxTimeIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -362,13 +361,13 @@ public class OrderValidatorTests
 
         OrderValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Orders[0]);
+        var result = sut.Validate(project.Orders[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_TruckIDsContainsInvalidElement_ThrowsValidationException()
+    public void Validate_TruckIDsContainsInvalidElement_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -406,8 +405,8 @@ public class OrderValidatorTests
 
         OrderValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Orders[0]);
+        var result = sut.Validate(project.Orders[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
@@ -32,7 +31,7 @@ public class ClientValidatorTests
     }
 
     [Fact]
-    public void Validate_IdIsNull_ThrowsValidationException()
+    public void Validate_IdIsNull_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -50,13 +49,13 @@ public class ClientValidatorTests
 
         ClientValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.Clients[0]);
+        var result = sut.Validate(project.Clients[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsEmpty_ThrowsValidationException()
+    public void Validate_IdIsEmpty_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -74,13 +73,13 @@ public class ClientValidatorTests
 
         ClientValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.Clients[0]);
+        var result = sut.Validate(project.Clients[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsNotUnique_ThrowsValidationException()
+    public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -106,13 +105,13 @@ public class ClientValidatorTests
 
         ClientValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.Clients[0]);
+        var result = sut.Validate(project.Clients[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_ClientNameIsEmpty_ThrowsValidationException()
+    public void Validate_ClientNameIsEmpty_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -130,13 +129,13 @@ public class ClientValidatorTests
 
         ClientValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.Clients[0]);
+        var result = sut.Validate(project.Clients[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_ClientNameIsNull_ThrowsValidationException()
+    public void Validate_ClientNameIsNull_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -154,9 +153,9 @@ public class ClientValidatorTests
 
         ClientValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.Clients[0]);
+        var result = sut.Validate(project.Clients[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
@@ -189,7 +188,7 @@ public class ClientValidatorTests
     [Theory]
     [InlineData(-91)]
     [InlineData(91)]
-    public void Validate_LatIsOutsideNegative90And90_ThrowsValidationException(double value)
+    public void Validate_LatIsOutsideNegative90And90_ReturnsInvalidResult(double value)
     {
         PVRPCloudProject project = new()
         {
@@ -207,9 +206,9 @@ public class ClientValidatorTests
 
         ClientValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.Clients[0]);
+        var result = sut.Validate(project.Clients[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
@@ -242,7 +241,7 @@ public class ClientValidatorTests
     [Theory]
     [InlineData(-181)]
     [InlineData(191)]
-    public void Validate_LatIsOutsideNegative181And191_ThrowsValidationException(double value)
+    public void Validate_LatIsOutsideNegative181And191_ReturnsInvalidResult(double value)
     {
         PVRPCloudProject project = new()
         {
@@ -260,13 +259,13 @@ public class ClientValidatorTests
 
         ClientValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.Clients[0]);
+        var result = sut.Validate(project.Clients[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_ServiceFixTimeIsNegative_ThrowsValidationException()
+    public void Validate_ServiceFixTimeIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -284,8 +283,8 @@ public class ClientValidatorTests
 
         ClientValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.Clients[0]);
+        var result = sut.Validate(project.Clients[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 }

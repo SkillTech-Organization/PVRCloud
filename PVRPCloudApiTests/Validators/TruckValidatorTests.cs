@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
@@ -51,7 +50,7 @@ public class TruckValidatorTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void Validate_IdIsInvalid_ThrowsValidationException(string? value)
+    public void Validate_IdIsInvalid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -86,13 +85,13 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsNotUnique_ThrowsValidationException()
+    public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -131,15 +130,15 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void Validate_TruckTypeIdIsNotValid_ThrowsValidationException(string? value)
+    public void Validate_TruckTypeIdIsNotValid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -174,13 +173,13 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_TruckTypeIdIsNotReal_ThrowsValidationException()
+    public void Validate_TruckTypeIdIsNotReal_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -215,15 +214,15 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void Validate_TruckNameIsNotValid_ThrowsValidationException(string? value)
+    public void Validate_TruckNameIsNotValid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -258,15 +257,15 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(0)]
     [InlineData(4)]
-    public void Validate_ArrDepotMaxTimeIsOutOfProjectTime_ThrowsValidationException(int value)
+    public void Validate_ArrDepotMaxTimeIsOutOfProjectTime_ReturnsInvalidResult(int value)
     {
         PVRPCloudProject project = new()
         {
@@ -301,13 +300,13 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_ArrDepotMaxTimeIsZero_ThrowsValidationException()
+    public void Validate_ArrDepotMaxTimeIsZero_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -342,13 +341,13 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_MaxWorkTimeIsZero_ThrowsValidationException()
+    public void Validate_MaxWorkTimeIsZero_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -383,13 +382,13 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_EarliestStartIsNegative_ThrowsValidationException()
+    public void Validate_EarliestStartIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -424,13 +423,13 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_LatestStartIsLessThenEarliestStart_ThrowsValidationException()
+    public void Validate_LatestStartIsLessThenEarliestStart_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -465,13 +464,13 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_LatestStartIsGreaterThanMaxTime_ThrowsValidationException()
+    public void Validate_LatestStartIsGreaterThanMaxTime_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -506,15 +505,15 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void Validate_CapacityProfileIdIsNotValid_ThrowsValidationException(string? value)
+    public void Validate_CapacityProfileIdIsNotValid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -549,13 +548,13 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_CapacityProfileIdIsNotFound_ThrowsValidationException()
+    public void Validate_CapacityProfileIdIsNotFound_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -590,8 +589,8 @@ public class TruckValidatorTests
 
         TruckValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Trucks[0]);
+        var result = sut.Validate(project.Trucks[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 }

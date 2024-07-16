@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
@@ -29,7 +28,7 @@ public class CapacityProfileValidatorTests
     }
 
     [Fact]
-    public void Validate_IdIsNull_ThrowsValidationException()
+    public void Validate_IdIsNull_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -44,13 +43,13 @@ public class CapacityProfileValidatorTests
         };
         CapacityProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CapacityProfiles[0]);
+        var result = sut.Validate(project.CapacityProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsEmpty_ThrowsValidationException()
+    public void Validate_IdIsEmpty_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -65,13 +64,13 @@ public class CapacityProfileValidatorTests
         };
         CapacityProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CapacityProfiles[0]);
+        var result = sut.Validate(project.CapacityProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsRepeated_ThrowsValidationException()
+    public void Validate_IdIsRepeated_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -92,8 +91,8 @@ public class CapacityProfileValidatorTests
         };
         CapacityProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CapacityProfiles[0]);
+        var result = sut.Validate(project.CapacityProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 }

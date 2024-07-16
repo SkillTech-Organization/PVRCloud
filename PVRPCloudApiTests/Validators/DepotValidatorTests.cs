@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
@@ -35,7 +34,7 @@ public class DepotValidatorTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void Validate_IdIsInvalid_ThrowsValidationException(string? value)
+    public void Validate_IdIsInvalid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -54,15 +53,15 @@ public class DepotValidatorTests
 
         DepotValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Depot);
+        var result = sut.Validate(project.Depot);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void Validate_DepotNameIsInvalid_ThrowsValidationException(string? value)
+    public void Validate_DepotNameIsInvalid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -81,15 +80,15 @@ public class DepotValidatorTests
 
         DepotValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Depot);
+        var result = sut.Validate(project.Depot);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(-91)]
     [InlineData(91)]
-    public void Validate_LatIsInvalid_ThrowsValidationException(double value)
+    public void Validate_LatIsInvalid_ReturnsInvalidResult(double value)
     {
         PVRPCloudProject project = new()
         {
@@ -108,15 +107,15 @@ public class DepotValidatorTests
 
         DepotValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Depot);
+        var result = sut.Validate(project.Depot);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(-181)]
     [InlineData(191)]
-    public void Validate_LngIsInvalid_ThrowsValidationException(double value)
+    public void Validate_LngIsInvalid_ReturnsInvalidResult(double value)
     {
         PVRPCloudProject project = new()
         {
@@ -135,13 +134,13 @@ public class DepotValidatorTests
 
         DepotValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Depot);
+        var result = sut.Validate(project.Depot);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_ServiceFixTimeIsNegative_ThrowsValidationException()
+    public void Validate_ServiceFixTimeIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -160,13 +159,13 @@ public class DepotValidatorTests
 
         DepotValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Depot);
+        var result = sut.Validate(project.Depot);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_ServiceVarTimeIsNegative_ThrowsValidationException()
+    public void Validate_ServiceVarTimeIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -185,13 +184,13 @@ public class DepotValidatorTests
 
         DepotValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Depot);
+        var result = sut.Validate(project.Depot);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_DepotMinTimeIsLessThanProjectMinTime_ThrowsValidationException()
+    public void Validate_DepotMinTimeIsLessThanProjectMinTime_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -211,13 +210,13 @@ public class DepotValidatorTests
 
         DepotValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Depot);
+        var result = sut.Validate(project.Depot);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_DepotMaxTimeIsGreaterThanProjectMinTime_ThrowsValidationException()
+    public void Validate_DepotMaxTimeIsGreaterThanProjectMinTime_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -237,8 +236,8 @@ public class DepotValidatorTests
 
         DepotValidator sut = new(project);
 
-        var act = () => sut.Validate(project.Depot);
+        var result = sut.Validate(project.Depot);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 }
