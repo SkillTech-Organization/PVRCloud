@@ -3,16 +3,24 @@ using PVRPCloudInsightsLogger.Settings;
 using PVRPCloudApi;
 using PVRPCloudApi.Handlers;
 using PVRPCloudApi.Util;
+using PVRPCloudApi.DTO.Response;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
-    options.JsonSerializerOptions.Converters.Add(new EnumConverter());
-});
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(option =>
+    {
+        option.InvalidModelStateResponseFactory = context =>
+        {
+            return PVRPCloudResponseObjectResult.Create(context.ModelState);
+        };
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+    });
 
 builder.Services.AddValidation();
 builder.Services.AddExceptionHandler(option => {
