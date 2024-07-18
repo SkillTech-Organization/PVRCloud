@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
@@ -39,7 +38,7 @@ public class TruckTypeValidatorTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void Validate_IdIsInvalid_ThrowsValidationException(string? value)
+    public void Validate_IdIsInvalid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -62,13 +61,13 @@ public class TruckTypeValidatorTests
 
         TruckTypeValidator sut = new(project);
 
-        var act = () => sut.Validate(project.TruckTypes[0]);
+        var result = sut.Validate(project.TruckTypes[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsNotUnique_ThrowsValidationException()
+    public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -104,15 +103,15 @@ public class TruckTypeValidatorTests
 
         TruckTypeValidator sut = new(project);
 
-        var act = () => sut.Validate(project.TruckTypes[0]);
+        var result = sut.Validate(project.TruckTypes[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void Validate_TruckTypeNameIsInvalid_ThrowsValidationException(string? value)
+    public void Validate_TruckTypeNameIsInvalid_ReturnsInvalidResult(string? value)
     {
         PVRPCloudProject project = new()
         {
@@ -135,13 +134,13 @@ public class TruckTypeValidatorTests
 
         TruckTypeValidator sut = new(project);
 
-        var act = () => sut.Validate(project.TruckTypes[0]);
+        var result = sut.Validate(project.TruckTypes[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_WeightIsNegative_ThrowsValidationException()
+    public void Validate_WeightIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -164,13 +163,13 @@ public class TruckTypeValidatorTests
 
         TruckTypeValidator sut = new(project);
 
-        var act = () => sut.Validate(project.TruckTypes[0]);
+        var result = sut.Validate(project.TruckTypes[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_XHeightIsNegative_ThrowsValidationException()
+    public void Validate_XHeightIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -193,13 +192,13 @@ public class TruckTypeValidatorTests
 
         TruckTypeValidator sut = new(project);
 
-        var act = () => sut.Validate(project.TruckTypes[0]);
+        var result = sut.Validate(project.TruckTypes[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_XWidthIsNegative_ThrowsValidationException()
+    public void Validate_XWidthIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -222,15 +221,15 @@ public class TruckTypeValidatorTests
 
         TruckTypeValidator sut = new(project);
 
-        var act = () => sut.Validate(project.TruckTypes[0]);
+        var result = sut.Validate(project.TruckTypes[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(0)]
     [InlineData(8)]
-    public void Validate_SpeedValuesIsOutOfRange_ThrowsValidationException(int value)
+    public void Validate_SpeedValuesIsOutOfRange_ReturnsInvalidResult(int value)
     {
         PVRPCloudProject project = new()
         {
@@ -253,13 +252,13 @@ public class TruckTypeValidatorTests
 
         TruckTypeValidator sut = new(project);
 
-        var act = () => sut.Validate(project.TruckTypes[0]);
+        var result = sut.Validate(project.TruckTypes[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_RestrictedZonesIsOutOfRange_ThrowsValidationException()
+    public void Validate_RestrictedZonesIsOutOfRange_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -282,9 +281,9 @@ public class TruckTypeValidatorTests
 
         TruckTypeValidator sut = new(project);
 
-        var act = () => sut.Validate(project.TruckTypes[0]);
+        var result = sut.Validate(project.TruckTypes[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using PVRPCloud.Requests;
 using PVRPCloudApi.Validators;
 
@@ -31,7 +30,7 @@ public class CostProfileValidatorTests
     }
 
     [Fact]
-    public void Validate_IdIsNull_ThrowsValidationException()
+    public void Validate_IdIsNull_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -48,13 +47,13 @@ public class CostProfileValidatorTests
 
         CostProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CostProfiles[0]);
+        var result = sut.Validate(project.CostProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsEmpty_ThrowsValidationException()
+    public void Validate_IdIsEmpty_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -71,13 +70,13 @@ public class CostProfileValidatorTests
 
         CostProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CostProfiles[0]);
+        var result = sut.Validate(project.CostProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_IdIsNotUnique_ThrowsValidationException()
+    public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -101,13 +100,13 @@ public class CostProfileValidatorTests
 
         CostProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CostProfiles[0]);
+        var result = sut.Validate(project.CostProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_FixCostIsNegative_ThrowsValidationException()
+    public void Validate_FixCostIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -124,13 +123,13 @@ public class CostProfileValidatorTests
 
         CostProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CostProfiles[0]);
+        var result = sut.Validate(project.CostProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_HourCostIsNegative_ThrowsValidationException()
+    public void Validate_HourCostIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -147,13 +146,13 @@ public class CostProfileValidatorTests
 
         CostProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CostProfiles[0]);
+        var result = sut.Validate(project.CostProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_KmCostIsNegative_ThrowsValidationException()
+    public void Validate_KmCostIsNegative_ReturnsInvalidResult()
     {
         PVRPCloudProject project = new()
         {
@@ -170,8 +169,8 @@ public class CostProfileValidatorTests
 
         CostProfileValidator sut = new(project);
 
-        Action act = () => sut.Validate(project.CostProfiles[0]);
+        var result = sut.Validate(project.CostProfiles[0]);
 
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 }
