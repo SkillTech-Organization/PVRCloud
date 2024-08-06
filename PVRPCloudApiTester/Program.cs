@@ -30,7 +30,7 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
             //services.Configure<PVRPCloudApiTesterSettings>(hostContext.Configuration.GetSection("PVRPCloudApiTester"));
             services.AddTransient<ApiTesterSettings>();
             services.AddLogging();
-            services.AddTransient<PVRPCloudApiServiceClient>();
+            services.AddTransient<ApiServiceClient>();
             services.AddTransient<IApiTesterService, ApiTesterService>();
             services.AddHostedService<BgService>();
         });

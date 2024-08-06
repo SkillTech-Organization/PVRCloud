@@ -20,12 +20,12 @@ using System.ComponentModel;
 using System = global::System;
 
 [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class PVRPCloudApiServiceClient : ApiServiceClientBase
+public partial class ApiServiceClient : ApiServiceClientBase
 {
     private System.Net.Http.HttpClient _httpClient;
     private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-    public PVRPCloudApiServiceClient(System.Net.Http.HttpClient httpClient, IConfiguration configuration) : base(configuration)
+    public ApiServiceClient(System.Net.Http.HttpClient httpClient, IConfiguration configuration) : base(configuration)
     {
         _httpClient = httpClient;
         _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);

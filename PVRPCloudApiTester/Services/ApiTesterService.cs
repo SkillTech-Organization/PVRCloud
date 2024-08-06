@@ -34,7 +34,7 @@ internal class TestData
 
 internal class ApiTesterService : IApiTesterService
 {
-    private PVRPCloudApiServiceClient _client;
+    private ApiServiceClient _client;
     private ApiTesterSettings _settings;
     private readonly ILogger _logger;
 
@@ -49,7 +49,7 @@ internal class ApiTesterService : IApiTesterService
 
     public JsonSerializerSettings isoDateTimeConverter { get; set; }
 
-    public ApiTesterService(PVRPCloudApiServiceClient client, ApiTesterSettings settings, IConfiguration configuration)
+    public ApiTesterService(ApiServiceClient client, ApiTesterSettings settings, IConfiguration configuration)
     {
         _client = client;
         _settings = settings;
