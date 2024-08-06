@@ -8,5 +8,5 @@ public sealed class Tour
     public int TourLength { get; init; }
     public int TourToll { get; init; }
     public List<RoutePoint> RoutePoints { get; init; } = [];
-    public List<PVRPCloudTourPoint> TourPoints { get; init; } = [];
+    public List<TourPoint> TourPoints { get; init; } = [];
 }

@@ -1,6 +1,6 @@
 namespace PVRPCloud.Requests;
 
-public sealed class PVRPCloudTourPoint
+public sealed class TourPoint
 {
     public Depot? Depot { get; init; }
     public Client? Client { get; init; }
