@@ -23,7 +23,7 @@ public class PVRPCloudApiHandler : IApiHandler
         Logger.LogToQueueMessage = PVRPCloudInterface.LogToQueueMessage;
     }
 
-    public Task<Response> PVRCloudSupportAsync(SupportRequest body, CancellationToken cancellationToken = default)
+    public Task<Response> SupportAsync(SupportRequest body, CancellationToken cancellationToken = default)
     {
 
         var response = new Response();
@@ -88,7 +88,7 @@ public class PVRPCloudApiHandler : IApiHandler
         return Task.FromResult(response);
     }
 
-    public Task<Response> PVRCloudSupportXAsync(SupportRequest body, CancellationToken cancellationToken = default)
+    public Task<Response> SupportXAsync(SupportRequest body, CancellationToken cancellationToken = default)
     {
         var response = new Response();
         try

@@ -15,7 +15,7 @@ public interface IApiHandler
     /// <param name="accept"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Response> PVRCloudSupportAsync(SupportRequest body, CancellationToken cancellationToken = default);
+    Task<Response> SupportAsync(SupportRequest body, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get calculation result
@@ -32,7 +32,7 @@ public interface IApiHandler
     /// <param name="accept"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Response> PVRCloudSupportXAsync(SupportRequest body, CancellationToken cancellationToken = default);
+    Task<Response> SupportXAsync(SupportRequest body, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// get the 'isalive' status of the PVRCloudSupporter service
