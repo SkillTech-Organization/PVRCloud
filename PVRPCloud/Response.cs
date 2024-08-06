@@ -6,7 +6,7 @@ public sealed class Response
     public List<Result> Results { get; set; } = [];
 
     public bool HasError => Results.Any(a =>
-        a.Status is Result.PVRPCloudResultStatus.VALIDATIONERROR or
-        Result.PVRPCloudResultStatus.EXCEPTION or
-        Result.PVRPCloudResultStatus.ERROR);
+        a.Status is Result.ResultStatus.VALIDATIONERROR or
+        Result.ResultStatus.EXCEPTION or
+        Result.ResultStatus.ERROR);
 }

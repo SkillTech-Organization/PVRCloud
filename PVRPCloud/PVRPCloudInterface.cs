@@ -1164,7 +1164,7 @@ public class PVRPCloudInterface
 
                 Result res = new Result()
                 {
-                    Status = Result.PVRPCloudResultStatus.RESULT,
+                    Status = Result.ResultStatus.RESULT,
                     ItemID = "",
                     Data = tskResult
 
@@ -1179,7 +1179,7 @@ public class PVRPCloudInterface
 
             Result res = new Result()
             {
-                Status = Result.PVRPCloudResultStatus.EXCEPTION,
+                Status = Result.ResultStatus.EXCEPTION,
                 ItemID = "",
                 Data = rm
 
@@ -1219,7 +1219,7 @@ public class PVRPCloudInterface
 
         Result itemRes = new Result()
         {
-            Status = Result.PVRPCloudResultStatus.VALIDATIONERROR,
+            Status = Result.ResultStatus.VALIDATIONERROR,
             ItemID = ItemIDProp != null ? p_obj.GetType().GetProperty(ItemIDProp.Name).GetValue(p_obj, null).ToString() : "???",
             Data = msg
         };
@@ -1248,7 +1248,7 @@ public class PVRPCloudInterface
 
         DateTime dtPhaseStart = DateTime.UtcNow;
 
-        var calcResult = res.Where(i => i.Status == Result.PVRPCloudResultStatus.RESULT).FirstOrDefault();
+        var calcResult = res.Where(i => i.Status == Result.ResultStatus.RESULT).FirstOrDefault();
         if (calcResult != null)
         {
             PVRPCloudSetBestTruck(res);
@@ -1261,7 +1261,7 @@ public class PVRPCloudInterface
                 lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
                 List<Result> res2 = PVRPCloudSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
 
-                var calcResult2 = res2.Where(x => x.Status == Result.PVRPCloudResultStatus.RESULT).FirstOrDefault();
+                var calcResult2 = res2.Where(x => x.Status == Result.ResultStatus.RESULT).FirstOrDefault();
                 if (calcResult2 != null)
                 {
                     //Elvileg itt már kell, hogy legyen result típusú tétel, mert a validálás az előző menetben megrtörtént.
@@ -1322,7 +1322,7 @@ public class PVRPCloudInterface
 
                     Result resErr = new Result()
                     {
-                        Status = Result.PVRPCloudResultStatus.ERROR,
+                        Status = Result.ResultStatus.ERROR,
                         ItemID = "",
                         Data = rm
 
@@ -1354,7 +1354,7 @@ public class PVRPCloudInterface
         //2. minden járműhöz hozzárendeljuk azt a túrát, amely teljesítésében a legkisebb az átállás+visszaérkezés költsége
 
         //2.1 Van-e eredmény ?
-        var calcResult = p_calcResult.Where(i => i.Status == Result.PVRPCloudResultStatus.RESULT).FirstOrDefault();
+        var calcResult = p_calcResult.Where(i => i.Status == Result.ResultStatus.RESULT).FirstOrDefault();
         if (calcResult != null)
         {
             List<CalcTask> calcTaskList = (List<CalcTask>)calcResult.Data;

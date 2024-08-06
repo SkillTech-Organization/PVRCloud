@@ -18,14 +18,14 @@ public class DateTimeConverter : JsonConverter<DateTime>
     }
 }
 
-public class EnumConverter : JsonConverter<PVRPCloudResultStatus>
+public class EnumConverter : JsonConverter<ResultStatus>
 {
-    public override PVRPCloudResultStatus Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override ResultStatus Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return (PVRPCloudResultStatus)Enum.Parse(typeof(PVRPCloudResultStatus), reader.GetString());
+        return (ResultStatus)Enum.Parse(typeof(ResultStatus), reader.GetString());
     }
 
-    public override void Write(Utf8JsonWriter writer, PVRPCloudResultStatus value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, ResultStatus value, JsonSerializerOptions options)
     {
         writer.WriteStringValue(value.ToString());
     }

@@ -913,7 +913,7 @@ class Program
                 Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája
 
 
-            if (rr.Status == Result.PVRPCloudResultStatus.RESULT)
+            if (rr.Status == Result.ResultStatus.RESULT)
             {
                 if (p_bestTruck)
                     bestTruckConsole(res.FirstOrDefault());
