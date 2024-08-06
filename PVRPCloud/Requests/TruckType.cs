@@ -1,6 +1,6 @@
 namespace PVRPCloud.Requests;
 
-public sealed class PVRPCloudTruckType : IIdentifiable
+public sealed class TruckType : IIdentifiable
 {
     public string ID { get; init; } = string.Empty;
     public string TruckTypeName { get; init; } = string.Empty;
