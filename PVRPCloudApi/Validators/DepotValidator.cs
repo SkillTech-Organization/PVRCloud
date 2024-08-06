@@ -6,7 +6,7 @@ namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class DepotValidator : AbstractValidator<PVRPCloudDepot>
+public sealed class DepotValidator : AbstractValidator<Depot>
 {
     public DepotValidator(PVRPCloudProject project)
     {

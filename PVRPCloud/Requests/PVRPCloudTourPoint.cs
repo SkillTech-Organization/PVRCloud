@@ -2,7 +2,7 @@ namespace PVRPCloud.Requests;
 
 public sealed class PVRPCloudTourPoint
 {
-    public PVRPCloudDepot? Depot { get; init; }
+    public Depot? Depot { get; init; }
     public Client? Client { get; init; }
     public double Lat { get; init; }
     public double Lng { get; init; }

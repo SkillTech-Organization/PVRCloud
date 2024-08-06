@@ -1,6 +1,6 @@
 namespace PVRPCloud.Requests;
 
-public sealed class PVRPCloudDepot : IIdentifiable
+public sealed class Depot : IIdentifiable
 {
     public string ID { get; init; } = string.Empty;
     public string DepotName { get; init; } = string.Empty;
