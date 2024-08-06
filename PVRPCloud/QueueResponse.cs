@@ -2,7 +2,7 @@
 
 namespace PVRPCloud;
 
-public sealed class PVRPCloudQueueResponse
+public sealed class QueueResponse
 {
     public enum PVRPCloudQueueResponseStatus
     {

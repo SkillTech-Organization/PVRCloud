@@ -79,7 +79,7 @@ public class PVRPCloudInterface
     public static object LogToQueueMessage(params object[] args)
     {
         var typeParsed = Enum.TryParse((string)(args[1] ?? ""), out LogTypes type);
-        var m = new PVRPCloudQueueResponse
+        var m = new QueueResponse
         {
             RequestID = RequestID,
             Log = new Log
@@ -88,7 +88,7 @@ public class PVRPCloudInterface
                 Timestamp = (DateTime)args[2],
                 Type = typeParsed ? type : LogTypes.STATUS
             },
-            Status = PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.LOG
+            Status = QueueResponse.PVRPCloudQueueResponseStatus.LOG
         };
         return m.ToJson();
     }
@@ -109,7 +109,7 @@ public class PVRPCloudInterface
 
             Logger.Info(msg, Logger.GetEndProperty(RequestID), false);
 
-            var queueResponse = new PVRPCloudQueueResponse
+            var queueResponse = new QueueResponse
             {
                 RequestID = RequestID,
                 Link = link,
@@ -119,7 +119,7 @@ public class PVRPCloudInterface
                     Timestamp = DateTime.UtcNow,
                     Type = LogTypes.END
                 },
-                Status = PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.RESULT
+                Status = QueueResponse.PVRPCloudQueueResponseStatus.RESULT
             };
 
             Logger.QueueLogger.Log(queueResponse, RequestID);
@@ -128,7 +128,7 @@ public class PVRPCloudInterface
         {
             Logger.Error(Messages.E_ERRINBLOBSAVE, Logger.GetExceptionProperty(RequestID), null, false);
 
-            var queueResponse = new PVRPCloudQueueResponse
+            var queueResponse = new QueueResponse
             {
                 RequestID = RequestID,
                 Link = link,
@@ -138,7 +138,7 @@ public class PVRPCloudInterface
                     Timestamp = DateTime.UtcNow,
                     Type = LogTypes.END
                 },
-                Status = PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.ERROR
+                Status = QueueResponse.PVRPCloudQueueResponseStatus.ERROR
             };
 
             Logger.QueueLogger.Log(queueResponse, RequestID);

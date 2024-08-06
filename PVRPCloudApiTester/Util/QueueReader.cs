@@ -10,7 +10,7 @@ namespace PVRPCloudApiTester.Util;
 
 internal class GetResultResponse
 {
-    public PVRPCloudQueueResponse Result { get; set; }
+    public QueueResponse Result { get; set; }
 
     public List<PVRPCloudResult> PVRPCloudResults { get; set; }
 
@@ -80,7 +80,7 @@ internal class QueueReader
                         try
                         {
                             _logger.Debug("Parsing message...");
-                            var queueResponse = msgText.ToDeserializedJson<PVRPCloudQueueResponse>();
+                            var queueResponse = msgText.ToDeserializedJson<QueueResponse>();
                             _logger.Debug("Parsing message...done");
 
                             if (queueResponse == null)
@@ -92,7 +92,7 @@ internal class QueueReader
                                 var res = queueResponse;
                                 if (res != null)
                                 {
-                                    if (res.Status == PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.RESULT)
+                                    if (res.Status == QueueResponse.PVRPCloudQueueResponseStatus.RESULT)
                                     {
                                         _logger.Information("Result found.");
 
@@ -100,7 +100,7 @@ internal class QueueReader
                                         resp.ResultReceived = true;
                                         return resp;
                                     }
-                                    else if (res.Status == PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.ERROR)
+                                    else if (res.Status == QueueResponse.PVRPCloudQueueResponseStatus.ERROR)
                                     {
                                         _logger.Information("Error found.");
 
