@@ -61,7 +61,7 @@ public class CalcRoute
     public string RoutePoints { get; set; }
 
     /* munkamező */
-    internal PVRPCloudPMapRoute PMapRoute { get; set; }
+    internal PMapRoute PMapRoute { get; set; }
     internal bool ErrDriveTime { get; set; } = false;
 
 }

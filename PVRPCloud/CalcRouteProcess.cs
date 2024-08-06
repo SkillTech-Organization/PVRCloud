@@ -17,9 +17,9 @@ internal class CalcRouteProcess : BaseLongProcess
     //TODO refakt     private bllRoute m_bllRoute;
     //TODO refakt        private bool m_cacheRoutes;
 
-    List<PVRPCloudPMapRoute> m_lstRoutes = new List<PVRPCloudPMapRoute>();
+    List<PMapRoute> m_lstRoutes = new List<PMapRoute>();
 
-    internal CalcRouteProcess(List<PVRPCloudPMapRoute> p_lstRoutes)
+    internal CalcRouteProcess(List<PMapRoute> p_lstRoutes)
         : base(ThreadPriority.Normal)
     {
 
@@ -84,10 +84,10 @@ internal class CalcRouteProcess : BaseLongProcess
                 {
 
                     //leválogatjuk, mely útvonalakra tartozik a konkrét számítás
-                    List<PVRPCloudPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO
+                    List<PMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO
                                                                 && x.RZN_ID_LIST == routePar.RZN_ID_LIST && x.GVWR == routePar.Weight && x.Height == routePar.Height && x.Width == routePar.Width).ToList();
                     //és feltöltjuk a ROUTE-ját
-                    foreach (PVRPCloudPMapRoute ftr in lstFTLR)
+                    foreach (PMapRoute ftr in lstFTLR)
                     {
 
                         PVRPCloudRouteCache.Instance.Add(route);

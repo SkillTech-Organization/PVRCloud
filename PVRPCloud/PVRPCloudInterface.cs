@@ -401,7 +401,7 @@ public class PVRPCloudInterface
                 //1. Előkészítés:
 
 
-                List<PVRPCloudPMapRoute> lstPMapRoutes = new List<PVRPCloudPMapRoute>();        //A számításban részt vevő Route-k
+                List<PMapRoute> lstPMapRoutes = new List<PMapRoute>();        //A számításban részt vevő Route-k
 
                 /************************************************************************************/
                 /*Járművek előszűrése, NOD_ID meghatározás és visszatérési érték objektum felépítése*/
@@ -481,7 +481,7 @@ public class PVRPCloudInterface
                     {
                         foreach (var grpTrk in p_TruckList.GroupBy(g => new { g.RZN_ID_LIST, g.GVWR, g.Height, g.Width }).ToList())
                         {
-                            var pmr = new PVRPCloudPMapRoute
+                            var pmr = new PMapRoute
                             {
                                 fromNOD_ID = clctsk.Task.TPoints[i].NOD_ID,
                                 toNOD_ID = clctsk.Task.TPoints[i + 1].NOD_ID,
@@ -504,7 +504,7 @@ public class PVRPCloudInterface
                             //4.2 futó túrapontok közötti távolságok
                             for (int i = 0; i < trk.CurrTPoints.Count - 1; i++)
                             {
-                                var pmr1 = new PVRPCloudPMapRoute { fromNOD_ID = trk.CurrTPoints[i].NOD_ID, toNOD_ID = trk.CurrTPoints[i + 1].NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
+                                var pmr1 = new PMapRoute { fromNOD_ID = trk.CurrTPoints[i].NOD_ID, toNOD_ID = trk.CurrTPoints[i + 1].NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
                                 if (lstPMapRoutes.IndexOf(pmr1) < 0)
                                     lstPMapRoutes.Add(pmr1);
                             }
@@ -512,25 +512,25 @@ public class PVRPCloudInterface
                             //4.3 Utolsó teljesített túrapont --> aktuális járműpozíció
                             if (trk.TPointCompleted > 0)
                             {
-                                var pmr2 = new PVRPCloudPMapRoute { fromNOD_ID = trk.CurrTPoints[trk.TPointCompleted - 1].NOD_ID, toNOD_ID = trk.NOD_ID_CURR, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
+                                var pmr2 = new PMapRoute { fromNOD_ID = trk.CurrTPoints[trk.TPointCompleted - 1].NOD_ID, toNOD_ID = trk.NOD_ID_CURR, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
                                 if (lstPMapRoutes.IndexOf(pmr2) < 0)
                                     lstPMapRoutes.Add(pmr2);
                             }
 
                             //4.4 Aktuális járműpozíció --> első nem teljesített túrapont
-                            var pmr3 = new PVRPCloudPMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.CurrTPoints[trk.TPointCompleted].NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
+                            var pmr3 = new PMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.CurrTPoints[trk.TPointCompleted].NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
                             if (lstPMapRoutes.IndexOf(pmr3) < 0)
                                 lstPMapRoutes.Add(pmr3);
 
                             //4.5 Teljesített utolsó túrapont -> beosztandó első túrapont (átállás)
-                            var pmr4 = new PVRPCloudPMapRoute { fromNOD_ID = trk.CurrTPoints.Last().NOD_ID, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
+                            var pmr4 = new PMapRoute { fromNOD_ID = trk.CurrTPoints.Last().NOD_ID, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
                             if (lstPMapRoutes.IndexOf(pmr4) < 0)
                                 lstPMapRoutes.Add(pmr4);
 
                             //4.6 Beosztandó túrapont utolsó --> visszatérés túrapont (csak NEM irányos túra esetén !!)
                             if (!trk.CurrIsOneWay)
                             {
-                                var pmr5 = new PVRPCloudPMapRoute { fromNOD_ID = clctsk.Task.TPoints.Last().NOD_ID, toNOD_ID = trk.RET_NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
+                                var pmr5 = new PMapRoute { fromNOD_ID = clctsk.Task.TPoints.Last().NOD_ID, toNOD_ID = trk.RET_NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
                                 if (lstPMapRoutes.IndexOf(pmr5) < 0)
                                     lstPMapRoutes.Add(pmr5);
                             }
@@ -544,14 +544,14 @@ public class PVRPCloudInterface
                             /********************************************/
 
                             //4.5 Aktuális pozíció -> beosztandó első túrapont (átállás)
-                            var pmr6 = new PVRPCloudPMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
+                            var pmr6 = new PMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
                             if (lstPMapRoutes.IndexOf(pmr6) < 0)
                                 lstPMapRoutes.Add(pmr6);
 
                             //4.6 Beosztandó túrapont utolsó --> visszatérési pozíció (csak NEM irányos túra esetén !!)
                             if (!trk.CurrIsOneWay)
                             {
-                                var pmr7 = new PVRPCloudPMapRoute { fromNOD_ID = clctsk.Task.TPoints.Last().NOD_ID, toNOD_ID = trk.RET_NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
+                                var pmr7 = new PMapRoute { fromNOD_ID = clctsk.Task.TPoints.Last().NOD_ID, toNOD_ID = trk.RET_NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width };
                                 if (lstPMapRoutes.IndexOf(pmr7) < 0)
                                     lstPMapRoutes.Add(pmr7);
                             }
@@ -563,7 +563,7 @@ public class PVRPCloudInterface
 
                 //5. legeneráljuk az összes futó túra befejezés és a szállítási feladat felrakás távolságot/menetidőt
 
-                List<PVRPCloudPMapRoute> lstCalcPMapRoutes = new List<PVRPCloudPMapRoute>();        //Számolandó útvonalak
+                List<PMapRoute> lstCalcPMapRoutes = new List<PMapRoute>();        //Számolandó útvonalak
 
                 //debug info
                 /*
@@ -573,7 +573,7 @@ public class PVRPCloudInterface
 
                 // 5.1 Megnézzük, mely számítandó PVRPCloud útvonalaknak nincs Route-juk (ezeket ki kell számolni)
                 //
-                foreach (PVRPCloudPMapRoute r in lstPMapRoutes)
+                foreach (PMapRoute r in lstPMapRoutes)
                 {
                     boRoute rt = PVRPCloudRouteCache.Instance.Get(r.fromNOD_ID, r.toNOD_ID, r.RZN_ID_LIST, r.GVWR, r.Height, r.Width);
                     if (rt != null)
@@ -637,7 +637,7 @@ public class PVRPCloudInterface
 
                             for (int i = 1; i < trk.TPointCompleted - 1; i++)
                             {
-                                PVRPCloudPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[i - 1].NOD_ID && x.toNOD_ID == trk.CurrTPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                                PMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[i - 1].NOD_ID && x.toNOD_ID == trk.CurrTPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                                 clctour.T1CalcRoute.Add(new CalcRoute()
                                 {
                                     TPoint = trk.CurrTPoints[i],
@@ -652,7 +652,7 @@ public class PVRPCloudInterface
                             //6.1.3  Utolsó teljesített pont -> Curr
                             if (trk.TPointCompleted > 0)
                             {
-                                PVRPCloudPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[trk.TPointCompleted - 1].NOD_ID && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                                PMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[trk.TPointCompleted - 1].NOD_ID && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                                 clctour.T1CalcRoute.Add(new CalcRoute()
                                 {
                                     TPoint = null,
@@ -681,7 +681,7 @@ public class PVRPCloudInterface
 
                             for (int i = trk.TPointCompleted + 1; i < trk.CurrTPoints.Count; i++)
                             {
-                                PVRPCloudPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[i - 1].NOD_ID && x.toNOD_ID == trk.CurrTPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                                PMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[i - 1].NOD_ID && x.toNOD_ID == trk.CurrTPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                                 clctour.T1CalcRoute.Add(new CalcRoute()
                                 {
                                     TPoint = trk.CurrTPoints[i],
@@ -703,7 +703,7 @@ public class PVRPCloudInterface
                         /***********/
                         /* Átállás */
                         /***********/
-                        PVRPCloudPMapRoute rtx;
+                        PMapRoute rtx;
                         if (trk.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
                         {
                             //6.2  utolsó beosztott túrapont --> első beosztandó túrapont
@@ -728,7 +728,7 @@ public class PVRPCloudInterface
 
                         for (int i = 1; i < clctsk.Task.TPoints.Count; i++)
                         {
-                            PVRPCloudPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints[i - 1].NOD_ID && x.toNOD_ID == clctsk.Task.TPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                            PMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints[i - 1].NOD_ID && x.toNOD_ID == clctsk.Task.TPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                             clctour.T2CalcRoute.Add(new CalcRoute()
                             {
                                 TPoint = clctsk.Task.TPoints[i],
@@ -743,7 +743,7 @@ public class PVRPCloudInterface
                         //6.4 : Nem irányos túra esetén tervezett utolsó pont -> futó első pont
                         if (!trk.CurrIsOneWay)
                         {
-                            PVRPCloudPMapRoute rtx2;
+                            PMapRoute rtx2;
                             //6.4.1  utolsó beosztott túrapont --> első beosztandó túrapont
                             rtx2 = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints.Last().NOD_ID && x.toNOD_ID == trk.RET_NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                             clctour.RetCalcRoute = new CalcRoute()

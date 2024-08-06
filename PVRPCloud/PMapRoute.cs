@@ -3,7 +3,7 @@
 namespace PVRPCloud;
 
 [Serializable]
-internal class PVRPCloudPMapRoute
+internal class PMapRoute
 {
     public class PVRPCloudToll
     {
@@ -12,7 +12,7 @@ internal class PVRPCloudPMapRoute
         public double Toll { get; set; }                           //Útdíj
     }
 
-    public PVRPCloudPMapRoute()
+    public PMapRoute()
     {
         route = null;
     }
@@ -39,7 +39,7 @@ internal class PVRPCloudPMapRoute
     public override bool Equals(object obj)
     {
         if (obj == null) return false;
-        PVRPCloudPMapRoute rk = (PVRPCloudPMapRoute)obj;
+        PMapRoute rk = (PMapRoute)obj;
         return fromNOD_ID == rk.fromNOD_ID && toNOD_ID == rk.toNOD_ID &&
             RZN_ID_LIST == rk.RZN_ID_LIST && GVWR == rk.GVWR && Height == rk.Height && Width == rk.Width;
     }
