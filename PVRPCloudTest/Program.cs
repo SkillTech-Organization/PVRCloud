@@ -30,7 +30,7 @@ class Program
         // lstTrk.First().GVWR = 0;
         // lstTrk.Last().CargoTypes = null;
 
-        var res = PVRPCloudInterface.PVRPCloudInit(lstTsk, lstTrk, 10000, null);
+        var res = PVRPCloudInterface.Init(lstTsk, lstTrk, 10000, null);
         var str = JsonConvert.SerializeObject(res);
     }
 
@@ -896,9 +896,9 @@ class Program
         Console.BufferHeight = 600;
         p_bestTruck = false;
         if (p_bestTruck)
-            res = PVRPCloudInterface.PVRPCloudSupportX(lstTsk, lstTrk, 10000);
+            res = PVRPCloudInterface.SupportX(lstTsk, lstTrk, 10000);
         else
-            res = PVRPCloudInterface.PVRPCloudSupport(lstTsk, lstTrk, 10000);
+            res = PVRPCloudInterface.Support(lstTsk, lstTrk, 10000);
         Console.WriteLine("PVRPCloudSupport  időtartam:" + (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString());
 
         int i = 1;

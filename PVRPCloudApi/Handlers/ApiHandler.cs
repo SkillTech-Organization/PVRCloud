@@ -30,7 +30,7 @@ public class ApiHandler : IApiHandler
         try
         {
 
-            var initResult = PVRPCloudInterface.PVRPCloudInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
+            var initResult = PVRPCloudInterface.Init(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
             if (initResult != null)
             {
                 response = initResult;
@@ -38,7 +38,7 @@ public class ApiHandler : IApiHandler
 
             if (initResult != null && !initResult.HasError)
             {
-                Task.Run(() => PVRPCloudInterface.PVRPCloudSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
+                Task.Run(() => PVRPCloudInterface.Support(body.TaskList, body.TruckList, body.MaxTruckDistance));
             }
         }
         catch (Exception ex)
@@ -93,7 +93,7 @@ public class ApiHandler : IApiHandler
         var response = new Response();
         try
         {
-            var initResult = PVRPCloudInterface.PVRPCloudInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
+            var initResult = PVRPCloudInterface.Init(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
             if (initResult != null)
             {
                 response = initResult;
@@ -101,7 +101,7 @@ public class ApiHandler : IApiHandler
 
             if (initResult != null && !initResult.HasError)
             {
-                Task.Run(() => PVRPCloudInterface.PVRPCloudSupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
+                Task.Run(() => PVRPCloudInterface.SupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
             }
         }
         catch (Exception ex)
