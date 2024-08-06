@@ -954,7 +954,7 @@ class Program
                                 Console.WriteLine("T1  kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, Idő:{5:#,#0.00}, pih:{6:#,#0.00}"
                                     , clctour.T1Start, clctour.T1End, clctour.T1M, clctour.T1Toll, clctour.T1Cost, clctour.T1FullDuration, clctour.T1Rest);
 
-                                foreach (PVRPCloudCalcRoute clcroute in clctour.T1CalcRoute)
+                                foreach (CalcRoute clcroute in clctour.T1CalcRoute)
                                 {
                                     Console.WriteLine("\t{0} érk:{1:yyyy.MM.dd HH:mm}, ind:{2:yyyy.MM.dd HH:mm}, táv:{3:#,#0.00}, vez:{4:#,#0.00}, pih:{5:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Aktuálsi poz.**", clcroute.Arrival, clcroute.Departure, clcroute.Distance, clcroute.DrivingDuration, clcroute.RestDuration);
                                 }
@@ -968,7 +968,7 @@ class Program
                             Console.WriteLine("T2  kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, Idő:{5:#,#0.00}, pih:{6:#,#0.00}"
                                 , clctour.T2Start, clctour.T2End, clctour.T2M, clctour.T2Toll, clctour.T2Cost, clctour.T2FullDuration, clctour.T2Rest);
 
-                            foreach (PVRPCloudCalcRoute clcroute in clctour.T2CalcRoute)
+                            foreach (CalcRoute clcroute in clctour.T2CalcRoute)
                             {
                                 Console.WriteLine("\t{0} érk:{1:yyyy.MM.dd HH:mm}, ind:{2:yyyy.MM.dd HH:mm}, táv:{3:#,#0.00}, vez:{4:#,#0.00}, pih:{5:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : " **Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.Distance, clcroute.DrivingDuration, clcroute.RestDuration);
                             }

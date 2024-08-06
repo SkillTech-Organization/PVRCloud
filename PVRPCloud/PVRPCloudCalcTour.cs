@@ -32,7 +32,7 @@ public class PVRPCloudCalcTour
         T1FullDuration = 0;
         T1Start = DateTime.MinValue;
         T1End = DateTime.MinValue;
-        T1CalcRoute = new List<PVRPCloudCalcRoute>();
+        T1CalcRoute = new List<CalcRoute>();
 
         RelM = 0;
         RelToll = 0;
@@ -41,7 +41,7 @@ public class PVRPCloudCalcTour
         RelFullDuration = 0;
         RelStart = DateTime.MinValue;
         RelEnd = DateTime.MinValue;
-        RelCalcRoute = new PVRPCloudCalcRoute();
+        RelCalcRoute = new CalcRoute();
 
         T2M = 0;
         T2Toll = 0;
@@ -50,7 +50,7 @@ public class PVRPCloudCalcTour
         T2FullDuration = 0;
         T2Start = DateTime.MinValue;
         T2End = DateTime.MinValue;
-        T2CalcRoute = new List<PVRPCloudCalcRoute>();
+        T2CalcRoute = new List<CalcRoute>();
 
         RetM = 0;
         RetToll = 0;
@@ -59,7 +59,7 @@ public class PVRPCloudCalcTour
         RetFullDuration = 0;
         RetStart = DateTime.MinValue;
         RetEnd = DateTime.MinValue;
-        RetCalcRoute = new PVRPCloudCalcRoute();
+        RetCalcRoute = new CalcRoute();
     }
 
     //    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
@@ -102,7 +102,7 @@ public class PVRPCloudCalcTour
     public DateTime T1End { get; set; }
 
     [DisplayNameAttributeX(Name = "I.túra részletek", Order = 12)]
-    public List<PVRPCloudCalcRoute> T1CalcRoute { get; set; }
+    public List<CalcRoute> T1CalcRoute { get; set; }
 
     [DisplayNameAttributeX(Name = "Átállás hossz (m)", Order = 13)]
     public double RelM { get; set; }
@@ -126,7 +126,7 @@ public class PVRPCloudCalcTour
     public DateTime RelEnd { get; set; }
 
     [DisplayNameAttributeX(Name = "Átállás részletek", Order = 20)]
-    public PVRPCloudCalcRoute RelCalcRoute { get; set; }
+    public CalcRoute RelCalcRoute { get; set; }
 
     [DisplayNameAttributeX(Name = "II.túra hossz (m)", Order = 21)]
     public double T2M { get; set; }
@@ -150,7 +150,7 @@ public class PVRPCloudCalcTour
     public DateTime T2End { get; set; }
 
     [DisplayNameAttributeX(Name = "II.túra részletek", Order = 28)]
-    public List<PVRPCloudCalcRoute> T2CalcRoute { get; set; }
+    public List<CalcRoute> T2CalcRoute { get; set; }
 
     [DisplayNameAttributeX(Name = "Visszatérés hossz (m)", Order = 29)]
     public double RetM { get; set; }
@@ -174,7 +174,7 @@ public class PVRPCloudCalcTour
     public DateTime RetEnd { get; set; }
 
     [DisplayNameAttributeX(Name = "Visszatérés részletek", Order = 36)]
-    public PVRPCloudCalcRoute RetCalcRoute { get; set; }
+    public CalcRoute RetCalcRoute { get; set; }
 
     #endregion
 

@@ -623,7 +623,7 @@ public class PVRPCloudInterface
                         if (trk.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
                         {
                             //6.1.1 : legelső pont:
-                            clctour.T1CalcRoute.Add(new PVRPCloudCalcRoute()
+                            clctour.T1CalcRoute.Add(new CalcRoute()
                             {
                                 TPoint = trk.CurrTPoints[0],
                                 Arrival = trk.CurrTPoints[0].RealArrival,
@@ -638,7 +638,7 @@ public class PVRPCloudInterface
                             for (int i = 1; i < trk.TPointCompleted - 1; i++)
                             {
                                 PVRPCloudPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[i - 1].NOD_ID && x.toNOD_ID == trk.CurrTPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                clctour.T1CalcRoute.Add(new PVRPCloudCalcRoute()
+                                clctour.T1CalcRoute.Add(new CalcRoute()
                                 {
                                     TPoint = trk.CurrTPoints[i],
                                     Arrival = trk.CurrTPoints[i].RealArrival,
@@ -653,7 +653,7 @@ public class PVRPCloudInterface
                             if (trk.TPointCompleted > 0)
                             {
                                 PVRPCloudPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[trk.TPointCompleted - 1].NOD_ID && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                clctour.T1CalcRoute.Add(new PVRPCloudCalcRoute()
+                                clctour.T1CalcRoute.Add(new CalcRoute()
                                 {
                                     TPoint = null,
                                     Arrival = DateTime.MinValue,
@@ -666,7 +666,7 @@ public class PVRPCloudInterface
 
                                 //6.1.4  Curr --> első teljesítetlen túrapont
                                 rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == trk.CurrTPoints[trk.TPointCompleted].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                clctour.T1CalcRoute.Add(new PVRPCloudCalcRoute()
+                                clctour.T1CalcRoute.Add(new CalcRoute()
                                 {
                                     TPoint = trk.CurrTPoints[trk.TPointCompleted],
                                     Arrival = DateTime.MinValue,
@@ -682,7 +682,7 @@ public class PVRPCloudInterface
                             for (int i = trk.TPointCompleted + 1; i < trk.CurrTPoints.Count; i++)
                             {
                                 PVRPCloudPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[i - 1].NOD_ID && x.toNOD_ID == trk.CurrTPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                clctour.T1CalcRoute.Add(new PVRPCloudCalcRoute()
+                                clctour.T1CalcRoute.Add(new CalcRoute()
                                 {
                                     TPoint = trk.CurrTPoints[i],
                                     Arrival = DateTime.MinValue,
@@ -714,7 +714,7 @@ public class PVRPCloudInterface
                             //6.2  elérhetőség esetén CURR --> első beosztandó túrapont
                             rtx = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == clctsk.Task.TPoints.First().NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                         }
-                        clctour.RelCalcRoute = new PVRPCloudCalcRoute()
+                        clctour.RelCalcRoute = new CalcRoute()
                         {
                             TPoint = clctsk.Task.TPoints.First(),
                             Arrival = DateTime.MinValue,
@@ -729,7 +729,7 @@ public class PVRPCloudInterface
                         for (int i = 1; i < clctsk.Task.TPoints.Count; i++)
                         {
                             PVRPCloudPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints[i - 1].NOD_ID && x.toNOD_ID == clctsk.Task.TPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                            clctour.T2CalcRoute.Add(new PVRPCloudCalcRoute()
+                            clctour.T2CalcRoute.Add(new CalcRoute()
                             {
                                 TPoint = clctsk.Task.TPoints[i],
                                 Arrival = DateTime.MinValue,
@@ -746,7 +746,7 @@ public class PVRPCloudInterface
                             PVRPCloudPMapRoute rtx2;
                             //6.4.1  utolsó beosztott túrapont --> első beosztandó túrapont
                             rtx2 = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints.Last().NOD_ID && x.toNOD_ID == trk.RET_NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                            clctour.RetCalcRoute = new PVRPCloudCalcRoute()
+                            clctour.RetCalcRoute = new CalcRoute()
                             {
                                 TPoint = new PVRPCloudPoint() { Name = "Visszatérés", Lat = trk.RetPoint.Value.Lat, Lng = trk.RetPoint.Value.Lng, Open = DateTime.MinValue, Close = DateTime.MaxValue },
                                 Arrival = DateTime.MinValue,
@@ -839,7 +839,7 @@ public class PVRPCloudInterface
                         if (firstCurrPoint != null)
                             clctour.T1Start = firstCurrPoint.RealArrival;
 
-                        foreach (PVRPCloudCalcRoute clr in clctour.T1CalcRoute)
+                        foreach (CalcRoute clr in clctour.T1CalcRoute)
                         {
                             if (clr == clctour.T1CalcRoute.First())     // legelső túrapont (raktári felrakás)
                             {
@@ -960,7 +960,7 @@ public class PVRPCloudInterface
                         /*********************************/
                         /* II. túra teljesítés számítása */
                         /*********************************/
-                        foreach (PVRPCloudCalcRoute clr in clctour.T2CalcRoute)
+                        foreach (CalcRoute clr in clctour.T2CalcRoute)
                         {
                             clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
                             clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
@@ -1304,7 +1304,7 @@ public class PVRPCloudInterface
                                         OriCalcTour.RetFullDuration = 0;
                                         OriCalcTour.RetStart = OriCalcTour.T2End;
                                         OriCalcTour.RetEnd = OriCalcTour.T2End;
-                                        OriCalcTour.RetCalcRoute = new PVRPCloudCalcRoute();
+                                        OriCalcTour.RetCalcRoute = new CalcRoute();
                                     }
                                 }
 
@@ -1515,7 +1515,7 @@ public class PVRPCloudInterface
         Console.WriteLine("workCycle:{0}, o_driveTime:{1}, o_restTime:{2}", workCycle, o_driveTime, o_restTime);
     }
 
-    private static int calcDriveTimes(PVRPCloudTruck p_trk, PVRPCloudCalcRoute clr, ref int usedDriveTime, ref int workCycle, ref int driveTime, ref int restTime)
+    private static int calcDriveTimes(PVRPCloudTruck p_trk, CalcRoute clr, ref int usedDriveTime, ref int workCycle, ref int driveTime, ref int restTime)
     {
         int retRestTime = 0;
         if (usedDriveTime + clr.DrivingDuration >= driveTime)

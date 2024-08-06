@@ -4,10 +4,10 @@ namespace PVRPCloud;
 
 //Eredmény útvonalak
 [Serializable]
-public class PVRPCloudCalcRoute
+public class CalcRoute
 {
 
-    public PVRPCloudCalcRoute()
+    public CalcRoute()
     {
         TPoint = null;
         Arrival = DateTime.MinValue;
