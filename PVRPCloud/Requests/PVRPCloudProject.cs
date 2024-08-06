@@ -8,7 +8,7 @@ public sealed class PVRPCloudProject
     public int MaxTourDuration { get; init; }
     public int DistanceLimit { get; init; }
     public List<PVRPCloudCostProfile> CostProfiles { get; init; } = [];
-    public List<PVRPCloudCapacityProfile> CapacityProfiles { get; init; } = [];
+    public List<CapacityProfile> CapacityProfiles { get; init; } = [];
     public List<PVRPCloudTruckType> TruckTypes { get; init; } = [];
     public List<PVRPCloudTruck> Trucks { get; init; } = [];
     public PVRPCloudDepot Depot { get; init; } = null!;

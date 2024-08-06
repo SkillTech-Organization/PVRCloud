@@ -6,7 +6,7 @@ namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class CapacityProfileValidator : AbstractValidator<PVRPCloudCapacityProfile>
+public sealed class CapacityProfileValidator : AbstractValidator<CapacityProfile>
 {
     public CapacityProfileValidator(PVRPCloudProject project)
     {
