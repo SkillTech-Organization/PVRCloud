@@ -18,7 +18,7 @@ public class PVRPCloudController : ControllerBase
         return Accepted(new Response
         {
             RequestID = "12345678",
-            Results = [ PVRPCloud.PVRPCloudResult.Success(request) ]
+            Results = [ PVRPCloud.Result.Success(request) ]
         });
     }
 

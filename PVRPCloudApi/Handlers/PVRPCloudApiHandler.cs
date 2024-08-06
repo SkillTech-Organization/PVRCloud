@@ -65,7 +65,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
                 //Logger.Info("Data: " + Newtonsoft.Json.JsonConvert.SerializeObject(x.Data), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
                 if (x.Data != null)
                 {
-                    if (x.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT)
+                    if (x.Status == PVRPCloud.Result.PVRPCloudResultStatus.RESULT)
                     {
                         x.Data = ((JToken)x.Data).ToObject<List<CalcTask>>();
                     }

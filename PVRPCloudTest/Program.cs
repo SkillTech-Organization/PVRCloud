@@ -892,7 +892,7 @@ class Program
     {
         DateTime dtStart = DateTime.Now;
 
-        List<PVRPCloudResult> res;
+        List<Result> res;
         Console.BufferHeight = 600;
         p_bestTruck = false;
         if (p_bestTruck)
@@ -913,7 +913,7 @@ class Program
                 Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája
 
 
-            if (rr.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT)
+            if (rr.Status == Result.PVRPCloudResultStatus.RESULT)
             {
                 if (p_bestTruck)
                     bestTruckConsole(res.FirstOrDefault());
@@ -996,7 +996,7 @@ class Program
         Console.ReadKey();
 
     }
-    private static void bestTruckConsole(PVRPCloudResult rr)
+    private static void bestTruckConsole(Result rr)
     {
         List<CalcTask> tskResult = (List<CalcTask>)rr.Data;
 

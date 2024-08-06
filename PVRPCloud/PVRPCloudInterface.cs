@@ -93,7 +93,7 @@ public class PVRPCloudInterface
         return m.ToJson();
     }
 
-    private static void HandleResult(DateTime dtStart, List<PVRPCloudResult> res, bool isPvrpCloudSupport, List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static void HandleResult(DateTime dtStart, List<Result> res, bool isPvrpCloudSupport, List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
         var ret = new Response();
 
@@ -145,7 +145,7 @@ public class PVRPCloudInterface
         }
     }
 
-    public static List<PVRPCloudResult> PVRPCloudSupport(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    public static List<Result> PVRPCloudSupport(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
         DateTime dtStart = DateTime.UtcNow;
         PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
@@ -160,7 +160,7 @@ public class PVRPCloudInterface
     }
 
     //Az eredményfeldolgozásban különbözik a PVRPCloudSupport-től
-    public static List<PVRPCloudResult> PVRPCloudSupportX(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    public static List<Result> PVRPCloudSupportX(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
         DateTime dtStart = DateTime.UtcNow;
         PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
@@ -174,10 +174,10 @@ public class PVRPCloudInterface
         return res;
     }
 
-    private static List<PVRPCloudResult> PVRPCloudSupport_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static List<Result> PVRPCloudSupport_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
 
-        List<PVRPCloudResult> result = new List<PVRPCloudResult>();
+        List<Result> result = new List<Result>();
 
         try
         {
@@ -1162,9 +1162,9 @@ public class PVRPCloudInterface
 
                 dtPhaseStart = DateTime.UtcNow;
 
-                PVRPCloudResult res = new PVRPCloudResult()
+                Result res = new Result()
                 {
-                    Status = PVRPCloudResult.PVRPCloudResultStatus.RESULT,
+                    Status = Result.PVRPCloudResultStatus.RESULT,
                     ItemID = "",
                     Data = tskResult
 
@@ -1177,9 +1177,9 @@ public class PVRPCloudInterface
             Util.ExceptionLog(ex);
             var rm = ResErrMsg.FromException(ex);
 
-            PVRPCloudResult res = new PVRPCloudResult()
+            Result res = new Result()
             {
-                Status = PVRPCloudResult.PVRPCloudResultStatus.EXCEPTION,
+                Status = Result.PVRPCloudResultStatus.EXCEPTION,
                 ItemID = "",
                 Data = rm
 
@@ -1192,9 +1192,9 @@ public class PVRPCloudInterface
 
     }
 
-    private static List<PVRPCloudResult> ValidateObjList<T>(List<T> p_list)
+    private static List<Result> ValidateObjList<T>(List<T> p_list)
     {
-        List<PVRPCloudResult> result = new List<PVRPCloudResult>();
+        List<Result> result = new List<Result>();
         foreach (object item in p_list)
         {
             List<ObjectValidator.ValidationError> tskErros = ObjectValidator.ValidateObject(item);
@@ -1211,15 +1211,15 @@ public class PVRPCloudInterface
 
     }
 
-    private static PVRPCloudResult getValidationError(object p_obj, string p_field, string p_msg, bool log = true)
+    private static Result getValidationError(object p_obj, string p_field, string p_msg, bool log = true)
     {
         var msg = ResErrMsg.ValidationError(p_field, p_msg);
 
         PropertyInfo ItemIDProp = p_obj.GetType().GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(ItemIDAttr))).FirstOrDefault();
 
-        PVRPCloudResult itemRes = new PVRPCloudResult()
+        Result itemRes = new Result()
         {
-            Status = PVRPCloudResult.PVRPCloudResultStatus.VALIDATIONERROR,
+            Status = Result.PVRPCloudResultStatus.VALIDATIONERROR,
             ItemID = ItemIDProp != null ? p_obj.GetType().GetProperty(ItemIDProp.Name).GetValue(p_obj, null).ToString() : "???",
             Data = msg
         };
@@ -1232,10 +1232,10 @@ public class PVRPCloudInterface
         return itemRes;
     }
 
-    private static List<PVRPCloudResult> PVRPCloudSupportX_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static List<Result> PVRPCloudSupportX_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
 
-        List<PVRPCloudResult> res = PVRPCloudSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
+        List<Result> res = PVRPCloudSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
 
         /*
@@ -1248,7 +1248,7 @@ public class PVRPCloudInterface
 
         DateTime dtPhaseStart = DateTime.UtcNow;
 
-        var calcResult = res.Where(i => i.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT).FirstOrDefault();
+        var calcResult = res.Where(i => i.Status == Result.PVRPCloudResultStatus.RESULT).FirstOrDefault();
         if (calcResult != null)
         {
             PVRPCloudSetBestTruck(res);
@@ -1259,9 +1259,9 @@ public class PVRPCloudInterface
                 List<PVRPCloudTask> lstTsk2 = new List<PVRPCloudTask>();
                 var lstTrk2 = PVRPCloudGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
                 lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
-                List<PVRPCloudResult> res2 = PVRPCloudSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
+                List<Result> res2 = PVRPCloudSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
 
-                var calcResult2 = res2.Where(x => x.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT).FirstOrDefault();
+                var calcResult2 = res2.Where(x => x.Status == Result.PVRPCloudResultStatus.RESULT).FirstOrDefault();
                 if (calcResult2 != null)
                 {
                     //Elvileg itt már kell, hogy legyen result típusú tétel, mert a validálás az előző menetben megrtörtént.
@@ -1320,9 +1320,9 @@ public class PVRPCloudInterface
                     //Ha nincs eredmény (Status == RESULT), akkor felveszünk egy hibatételt és kilépünk
                     var rm = ResErrMsg.BusinessError(Messages.E_ERRINSECONDPHASE);
 
-                    PVRPCloudResult resErr = new PVRPCloudResult()
+                    Result resErr = new Result()
                     {
-                        Status = PVRPCloudResult.PVRPCloudResultStatus.ERROR,
+                        Status = Result.PVRPCloudResultStatus.ERROR,
                         ItemID = "",
                         Data = rm
 
@@ -1344,7 +1344,7 @@ public class PVRPCloudInterface
 
 
 
-    public static void PVRPCloudSetBestTruck(List<PVRPCloudResult> p_calcResult)
+    public static void PVRPCloudSetBestTruck(List<Result> p_calcResult)
     {
 
         DateTime dtBestTruckStart = DateTime.UtcNow;
@@ -1354,7 +1354,7 @@ public class PVRPCloudInterface
         //2. minden járműhöz hozzárendeljuk azt a túrát, amely teljesítésében a legkisebb az átállás+visszaérkezés költsége
 
         //2.1 Van-e eredmény ?
-        var calcResult = p_calcResult.Where(i => i.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT).FirstOrDefault();
+        var calcResult = p_calcResult.Where(i => i.Status == Result.PVRPCloudResultStatus.RESULT).FirstOrDefault();
         if (calcResult != null)
         {
             List<CalcTask> calcTaskList = (List<CalcTask>)calcResult.Data;

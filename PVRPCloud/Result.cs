@@ -6,7 +6,7 @@ namespace PVRPCloud;
 [Serializable]
 [KnownType(typeof(List<CalcTask>))]
 [KnownType(typeof(ResErrMsg))]
-public sealed class PVRPCloudResult
+public sealed class Result
 {
     public enum PVRPCloudResultStatus
     {
@@ -26,20 +26,20 @@ public sealed class PVRPCloudResult
     public string ItemID { get; set; } = string.Empty;
     public required object Data { get; set; }
 
-    public static PVRPCloudResult Success(object obj) => new()
+    public static Result Success(object obj) => new()
     {
         Status = PVRPCloudResultStatus.RESULT,
         Data = obj
     };
 
-    public static PVRPCloudResult ValidationError(ResErrMsg error, string itemId) => new()
+    public static Result ValidationError(ResErrMsg error, string itemId) => new()
     {
         ItemID = itemId,
         Status = PVRPCloudResultStatus.VALIDATIONERROR,
         Data = error,
     };
 
-    public static PVRPCloudResult Exception(ResErrMsg error) => new()
+    public static Result Exception(ResErrMsg error) => new()
     {
         Status = PVRPCloudResultStatus.EXCEPTION,
         Data = error,

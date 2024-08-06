@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static PVRPCloud.PVRPCloudResult;
+using static PVRPCloud.Result;
 
 namespace PVRPCloudApi.Util;
 

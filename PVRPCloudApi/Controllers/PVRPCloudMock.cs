@@ -9,7 +9,7 @@ public static class PVRPCloudMock
     {
         RequestID = "12345678",
         Results = [
-            PVRPCloudResult.Success(Project)
+            Result.Success(Project)
         ]
     };
 

@@ -22,7 +22,7 @@ public sealed class ValidationExceptionHandler : IExceptionHandler
                     ErrorMessage: ResErrMsg.ValidationError(error.PropertyName, error.ErrorMessage),
                     Error: error
                 ))
-                .Select(errorTuple => PVRPCloudResult.ValidationError(errorTuple.ErrorMessage, (string)errorTuple.Error.CustomState))
+                .Select(errorTuple => Result.ValidationError(errorTuple.ErrorMessage, (string)errorTuple.Error.CustomState))
                 .ToList()
         };
 
