@@ -10,13 +10,13 @@ using PVRPCloudApi.DTO.Response;
 
 namespace PVRPCloudApi.Handlers;
 
-public class PVRPCloudApiHandler : IApiHandler
+public class ApiHandler : IApiHandler
 {
     private LoggerSettings Settings { get; set; }
 
     private ITelemetryLogger Logger { get; set; }
 
-    public PVRPCloudApiHandler(IOptions<LoggerSettings> options)
+    public ApiHandler(IOptions<LoggerSettings> options)
     {
         Settings = options.Value;
         Logger = TelemetryClientFactory.Create(Settings);
