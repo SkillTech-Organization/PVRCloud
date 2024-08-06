@@ -10,7 +10,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_Project_ResturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "name",
             MinTime = 1,
@@ -111,7 +111,7 @@ public class ProjectValidatorTests
     [InlineData(null)]
     public void Validate_ProjectNameIsInvalid_ThrowsValidationException(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = value!,
             MinTime = 1,
@@ -212,7 +212,7 @@ public class ProjectValidatorTests
     [InlineData(0)]
     public void Validate_MaxTimeIsLessThanMinTime_ThrowsValidationException(int value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -311,7 +311,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_MaxTourDurationIsLessThan1_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -410,7 +410,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_DistanceLimitIsNegative_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -509,7 +509,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_CostProfilesIsEmpty_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -600,7 +600,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_CapacityProfilesIsEmpty_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -692,7 +692,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_TruckTypesIsEmpty_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -777,7 +777,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_TrucksIsEmpty_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -864,7 +864,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_DepotIsNull_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -953,7 +953,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_ClientsIsEmpty_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,
@@ -1043,7 +1043,7 @@ public class ProjectValidatorTests
     [Fact]
     public void Validate_OrdersIsEmpty_ThrowsValidationException()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             ProjectName = "project name",
             MinTime = 1,

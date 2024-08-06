@@ -24,7 +24,7 @@ public sealed class TruckTypeValidator : AbstractValidator<PVRPCloudTruckType>
         "P35",
     ];
 
-    public TruckTypeValidator(PVRPCloudProject project)
+    public TruckTypeValidator(Project project)
     {
         var truckTypeIds = ValidationHelpers.IdsToArray(project.TruckTypes);
         RuleFor(x => x.ID)

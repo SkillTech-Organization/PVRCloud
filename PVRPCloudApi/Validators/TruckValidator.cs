@@ -6,7 +6,7 @@ namespace PVRPCloudApi.Validators;
 
 public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.PVRPCloudTruck>
 {
-    public TruckValidator(PVRPCloudProject project)
+    public TruckValidator(Project project)
     {
 /* PR teszt I */
         var truckIds = ValidationHelpers.IdsToArray(project.Trucks);

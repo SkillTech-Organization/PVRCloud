@@ -13,7 +13,7 @@ public class PVRPCloudController : ControllerBase
     [ProducesResponseType<Response>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult PVRPCloudRequest(PVRPCloudProject request)
+    public IActionResult PVRPCloudRequest(Project request)
     {
         return Accepted(new Response
         {

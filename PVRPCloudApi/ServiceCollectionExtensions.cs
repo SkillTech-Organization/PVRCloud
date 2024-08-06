@@ -24,6 +24,6 @@ public static class ServiceCollectionExtensions
 
         services.AddFluentValidationAutoValidation();
 
-        services.AddScoped<IValidator<PVRPCloudProject>, ProjectValidator>();
+        services.AddScoped<IValidator<Project>, ProjectValidator>();
     }
 }

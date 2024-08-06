@@ -8,7 +8,7 @@ using static ValidationHelpers;
 
 public sealed class CostProfileValidator : AbstractValidator<CostProfile>
 {
-    public CostProfileValidator(PVRPCloudProject project)
+    public CostProfileValidator(Project project)
     {
         var ids = IdsToArray(project.CostProfiles);
         RuleFor(x => x.ID)

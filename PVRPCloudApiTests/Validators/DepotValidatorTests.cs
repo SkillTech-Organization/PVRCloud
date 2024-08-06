@@ -9,7 +9,7 @@ public class DepotValidatorTests
     [Fact]
     public void Validate_ReturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Depot = new()
             {
@@ -36,7 +36,7 @@ public class DepotValidatorTests
     [InlineData("")]
     public void Validate_IdIsInvalid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Depot = new()
             {
@@ -63,7 +63,7 @@ public class DepotValidatorTests
     [InlineData("")]
     public void Validate_DepotNameIsInvalid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Depot = new()
             {
@@ -90,7 +90,7 @@ public class DepotValidatorTests
     [InlineData(91)]
     public void Validate_LatIsInvalid_ReturnsInvalidResult(double value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Depot = new()
             {
@@ -117,7 +117,7 @@ public class DepotValidatorTests
     [InlineData(191)]
     public void Validate_LngIsInvalid_ReturnsInvalidResult(double value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Depot = new()
             {
@@ -142,7 +142,7 @@ public class DepotValidatorTests
     [Fact]
     public void Validate_ServiceFixTimeIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Depot = new()
             {
@@ -167,7 +167,7 @@ public class DepotValidatorTests
     [Fact]
     public void Validate_ServiceVarTimeIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Depot = new()
             {
@@ -192,7 +192,7 @@ public class DepotValidatorTests
     [Fact]
     public void Validate_DepotMinTimeIsLessThanProjectMinTime_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 2,
             Depot = new()
@@ -218,7 +218,7 @@ public class DepotValidatorTests
     [Fact]
     public void Validate_DepotMaxTimeIsGreaterThanProjectMinTime_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MaxTime = 2,
             Depot = new()

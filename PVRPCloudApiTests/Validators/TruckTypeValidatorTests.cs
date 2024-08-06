@@ -9,7 +9,7 @@ public class TruckTypeValidatorTests
     [Fact]
     public void Validate_ReturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -40,7 +40,7 @@ public class TruckTypeValidatorTests
     [InlineData(null)]
     public void Validate_IdIsInvalid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -69,7 +69,7 @@ public class TruckTypeValidatorTests
     [Fact]
     public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -113,7 +113,7 @@ public class TruckTypeValidatorTests
     [InlineData("")]
     public void Validate_TruckTypeNameIsInvalid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -142,7 +142,7 @@ public class TruckTypeValidatorTests
     [Fact]
     public void Validate_WeightIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -171,7 +171,7 @@ public class TruckTypeValidatorTests
     [Fact]
     public void Validate_XHeightIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -200,7 +200,7 @@ public class TruckTypeValidatorTests
     [Fact]
     public void Validate_XWidthIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -231,7 +231,7 @@ public class TruckTypeValidatorTests
     [InlineData(8)]
     public void Validate_SpeedValuesIsOutOfRange_ReturnsInvalidResult(int value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -260,7 +260,7 @@ public class TruckTypeValidatorTests
     [Fact]
     public void Validate_RestrictedZonesIsOutOfRange_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()
@@ -289,7 +289,7 @@ public class TruckTypeValidatorTests
     [Fact]
     public void Validate_RestrictedZonesIsEmpty_ReturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             TruckTypes = [
                 new()

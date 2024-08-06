@@ -8,7 +8,7 @@ using static ValidationHelpers;
 
 public sealed class ClientValidator : AbstractValidator<Client>
 {
-    public ClientValidator(PVRPCloudProject project)
+    public ClientValidator(Project project)
     {
         var ids = IdsToArray(project.Clients);
         RuleFor(x => x.ID)

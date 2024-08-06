@@ -8,7 +8,7 @@ using static ValidationHelpers;
 
 public sealed class OrderValidator : AbstractValidator<Order>
 {
-    public OrderValidator(PVRPCloudProject project)
+    public OrderValidator(Project project)
     {
         var ids = IdsToArray(project.Orders);
         RuleFor(x => x.ID)

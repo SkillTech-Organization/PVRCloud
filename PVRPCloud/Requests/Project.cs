@@ -1,6 +1,6 @@
 ﻿namespace PVRPCloud.Requests;
 
-public sealed class PVRPCloudProject
+public sealed class Project
 {
     public string ProjectName { get; init; } = string.Empty;
     public int MinTime { get; init; }

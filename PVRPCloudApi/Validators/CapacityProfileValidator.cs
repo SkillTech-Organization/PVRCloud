@@ -8,7 +8,7 @@ using static ValidationHelpers;
 
 public sealed class CapacityProfileValidator : AbstractValidator<CapacityProfile>
 {
-    public CapacityProfileValidator(PVRPCloudProject project)
+    public CapacityProfileValidator(Project project)
     {
         var ids = IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.ID)

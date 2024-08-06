@@ -5,7 +5,7 @@ namespace PVRPCloudApiTests;
 
 public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : IClassFixture<WebApplicationFactory<Program>>
 {
-    private static PVRPCloudProject CreateValidProject()
+    private static Project CreateValidProject()
     {
         return new()
         {
