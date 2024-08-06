@@ -48,14 +48,14 @@ public partial class ApiServiceClient : ApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudPVRPCloudSupportAsync(PVRPCloudRequest body)
+    public virtual System.Threading.Tasks.Task<Response> ApiV1PVRPCloudPVRPCloudSupportAsync(Request body)
     {
         return ApiV1PVRPCloudSupporterPVRPCloudSupportAsync(body, System.Threading.CancellationToken.None);
     }
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual PVRPCloudResponse ApiV1PVRPCloudSupporterPVRPCloudSupport(PVRPCloudRequest body)
+    public virtual Response ApiV1PVRPCloudSupporterPVRPCloudSupport(Request body)
     {
         return System.Threading.Tasks.Task.Run(async () => await ApiV1PVRPCloudSupporterPVRPCloudSupportAsync(body, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
     }
@@ -63,7 +63,7 @@ public partial class ApiServiceClient : ApiServiceClientBase
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudSupporterPVRPCloudSupportAsync(PVRPCloudRequest body, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<Response> ApiV1PVRPCloudSupporterPVRPCloudSupportAsync(Request body, System.Threading.CancellationToken cancellationToken)
     {
         var urlBuilder_ = new System.Text.StringBuilder();
         urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/PVRPCloudSupporter/PVRPCloudSupport");
@@ -106,7 +106,7 @@ public partial class ApiServiceClient : ApiServiceClientBase
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<PVRPCloudResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<Response>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -135,14 +135,14 @@ public partial class ApiServiceClient : ApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudResultAsync(string id)
+    public virtual System.Threading.Tasks.Task<Response> ApiV1PVRPCloudResultAsync(string id)
     {
         return ApiV1PVRPCloudSupporterResultAsync(id, System.Threading.CancellationToken.None);
     }
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual PVRPCloudResponse ApiV1PVRPCloudSupporterResult(string id)
+    public virtual Response ApiV1PVRPCloudSupporterResult(string id)
     {
         return System.Threading.Tasks.Task.Run(async () => await ApiV1PVRPCloudSupporterResultAsync(id, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
     }
@@ -150,7 +150,7 @@ public partial class ApiServiceClient : ApiServiceClientBase
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudSupporterResultAsync(string id, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<Response> ApiV1PVRPCloudSupporterResultAsync(string id, System.Threading.CancellationToken cancellationToken)
     {
         if (id == null)
             throw new System.ArgumentNullException("id");
@@ -193,7 +193,7 @@ public partial class ApiServiceClient : ApiServiceClientBase
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<PVRPCloudResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<Response>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -222,14 +222,14 @@ public partial class ApiServiceClient : ApiServiceClientBase
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudPVRPCloudXAsync(PVRPCloudRequest body)
+    public virtual System.Threading.Tasks.Task<Response> ApiV1PVRPCloudPVRPCloudXAsync(Request body)
     {
         return ApiV1PVRPCloudSupporterPVRPCloudSupportXAsync(body, System.Threading.CancellationToken.None);
     }
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual PVRPCloudResponse ApiV1PVRPCloudSupporterPVRPCloudSupportX(PVRPCloudRequest body)
+    public virtual Response ApiV1PVRPCloudSupporterPVRPCloudSupportX(Request body)
     {
         return System.Threading.Tasks.Task.Run(async () => await ApiV1PVRPCloudSupporterPVRPCloudSupportXAsync(body, System.Threading.CancellationToken.None)).GetAwaiter().GetResult();
     }
@@ -237,7 +237,7 @@ public partial class ApiServiceClient : ApiServiceClientBase
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<PVRPCloudResponse> ApiV1PVRPCloudSupporterPVRPCloudSupportXAsync(PVRPCloudRequest body, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<Response> ApiV1PVRPCloudSupporterPVRPCloudSupportXAsync(Request body, System.Threading.CancellationToken cancellationToken)
     {
         var urlBuilder_ = new System.Text.StringBuilder();
         urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/PVRPCloudSupporter/PVRPCloudSupportX");
@@ -280,7 +280,7 @@ public partial class ApiServiceClient : ApiServiceClientBase
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<PVRPCloudResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<Response>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -500,7 +500,7 @@ public enum ETruckTaskType
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class PVRPCloudPoint
+public partial class Point
 {
     [Newtonsoft.Json.JsonProperty("tpid", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -543,7 +543,7 @@ public partial class PVRPCloudPoint
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class PVRPCloudResponse
+public partial class Response
 {
     [Newtonsoft.Json.JsonProperty("requestID", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public string RequestID { get; set; }
@@ -552,13 +552,13 @@ public partial class PVRPCloudResponse
     public System.Collections.Generic.ICollection<PVRPCloudTask> TaskList { get; set; }
 
     [Newtonsoft.Json.JsonProperty("truckList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<PVRPCloudTruck> TruckList { get; set; }
+    public System.Collections.Generic.ICollection<Truck> TruckList { get; set; }
 
     [Newtonsoft.Json.JsonProperty("maxTruckDistance", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public int MaxTruckDistance { get; set; }
 
     [Newtonsoft.Json.JsonProperty("result", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<PVRPCloudResult> Result { get; set; }
+    public System.Collections.Generic.ICollection<Result> Result { get; set; }
 
     [Newtonsoft.Json.JsonProperty("hasError", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public bool HasError { get; set; }
@@ -566,10 +566,10 @@ public partial class PVRPCloudResponse
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class PVRPCloudResult
+public partial class Result
 {
     [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public PVRPCloudResultStatus Status { get; set; }
+    public ResultStatus Status { get; set; }
 
     [Newtonsoft.Json.JsonProperty("objectName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public string ObjectName { get; set; }
@@ -584,7 +584,7 @@ public partial class PVRPCloudResult
 
 // NOTODO NSwagger fails to generate this enum correctly, the fields must be copied here after generation.
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public enum PVRPCloudResultStatus
+public enum ResultStatus
 {
     [Description("RESULT")]
     RESULT,
@@ -599,7 +599,7 @@ public enum PVRPCloudResultStatus
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class PVRPCloudRequest
+public partial class Request
 {
     [Newtonsoft.Json.JsonProperty("maxTruckDistance", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public int MaxTruckDistance { get; set; }
@@ -608,7 +608,7 @@ public partial class PVRPCloudRequest
     public System.Collections.Generic.ICollection<PVRPCloudTask> TaskList { get; set; }
 
     [Newtonsoft.Json.JsonProperty("truckList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<PVRPCloudTruck> TruckList { get; set; }
+    public System.Collections.Generic.ICollection<Truck> TruckList { get; set; }
 
 }
 
@@ -634,7 +634,7 @@ public partial class PVRPCloudTask
 
     [Newtonsoft.Json.JsonProperty("tPoints", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required]
-    public System.Collections.Generic.ICollection<PVRPCloudPoint> TPoints { get; set; } = new System.Collections.ObjectModel.Collection<PVRPCloudPoint>();
+    public System.Collections.Generic.ICollection<Point> TPoints { get; set; } = new System.Collections.ObjectModel.Collection<Point>();
 
     [Newtonsoft.Json.JsonProperty("inclTruckProps", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public string InclTruckProps { get; set; }
@@ -645,7 +645,7 @@ public partial class PVRPCloudTask
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class PVRPCloudTruck
+public partial class Truck
 {
     [Newtonsoft.Json.JsonProperty("truckID", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -749,7 +749,7 @@ public partial class PVRPCloudTruck
 
     [Newtonsoft.Json.JsonProperty("currTPoints", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required]
-    public System.Collections.Generic.ICollection<PVRPCloudPoint> CurrTPoints { get; set; } = new System.Collections.ObjectModel.Collection<PVRPCloudPoint>();
+    public System.Collections.Generic.ICollection<Point> CurrTPoints { get; set; } = new System.Collections.ObjectModel.Collection<Point>();
 
     [Newtonsoft.Json.JsonProperty("tPointCompleted", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public int TPointCompleted { get; set; }

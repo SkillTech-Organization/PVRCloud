@@ -25,9 +25,9 @@ internal class Args
 
 internal class TestData
 {
-    public PVRPCloudRequest Request { get; set; }
+    public Request Request { get; set; }
 
-    public List<PVRPCloudResult> Result { get; set; }
+    public List<Result> Result { get; set; }
 
     public bool IsPVRPCloudSupport { get; set; }
 }
@@ -216,7 +216,7 @@ internal class ApiTesterService : IApiTesterService
 
                                 testCase.Result.ForEach(x =>
                                 {
-                                    if (x.Status == PVRPCloudResultStatus.RESULT)
+                                    if (x.Status == ResultStatus.RESULT)
                                     {
                                         x.Data = ((JToken)x.Data).ToObject<List<PVRPCloud.CalcTask>>();
                                     }
@@ -306,10 +306,10 @@ internal class ApiTesterService : IApiTesterService
     private TestData GetTestData(string id)
     {
         TestData data = new TestData();
-        data.Request = new PVRPCloudRequest
+        data.Request = new Request
         {
             TaskList = new List<PVRPCloudTask>(),
-            TruckList = new List<PVRPCloudTruck>()
+            TruckList = new List<Truck>()
         };
 
         data.IsPVRPCloudSupport = File.Exists(Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + _settings.PVRPCloudSupportFileSuffix + "." + _settings.FileExtension));
@@ -338,7 +338,7 @@ internal class ApiTesterService : IApiTesterService
         var truckPath = Path.Combine(TestDataPath, id + _settings.TruckFileIdentifier + fileEnding);
         if (File.Exists(truckPath))
         {
-            var trucks = JsonConvert.DeserializeObject<List<PVRPCloudTruck>>(File.ReadAllText(truckPath), isoDateTimeConverter);
+            var trucks = JsonConvert.DeserializeObject<List<Truck>>(File.ReadAllText(truckPath), isoDateTimeConverter);
             data.Request.TruckList = trucks;
         }
         else
@@ -352,7 +352,7 @@ internal class ApiTesterService : IApiTesterService
         var resultPath = Path.Combine(TestDataPath, id + _settings.ResultFileIdentifier + fileEnding);
         if (File.Exists(resultPath))
         {
-            var result = JsonConvert.DeserializeObject<List<PVRPCloudResult>>(File.ReadAllText(resultPath), isoDateTimeConverter);
+            var result = JsonConvert.DeserializeObject<List<Result>>(File.ReadAllText(resultPath), isoDateTimeConverter);
             data.Result = result;
         }
         else
