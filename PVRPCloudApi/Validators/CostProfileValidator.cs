@@ -6,7 +6,7 @@ namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class CostProfileValidator : AbstractValidator<PVRPCloudCostProfile>
+public sealed class CostProfileValidator : AbstractValidator<CostProfile>
 {
     public CostProfileValidator(PVRPCloudProject project)
     {

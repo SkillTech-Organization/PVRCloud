@@ -1,6 +1,6 @@
 namespace PVRPCloud.Requests;
 
-public sealed class PVRPCloudCostProfile : IIdentifiable
+public sealed class CostProfile : IIdentifiable
 {
     public string ID { get; init; } = string.Empty;
     public int FixCost { get; init; }
