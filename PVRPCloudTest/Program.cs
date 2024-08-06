@@ -49,7 +49,7 @@ class Program
     static void CaseTest(bool p_bestTruck = false)
     {
         #region túraponok
-        PVRPCloudPoint tp1 = new PVRPCloudPoint()
+        Point tp1 = new Point()
         {
             TPID = "TP001",
             Name = "Győr",
@@ -62,7 +62,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp2 = new PVRPCloudPoint()
+        Point tp2 = new Point()
         {
             TPID = "TP002",
             Name = "Székesfehérvár",
@@ -75,7 +75,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp3 = new PVRPCloudPoint()
+        Point tp3 = new Point()
         {
             TPID = "TP003",
             Name = "Budapest M5",
@@ -88,7 +88,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp4 = new PVRPCloudPoint()
+        Point tp4 = new Point()
         {
             TPID = "TP004",
             Name = "Budapest belváros",
@@ -102,7 +102,7 @@ class Program
         };
 
 
-        PVRPCloudPoint tp5 = new PVRPCloudPoint()
+        Point tp5 = new Point()
         {
             TPID = "TP005",
             Name = "Hatvan",
@@ -115,7 +115,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp6 = new PVRPCloudPoint()
+        Point tp6 = new Point()
         {
             TPID = "TP006",
             Name = "Debrecen",
@@ -128,7 +128,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp7 = new PVRPCloudPoint()
+        Point tp7 = new Point()
         {
             TPID = "TP007",
             Name = "Nyíregyháza",
@@ -141,7 +141,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp8 = new PVRPCloudPoint()
+        Point tp8 = new Point()
         {
             TPID = "TP008",
             Name = "Kecskemét",
@@ -154,7 +154,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp9 = new PVRPCloudPoint()
+        Point tp9 = new Point()
         {
             TPID = "TP009",
             Name = "Szeged",
@@ -167,7 +167,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp10 = new PVRPCloudPoint()
+        Point tp10 = new Point()
         {
             TPID = "TP010",
             Name = "Cegléd ",
@@ -180,7 +180,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp11 = new PVRPCloudPoint()
+        Point tp11 = new Point()
         {
             TPID = "TP011",
             Name = "Szolnok ",
@@ -193,7 +193,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp12 = new PVRPCloudPoint()
+        Point tp12 = new Point()
         {
             TPID = "TP012",
             Name = "Baja",
@@ -207,7 +207,7 @@ class Program
         };
 
 
-        PVRPCloudPoint tp13 = new PVRPCloudPoint()
+        Point tp13 = new Point()
         {
             TPID = "TP013",
             Name = "Pécs",
@@ -220,7 +220,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp14 = new PVRPCloudPoint()
+        Point tp14 = new Point()
         {
             TPID = "TP014",
             Name = "Kaposvár",
@@ -235,7 +235,7 @@ class Program
 
 
 
-        PVRPCloudPoint tp15 = new PVRPCloudPoint()
+        Point tp15 = new Point()
         {
             TPID = "TP015",
             Name = "Tisszacsege (12t korlát)",
@@ -248,7 +248,7 @@ class Program
             RealArrival = DateTime.MinValue
         };
 
-        PVRPCloudPoint tp16 = new PVRPCloudPoint()
+        Point tp16 = new Point()
         {
             TPID = "TP016",
             Name = "Balmazújváros (12t korlát)",
@@ -262,7 +262,7 @@ class Program
         };
 
 
-        PVRPCloudPoint tp17 = new PVRPCloudPoint()
+        Point tp17 = new Point()
         {
             TPID = "TP004",
             Name = "Budapest belváros másnapi 0:30 nyitva tartás",
@@ -285,7 +285,7 @@ class Program
             TruckTypes = "Hűtős,Egyéb",
             Weight = 100,
             Client = "Budapest belváros-Hatvan-Debrecen",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk1.TPoints.Add(tp4.ShallowCopy());
         tsk1.TPoints.Add(tp5.ShallowCopy());
@@ -298,7 +298,7 @@ class Program
             TruckTypes = "Hűtős",
             Weight = 100,
             Client = "Debrecen-Nyíregyháza",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk2.TPoints.Add(tp6.ShallowCopy());
         tsk2.TPoints.Add(tp7.ShallowCopy());
@@ -310,7 +310,7 @@ class Program
             TruckTypes = "Hűtős",
             Weight = 100,
             Client = "Nyíregyháza-Hatvan-Budapest M5",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk3.TPoints.Add(tp7.ShallowCopy());
         tsk3.TPoints.Add(tp5.ShallowCopy());
@@ -324,7 +324,7 @@ class Program
             TruckTypes = "Hűtős,Egyéb",
             Weight = 100,
             Client = "Cegléd pontos megérkezés - Szolnok",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk4.TPoints.Add(tp10.ShallowCopy());
         tsk4.TPoints.Add(tp11.ShallowCopy());
@@ -336,7 +336,7 @@ class Program
             TruckTypes = "Hűtős,Egyéb",
             Weight = 100,
             Client = "Kecskemét-Hatvan",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk5.TPoints.Add(tp8.ShallowCopy());
         tsk5.TPoints.Add(tp5.ShallowCopy());
@@ -348,7 +348,7 @@ class Program
             TruckTypes = "Hűtős,Egyéb",
             Weight = 100,
             Client = "Baja-Pécs-Kaposvár",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk6.TPoints.Add(tp12.ShallowCopy());
         tsk6.TPoints.Add(tp13.ShallowCopy());
@@ -361,7 +361,7 @@ class Program
             TruckTypes = "Hűtős,Egyéb",
             Weight = 100,
             Client = "Pécs-Baja-Szolnok",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk7.TPoints.Add(tp15.ShallowCopy());
         tsk7.TPoints.Add(tp16.ShallowCopy());
@@ -374,7 +374,7 @@ class Program
             TruckTypes = "Hűtős,Egyéb",
             Weight = 100,
             Client = "Tiszacsege-Balmazújváros (12T teszt)",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk8.TPoints.Add(tp15.ShallowCopy());
         tsk8.TPoints.Add(tp16.ShallowCopy());
@@ -386,7 +386,7 @@ class Program
             TruckTypes = "Hűtős,Egyéb",
             Weight = 100,
             Client = "Budapest belváros-Baja",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tsk9.TPoints.Add(tp17.ShallowCopy());
         tsk9.TPoints.Add(tp12.ShallowCopy());
@@ -400,7 +400,7 @@ class Program
             TruckTypes = "Hűtős,Egyéb",
             Weight = 100,
             Client = "Székesfehérvár-Szeged",
-            TPoints = new List<PVRPCloudPoint>()
+            TPoints = new List<Point>()
         };
         tskX.TPoints.Add(tp2.ShallowCopy());
         tskX.TPoints.Add(tp9.ShallowCopy());
@@ -431,7 +431,7 @@ class Program
             CurrTime = DateTime.Now.Date.AddHours(7),
             CurrLat = 47.3844618,
             CurrLng = 19.2114830,
-            CurrTPoints = new List<PVRPCloudPoint>(),
+            CurrTPoints = new List<Point>(),
 
             RemainingDriveTime = 5 * 60 * 60,                                   //300 perc
             RemainingRestTime = 30 * 60,                                   // 30 perc
@@ -465,7 +465,7 @@ class Program
             TruckTaskType = PVRPCloudTruck.eTruckTaskType.Planned,
             RunningTaskID = "",
             CurrIsOneWay = false,
-            CurrTPoints = new List<PVRPCloudPoint>(),
+            CurrTPoints = new List<Point>(),
 
             RemainingDriveTime = 5 * 60 * 60,                               //300 perc
             RemainingRestTime = 45 * 60,                                    // 45 perc
@@ -511,7 +511,7 @@ class Program
             TruckTaskType = PVRPCloudTruck.eTruckTaskType.Running,
             RunningTaskID = "",
             CurrIsOneWay = false,
-            CurrTPoints = new List<PVRPCloudPoint>(),
+            CurrTPoints = new List<Point>(),
             TPointCompleted = 1,                         /* Kecskemét teljesítve */
             CurrTime = DateTime.Now.Date.AddHours(9),       //9:00-kor tart itt
             CurrLat = 47.047533,
@@ -561,7 +561,7 @@ class Program
             TruckTaskType = PVRPCloudTruck.eTruckTaskType.Running,
             RunningTaskID = "",
             CurrIsOneWay = false,
-            CurrTPoints = new List<PVRPCloudPoint>(),
+            CurrTPoints = new List<Point>(),
             TPointCompleted = 1,                             /* Kecskemét már teljesítve van */
             CurrTime = DateTime.Now.Date.AddHours(5),       //05:00-kor tart Szeged határában
             CurrLat = 46.2737422,
@@ -611,7 +611,7 @@ class Program
             TruckTaskType = PVRPCloudTruck.eTruckTaskType.Available,
             RunningTaskID = "",
             CurrIsOneWay = false,
-            CurrTPoints = new List<PVRPCloudPoint>(),
+            CurrTPoints = new List<Point>(),
             TPointCompleted = 1,
             CurrTime = DateTime.Now.Date.AddHours(5),
             CurrLat = tp9.Lat,                          //Szeged
@@ -648,7 +648,7 @@ class Program
             TruckTaskType = PVRPCloudTruck.eTruckTaskType.Available,
             RunningTaskID = "",
             CurrIsOneWay = false,
-            CurrTPoints = new List<PVRPCloudPoint>(),
+            CurrTPoints = new List<Point>(),
             TPointCompleted = 1,
             CurrTime = DateTime.Now.Date.AddHours(5),
             CurrLat = tp6.Lat,                          //Debrecen
@@ -691,7 +691,7 @@ class Program
             CurrTime = DateTime.Now.Date.AddHours(7),
             CurrLat = 47.3844618,
             CurrLng = 19.2114830,
-            CurrTPoints = new List<PVRPCloudPoint>(),
+            CurrTPoints = new List<Point>(),
 
             RemainingDriveTime = 5 * 60 * 60,                                   //300 perc
             RemainingRestTime = 30 * 60,                                   // 30 perc

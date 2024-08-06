@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace PVRPCloud;
 
 [Serializable]
-public class PVRPCloudPoint
+public class Point
 {
     [ItemIDAttr]
     [DisplayNameAttributeX(Name = "Túrapont azonosító", Order = 1)]
@@ -57,9 +57,9 @@ public class PVRPCloudPoint
     internal int NOD_ID { get; set; }
     internal DateTime RealClose { get { return Close.AddMinutes(ExtraPeriod); } }
 
-    public PVRPCloudPoint ShallowCopy()
+    public Point ShallowCopy()
     {
-        return (PVRPCloudPoint)MemberwiseClone();
+        return (Point)MemberwiseClone();
     }
 
 }

@@ -25,7 +25,7 @@ public class CalcRoute
     }
 
     [DisplayNameAttributeX(Name = "Túrapont", Order = 1)]
-    public PVRPCloudPoint TPoint { get; set; }
+    public Point TPoint { get; set; }
 
     [DisplayNameAttributeX(Name = "Érkezés", Order = 2)]
     public DateTime Arrival { get; set; }

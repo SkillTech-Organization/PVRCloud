@@ -152,7 +152,7 @@ public class PVRPCloudTruck
         {
             if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás időpontja */
             {
-                PVRPCloudPoint firstPt = CurrTPoints.FirstOrDefault();
+                Point firstPt = CurrTPoints.FirstOrDefault();
                 if (firstPt != null)
                     return firstPt.RealDeparture;
                 else
@@ -180,7 +180,7 @@ public class PVRPCloudTruck
         {
             if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás helye */
             {
-                PVRPCloudPoint firstPt = CurrTPoints.FirstOrDefault();
+                Point firstPt = CurrTPoints.FirstOrDefault();
                 if (firstPt != null)
                     return firstPt.Lat;
                 else
@@ -209,7 +209,7 @@ public class PVRPCloudTruck
         {
             if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás helye */
             {
-                PVRPCloudPoint firstPt = CurrTPoints.FirstOrDefault();
+                Point firstPt = CurrTPoints.FirstOrDefault();
                 if (firstPt != null)
                     return firstPt.Lng;
                 else
@@ -232,7 +232,7 @@ public class PVRPCloudTruck
     //internal ObservableCollection<PVRPCloudPoint> m_currTPoints = new ObservableCollection<PVRPCloudPoint>();
     [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 33)]
     [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
-    public List<PVRPCloudPoint> CurrTPoints { get; set; } = new List<PVRPCloudPoint>();
+    public List<Point> CurrTPoints { get; set; } = new List<Point>();
 
 
     [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 34)]
@@ -292,7 +292,7 @@ public class PVRPCloudTruck
                         break;
                     case eTruckTaskType.Planned:
                     case eTruckTaskType.Running:
-                        PVRPCloudPoint firstPt = CurrTPoints.FirstOrDefault();
+                        Point firstPt = CurrTPoints.FirstOrDefault();
                         if (firstPt != null)
                             m_retPoint = new PointLatLng(firstPt.Lat, firstPt.Lng);
 

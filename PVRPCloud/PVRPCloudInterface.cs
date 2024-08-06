@@ -202,7 +202,7 @@ public class PVRPCloudInterface
                 {
 
                     //Koordináta feloldás és ellenőrzés
-                    foreach (PVRPCloudPoint pt in tsk.TPoints)
+                    foreach (Point pt in tsk.TPoints)
                     {
                         //A beosztandó szállíási feladat esetén megkeressük a legközelebbi pontot
 
@@ -319,7 +319,7 @@ public class PVRPCloudInterface
                             trk.RetPoint.Value.ToString()), Messages.E_WRONGCOORD));
                 }
 
-                foreach (PVRPCloudPoint pt in trk.CurrTPoints)
+                foreach (Point pt in trk.CurrTPoints)
                 {
                     if (pt.NOD_ID == 0)
                     {
@@ -352,7 +352,7 @@ public class PVRPCloudInterface
                     foreach (PVRPCloudTask tsk in p_TaskList)
                     {
 
-                        foreach (PVRPCloudPoint pt in tsk.TPoints)
+                        foreach (Point pt in tsk.TPoints)
                         {
                             del = del &&
                                   Util.GetDistanceOfTwoPoints_Meter(pt.Lng, pt.Lat, trk.CurrLng, trk.CurrLat) > p_maxTruckDistance;
@@ -748,7 +748,7 @@ public class PVRPCloudInterface
                             rtx2 = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints.Last().NOD_ID && x.toNOD_ID == trk.RET_NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                             clctour.RetCalcRoute = new CalcRoute()
                             {
-                                TPoint = new PVRPCloudPoint() { Name = "Visszatérés", Lat = trk.RetPoint.Value.Lat, Lng = trk.RetPoint.Value.Lng, Open = DateTime.MinValue, Close = DateTime.MaxValue },
+                                TPoint = new Point() { Name = "Visszatérés", Lat = trk.RetPoint.Value.Lat, Lng = trk.RetPoint.Value.Lng, Open = DateTime.MinValue, Close = DateTime.MaxValue },
                                 Arrival = DateTime.MinValue,
                                 Departure = DateTime.MinValue,
                                 Completed = false,
@@ -1078,11 +1078,11 @@ public class PVRPCloudInterface
                     {
 
                         //Teljesítés nyitva tartások ellenőrzése
-                        List<PVRPCloudPoint> lstOpenErrT1 = clctour.T1CalcRoute.Where(x => x.TPoint != null && x.Arrival > x.TPoint.RealClose).Select(s => s.TPoint).ToList();
+                        List<Point> lstOpenErrT1 = clctour.T1CalcRoute.Where(x => x.TPoint != null && x.Arrival > x.TPoint.RealClose).Select(s => s.TPoint).ToList();
                         if (lstOpenErrT1.Count > 0)
                         {
                             lstTrucksErrOpen.Add(clctour.Truck);
-                            foreach (PVRPCloudPoint tp in lstOpenErrT1)
+                            foreach (Point tp in lstOpenErrT1)
                             {
                                 clctour.Msg.Add("(T1)" + Messages.E_CLOSETP + tp.Name);
                             }
@@ -1096,11 +1096,11 @@ public class PVRPCloudInterface
                         }
 
                         //Beosztott túra tartás ellenőrzése
-                        List<PVRPCloudPoint> lstOpenErrT2 = clctour.T2CalcRoute.Where(x => x.Arrival > x.TPoint.RealClose).Select(s => s.TPoint).ToList();
+                        List<Point> lstOpenErrT2 = clctour.T2CalcRoute.Where(x => x.Arrival > x.TPoint.RealClose).Select(s => s.TPoint).ToList();
                         if (lstOpenErrT2.Count > 0)
                         {
                             lstTrucksErrOpen.Add(clctour.Truck);
-                            foreach (PVRPCloudPoint tp in lstOpenErrT2)
+                            foreach (Point tp in lstOpenErrT2)
                             {
                                 clctour.Msg.Add("(T2)" + Messages.E_CLOSETP + tp.Name);
                             }
