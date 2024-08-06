@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace PVRPCloud;
 
 [Serializable]
-public class PVRPCloudTruck
+public class Truck
 {
     public enum eTruckTaskType
     {
@@ -15,7 +15,7 @@ public class PVRPCloudTruck
         Running                     // Futó
     }
 
-    public PVRPCloudTruck()
+    public Truck()
     {
         /*
         m_currTPoints.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
@@ -31,9 +31,9 @@ public class PVRPCloudTruck
          */
     }
 
-    public PVRPCloudTruck ShallowCopy()
+    public Truck ShallowCopy()
     {
-        return (PVRPCloudTruck)MemberwiseClone();
+        return (Truck)MemberwiseClone();
     }
 
 

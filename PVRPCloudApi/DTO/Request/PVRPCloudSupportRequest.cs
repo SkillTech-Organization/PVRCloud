@@ -13,5 +13,5 @@ public class PVRPCloudSupportRequest
     public List<PVRPCloudTask> TaskList { get; set; }
 
     [JsonProperty("truckList")]
-    public List<PVRPCloudTruck> TruckList { get; set; }
+    public List<Truck> TruckList { get; set; }
 }

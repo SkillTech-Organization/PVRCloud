@@ -77,7 +77,7 @@ public class CalcTour
     public int Rank { get; set; }
 
     [DisplayNameAttributeX(Name = "Jármű", Order = 4)]
-    public PVRPCloudTruck Truck { get; set; }
+    public Truck Truck { get; set; }
 
     #region túrarészletezők
     [DisplayNameAttributeX(Name = "I.túra hossz (m)", Order = 5)]

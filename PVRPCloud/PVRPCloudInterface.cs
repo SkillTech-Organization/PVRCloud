@@ -17,7 +17,7 @@ public class PVRPCloudInterface
     private static PVRPCloudLoggerSettings LoggerSettings { get; set; }
     private static string RequestID { get; set; }
 
-    public static Response PVRPCloudInit(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
+    public static Response PVRPCloudInit(List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
     {
         if (Logger == null)
         {
@@ -38,7 +38,7 @@ public class PVRPCloudInterface
             ret.Results.AddRange(ValidateObjList(tsk.TPoints));
 
         ret.Results.AddRange(ValidateObjList(p_TruckList));
-        foreach (PVRPCloudTruck trk in p_TruckList)
+        foreach (Truck trk in p_TruckList)
         {
             ret.Results.AddRange(ValidateObjList(trk.CurrTPoints));
 
@@ -53,7 +53,7 @@ public class PVRPCloudInterface
         return ret;
     }
 
-    private static void convertDateTimeToUTC(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList)
+    private static void convertDateTimeToUTC(List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList)
     {
         p_TaskList.ForEach(i =>
         {
@@ -93,7 +93,7 @@ public class PVRPCloudInterface
         return m.ToJson();
     }
 
-    private static void HandleResult(DateTime dtStart, List<Result> res, bool isPvrpCloudSupport, List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static void HandleResult(DateTime dtStart, List<Result> res, bool isPvrpCloudSupport, List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList, int p_maxTruckDistance)
     {
         var ret = new Response();
 
@@ -145,7 +145,7 @@ public class PVRPCloudInterface
         }
     }
 
-    public static List<Result> PVRPCloudSupport(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    public static List<Result> PVRPCloudSupport(List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList, int p_maxTruckDistance)
     {
         DateTime dtStart = DateTime.UtcNow;
         PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
@@ -160,7 +160,7 @@ public class PVRPCloudInterface
     }
 
     //Az eredményfeldolgozásban különbözik a PVRPCloudSupport-től
-    public static List<Result> PVRPCloudSupportX(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    public static List<Result> PVRPCloudSupportX(List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList, int p_maxTruckDistance)
     {
         DateTime dtStart = DateTime.UtcNow;
         PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
@@ -174,7 +174,7 @@ public class PVRPCloudInterface
         return res;
     }
 
-    private static List<Result> PVRPCloudSupport_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static List<Result> PVRPCloudSupport_inner(List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList, int p_maxTruckDistance)
     {
 
         List<Result> result = new List<Result>();
@@ -232,7 +232,7 @@ public class PVRPCloudInterface
 
             //Validálás, koordináta feloldás:jármű aktuális pozíció, szállítási feladat
             //
-            foreach (PVRPCloudTruck trk in p_TruckList)
+            foreach (Truck trk in p_TruckList)
             {
                 var dtXDate = DateTime.UtcNow;
                 var dtXDate2 = DateTime.UtcNow;
@@ -288,7 +288,7 @@ public class PVRPCloudInterface
 
 
                 //Teljesített túrapont ellenőrzés
-                if ((trk.TruckTaskType == PVRPCloudTruck.eTruckTaskType.Planned || trk.TruckTaskType == PVRPCloudTruck.eTruckTaskType.Running) &&
+                if ((trk.TruckTaskType == Truck.eTruckTaskType.Planned || trk.TruckTaskType == Truck.eTruckTaskType.Running) &&
                     (trk.TPointCompleted < 0 || trk.TPointCompleted > trk.CurrTPoints.Count - 1))
                 {
                     result.Add(getValidationError(trk, "TPointCompleted", Messages.E_TRKWRONGCOMPLETED));
@@ -342,11 +342,11 @@ public class PVRPCloudInterface
 
             dtPhaseStart = DateTime.UtcNow;
 
-            var delTrucks = new List<PVRPCloudTruck>();
+            var delTrucks = new List<Truck>();
 
             if (p_maxTruckDistance > 0)
             {
-                foreach (PVRPCloudTruck trk in p_TruckList)
+                foreach (Truck trk in p_TruckList)
                 {
                     var del = true;
                     foreach (PVRPCloudTask tsk in p_TaskList)
@@ -386,7 +386,7 @@ public class PVRPCloudInterface
                     var clctsk = new CalcTask() { Task = tsk };
                     tskResult.Add(clctsk);
 
-                    foreach (PVRPCloudTruck trk in p_TruckList)
+                    foreach (Truck trk in p_TruckList)
                     {
                         CalcTour clctour = new CalcTour();
                         clctour.Truck = trk;
@@ -418,7 +418,7 @@ public class PVRPCloudInterface
                     //  2.5: Ha ki van töltve az engedélyező property, akkor a járműproperty megtalálható-e benne? --> Teljesítheti a feladatot
                     //  2.6: Ha ki van töltve az tiltó property, akkor a járműproperty megtalálható-e benne? --> nem teljesítheti a feladatot
                     //
-                    List<PVRPCloudTruck> CalcTrucks = p_TruckList.Where(x => /*2.1*/ (clctsk.Task.TruckTypes.Length > 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
+                    List<Truck> CalcTrucks = p_TruckList.Where(x => /*2.1*/ (clctsk.Task.TruckTypes.Length > 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
                                                                 /*2.2*/ ("," + x.CargoTypes + ",").IndexOf("," + clctsk.Task.CargoType + ",") >= 0 &&
                                                                 /*2.3*/ x.Capacity >= clctsk.Task.Weight &&
                                                                 /*2.4*/ clctsk.Task.TPoints.Where(p => p.RealClose > x.CurrTime &&
@@ -428,7 +428,7 @@ public class PVRPCloudInterface
                     //Hibalista generálása
                     //
                     /*2.1*/
-                    List<PVRPCloudTruck> lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.TruckTypes.Length >= 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true)).ToList();
+                    List<Truck> lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.TruckTypes.Length >= 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true)).ToList();
                     if (lstTrucksErr.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                         .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKTYPE); });
@@ -497,9 +497,9 @@ public class PVRPCloudInterface
                         }
                     }
 
-                    foreach (PVRPCloudTruck trk in CalcTrucks)
+                    foreach (Truck trk in CalcTrucks)
                     {
-                        if (trk.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
+                        if (trk.TruckTaskType != Truck.eTruckTaskType.Available)
                         {
                             //4.2 futó túrapontok közötti távolságok
                             for (int i = 0; i < trk.CurrTPoints.Count - 1; i++)
@@ -614,13 +614,13 @@ public class PVRPCloudInterface
                 {
                     foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK))
                     {
-                        PVRPCloudTruck trk = clctour.Truck;
+                        Truck trk = clctour.Truck;
                         // Útvonal összeállítása
 
                         /***********/
                         /* T1 túra */
                         /***********/
-                        if (trk.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
+                        if (trk.TruckTaskType != Truck.eTruckTaskType.Available)
                         {
                             //6.1.1 : legelső pont:
                             clctour.T1CalcRoute.Add(new CalcRoute()
@@ -704,7 +704,7 @@ public class PVRPCloudInterface
                         /* Átállás */
                         /***********/
                         PMapRoute rtx;
-                        if (trk.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
+                        if (trk.TruckTaskType != Truck.eTruckTaskType.Available)
                         {
                             //6.2  utolsó beosztott túrapont --> első beosztandó túrapont
                             rtx = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints.Last().NOD_ID && x.toNOD_ID == clctsk.Task.TPoints.First().NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
@@ -770,29 +770,29 @@ public class PVRPCloudInterface
                 foreach (CalcTask clctsk in tskResult)
                 {
 
-                    List<PVRPCloudTruck> lstTrucksErrT1 = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
-                                                                           x.Truck.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available &&
+                    List<Truck> lstTrucksErrT1 = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                                                                           x.Truck.TruckTaskType != Truck.eTruckTaskType.Available &&
                                                                            x.T1CalcRoute.Where(r => r.PMapRoute != null &&
                                                                                                 r.PMapRoute.fromNOD_ID != r.PMapRoute.toNOD_ID && r.PMapRoute.route.Edges.Count == 0).FirstOrDefault() != null).Select(s => s.Truck).ToList();
                     if (lstTrucksErrT1.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrT1.Contains(x.Truck)).ToList()
                                         .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_T1MISSROUTE); });
 
-                    List<PVRPCloudTruck> lstTrucksErrRel = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrRel = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
                                                                             x.RelCalcRoute.PMapRoute.fromNOD_ID != x.RelCalcRoute.PMapRoute.toNOD_ID && x.RelCalcRoute.PMapRoute.route.Edges.Count == 0).Select(s => s.Truck).ToList();
                     if (lstTrucksErrRel.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrRel.Contains(x.Truck)).ToList()
                                         .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_RELMISSROUTE); });
 
 
-                    List<PVRPCloudTruck> lstTrucksErrT2 = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrT2 = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
                                                                            x.T2CalcRoute.Where(r => r.PMapRoute != null &&
                                                                                 r.PMapRoute.fromNOD_ID != r.PMapRoute.toNOD_ID && r.PMapRoute.route.Edges.Count == 0).FirstOrDefault() != null).Select(s => s.Truck).ToList();
                     if (lstTrucksErrT2.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrT2.Contains(x.Truck)).ToList()
                                        .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_T2MISSROUTE); });
 
-                    List<PVRPCloudTruck> lstTrucksErrRet = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrRet = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
                                                                             x.RetCalcRoute.PMapRoute != null && x.RetCalcRoute.PMapRoute.fromNOD_ID != x.RetCalcRoute.PMapRoute.toNOD_ID && x.RetCalcRoute.PMapRoute.route.Edges.Count == 0).Select(s => s.Truck).ToList();
                     if (lstTrucksErrRet.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrRet.Contains(x.Truck)).ToList()
@@ -812,7 +812,7 @@ public class PVRPCloudInterface
                     foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK))
                     {
 
-                        PVRPCloudTruck trk = clctour.Truck;
+                        Truck trk = clctour.Truck;
 
                         int workCycle = 1;
                         int driveTime = 0;
@@ -826,7 +826,7 @@ public class PVRPCloudInterface
                         string sLastETLCode = "";
                         DateTime dtPrevTime = DateTime.MinValue;
 
-                        if (trk.TruckTaskType == PVRPCloudTruck.eTruckTaskType.Available)
+                        if (trk.TruckTaskType == Truck.eTruckTaskType.Available)
                         {
                             dtPrevTime = trk.CurrTime;
                         }
@@ -917,7 +917,7 @@ public class PVRPCloudInterface
                         }
 
 
-                        if (trk.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
+                        if (trk.TruckTaskType != Truck.eTruckTaskType.Available)
                         {
                             clctour.T1End = clctour.T1CalcRoute.Last().Departure;
                         }
@@ -949,7 +949,7 @@ public class PVRPCloudInterface
                         clctour.RelToll = relclr.Toll;
                         clctour.RelCost = trk.RelocateCost * relclr.Distance / 1000;
 
-                        if (trk.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
+                        if (trk.TruckTaskType != Truck.eTruckTaskType.Available)
                             clctour.RelStart = clctour.T1End;
                         else
                             clctour.RelStart = trk.CurrTime;
@@ -1026,14 +1026,14 @@ public class PVRPCloudInterface
                 {
 
                     //Túra időtartama ellenőrzés
-                    List<PVRPCloudTruck> lstTrucksErrDuration = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrDuration = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
                                                                            x.Truck.MaxDuration > 0 && x.Truck.MaxDuration < x.FullDuration).Select(s => s.Truck).ToList();
                     if (lstTrucksErrDuration.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrDuration.Contains(x.Truck)).ToList()
                                         .ForEach(x => { x.Msg.Add(Messages.E_MAXDURATION); });
 
                     //Vezetési idő ellenőrzés T1
-                    List<PVRPCloudTruck> lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
                                                                            x.T1CalcRoute.Where(xT1 => xT1.ErrDriveTime).FirstOrDefault() != null)
                                                                            .Select(s => s.Truck).ToList();
                     if (lstTrucksErrDriveTime.Count > 0)
@@ -1067,13 +1067,13 @@ public class PVRPCloudInterface
 
 
                     //Túra hossz (távolság
-                    List<PVRPCloudTruck> lstTrucksErrKM = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrKM = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
                                                                            x.Truck.MaxKM > 0 && x.Truck.MaxKM < x.FullM / 1000).Select(s => s.Truck).ToList();
                     if (lstTrucksErrKM.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrKM.Contains(x.Truck)).ToList()
                                         .ForEach(x => { x.Msg.Add(Messages.E_MAXKM); });
 
-                    List<PVRPCloudTruck> lstTrucksErrOpen = new List<PVRPCloudTruck>();
+                    List<Truck> lstTrucksErrOpen = new List<Truck>();
                     foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK))
                     {
 
@@ -1232,7 +1232,7 @@ public class PVRPCloudInterface
         return itemRes;
     }
 
-    private static List<Result> PVRPCloudSupportX_inner(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
+    private static List<Result> PVRPCloudSupportX_inner(List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList, int p_maxTruckDistance)
     {
 
         List<Result> res = PVRPCloudSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
@@ -1369,7 +1369,7 @@ public class PVRPCloudInterface
             foreach (var calcTask in calcTaskList)
             {
                 //2.3 A hozzárendelendő jármű megállapítása
-                PVRPCloudTruck trk = null;
+                Truck trk = null;
                 bool done = false;
                 while (!done && trk == null)
                 {
@@ -1434,9 +1434,9 @@ public class PVRPCloudInterface
 
     }
 
-    public static List<PVRPCloudTruck> PVRPCloudGenerateTrucksFromCalcTours(List<PVRPCloudTruck> p_TruckList, List<CalcTask> p_calcTaskList)
+    public static List<Truck> PVRPCloudGenerateTrucksFromCalcTours(List<Truck> p_TruckList, List<CalcTask> p_calcTaskList)
     {
-        List<PVRPCloudTruck> res = new List<PVRPCloudTruck>();
+        List<Truck> res = new List<Truck>();
         List<CalcTour> ctList = new List<CalcTour>();
         foreach (var ct in p_calcTaskList)
         {
@@ -1449,9 +1449,9 @@ public class PVRPCloudInterface
             var lastCalcTour = ctList.Where(w => w.Truck.TruckID == trk.TruckID).OrderByDescending(o => o.TimeComplete).FirstOrDefault();
             if (lastCalcTour != null)
             {
-                PVRPCloudTruck trkNew = trk.ShallowCopy();
+                Truck trkNew = trk.ShallowCopy();
                 trkNew.CurrTPoints.Clear();
-                trkNew.TruckTaskType = PVRPCloudTruck.eTruckTaskType.Available;
+                trkNew.TruckTaskType = Truck.eTruckTaskType.Available;
                 trkNew.CurrLat = lastCalcTour.T2CalcRoute.Last().TPoint.Lat;
                 trkNew.CurrLng = lastCalcTour.T2CalcRoute.Last().TPoint.Lng;
                 trkNew.CurrTime = lastCalcTour.T2End;
@@ -1484,7 +1484,7 @@ public class PVRPCloudInterface
     1. minden változót csak akkor veszünk figyelembe, ha értéke nagyobb, mint nulla. Ha pl a RemainingTwoWeeklyDriveTime értéke nulla, akkor az nem vesz részt a számításokban)
     2.Az PVRPCloudSupport percben számol. A kapott másodperekbők minden megkezdett perc számít.
     */
-    private static void fillDriveTimes(PVRPCloudTruck p_trk, int workCycle, out int o_driveTime, out int o_restTime)
+    private static void fillDriveTimes(Truck p_trk, int workCycle, out int o_driveTime, out int o_restTime)
     {
         o_driveTime = 0;
         o_restTime = 0;
@@ -1515,7 +1515,7 @@ public class PVRPCloudInterface
         Console.WriteLine("workCycle:{0}, o_driveTime:{1}, o_restTime:{2}", workCycle, o_driveTime, o_restTime);
     }
 
-    private static int calcDriveTimes(PVRPCloudTruck p_trk, CalcRoute clr, ref int usedDriveTime, ref int workCycle, ref int driveTime, ref int restTime)
+    private static int calcDriveTimes(Truck p_trk, CalcRoute clr, ref int usedDriveTime, ref int workCycle, ref int driveTime, ref int restTime)
     {
         int retRestTime = 0;
         if (usedDriveTime + clr.DrivingDuration >= driveTime)

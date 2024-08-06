@@ -23,7 +23,7 @@ class Program
 
 
         FileInfo fi2 = new FileInfo(@"c:\temp\ct\Trucks_dump.bin");
-        var lstTrk = (List<PVRPCloudTruck>)BinarySerializer.Deserialize(fi2);
+        var lstTrk = (List<Truck>)BinarySerializer.Deserialize(fi2);
 
 
         // hibaelőállításhoz
@@ -41,7 +41,7 @@ class Program
         var lstTsk = (List<PVRPCloudTask>)BinarySerializer.Deserialize(fi);
         FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\PVRPCloudSupporterTest\input\Trucks_dump.bin");
         //FileInfo fi2 = new FileInfo(@"d:\temp\SWH\ori\4617936_boXTruck.json");
-        var lstTrk = (List<PVRPCloudTruck>)BinarySerializer.Deserialize(fi2);
+        var lstTrk = (List<Truck>)BinarySerializer.Deserialize(fi2);
         RunTest(lstTsk, lstTrk, p_bestTruck);
     }
 
@@ -411,7 +411,7 @@ class Program
         #region járművek és futó szállítási feladatok
 
         /*Szabad jármű, Gyáli tartózkodással */
-        PVRPCloudTruck trk1 = new PVRPCloudTruck()
+        Truck trk1 = new Truck()
         {
             TruckID = "TRK1 Gyál",
             GVWR = 12000,
@@ -425,7 +425,7 @@ class Program
             RelocateCost = 500,
             MaxKM = 9999,
             MaxDuration = 9999,
-            TruckTaskType = PVRPCloudTruck.eTruckTaskType.Available,
+            TruckTaskType = Truck.eTruckTaskType.Available,
             RunningTaskID = "",
             CurrIsOneWay = false,
             CurrTime = DateTime.Now.Date.AddHours(7),
@@ -448,7 +448,7 @@ class Program
 
         /*Szeged-Kecskemét-Budapest tervezett */
         /*Indulás 7:00, KKMét:9:00, Bp:11:00 */
-        PVRPCloudTruck trk2 = new PVRPCloudTruck()
+        Truck trk2 = new Truck()
         {
             TruckID = "TRK2 Szeged-Kecskemét-Budapest",
             GVWR = 3500,
@@ -462,7 +462,7 @@ class Program
             RelocateCost = 500,
             MaxKM = 9999,
             MaxDuration = 9999,
-            TruckTaskType = PVRPCloudTruck.eTruckTaskType.Planned,
+            TruckTaskType = Truck.eTruckTaskType.Planned,
             RunningTaskID = "",
             CurrIsOneWay = false,
             CurrTPoints = new List<Point>(),
@@ -493,7 +493,7 @@ class Program
 
         /*Kecskemét-Budapest-Hatvan futó */
         /*KKMét:8:00, Bp:12:00, Hatvan:14:00 */
-        PVRPCloudTruck trk3 = new PVRPCloudTruck()
+        Truck trk3 = new Truck()
         {
             TruckID = "TRK3 Kecskemét-Budapest-Hatvan",
             GVWR = 3500,
@@ -508,7 +508,7 @@ class Program
             RelocateCost = 500,
             MaxKM = 9999,
             MaxDuration = 9999,
-            TruckTaskType = PVRPCloudTruck.eTruckTaskType.Running,
+            TruckTaskType = Truck.eTruckTaskType.Running,
             RunningTaskID = "",
             CurrIsOneWay = false,
             CurrTPoints = new List<Point>(),
@@ -543,7 +543,7 @@ class Program
 
         /*Kecskemét-Szeged (várunk egy kicsit)-Debrecen futó */
         /*KKMét:4:00, Szeged:06:00, Debrecen:?? */
-        PVRPCloudTruck trk4 = new PVRPCloudTruck()
+        Truck trk4 = new Truck()
         {
             TruckID = "TRK4 Kecskemét-Szeged-Debrecen 12T",
             GVWR = 12000,
@@ -558,7 +558,7 @@ class Program
             RelocateCost = 500,
             MaxKM = 9999,
             MaxDuration = 9999,
-            TruckTaskType = PVRPCloudTruck.eTruckTaskType.Running,
+            TruckTaskType = Truck.eTruckTaskType.Running,
             RunningTaskID = "",
             CurrIsOneWay = false,
             CurrTPoints = new List<Point>(),
@@ -593,7 +593,7 @@ class Program
         trk4.CurrTPoints.Add(tpx10);
 
 
-        PVRPCloudTruck trk5 = new PVRPCloudTruck()
+        Truck trk5 = new Truck()
         {
             TruckID = "TRK5 Szeged avail",
             GVWR = 2000,
@@ -608,7 +608,7 @@ class Program
             RelocateCost = 500,
             MaxKM = 9999,
             MaxDuration = 9999,
-            TruckTaskType = PVRPCloudTruck.eTruckTaskType.Available,
+            TruckTaskType = Truck.eTruckTaskType.Available,
             RunningTaskID = "",
             CurrIsOneWay = false,
             CurrTPoints = new List<Point>(),
@@ -630,7 +630,7 @@ class Program
 
         };
 
-        PVRPCloudTruck trk6 = new PVRPCloudTruck()
+        Truck trk6 = new Truck()
         {
             TruckID = "TRK6 Debrecen avail",
             GVWR = 20000,
@@ -645,7 +645,7 @@ class Program
             RelocateCost = 500,
             MaxKM = 9999,
             MaxDuration = 9999,
-            TruckTaskType = PVRPCloudTruck.eTruckTaskType.Available,
+            TruckTaskType = Truck.eTruckTaskType.Available,
             RunningTaskID = "",
             CurrIsOneWay = false,
             CurrTPoints = new List<Point>(),
@@ -671,7 +671,7 @@ class Program
 
 
         /*Szabad jármű, Gyáli tartózkodással */
-        PVRPCloudTruck trk7 = new PVRPCloudTruck()
+        Truck trk7 = new Truck()
         {
             TruckID = "TRK7 Gyál 3,5t",
             GVWR = 3500,
@@ -685,7 +685,7 @@ class Program
             RelocateCost = 500,
             MaxKM = 9999,
             MaxDuration = 9999,
-            TruckTaskType = PVRPCloudTruck.eTruckTaskType.Available,
+            TruckTaskType = Truck.eTruckTaskType.Available,
             RunningTaskID = "",
             CurrIsOneWay = false,
             CurrTime = DateTime.Now.Date.AddHours(7),
@@ -710,7 +710,7 @@ class Program
 
         //vezetési idő teszt
         var lstTsk = new List<PVRPCloudTask> { tsk1 };
-        var lstTrk = new List<PVRPCloudTruck> { trk2 };
+        var lstTrk = new List<Truck> { trk2 };
 
 
         //12t korlát teszt
@@ -888,7 +888,7 @@ class Program
         RunTest(lstTsk, lstTrk, p_bestTruck);
     }
 
-    static void RunTest(List<PVRPCloudTask> lstTsk, List<PVRPCloudTruck> lstTrk, bool p_bestTruck = false)
+    static void RunTest(List<PVRPCloudTask> lstTsk, List<Truck> lstTrk, bool p_bestTruck = false)
     {
         DateTime dtStart = DateTime.Now;
 
@@ -949,7 +949,7 @@ class Program
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         if (clctour.StatusEnum != CalcTour.PVRPCloudCalcTourStatus.ERR)
                         {
-                            if (clctour.Truck.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
+                            if (clctour.Truck.TruckTaskType != Truck.eTruckTaskType.Available)
                             {
                                 Console.WriteLine("T1  kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, Idő:{5:#,#0.00}, pih:{6:#,#0.00}"
                                     , clctour.T1Start, clctour.T1End, clctour.T1M, clctour.T1Toll, clctour.T1Cost, clctour.T1FullDuration, clctour.T1Rest);

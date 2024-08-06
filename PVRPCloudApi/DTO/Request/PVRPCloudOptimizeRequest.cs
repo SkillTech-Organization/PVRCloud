@@ -8,5 +8,5 @@ public class PVRPCloudOptimizeRequest
 
     public List<PVRPCloudTask> TaskList { get; init; } = [];
 
-    public List<PVRPCloudTruck> TruckList { get; init; } = [];
+    public List<Truck> TruckList { get; init; } = [];
 }
