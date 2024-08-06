@@ -1,6 +1,6 @@
 namespace PVRPCloud.Requests;
 
-public sealed class PVRPCloudTour
+public sealed class Tour
 {
     public required PVRPCloudTruck Truck { get; init; }
     public DateTime StartTime { get; init; }
