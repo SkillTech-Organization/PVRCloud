@@ -6,9 +6,9 @@ using PVRPCloud;
 namespace PVRPCloudApi.DTO.Response;
 
 [DefaultStatusCode(StatusCodes.Status400BadRequest)]
-public sealed class PVRPCloudResponseObjectResult : ObjectResult
+public sealed class ResponseObjectResult : ObjectResult
 {
-    public static PVRPCloudResponseObjectResult Create(ModelStateDictionary modelState)
+    public static ResponseObjectResult Create(ModelStateDictionary modelState)
     {
         return new(new PVRPCloud.Response()
         {
@@ -20,7 +20,7 @@ public sealed class PVRPCloudResponseObjectResult : ObjectResult
         });
     }
 
-    private PVRPCloudResponseObjectResult([ActionResultObjectValue] object? value) : base(value)
+    private ResponseObjectResult([ActionResultObjectValue] object? value) : base(value)
     {
         StatusCode = StatusCodes.Status400BadRequest;
     }

@@ -14,7 +14,7 @@ builder.Services.AddControllers()
     {
         option.InvalidModelStateResponseFactory = context =>
         {
-            return PVRPCloudResponseObjectResult.Create(context.ModelState);
+            return ResponseObjectResult.Create(context.ModelState);
         };
     })
     .AddJsonOptions(options =>
