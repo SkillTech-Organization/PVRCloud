@@ -6,7 +6,7 @@ namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class ClientValidator : AbstractValidator<PVRPCloudClient>
+public sealed class ClientValidator : AbstractValidator<Client>
 {
     public ClientValidator(PVRPCloudProject project)
     {
