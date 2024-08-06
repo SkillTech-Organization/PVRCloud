@@ -13,7 +13,7 @@ public static class PVRPCloudMock
         ]
     };
 
-    private static PVRPCloudProjectRes Project => new()
+    private static ProjectRes Project => new()
     {
         ProjectName = "TEST1",
         MinTime = DateTime.Parse("2024.07.25 00:00:00"),
