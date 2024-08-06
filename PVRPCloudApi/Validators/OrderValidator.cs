@@ -14,14 +14,14 @@ public sealed class OrderValidator : AbstractValidator<PVRPCloudOrder>
         RuleFor(x => x.ID)
             .NotEmpty()
             .NotNull()
-            .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .Must(IsUnique(ids)).WithMessage(Messages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         var clientIds = IdsToArray(project.Clients);
         RuleFor(x => x.ClientID)
             .NotEmpty()
             .NotNull()
-            .Must(Contains(clientIds)).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND)
+            .Must(Contains(clientIds)).WithMessage(Messages.ERR_NOT_FOUND)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Quantity1)

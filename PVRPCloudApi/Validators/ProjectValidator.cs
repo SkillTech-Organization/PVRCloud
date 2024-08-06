@@ -36,11 +36,11 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
             .WithState(GetProjectName);
 
         RuleFor(x => x.CapacityProfiles)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty().WithMessage(Messages.ERR_EMPTY)
             .WithState(GetProjectName);
 
         RuleFor(x => x.TruckTypes)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty().WithMessage(Messages.ERR_EMPTY)
             .WithState(GetProjectName);
 
         RuleFor(x => x.Trucks)

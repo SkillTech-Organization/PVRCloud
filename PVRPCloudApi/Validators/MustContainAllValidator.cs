@@ -26,5 +26,5 @@ public static class MustContainAllValidator
 
             context.MessageFormatter.AppendArgument("CollectionValues", string.Join(", ", invalidValues));
             return isValid;
-        }).WithMessage(PVRPCloudMessages.ERR_NOT_FOUND_COLLECTION);
+        }).WithMessage(Messages.ERR_NOT_FOUND_COLLECTION);
 }

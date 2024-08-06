@@ -14,7 +14,7 @@ public sealed class CostProfileValidator : AbstractValidator<PVRPCloudCostProfil
         RuleFor(x => x.ID)
             .NotEmpty()
             .NotNull()
-            .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .Must(IsUnique(ids)).WithMessage(Messages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.FixCost)

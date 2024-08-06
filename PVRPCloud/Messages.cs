@@ -1,6 +1,6 @@
 ﻿namespace PVRPCloud;
 
-public static class PVRPCloudMessages
+public static class Messages
 {
     public const string M_CALCROUTES = "Útvonalak számítása";
     public const string E_TRKTYPE = "Járműtípus miatt nem teljesítheti a túrát!";
