@@ -3,15 +3,15 @@ using System.Collections.Concurrent;
 
 namespace PVRPCloud;
 
-public class PVRPCloudRouteCache
+public class RouteCache
 {
 
     private ConcurrentDictionary<string, boRoute> Items = null;
 
-    private static readonly Lazy<PVRPCloudRouteCache> m_instance = new Lazy<PVRPCloudRouteCache>(() => new PVRPCloudRouteCache(), true);
+    private static readonly Lazy<RouteCache> m_instance = new Lazy<RouteCache>(() => new RouteCache(), true);
 
 
-    static public PVRPCloudRouteCache Instance
+    static public RouteCache Instance
     {
         get
         {
@@ -19,7 +19,7 @@ public class PVRPCloudRouteCache
         }
     }
 
-    private PVRPCloudRouteCache()
+    private RouteCache()
     {
         Items = new ConcurrentDictionary<string, boRoute>();
     }

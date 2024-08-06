@@ -575,7 +575,7 @@ public class PVRPCloudInterface
                 //
                 foreach (PMapRoute r in lstPMapRoutes)
                 {
-                    boRoute rt = PVRPCloudRouteCache.Instance.Get(r.fromNOD_ID, r.toNOD_ID, r.RZN_ID_LIST, r.GVWR, r.Height, r.Width);
+                    boRoute rt = RouteCache.Instance.Get(r.fromNOD_ID, r.toNOD_ID, r.RZN_ID_LIST, r.GVWR, r.Height, r.Width);
                     if (rt != null)
                     {
                         r.route = rt;

@@ -90,7 +90,7 @@ internal class CalcRouteProcess : BaseLongProcess
                     foreach (PMapRoute ftr in lstFTLR)
                     {
 
-                        PVRPCloudRouteCache.Instance.Add(route);
+                        RouteCache.Instance.Add(route);
 
                         ftr.route = route;
                     }
