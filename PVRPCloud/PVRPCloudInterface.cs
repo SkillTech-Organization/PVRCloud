@@ -82,7 +82,7 @@ public class PVRPCloudInterface
         var m = new PVRPCloudQueueResponse
         {
             RequestID = RequestID,
-            Log = new PVRPCloudLog
+            Log = new Log
             {
                 Message = (string)args[0],
                 Timestamp = (DateTime)args[2],
@@ -113,7 +113,7 @@ public class PVRPCloudInterface
             {
                 RequestID = RequestID,
                 Link = link,
-                Log = new PVRPCloudLog
+                Log = new Log
                 {
                     Message = msg,
                     Timestamp = DateTime.UtcNow,
@@ -132,7 +132,7 @@ public class PVRPCloudInterface
             {
                 RequestID = RequestID,
                 Link = link,
-                Log = new PVRPCloudLog
+                Log = new Log
                 {
                     Message = PVRPCloudMessages.E_ERRINBLOBSAVE,
                     Timestamp = DateTime.UtcNow,

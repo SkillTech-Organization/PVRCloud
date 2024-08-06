@@ -16,6 +16,6 @@ public sealed class PVRPCloudQueueResponse
 
     public PVRPCloudQueueResponseStatus Status { get; set; }
     public string RequestID { get; set; } = string.Empty;
-    public PVRPCloudLog Log { get; set; }
+    public Log Log { get; set; }
     public string Link { get; set; } = string.Empty;
 }

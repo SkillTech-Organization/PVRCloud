@@ -3,7 +3,7 @@ using PVRPCloudInsightsLogger.Logger;
 
 namespace PVRPCloud;
 
-public class PVRPCloudLog
+public class Log
 {
     public DateTime Timestamp { get; set; }
 
