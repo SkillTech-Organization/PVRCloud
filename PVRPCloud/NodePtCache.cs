@@ -2,16 +2,16 @@
 
 namespace PVRPCloud;
 
-public class PVRPCloudNodePtCache
+public class NodePtCache
 {
     public static object Locker = new object();
 
     public ConcurrentDictionary<string, int> Items = null;
 
-    private static readonly Lazy<PVRPCloudNodePtCache> m_instance = new Lazy<PVRPCloudNodePtCache>(() => new PVRPCloudNodePtCache(), true);
+    private static readonly Lazy<NodePtCache> m_instance = new Lazy<NodePtCache>(() => new NodePtCache(), true);
 
 
-    static public PVRPCloudNodePtCache Instance
+    static public NodePtCache Instance
     {
         get
         {
@@ -19,7 +19,7 @@ public class PVRPCloudNodePtCache
         }
     }
 
-    private PVRPCloudNodePtCache()
+    private NodePtCache()
     {
         Items = new ConcurrentDictionary<string, int>();
     }

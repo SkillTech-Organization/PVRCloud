@@ -1609,9 +1609,9 @@ public class PVRPCloudInterface
         //Legyünk következetesek, a PMAp-os térkép esetében:
         //X --> lng, Y --> lat
         var ptKey = p_pt.ToString();
-        if (PVRPCloudNodePtCache.Instance.Items.ContainsKey(ptKey))
+        if (NodePtCache.Instance.Items.ContainsKey(ptKey))
         {
-            return PVRPCloudNodePtCache.Instance.Items[ptKey];
+            return NodePtCache.Instance.Items[ptKey];
         }
         int retNodID = 0;
         var dtXDate2 = DateTime.UtcNow;
@@ -1643,7 +1643,7 @@ public class PVRPCloudInterface
 
             retNodID = Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
                 Math.Abs(nearest.toLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.toLatLng.Lat - p_pt.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
-            PVRPCloudNodePtCache.Instance.Items.TryAdd(ptKey, retNodID);
+            NodePtCache.Instance.Items.TryAdd(ptKey, retNodID);
         }
 
         return retNodID;
