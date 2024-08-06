@@ -10,7 +10,7 @@ public sealed class Project
     public List<CostProfile> CostProfiles { get; init; } = [];
     public List<CapacityProfile> CapacityProfiles { get; init; } = [];
     public List<PVRPCloudTruckType> TruckTypes { get; init; } = [];
-    public List<PVRPCloudTruck> Trucks { get; init; } = [];
+    public List<Truck> Trucks { get; init; } = [];
     public Depot Depot { get; init; } = null!;
     public List<Client> Clients { get; init; } = [];
     public List<Order> Orders { get; init; } = [];

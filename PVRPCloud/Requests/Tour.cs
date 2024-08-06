@@ -2,7 +2,7 @@ namespace PVRPCloud.Requests;
 
 public sealed class Tour
 {
-    public required PVRPCloudTruck Truck { get; init; }
+    public required Truck Truck { get; init; }
     public DateTime StartTime { get; init; }
     public DateTime EndTime { get; init; }
     public int TourLength { get; init; }
