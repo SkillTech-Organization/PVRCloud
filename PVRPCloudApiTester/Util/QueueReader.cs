@@ -92,7 +92,7 @@ internal class QueueReader
                                 var res = queueResponse;
                                 if (res != null)
                                 {
-                                    if (res.Status == QueueResponse.PVRPCloudQueueResponseStatus.RESULT)
+                                    if (res.Status == QueueResponse.QueueResponseStatus.RESULT)
                                     {
                                         _logger.Information("Result found.");
 
@@ -100,7 +100,7 @@ internal class QueueReader
                                         resp.ResultReceived = true;
                                         return resp;
                                     }
-                                    else if (res.Status == QueueResponse.PVRPCloudQueueResponseStatus.ERROR)
+                                    else if (res.Status == QueueResponse.QueueResponseStatus.ERROR)
                                     {
                                         _logger.Information("Error found.");
 

@@ -88,7 +88,7 @@ public class PVRPCloudInterface
                 Timestamp = (DateTime)args[2],
                 Type = typeParsed ? type : LogTypes.STATUS
             },
-            Status = QueueResponse.PVRPCloudQueueResponseStatus.LOG
+            Status = QueueResponse.QueueResponseStatus.LOG
         };
         return m.ToJson();
     }
@@ -119,7 +119,7 @@ public class PVRPCloudInterface
                     Timestamp = DateTime.UtcNow,
                     Type = LogTypes.END
                 },
-                Status = QueueResponse.PVRPCloudQueueResponseStatus.RESULT
+                Status = QueueResponse.QueueResponseStatus.RESULT
             };
 
             Logger.QueueLogger.Log(queueResponse, RequestID);
@@ -138,7 +138,7 @@ public class PVRPCloudInterface
                     Timestamp = DateTime.UtcNow,
                     Type = LogTypes.END
                 },
-                Status = QueueResponse.PVRPCloudQueueResponseStatus.ERROR
+                Status = QueueResponse.QueueResponseStatus.ERROR
             };
 
             Logger.QueueLogger.Log(queueResponse, RequestID);

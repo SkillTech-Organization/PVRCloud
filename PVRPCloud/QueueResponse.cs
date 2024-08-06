@@ -4,7 +4,7 @@ namespace PVRPCloud;
 
 public sealed class QueueResponse
 {
-    public enum PVRPCloudQueueResponseStatus
+    public enum QueueResponseStatus
     {
         [Description("ERROR")]
         ERROR,
@@ -14,7 +14,7 @@ public sealed class QueueResponse
         LOG
     };
 
-    public PVRPCloudQueueResponseStatus Status { get; set; }
+    public QueueResponseStatus Status { get; set; }
     public string RequestID { get; set; } = string.Empty;
     public Log Log { get; set; }
     public string Link { get; set; } = string.Empty;
