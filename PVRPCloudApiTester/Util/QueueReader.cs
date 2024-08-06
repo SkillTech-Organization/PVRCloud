@@ -26,10 +26,10 @@ internal class GetResultResponse
 internal class QueueReader
 {
     private readonly QueueClient queueClient;
-    private readonly PVRPCloudApiTesterSettings settings;
+    private readonly ApiTesterSettings settings;
     private readonly ILogger _logger;
 
-    public QueueReader(PVRPCloudApiTesterSettings s, IConfiguration configuration)
+    public QueueReader(ApiTesterSettings s, IConfiguration configuration)
     {
         settings = s;
         queueClient = new QueueClient(settings.AzureStorageConnectionString, settings.QueueName);

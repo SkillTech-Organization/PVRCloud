@@ -2,9 +2,9 @@
 
 namespace PVRPCloudApiTester.Settings;
 
-public class PVRPCloudApiTesterSettings
+public class ApiTesterSettings
 {
-    public PVRPCloudApiTesterSettings(IConfiguration configuration)
+    public ApiTesterSettings(IConfiguration configuration)
     {
         configuration.Bind("PVRPCloudApiTester", this);
     }
