@@ -23,7 +23,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
         Logger.LogToQueueMessage = PVRPCloudInterface.LogToQueueMessage;
     }
 
-    public Task<Response> PVRCloudSupportAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default)
+    public Task<Response> PVRCloudSupportAsync(SupportRequest body, CancellationToken cancellationToken = default)
     {
 
         var response = new Response();
@@ -88,7 +88,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
         return Task.FromResult(response);
     }
 
-    public Task<Response> PVRCloudSupportXAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default)
+    public Task<Response> PVRCloudSupportXAsync(SupportRequest body, CancellationToken cancellationToken = default)
     {
         var response = new Response();
         try

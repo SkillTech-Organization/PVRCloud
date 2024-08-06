@@ -4,7 +4,7 @@ using PVRPCloud;
 namespace PVRPCloudApi.DTO.Request;
 
 // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
-public class PVRPCloudSupportRequest
+public class SupportRequest
 {
     [JsonProperty("maxTruckDistance")]
     public int MaxTruckDistance { get; set; }
