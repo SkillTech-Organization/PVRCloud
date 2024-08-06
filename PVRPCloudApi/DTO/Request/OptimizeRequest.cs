@@ -2,7 +2,7 @@ using PVRPCloud;
 
 namespace PVRPCloudApi.DTO.Request;
 
-public class PVRPCloudOptimizeRequest
+public class OptimizeRequest
 {
     public int MaxTruckDistance { get; init; }
 
