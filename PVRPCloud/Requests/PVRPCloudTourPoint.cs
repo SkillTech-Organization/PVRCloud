@@ -12,5 +12,5 @@ public sealed class PVRPCloudTourPoint
     public DateTime ArrTime { get; init; }
     public DateTime ServTime { get; init; }
     public DateTime DepTime { get; init; }
-    public PVRPCloudOrder? Order { get; init; }
+    public Order? Order { get; init; }
 }

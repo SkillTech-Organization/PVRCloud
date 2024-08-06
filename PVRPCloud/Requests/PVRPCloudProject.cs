@@ -13,5 +13,5 @@ public sealed class PVRPCloudProject
     public List<PVRPCloudTruck> Trucks { get; init; } = [];
     public Depot Depot { get; init; } = null!;
     public List<Client> Clients { get; init; } = [];
-    public List<PVRPCloudOrder> Orders { get; init; } = [];
+    public List<Order> Orders { get; init; } = [];
 }

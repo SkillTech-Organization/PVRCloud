@@ -2,5 +2,5 @@ namespace PVRPCloud.Requests;
 
 public sealed class PVRPCloudUnplannedOrder
 {
-    public required PVRPCloudOrder Order { get; set; }
+    public required Order Order { get; set; }
 }

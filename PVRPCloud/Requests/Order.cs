@@ -1,6 +1,6 @@
 namespace PVRPCloud.Requests;
 
-public sealed class PVRPCloudOrder : IIdentifiable
+public sealed class Order : IIdentifiable
 {
     public string ID { get; init; } = string.Empty;
     public string OrderName { get; init; } = string.Empty;
