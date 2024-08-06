@@ -17,7 +17,7 @@ public class PVRPCloudInterface
     private static PVRPCloudLoggerSettings LoggerSettings { get; set; }
     private static string RequestID { get; set; }
 
-    public static PVRPCloudResponse PVRPCloudInit(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
+    public static Response PVRPCloudInit(List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
     {
         if (Logger == null)
         {
@@ -31,7 +31,7 @@ public class PVRPCloudInterface
         //  var tskk = JsonConvert.SerializeObject(p_TaskList);
         //  var trkk = JsonConvert.SerializeObject(p_TruckList);
 
-        var ret = new PVRPCloudResponse();
+        var ret = new Response();
         //Paraméterek validálása
         ret.Results.AddRange(ValidateObjList(p_TaskList));
         foreach (PVRPCloudTask tsk in p_TaskList)
@@ -95,7 +95,7 @@ public class PVRPCloudInterface
 
     private static void HandleResult(DateTime dtStart, List<PVRPCloudResult> res, bool isPvrpCloudSupport, List<PVRPCloudTask> p_TaskList, List<PVRPCloudTruck> p_TruckList, int p_maxTruckDistance)
     {
-        var ret = new PVRPCloudResponse();
+        var ret = new Response();
 
         ret.Results.AddRange(res);
         ret.RequestID = RequestID;

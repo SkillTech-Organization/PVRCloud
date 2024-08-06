@@ -15,7 +15,7 @@ public sealed class ValidationExceptionHandler : IExceptionHandler
             return false;
         }
 
-        PVRPCloudResponse response = new()
+        Response response = new()
         {
             Results = validationException.Errors
                 .Select(error => (

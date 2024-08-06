@@ -1,6 +1,6 @@
 ﻿namespace PVRPCloud;
 
-public sealed class PVRPCloudResponse
+public sealed class Response
 {
     public string RequestID { get; set; } = string.Empty;
     public List<PVRPCloudResult> Results { get; set; } = [];

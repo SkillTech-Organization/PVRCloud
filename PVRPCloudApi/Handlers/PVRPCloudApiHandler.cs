@@ -23,10 +23,10 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
         Logger.LogToQueueMessage = PVRPCloudInterface.LogToQueueMessage;
     }
 
-    public Task<PVRPCloudResponse> PVRCloudSupportAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default)
+    public Task<Response> PVRCloudSupportAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default)
     {
 
-        var response = new PVRPCloudResponse();
+        var response = new Response();
         try
         {
 
@@ -49,16 +49,16 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
         return Task.FromResult(response);
     }
 
-    public Task<PVRPCloudResponse> Result(string id)
+    public Task<Response> Result(string id)
     {
-        var response = new PVRPCloudResponse();
+        var response = new Response();
         try
         {
             //var json = Logger.Blob.GetLoggedString(id).Result;
             //Logger.Info("From blob JSON: " + json, Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
             //response = Newtonsoft.Json.JsonConvert.DeserializeObject<PVRCloudResponse>(json);
             //Logger.Info("From blob is null: " + (response == null).ToString(), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
-            response = Logger.Blob.GetLoggedJsonAs<PVRPCloudResponse>(id).Result;
+            response = Logger.Blob.GetLoggedJsonAs<Response>(id).Result;
             //var asd = response.ToJson();
             response?.Results.ForEach(x =>
             {
@@ -88,9 +88,9 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
         return Task.FromResult(response);
     }
 
-    public Task<PVRPCloudResponse> PVRCloudSupportXAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default)
+    public Task<Response> PVRCloudSupportXAsync(PVRPCloudSupportRequest body, CancellationToken cancellationToken = default)
     {
-        var response = new PVRPCloudResponse();
+        var response = new Response();
         try
         {
             var initResult = PVRPCloudInterface.PVRPCloudInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);

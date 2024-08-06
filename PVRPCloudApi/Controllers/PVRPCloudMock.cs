@@ -5,7 +5,7 @@ namespace PVRPCloudApi.Controllers;
 
 public static class PVRPCloudMock
 {
-    public static PVRPCloudResponse ResponseMock => new()
+    public static Response ResponseMock => new()
     {
         RequestID = "12345678",
         Results = [

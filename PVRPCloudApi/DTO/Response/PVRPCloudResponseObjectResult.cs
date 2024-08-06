@@ -10,7 +10,7 @@ public sealed class PVRPCloudResponseObjectResult : ObjectResult
 {
     public static PVRPCloudResponseObjectResult Create(ModelStateDictionary modelState)
     {
-        return new(new PVRPCloudResponse()
+        return new(new PVRPCloud.Response()
         {
             Results = modelState
                 .Select(state => PVRPCloudResult.ValidationError(
