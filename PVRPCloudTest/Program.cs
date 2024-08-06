@@ -927,16 +927,16 @@ class Program
                     Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
                     Console.WriteLine("  Idők");
 
-                    foreach (PVRPCloudCalcTour clctour in clctsk.CalcTours.OrderBy(x => x.Rank))
+                    foreach (CalcTour clctour in clctsk.CalcTours.OrderBy(x => x.Rank))
                     {
                         Console.WriteLine("");
-                        if (clctour.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK)
+                        if (clctour.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK)
                             Console.ForegroundColor = ConsoleColor.Magenta;
                         else
                             Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Státusz:{0}, Helyezés:{1}, Jármű:{2}, Jármű állapot:{3}", clctour.StatusEnum, clctour.Rank, clctour.Truck.TruckID, clctour.Truck.TruckTaskType);
 
-                        if (clctour.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.ERR)
+                        if (clctour.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.ERR)
                         {
                             Console.WriteLine("Hibák:");
                             foreach (var sMsg in clctour.Msg)
@@ -947,7 +947,7 @@ class Program
 
                         //Aktuális túra
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        if (clctour.StatusEnum != PVRPCloudCalcTour.PVRPCloudCalcTourStatus.ERR)
+                        if (clctour.StatusEnum != CalcTour.PVRPCloudCalcTourStatus.ERR)
                         {
                             if (clctour.Truck.TruckTaskType != PVRPCloudTruck.eTruckTaskType.Available)
                             {
@@ -1006,7 +1006,7 @@ class Program
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("");
             Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
-            foreach (PVRPCloudCalcTour clctour in clctsk.CalcTours.Where(o => o.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK).OrderBy(x => x.Rank))
+            foreach (CalcTour clctour in clctsk.CalcTours.Where(o => o.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).OrderBy(x => x.Rank))
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost);

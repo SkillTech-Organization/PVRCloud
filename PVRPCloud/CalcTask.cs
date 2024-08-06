@@ -5,11 +5,11 @@ public class CalcTask
 {
     public CalcTask()
     {
-        CalcTours = new List<PVRPCloudCalcTour>();
+        CalcTours = new List<CalcTour>();
     }
 
     public PVRPCloudTask Task { get; set; }
-    public List<PVRPCloudCalcTour> CalcTours { get; set; }
+    public List<CalcTour> CalcTours { get; set; }
 
 
 }

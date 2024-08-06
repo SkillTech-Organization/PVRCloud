@@ -10,7 +10,7 @@ namespace PVRPCloud;
 /// Túraajánlat
 /// </summary>
 [Serializable]
-public class PVRPCloudCalcTour
+public class CalcTour
 {
     public enum PVRPCloudCalcTourStatus
     {
@@ -19,7 +19,7 @@ public class PVRPCloudCalcTour
         [Description("ERR")]
         ERR
     };
-    public PVRPCloudCalcTour()
+    public CalcTour()
     {
         StatusEnum = PVRPCloudCalcTourStatus.OK;
         Msg = new List<string>();
