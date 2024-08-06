@@ -56,7 +56,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.Configure<LoggerSettings>(
     builder.Configuration.GetSection("PVRPCloudLogger"));
 
-builder.Services.AddTransient<IPVRPCloudApiHandler, PVRPCloudApiHandler>();
+builder.Services.AddTransient<IApiHandler, PVRPCloudApiHandler>();
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 

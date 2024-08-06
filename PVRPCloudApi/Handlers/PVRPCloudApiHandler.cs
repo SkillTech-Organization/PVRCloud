@@ -10,7 +10,7 @@ using PVRPCloudApi.DTO.Response;
 
 namespace PVRPCloudApi.Handlers;
 
-public class PVRPCloudApiHandler : IPVRPCloudApiHandler
+public class PVRPCloudApiHandler : IApiHandler
 {
     private LoggerSettings Settings { get; set; }
 

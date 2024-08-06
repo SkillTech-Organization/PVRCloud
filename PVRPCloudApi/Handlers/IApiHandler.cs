@@ -4,7 +4,7 @@ using PVRPCloudApi.DTO.Request;
 namespace PVRPCloudApi.Handlers;
 
 [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-public interface IPVRPCloudApiHandler
+public interface IApiHandler
 {
 
     /// <summary>
