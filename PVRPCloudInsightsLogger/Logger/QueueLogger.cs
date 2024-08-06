@@ -21,11 +21,11 @@ public interface IQueueLogger
 
 public class QueueLogger : IQueueLogger
 {
-    private readonly PVRPCloudLoggerSettings settings;
+    private readonly LoggerSettings settings;
     private readonly QueueClient queueClient;
     private ITelemetryLogger logger;
 
-    public QueueLogger(PVRPCloudLoggerSettings s)
+    public QueueLogger(LoggerSettings s)
     {
         settings = s;
         queueClient = new QueueClient(settings.AzureStorageConnectionString, settings.QueueName);

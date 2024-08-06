@@ -14,10 +14,10 @@ namespace PVRPCloud;
 public class PVRPCloudInterface
 {
     private static ITelemetryLogger Logger { get; set; }
-    private static PVRPCloudLoggerSettings LoggerSettings { get; set; }
+    private static LoggerSettings LoggerSettings { get; set; }
     private static string RequestID { get; set; }
 
-    public static Response PVRPCloudInit(List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
+    public static Response PVRPCloudInit(List<PVRPCloudTask> p_TaskList, List<Truck> p_TruckList, int p_maxTruckDistance, LoggerSettings loggerSettings)
     {
         if (Logger == null)
         {

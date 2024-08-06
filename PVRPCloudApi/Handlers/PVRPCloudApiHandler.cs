@@ -12,11 +12,11 @@ namespace PVRPCloudApi.Handlers;
 
 public class PVRPCloudApiHandler : IPVRPCloudApiHandler
 {
-    private PVRPCloudLoggerSettings Settings { get; set; }
+    private LoggerSettings Settings { get; set; }
 
     private ITelemetryLogger Logger { get; set; }
 
-    public PVRPCloudApiHandler(IOptions<PVRPCloudLoggerSettings> options)
+    public PVRPCloudApiHandler(IOptions<LoggerSettings> options)
     {
         Settings = options.Value;
         Logger = TelemetryClientFactory.Create(Settings);

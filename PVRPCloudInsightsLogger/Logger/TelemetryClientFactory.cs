@@ -5,7 +5,7 @@ namespace PVRPCloudInsightsLogger.Logger;
 
 public class TelemetryClientFactory
 {
-    private static IQueueLogger CreateQueueLogger(PVRPCloudLoggerSettings settings)
+    private static IQueueLogger CreateQueueLogger(LoggerSettings settings)
     {
         if (settings.UseQueue && !string.IsNullOrWhiteSpace(settings.QueueName) && !string.IsNullOrWhiteSpace(settings.AzureStorageConnectionString))
         {
@@ -14,7 +14,7 @@ public class TelemetryClientFactory
         return null;
     }
 
-    public static ITelemetryLogger Create(PVRPCloudLoggerSettings settings)
+    public static ITelemetryLogger Create(LoggerSettings settings)
     {
         try
         {
