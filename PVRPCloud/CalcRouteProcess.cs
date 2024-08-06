@@ -2,19 +2,14 @@
 using PMapCore.BLL;
 using PMapCore.BO;
 using PMapCore.Common;
-using PMapCore.DB.Base;
 using PMapCore.LongProcess.Base;
 using PMapCore.MapProvider;
 using PMapCore.Route;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.ExceptionServices;
-using System.Text;
 
 namespace PVRPCloud;
 
-internal class PVRPCloudCalcRouteProcess : BaseLongProcess
+internal class CalcRouteProcess : BaseLongProcess
 {
 
     public bool Completed { get; set; }
@@ -24,7 +19,7 @@ internal class PVRPCloudCalcRouteProcess : BaseLongProcess
 
     List<PVRPCloudPMapRoute> m_lstRoutes = new List<PVRPCloudPMapRoute>();
 
-    internal PVRPCloudCalcRouteProcess(List<PVRPCloudPMapRoute> p_lstRoutes)
+    internal CalcRouteProcess(List<PVRPCloudPMapRoute> p_lstRoutes)
         : base(ThreadPriority.Normal)
     {
 

@@ -591,7 +591,7 @@ public class PVRPCloudInterface
 
                 if (lstCalcPMapRoutes.Count > 0)
                 {
-                    PVRPCloudCalcRouteProcess rp = new PVRPCloudCalcRouteProcess(lstCalcPMapRoutes);
+                    CalcRouteProcess rp = new CalcRouteProcess(lstCalcPMapRoutes);
                     rp.RunWait();
                 }
 
