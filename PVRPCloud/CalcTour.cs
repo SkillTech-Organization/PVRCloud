@@ -5,14 +5,13 @@ using System.Runtime.Serialization;
 
 namespace PVRPCloud;
 
-
 /// <summary>
 /// Túraajánlat
 /// </summary>
 [Serializable]
 public class CalcTour
 {
-    public enum PVRPCloudCalcTourStatus
+    public enum CalcTourStatus
     {
         [Description("OK")]
         OK,
@@ -21,7 +20,7 @@ public class CalcTour
     };
     public CalcTour()
     {
-        StatusEnum = PVRPCloudCalcTourStatus.OK;
+        StatusEnum = CalcTourStatus.OK;
         Msg = new List<string>();
 
         Rank = 0;
@@ -65,7 +64,7 @@ public class CalcTour
     //    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     [JsonIgnore]
     [IgnoreDataMember]
-    public PVRPCloudCalcTourStatus StatusEnum { get; set; }
+    public CalcTourStatus StatusEnum { get; set; }
 
     [DisplayNameAttributeX(Name = "Státusz", Order = 1)]
     public string Status { get { return StatusEnum.ToString(); } }

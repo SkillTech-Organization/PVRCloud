@@ -431,19 +431,19 @@ public class PVRPCloudInterface
                     List<Truck> lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.TruckTypes.Length >= 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true)).ToList();
                     if (lstTrucksErr.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
-                                        .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKTYPE); });
+                                        .ForEach(x => { x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKTYPE); });
 
                     /*2.2*/
                     lstTrucksErr = p_TruckList.Where(x => !(("," + x.CargoTypes + ",").IndexOf("," + clctsk.Task.CargoType + ",") >= 0)).ToList();
                     if (lstTrucksErr.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
-                                        .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKCARGOTYPE); });
+                                        .ForEach(x => { x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKCARGOTYPE); });
 
                     /*2.3*/
                     lstTrucksErr = p_TruckList.Where(x => !(x.Capacity >= clctsk.Task.Weight)).ToList();
                     if (lstTrucksErr.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
-                                        .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKCAPACITY); });
+                                        .ForEach(x => { x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKCAPACITY); });
 
                     /*2.4*/
                     lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.TPoints.Where(p => p.RealClose > x.CurrTime).FirstOrDefault() != null)).ToList();
@@ -451,7 +451,7 @@ public class PVRPCloudInterface
                         clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                         .ForEach(x =>
                                         {
-                                            x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKCLOSETP +
+                                            x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKCLOSETP +
                                 string.Join(",", clctsk.Task.TPoints.Where(p => p.RealClose > x.Truck.CurrTime).Select(s => s.Name).ToArray()));
                                         });
 
@@ -461,7 +461,7 @@ public class PVRPCloudInterface
                         clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                         .ForEach(x =>
                                         {
-                                            x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKNOINCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.InclTruckProps);
+                                            x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKNOINCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.InclTruckProps);
                                         });
 
                     /*2.6*/
@@ -470,7 +470,7 @@ public class PVRPCloudInterface
                         clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                         .ForEach(x =>
                                         {
-                                            x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKEXCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.ExclTruckProps);
+                                            x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_TRKEXCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.ExclTruckProps);
                                         });
 
 
@@ -612,7 +612,7 @@ public class PVRPCloudInterface
                 //6.eredmény összeállítása
                 foreach (CalcTask clctsk in tskResult)
                 {
-                    foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK))
+                    foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK))
                     {
                         Truck trk = clctour.Truck;
                         // Útvonal összeállítása
@@ -770,33 +770,33 @@ public class PVRPCloudInterface
                 foreach (CalcTask clctsk in tskResult)
                 {
 
-                    List<Truck> lstTrucksErrT1 = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrT1 = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                            x.Truck.TruckTaskType != Truck.eTruckTaskType.Available &&
                                                                            x.T1CalcRoute.Where(r => r.PMapRoute != null &&
                                                                                                 r.PMapRoute.fromNOD_ID != r.PMapRoute.toNOD_ID && r.PMapRoute.route.Edges.Count == 0).FirstOrDefault() != null).Select(s => s.Truck).ToList();
                     if (lstTrucksErrT1.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrT1.Contains(x.Truck)).ToList()
-                                        .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_T1MISSROUTE); });
+                                        .ForEach(x => { x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_T1MISSROUTE); });
 
-                    List<Truck> lstTrucksErrRel = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrRel = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                             x.RelCalcRoute.PMapRoute.fromNOD_ID != x.RelCalcRoute.PMapRoute.toNOD_ID && x.RelCalcRoute.PMapRoute.route.Edges.Count == 0).Select(s => s.Truck).ToList();
                     if (lstTrucksErrRel.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrRel.Contains(x.Truck)).ToList()
-                                        .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_RELMISSROUTE); });
+                                        .ForEach(x => { x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_RELMISSROUTE); });
 
 
-                    List<Truck> lstTrucksErrT2 = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrT2 = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                            x.T2CalcRoute.Where(r => r.PMapRoute != null &&
                                                                                 r.PMapRoute.fromNOD_ID != r.PMapRoute.toNOD_ID && r.PMapRoute.route.Edges.Count == 0).FirstOrDefault() != null).Select(s => s.Truck).ToList();
                     if (lstTrucksErrT2.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrT2.Contains(x.Truck)).ToList()
-                                       .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_T2MISSROUTE); });
+                                       .ForEach(x => { x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_T2MISSROUTE); });
 
-                    List<Truck> lstTrucksErrRet = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrRet = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                             x.RetCalcRoute.PMapRoute != null && x.RetCalcRoute.PMapRoute.fromNOD_ID != x.RetCalcRoute.PMapRoute.toNOD_ID && x.RetCalcRoute.PMapRoute.route.Edges.Count == 0).Select(s => s.Truck).ToList();
                     if (lstTrucksErrRet.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrRet.Contains(x.Truck)).ToList()
-                                       .ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; x.Msg.Add(Messages.E_RETMISSROUTE); });
+                                       .ForEach(x => { x.StatusEnum = CalcTour.CalcTourStatus.ERR; x.Msg.Add(Messages.E_RETMISSROUTE); });
                 }
 
                 Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", "Hibák beállítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
@@ -809,7 +809,7 @@ public class PVRPCloudInterface
 
                 foreach (CalcTask clctsk in tskResult)
                 {
-                    foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK))
+                    foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK))
                     {
 
                         Truck trk = clctour.Truck;
@@ -1026,14 +1026,14 @@ public class PVRPCloudInterface
                 {
 
                     //Túra időtartama ellenőrzés
-                    List<Truck> lstTrucksErrDuration = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrDuration = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                            x.Truck.MaxDuration > 0 && x.Truck.MaxDuration < x.FullDuration).Select(s => s.Truck).ToList();
                     if (lstTrucksErrDuration.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrDuration.Contains(x.Truck)).ToList()
                                         .ForEach(x => { x.Msg.Add(Messages.E_MAXDURATION); });
 
                     //Vezetési idő ellenőrzés T1
-                    List<Truck> lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                            x.T1CalcRoute.Where(xT1 => xT1.ErrDriveTime).FirstOrDefault() != null)
                                                                            .Select(s => s.Truck).ToList();
                     if (lstTrucksErrDriveTime.Count > 0)
@@ -1041,7 +1041,7 @@ public class PVRPCloudInterface
                                         .ForEach(x => { x.Msg.Add(Messages.E_MAXDRIVETIME_T1); });
 
                     //Vezetési idő ellenőrzés REL
-                    lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                            x.RelCalcRoute.ErrDriveTime)
                                                                            .Select(s => s.Truck).ToList();
                     if (lstTrucksErrDriveTime.Count > 0)
@@ -1050,7 +1050,7 @@ public class PVRPCloudInterface
 
 
                     //Vezetési idő ellenőrzés T2
-                    lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                            x.T2CalcRoute.Where(xT2 => xT2.ErrDriveTime).FirstOrDefault() != null)
                                                                            .Select(s => s.Truck).ToList();
                     if (lstTrucksErrDriveTime.Count > 0)
@@ -1058,7 +1058,7 @@ public class PVRPCloudInterface
                                         .ForEach(x => { x.Msg.Add(Messages.E_MAXDRIVETIME_T2); });
 
                     //Vezetési idő ellenőrzés RET
-                    lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                            x.RetCalcRoute.ErrDriveTime)
                                                                            .Select(s => s.Truck).ToList();
                     if (lstTrucksErrDriveTime.Count > 0)
@@ -1067,14 +1067,14 @@ public class PVRPCloudInterface
 
 
                     //Túra hossz (távolság
-                    List<Truck> lstTrucksErrKM = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                    List<Truck> lstTrucksErrKM = clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                            x.Truck.MaxKM > 0 && x.Truck.MaxKM < x.FullM / 1000).Select(s => s.Truck).ToList();
                     if (lstTrucksErrKM.Count > 0)
                         clctsk.CalcTours.Where(x => lstTrucksErrKM.Contains(x.Truck)).ToList()
                                         .ForEach(x => { x.Msg.Add(Messages.E_MAXKM); });
 
                     List<Truck> lstTrucksErrOpen = new List<Truck>();
-                    foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK))
+                    foreach (CalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK))
                     {
 
                         //Teljesítés nyitva tartások ellenőrzése
@@ -1124,7 +1124,7 @@ public class PVRPCloudInterface
                                                 lstTrucksErrKM.Contains(x.Truck) ||
                                                 lstTrucksErrOpen.Contains(x.Truck) ||
                                                 lstTrucksErrDriveTime.Contains(x.Truck)
-                                           ).ToList().ForEach(x => { x.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; });
+                                           ).ToList().ForEach(x => { x.StatusEnum = CalcTour.CalcTourStatus.ERR; });
 
                 }
 
@@ -1150,12 +1150,12 @@ public class PVRPCloudInterface
 
                     //Költség fordított sorrendben berendezzük
                     int rank = 1;
-                    clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).
+                    clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK).
                                      OrderBy(x => x.AdditionalCost).Select(x => x).ToList().
                                      ForEach(r => r.Rank = rank++);
 
                     // A hibás tételek rank-ja: 999999
-                    clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
+                    clctsk.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
                 }
 
                 Logger.Info(string.Format("{0} {1} Időtartam:{2}", "PVRPCloudSupport", "Eredmények véglegesítése", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
@@ -1254,11 +1254,11 @@ public class PVRPCloudInterface
             PVRPCloudSetBestTruck(res);
             List<CalcTask> calcTaskList = (List<CalcTask>)calcResult.Data;
 
-            while (calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
+            while (calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
             {
                 List<PVRPCloudTask> lstTsk2 = new List<PVRPCloudTask>();
                 var lstTrk2 = PVRPCloudGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
-                lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
+                lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
                 List<Result> res2 = PVRPCloudSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
 
                 var calcResult2 = res2.Where(x => x.Status == Result.ResultStatus.RESULT).FirstOrDefault();
@@ -1272,14 +1272,14 @@ public class PVRPCloudInterface
                     List<CalcTask> calcTaskList2 = (List<CalcTask>)calcResult2.Data;
 
                     //Megvizsgáljuk, hogy a számítási menet hozott-e eredményt.
-                    if (calcTaskList2.Where(x => x.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count != 0).ToList().Count == 0)
+                    if (calcTaskList2.Where(x => x.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK).ToList().Count != 0).ToList().Count == 0)
                         return res;             //ha nincs eredmény, ennyi volt...
 
 
                     foreach (CalcTask calcTask2 in calcTaskList2)
                     {
                         //van-e eredmény?
-                        var calcTour2 = calcTask2.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).FirstOrDefault();
+                        var calcTour2 = calcTask2.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK).FirstOrDefault();
                         if (calcTour2 != null)
                         {
                             //megkeressük a tételt a RES-ben és beírjuk az eredménylistát.
@@ -1290,12 +1290,12 @@ public class PVRPCloudInterface
                                 //Ha az teljesítő jármű előző túráiban visszatérés van, akkor megszűntetni a visszatérést
                                 //
                                 var prevCalcRetTasks = calcTaskList.Where(i => i.Task.TaskID != calcTask2.Task.TaskID &&
-                                                i.CalcTours.Where(x => x.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK &&
+                                                i.CalcTours.Where(x => x.StatusEnum == CalcTour.CalcTourStatus.OK &&
                                                                   x.Truck.TruckID == calcTour2.Truck.TruckID &&
                                                                   !x.Truck.CurrIsOneWay).Count() > 0);
                                 foreach (var pct in prevCalcRetTasks)
                                 {
-                                    var OriCalcTour = pct.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).FirstOrDefault();
+                                    var OriCalcTour = pct.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK).FirstOrDefault();
                                     if (OriCalcTour != null && !OriCalcTour.Truck.CurrIsOneWay)
                                     {
                                         OriCalcTour.RetM = 0;
@@ -1374,7 +1374,7 @@ public class PVRPCloudInterface
                 while (!done && trk == null)
                 {
                     //2.3.1 Alapesetben a legjobb rank-ú
-                    CalcTour calcTour = calcTask.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).OrderBy(o => o.Rank).FirstOrDefault();
+                    CalcTour calcTour = calcTask.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK).OrderBy(o => o.Rank).FirstOrDefault();
                     if (calcTour != null)
                     {
                         trk = calcTour.Truck;
@@ -1386,12 +1386,12 @@ public class PVRPCloudInterface
                             //nem választjuk ki, és a következő ciklusban a sorban következő lesz a hozzárendelt járművet vesszük
 
                             //Az első jármű lekérdezése
-                            CalcTour calcTour2 = calcTask2.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK)
+                            CalcTour calcTour2 = calcTask2.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK)
                                                                        .OrderBy(o => o.Rank).FirstOrDefault();
 
                             if (calcTour2 != null && trk == calcTour2.Truck && calcTour.RelCost + calcTour.RetCost > calcTour2.RelCost + calcTour2.RetCost)
                             {
-                                calcTask.CalcTours.Where(i => i.Truck == trk && i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).Select(c => { c.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; c.Msg.Add(Messages.E_OTHERTASK); return c; }).ToList();
+                                calcTask.CalcTours.Where(i => i.Truck == trk && i.StatusEnum == CalcTour.CalcTourStatus.OK).Select(c => { c.StatusEnum = CalcTour.CalcTourStatus.ERR; c.Msg.Add(Messages.E_OTHERTASK); return c; }).ToList();
                                 //calcTask.CalcTours.RemoveAll(i => i.Truck == trk);
                                 trk = null;
                                 break;
@@ -1412,19 +1412,19 @@ public class PVRPCloudInterface
                     //3.1 az aktuális taskból kitörlünk minden más járművet
 
                     // calcTask.CalcTours.RemoveAll(i => i.Truck != trk);
-                    calcTask.CalcTours.Where(i => i.Truck != trk && i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).Select(c => { c.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; c.Msg.Add(Messages.E_NOTASK); return c; }).ToList();
+                    calcTask.CalcTours.Where(i => i.Truck != trk && i.StatusEnum == CalcTour.CalcTourStatus.OK).Select(c => { c.StatusEnum = CalcTour.CalcTourStatus.ERR; c.Msg.Add(Messages.E_NOTASK); return c; }).ToList();
 
                     //A többi taskból pedig a kiválasztott járművet töröljük
                     foreach (var ct in calcTaskList.Where(i => i != calcTask).ToList())
                     {
                         // ct.CalcTours.RemoveAll(i => i.Truck == trk);
-                        ct.CalcTours.Where(i => i.Truck == trk && i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).Select(c => { c.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; c.Msg.Add(Messages.E_OTHERTASK); return c; }).ToList();
+                        ct.CalcTours.Where(i => i.Truck == trk && i.StatusEnum == CalcTour.CalcTourStatus.OK).Select(c => { c.StatusEnum = CalcTour.CalcTourStatus.ERR; c.Msg.Add(Messages.E_OTHERTASK); return c; }).ToList();
                     }
                 }
                 else
                 {
                     // calcTask.CalcTours.Clear();
-                    calcTask.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).Select(c => { c.StatusEnum = CalcTour.PVRPCloudCalcTourStatus.ERR; c.Msg.Add(Messages.E_NOTASK); return c; }).ToList();
+                    calcTask.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK).Select(c => { c.StatusEnum = CalcTour.CalcTourStatus.ERR; c.Msg.Add(Messages.E_NOTASK); return c; }).ToList();
 
                 }
             }
@@ -1440,7 +1440,7 @@ public class PVRPCloudInterface
         List<CalcTour> ctList = new List<CalcTour>();
         foreach (var ct in p_calcTaskList)
         {
-            ctList.AddRange(ct.CalcTours.Where(i => i.StatusEnum == CalcTour.PVRPCloudCalcTourStatus.OK).ToList());
+            ctList.AddRange(ct.CalcTours.Where(i => i.StatusEnum == CalcTour.CalcTourStatus.OK).ToList());
         }
 
         foreach (var trk in p_TruckList)
