@@ -1175,7 +1175,7 @@ public class PVRPCloudInterface
         catch (Exception ex)
         {
             Util.ExceptionLog(ex);
-            var rm = PVRPCloudResErrMsg.FromException(ex);
+            var rm = ResErrMsg.FromException(ex);
 
             PVRPCloudResult res = new PVRPCloudResult()
             {
@@ -1213,7 +1213,7 @@ public class PVRPCloudInterface
 
     private static PVRPCloudResult getValidationError(object p_obj, string p_field, string p_msg, bool log = true)
     {
-        var msg = PVRPCloudResErrMsg.ValidationError(p_field, p_msg);
+        var msg = ResErrMsg.ValidationError(p_field, p_msg);
 
         PropertyInfo ItemIDProp = p_obj.GetType().GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(ItemIDAttr))).FirstOrDefault();
 
@@ -1318,7 +1318,7 @@ public class PVRPCloudInterface
                 else
                 {
                     //Ha nincs eredmény (Status == RESULT), akkor felveszünk egy hibatételt és kilépünk
-                    var rm = PVRPCloudResErrMsg.BusinessError(Messages.E_ERRINSECONDPHASE);
+                    var rm = ResErrMsg.BusinessError(Messages.E_ERRINSECONDPHASE);
 
                     PVRPCloudResult resErr = new PVRPCloudResult()
                     {

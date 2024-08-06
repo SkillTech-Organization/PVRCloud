@@ -14,7 +14,7 @@ public static class GeneralExceptionHandler
         await context.Response.WriteAsJsonAsync(new PVRPCloudResponse()
         {
             Results = [
-                PVRPCloudResult.Exception(PVRPCloudResErrMsg.FromException(exceptionHandlerFeature.Error))
+                PVRPCloudResult.Exception(ResErrMsg.FromException(exceptionHandlerFeature.Error))
             ]
         });
     }

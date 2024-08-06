@@ -988,7 +988,7 @@ class Program
             }
             else
             {
-                PVRPCloudResErrMsg em = (PVRPCloudResErrMsg)rr.Data;
+                ResErrMsg em = (ResErrMsg)rr.Data;
                 Console.WriteLine(em.Message);
                 Console.WriteLine(em.CallStack);
             }

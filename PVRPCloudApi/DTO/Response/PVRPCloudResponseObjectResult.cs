@@ -14,7 +14,7 @@ public sealed class PVRPCloudResponseObjectResult : ObjectResult
         {
             Results = modelState
                 .Select(state => PVRPCloudResult.ValidationError(
-                    PVRPCloudResErrMsg.ValidationError(string.Empty, state.Key),
+                    ResErrMsg.ValidationError(string.Empty, state.Key),
                     string.Empty)
                 ).ToList()
         });
