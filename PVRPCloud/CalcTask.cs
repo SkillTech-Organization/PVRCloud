@@ -1,9 +1,9 @@
 ﻿namespace PVRPCloud;
 
 [Serializable]
-public class PVRPCloudCalcTask
+public class CalcTask
 {
-    public PVRPCloudCalcTask()
+    public CalcTask()
     {
         CalcTours = new List<PVRPCloudCalcTour>();
     }

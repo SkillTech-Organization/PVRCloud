@@ -380,10 +380,10 @@ public class PVRPCloudInterface
                 /********************************/
                 /* Eredmény objektum felépítése */
                 /********************************/
-                List<PVRPCloudCalcTask> tskResult = new List<PVRPCloudCalcTask>();
+                List<CalcTask> tskResult = new List<CalcTask>();
                 foreach (PVRPCloudTask tsk in p_TaskList)
                 {
-                    var clctsk = new PVRPCloudCalcTask() { Task = tsk };
+                    var clctsk = new CalcTask() { Task = tsk };
                     tskResult.Add(clctsk);
 
                     foreach (PVRPCloudTruck trk in p_TruckList)
@@ -407,7 +407,7 @@ public class PVRPCloudInterface
                 /*Járművek előszűrése, NOD_ID meghatározás és visszatérési érték objektum felépítése*/
                 /************************************************************************************/
 
-                foreach (PVRPCloudCalcTask clctsk in tskResult)
+                foreach (CalcTask clctsk in tskResult)
                 {
                     //2. Szóbajöhető járművek meghatározása
                     //
@@ -610,7 +610,7 @@ public class PVRPCloudInterface
 
 
                 //6.eredmény összeállítása
-                foreach (PVRPCloudCalcTask clctsk in tskResult)
+                foreach (CalcTask clctsk in tskResult)
                 {
                     foreach (PVRPCloudCalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK))
                     {
@@ -767,7 +767,7 @@ public class PVRPCloudInterface
                 /**************************************************************************************************************/
                 /* Hiba beállítása járművekre amelyek nem tudják teljesíteni a túrákat, mert nem találtunk útvonalat hozzájuk */
                 /**************************************************************************************************************/
-                foreach (PVRPCloudCalcTask clctsk in tskResult)
+                foreach (CalcTask clctsk in tskResult)
                 {
 
                     List<PVRPCloudTruck> lstTrucksErrT1 = clctsk.CalcTours.Where(x => x.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK &&
@@ -807,7 +807,7 @@ public class PVRPCloudInterface
                 /* Számítások  */
                 /***************/
 
-                foreach (PVRPCloudCalcTask clctsk in tskResult)
+                foreach (CalcTask clctsk in tskResult)
                 {
                     foreach (PVRPCloudCalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK))
                     {
@@ -1022,7 +1022,7 @@ public class PVRPCloudInterface
                 /*******************************************************/
                 /* Max. munkaidő és távolság, nyitva tartás ellenőrzés */
                 /*******************************************************/
-                foreach (PVRPCloudCalcTask clctsk in tskResult)
+                foreach (CalcTask clctsk in tskResult)
                 {
 
                     //Túra időtartama ellenőrzés
@@ -1135,7 +1135,7 @@ public class PVRPCloudInterface
                 /****************************/
                 /* Eredmények véglegesítése */
                 /****************************/
-                foreach (PVRPCloudCalcTask clctsk in tskResult)
+                foreach (CalcTask clctsk in tskResult)
                 {
                     //Útvonalpontok
                     clctsk.CalcTours.ForEach(x =>
@@ -1252,7 +1252,7 @@ public class PVRPCloudInterface
         if (calcResult != null)
         {
             PVRPCloudSetBestTruck(res);
-            List<PVRPCloudCalcTask> calcTaskList = (List<PVRPCloudCalcTask>)calcResult.Data;
+            List<CalcTask> calcTaskList = (List<CalcTask>)calcResult.Data;
 
             while (calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
             {
@@ -1269,14 +1269,14 @@ public class PVRPCloudInterface
 
                     PVRPCloudSetBestTruck(res2);
 
-                    List<PVRPCloudCalcTask> calcTaskList2 = (List<PVRPCloudCalcTask>)calcResult2.Data;
+                    List<CalcTask> calcTaskList2 = (List<CalcTask>)calcResult2.Data;
 
                     //Megvizsgáljuk, hogy a számítási menet hozott-e eredményt.
                     if (calcTaskList2.Where(x => x.CalcTours.Where(i => i.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK).ToList().Count != 0).ToList().Count == 0)
                         return res;             //ha nincs eredmény, ennyi volt...
 
 
-                    foreach (PVRPCloudCalcTask calcTask2 in calcTaskList2)
+                    foreach (CalcTask calcTask2 in calcTaskList2)
                     {
                         //van-e eredmény?
                         var calcTour2 = calcTask2.CalcTours.Where(i => i.StatusEnum == PVRPCloudCalcTour.PVRPCloudCalcTourStatus.OK).FirstOrDefault();
@@ -1357,7 +1357,7 @@ public class PVRPCloudInterface
         var calcResult = p_calcResult.Where(i => i.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT).FirstOrDefault();
         if (calcResult != null)
         {
-            List<PVRPCloudCalcTask> calcTaskList = (List<PVRPCloudCalcTask>)calcResult.Data;
+            List<CalcTask> calcTaskList = (List<CalcTask>)calcResult.Data;
             /*
             //init:kitöröljük az összes ERR státuszú járművet
             foreach (var ct in calcTaskList)
@@ -1434,7 +1434,7 @@ public class PVRPCloudInterface
 
     }
 
-    public static List<PVRPCloudTruck> PVRPCloudGenerateTrucksFromCalcTours(List<PVRPCloudTruck> p_TruckList, List<PVRPCloudCalcTask> p_calcTaskList)
+    public static List<PVRPCloudTruck> PVRPCloudGenerateTrucksFromCalcTours(List<PVRPCloudTruck> p_TruckList, List<CalcTask> p_calcTaskList)
     {
         List<PVRPCloudTruck> res = new List<PVRPCloudTruck>();
         List<PVRPCloudCalcTour> ctList = new List<PVRPCloudCalcTour>();

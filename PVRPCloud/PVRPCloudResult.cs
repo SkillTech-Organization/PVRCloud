@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace PVRPCloud;
 
 [Serializable]
-[KnownType(typeof(List<PVRPCloudCalcTask>))]
+[KnownType(typeof(List<CalcTask>))]
 [KnownType(typeof(PVRPCloudResErrMsg))]
 public sealed class PVRPCloudResult
 {

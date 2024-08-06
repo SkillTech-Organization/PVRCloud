@@ -218,7 +218,7 @@ internal class ApiTesterService : IApiTesterService
                                 {
                                     if (x.Status == PVRPCloudResultStatus.RESULT)
                                     {
-                                        x.Data = ((JToken)x.Data).ToObject<List<PVRPCloud.PVRPCloudCalcTask>>();
+                                        x.Data = ((JToken)x.Data).ToObject<List<PVRPCloud.CalcTask>>();
                                     }
                                     else
                                     {

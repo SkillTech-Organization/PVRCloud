@@ -67,7 +67,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
                 {
                     if (x.Status == PVRPCloudResult.PVRPCloudResultStatus.RESULT)
                     {
-                        x.Data = ((JToken)x.Data).ToObject<List<PVRPCloudCalcTask>>();
+                        x.Data = ((JToken)x.Data).ToObject<List<CalcTask>>();
                     }
                     else
                     {
@@ -76,7 +76,7 @@ public class PVRPCloudApiHandler : IPVRPCloudApiHandler
                 }
                 else
                 {
-                    x.Data = new List<PVRPCloudCalcTask>();
+                    x.Data = new List<CalcTask>();
                 }
             });
         }

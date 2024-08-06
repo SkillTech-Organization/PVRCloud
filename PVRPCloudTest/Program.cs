@@ -918,8 +918,8 @@ class Program
                 if (p_bestTruck)
                     bestTruckConsole(res.FirstOrDefault());
 
-                List<PVRPCloudCalcTask> tskResult = (List<PVRPCloudCalcTask>)rr.Data;
-                foreach (PVRPCloudCalcTask clctsk in tskResult)
+                List<CalcTask> tskResult = (List<CalcTask>)rr.Data;
+                foreach (CalcTask clctsk in tskResult)
                 {
 
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -998,9 +998,9 @@ class Program
     }
     private static void bestTruckConsole(PVRPCloudResult rr)
     {
-        List<PVRPCloudCalcTask> tskResult = (List<PVRPCloudCalcTask>)rr.Data;
+        List<CalcTask> tskResult = (List<CalcTask>)rr.Data;
 
-        foreach (PVRPCloudCalcTask clctsk in tskResult)
+        foreach (CalcTask clctsk in tskResult)
         {
 
             Console.ForegroundColor = ConsoleColor.Green;
