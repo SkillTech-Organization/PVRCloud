@@ -1,15 +1,16 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace PVRPCloudApiTests;
 
-public class PVRPCloudRequestTests(WebApplicationFactory<Program> _factory) : IClassFixture<WebApplicationFactory<Program>>
+public class PVRPCloudRequestTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
     private const string Endpoint = "/v1/PVRPCloudRequest";
 
-    private readonly HttpClient client = _factory.CreateClient();
+    private readonly HttpClient _client = factory.CreateClient();
 
     [Fact]
     public async Task PVRPCloudRequest_ValidInput_MakesAValidResponse()
@@ -17,9 +18,9 @@ public class PVRPCloudRequestTests(WebApplicationFactory<Program> _factory) : IC
         var project = ProjectFactory.CreateValidProject();
         string content = JsonSerializer.Serialize(project);
 
-        var response = await client.PostAsync(Endpoint, new StringContent(content, Encoding.UTF8, "application/json"));
+        var response = await _client.PostAsync(Endpoint, new StringContent(content, Encoding.UTF8, "application/json"));
 
-        Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 
     [Fact]
@@ -28,9 +29,9 @@ public class PVRPCloudRequestTests(WebApplicationFactory<Program> _factory) : IC
         var project = ProjectFactory.CreateInvalidProject();
         string content = JsonSerializer.Serialize(project);
 
-        var response = await client.PostAsync(Endpoint, new StringContent(content, Encoding.UTF8, "application/json"));
+        var response = await _client.PostAsync(Endpoint, new StringContent(content, Encoding.UTF8, "application/json"));
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
@@ -41,9 +42,9 @@ public class PVRPCloudRequestTests(WebApplicationFactory<Program> _factory) : IC
 
         string newContent = content.Replace("{", "");
 
-        var response = await client.PostAsync(Endpoint, new StringContent(newContent, Encoding.UTF8, "application/json"));
+        var response = await _client.PostAsync(Endpoint, new StringContent(newContent, Encoding.UTF8, "application/json"));
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
@@ -54,8 +55,8 @@ public class PVRPCloudRequestTests(WebApplicationFactory<Program> _factory) : IC
 
         string newContent = content.Replace("MaxTourDuration\":5", "MaxTourDuration:\":null");
 
-        var response = await client.PostAsync(Endpoint, new StringContent(newContent, Encoding.UTF8, "application/json"));
+        var response = await _client.PostAsync(Endpoint, new StringContent(newContent, Encoding.UTF8, "application/json"));
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }
