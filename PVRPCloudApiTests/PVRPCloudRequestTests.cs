@@ -32,4 +32,30 @@ public class PVRPCloudRequestTests(WebApplicationFactory<Program> _factory) : IC
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task PVRPCloudRequest_WrongJsonBody_ReturnsBadRequest()
+    {
+        var project = ProjectFactory.CreateInvalidProject();
+        string content = JsonSerializer.Serialize(project);
+
+        string newContent = content.Replace("{", "");
+
+        var response = await client.PostAsync(Endpoint, new StringContent(newContent, Encoding.UTF8, "application/json"));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task PVRPCloudRequest_WrongJsonBodyWithNull_ReturnsBadRequest()
+    {
+        var project = ProjectFactory.CreateInvalidProject();
+        string content = JsonSerializer.Serialize(project);
+
+        string newContent = content.Replace("MaxTourDuration\":5", "MaxTourDuration:\":null");
+
+        var response = await client.PostAsync(Endpoint, new StringContent(newContent, Encoding.UTF8, "application/json"));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
