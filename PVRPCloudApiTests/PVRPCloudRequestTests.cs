@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace PVRPCloudApiTests;
 
-public class OptimizeRequestTests(WebApplicationFactory<Program> _factory) : IClassFixture<WebApplicationFactory<Program>>
+public class PVRPCloudRequestTests(WebApplicationFactory<Program> _factory) : IClassFixture<WebApplicationFactory<Program>>
 {
     private const string Endpoint = "/v1/PVRPCloudRequest";
 
