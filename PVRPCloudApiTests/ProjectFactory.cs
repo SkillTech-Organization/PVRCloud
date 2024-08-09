@@ -4,7 +4,7 @@ namespace PVRPCloudApiTests;
 
 public static class ProjectFactory
 {
-    public static PVRPCloudProject CreateValidProject()
+    public static Project CreateValidProject()
     {
         return new()
         {
@@ -96,7 +96,7 @@ public static class ProjectFactory
         };
     }
 
-    public static PVRPCloudProject CreateInvalidProject()
+    public static Project CreateInvalidProject()
     {
         return new()
         {

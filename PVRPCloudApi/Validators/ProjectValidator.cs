@@ -5,7 +5,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApi.Validators;
 
-public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
+public sealed class ProjectValidator : AbstractValidator<Project>
 {
     public ProjectValidator()
     {
@@ -36,11 +36,11 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
             .WithState(GetProjectName);
 
         RuleFor(x => x.CapacityProfiles)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty().WithMessage(Messages.ERR_EMPTY)
             .WithState(GetProjectName);
 
         RuleFor(x => x.TruckTypes)
-            .NotEmpty().WithMessage(PVRPCloudMessages.ERR_EMPTY)
+            .NotEmpty().WithMessage(Messages.ERR_EMPTY)
             .WithState(GetProjectName);
 
         RuleFor(x => x.Trucks)
@@ -81,16 +81,16 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
         RuleForEach(x => x.Orders).SetValidator(createOrderValidator);
     }
 
-    public string GetProjectName(PVRPCloudProject project) => project.ProjectName;
+    public string GetProjectName(Project project) => project.ProjectName;
 
-    private Func<PVRPCloudProject, TValidator> CreateValidator<TValidator>(Func<PVRPCloudProject, TValidator> validatorProvider)
+    private Func<Project, TValidator> CreateValidator<TValidator>(Func<Project, TValidator> validatorProvider)
         where TValidator : class
     {
         TValidator? validator = null;
         return project => validator ??= validatorProvider(project);
     }
 
-    public override ValidationResult Validate(ValidationContext<PVRPCloudProject> context)
+    public override ValidationResult Validate(ValidationContext<Project> context)
     {
         ArgumentNullException.ThrowIfNull(context);
 
@@ -104,7 +104,7 @@ public sealed class ProjectValidator : AbstractValidator<PVRPCloudProject>
         return result;
     }
 
-    public override async Task<ValidationResult> ValidateAsync(ValidationContext<PVRPCloudProject> context, CancellationToken cancellation = default)
+    public override async Task<ValidationResult> ValidateAsync(ValidationContext<Project> context, CancellationToken cancellation = default)
     {
         ArgumentNullException.ThrowIfNull(context);
 

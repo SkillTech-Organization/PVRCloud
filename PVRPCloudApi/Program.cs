@@ -14,7 +14,7 @@ builder.Services.AddControllers()
     {
         option.InvalidModelStateResponseFactory = context =>
         {
-            return PVRPCloudResponseObjectResult.Create(context.ModelState);
+            return ResponseObjectResult.Create(context.ModelState);
         };
     })
     .AddJsonOptions(options =>
@@ -53,10 +53,10 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.Configure<PVRPCloudLoggerSettings>(
+builder.Services.Configure<LoggerSettings>(
     builder.Configuration.GetSection("PVRPCloudLogger"));
 
-builder.Services.AddTransient<IPVRPCloudApiHandler, PVRPCloudApiHandler>();
+builder.Services.AddTransient<IApiHandler, ApiHandler>();
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 

@@ -9,7 +9,7 @@ public class CapacityProfileValidatorTests
     [Fact]
     public void Validate_ReturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CapacityProfiles = [
                 new()
@@ -30,7 +30,7 @@ public class CapacityProfileValidatorTests
     [Fact]
     public void Validate_IdIsNull_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CapacityProfiles = [
                 new()
@@ -51,7 +51,7 @@ public class CapacityProfileValidatorTests
     [Fact]
     public void Validate_IdIsEmpty_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CapacityProfiles = [
                 new()
@@ -72,7 +72,7 @@ public class CapacityProfileValidatorTests
     [Fact]
     public void Validate_IdIsRepeated_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CapacityProfiles = [
                 new()

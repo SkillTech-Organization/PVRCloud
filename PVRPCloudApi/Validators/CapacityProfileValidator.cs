@@ -6,15 +6,15 @@ namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class CapacityProfileValidator : AbstractValidator<PVRPCloudCapacityProfile>
+public sealed class CapacityProfileValidator : AbstractValidator<CapacityProfile>
 {
-    public CapacityProfileValidator(PVRPCloudProject project)
+    public CapacityProfileValidator(Project project)
     {
         var ids = IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.ID)
             .NotEmpty()
             .NotNull()
-            .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .Must(IsUnique(ids)).WithMessage(Messages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.Capacity1)

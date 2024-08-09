@@ -6,15 +6,15 @@ namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class ClientValidator : AbstractValidator<PVRPCloudClient>
+public sealed class ClientValidator : AbstractValidator<Client>
 {
-    public ClientValidator(PVRPCloudProject project)
+    public ClientValidator(Project project)
     {
         var ids = IdsToArray(project.Clients);
         RuleFor(x => x.ID)
             .NotEmpty()
             .NotNull()
-            .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .Must(IsUnique(ids)).WithMessage(Messages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ClientName)

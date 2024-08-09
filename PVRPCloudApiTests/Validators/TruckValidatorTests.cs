@@ -9,7 +9,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_ReturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 0,
             MaxTime = 3,
@@ -52,7 +52,7 @@ public class TruckValidatorTests
     [InlineData("")]
     public void Validate_IdIsInvalid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 0,
             MaxTime = 3,
@@ -93,7 +93,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 0,
             MaxTime = 3,
@@ -140,7 +140,7 @@ public class TruckValidatorTests
     [InlineData(null)]
     public void Validate_TruckTypeIdIsNotValid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 0,
             MaxTime = 3,
@@ -181,7 +181,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_TruckTypeIdIsNotReal_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 0,
             MaxTime = 3,
@@ -224,7 +224,7 @@ public class TruckValidatorTests
     [InlineData(null)]
     public void Validate_TruckNameIsNotValid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 0,
             MaxTime = 3,
@@ -267,7 +267,7 @@ public class TruckValidatorTests
     [InlineData(4)]
     public void Validate_ArrDepotMaxTimeIsOutOfProjectTime_ReturnsInvalidResult(int value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 1,
             MaxTime = 3,
@@ -308,7 +308,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_ArrDepotMaxTimeIsZero_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 1,
             MaxTime = 3,
@@ -349,7 +349,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_MaxWorkTimeIsZero_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 1,
             MaxTime = 3,
@@ -390,7 +390,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_EarliestStartIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 1,
             MaxTime = 3,
@@ -431,7 +431,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_LatestStartIsLessThenEarliestStart_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 1,
             MaxTime = 3,
@@ -472,7 +472,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_LatestStartIsGreaterThanMaxTime_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 1,
             MaxTime = 3,
@@ -515,7 +515,7 @@ public class TruckValidatorTests
     [InlineData(null)]
     public void Validate_CapacityProfileIdIsNotValid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 0,
             MaxTime = 3,
@@ -556,7 +556,7 @@ public class TruckValidatorTests
     [Fact]
     public void Validate_CapacityProfileIdIsNotFound_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             MinTime = 0,
             MaxTime = 3,

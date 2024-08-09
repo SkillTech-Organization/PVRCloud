@@ -22,10 +22,10 @@ namespace FTLSupporter
     public class FTLInterface
     {
         private static ITelemetryLogger Logger { get; set; }
-        private static PVRPCloudLoggerSettings LoggerSettings { get; set; }
+        private static LoggerSettings LoggerSettings { get; set; }
         private static string RequestID { get; set; }
 
-        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, PVRPCloudLoggerSettings loggerSettings)
+        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, LoggerSettings loggerSettings)
         {
             if (Logger == null)
             {

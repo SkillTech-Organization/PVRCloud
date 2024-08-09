@@ -9,7 +9,7 @@ public class CostProfileValidatorTests
     [Fact]
     public void Validate_ReturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CostProfiles = [
                 new()
@@ -32,7 +32,7 @@ public class CostProfileValidatorTests
     [Fact]
     public void Validate_IdIsNull_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CostProfiles = [
                 new()
@@ -55,7 +55,7 @@ public class CostProfileValidatorTests
     [Fact]
     public void Validate_IdIsEmpty_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CostProfiles = [
                 new()
@@ -78,7 +78,7 @@ public class CostProfileValidatorTests
     [Fact]
     public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CostProfiles = [
                 new()
@@ -108,7 +108,7 @@ public class CostProfileValidatorTests
     [Fact]
     public void Validate_FixCostIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CostProfiles = [
                 new()
@@ -131,7 +131,7 @@ public class CostProfileValidatorTests
     [Fact]
     public void Validate_HourCostIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CostProfiles = [
                 new()
@@ -154,7 +154,7 @@ public class CostProfileValidatorTests
     [Fact]
     public void Validate_KmCostIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             CostProfiles = [
                 new()

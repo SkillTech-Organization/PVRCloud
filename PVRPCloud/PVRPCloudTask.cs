@@ -32,7 +32,7 @@ public class PVRPCloudTask
 
     [DisplayNameAttributeX(Name = "Túrapontok", Order = 6)]
     [Required(ErrorMessage = "Kötelező mező:TPoints")]
-    public List<PVRPCloudPoint> TPoints { get; set; } = new List<PVRPCloudPoint>();
+    public List<Point> TPoints { get; set; } = new List<Point>();
 
     [DisplayNameAttributeX(Name = "Engedélyező járműtulajdonságok", Order = 7)]
     public string InclTruckProps { get; set; } = "";

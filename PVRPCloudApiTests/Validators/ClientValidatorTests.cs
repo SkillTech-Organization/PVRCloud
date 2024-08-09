@@ -9,7 +9,7 @@ public class ClientValidatorTests
     [Fact]
     public void Validate_ReturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -33,7 +33,7 @@ public class ClientValidatorTests
     [Fact]
     public void Validate_IdIsNull_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -57,7 +57,7 @@ public class ClientValidatorTests
     [Fact]
     public void Validate_IdIsEmpty_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -81,7 +81,7 @@ public class ClientValidatorTests
     [Fact]
     public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -113,7 +113,7 @@ public class ClientValidatorTests
     [Fact]
     public void Validate_ClientNameIsEmpty_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -137,7 +137,7 @@ public class ClientValidatorTests
     [Fact]
     public void Validate_ClientNameIsNull_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -164,7 +164,7 @@ public class ClientValidatorTests
     [InlineData(90)]
     public void Validate_LatIsBetweenNegative90And90_ReturnsValidResult(int value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -190,7 +190,7 @@ public class ClientValidatorTests
     [InlineData(91)]
     public void Validate_LatIsOutsideNegative90And90_ReturnsInvalidResult(double value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -217,7 +217,7 @@ public class ClientValidatorTests
     [InlineData(190)]
     public void Validate_LngIsBetweenNegative180And190_ReturnsValidResult(int value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -243,7 +243,7 @@ public class ClientValidatorTests
     [InlineData(191)]
     public void Validate_LatIsOutsideNegative181And191_ReturnsInvalidResult(double value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -267,7 +267,7 @@ public class ClientValidatorTests
     [Fact]
     public void Validate_ServiceFixTimeIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()

@@ -5,15 +5,15 @@ namespace PVRPCloudApi.Controllers;
 
 public static class PVRPCloudMock
 {
-    public static PVRPCloudResponse ResponseMock => new()
+    public static Response ResponseMock => new()
     {
         RequestID = "12345678",
         Results = [
-            PVRPCloudResult.Success(Project)
+            Result.Success(Project)
         ]
     };
 
-    private static PVRPCloudProjectRes Project => new()
+    private static ProjectRes Project => new()
     {
         ProjectName = "TEST1",
         MinTime = DateTime.Parse("2024.07.25 00:00:00"),

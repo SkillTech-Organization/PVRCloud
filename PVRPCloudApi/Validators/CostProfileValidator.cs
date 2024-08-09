@@ -6,15 +6,15 @@ namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class CostProfileValidator : AbstractValidator<PVRPCloudCostProfile>
+public sealed class CostProfileValidator : AbstractValidator<CostProfile>
 {
-    public CostProfileValidator(PVRPCloudProject project)
+    public CostProfileValidator(Project project)
     {
         var ids = IdsToArray(project.CostProfiles);
         RuleFor(x => x.ID)
             .NotEmpty()
             .NotNull()
-            .Must(IsUnique(ids)).WithMessage(PVRPCloudMessages.ERR_ID_UNIQUE)
+            .Must(IsUnique(ids)).WithMessage(Messages.ERR_ID_UNIQUE)
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.FixCost)

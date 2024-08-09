@@ -67,7 +67,7 @@ public class TelemetryLogger : ITelemetryLogger, IDisposable
 {
     public MessageToQueueMessage LogToQueueMessage { get; set; }
 
-    private PVRPCloudLoggerSettings Settings { get; set; }
+    private LoggerSettings Settings { get; set; }
 
     public IQueueLogger QueueLogger { get; private set; }
 
@@ -82,7 +82,7 @@ public class TelemetryLogger : ITelemetryLogger, IDisposable
     public string IdPropertyLabel { get; set; } = "RequestID";
     public string TypePropertyLabel { get; set; } = "Type";
 
-    internal TelemetryLogger(PVRPCloudLoggerSettings settings, IQueueLogger queueLogger = null)
+    internal TelemetryLogger(LoggerSettings settings, IQueueLogger queueLogger = null)
     {
         Settings = settings;
 

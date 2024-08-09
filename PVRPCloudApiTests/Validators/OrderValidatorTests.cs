@@ -9,7 +9,7 @@ public class OrderValidatorTests
     [Fact]
     public void Validate_ReturnsValidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -55,7 +55,7 @@ public class OrderValidatorTests
     [InlineData("")]
     public void Validate_IdIsNotValid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -95,7 +95,7 @@ public class OrderValidatorTests
     [Fact]
     public void Validate_IdIsNotUnique_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -147,7 +147,7 @@ public class OrderValidatorTests
     [Fact]
     public void Validate_ClientIdNotFoud_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -193,7 +193,7 @@ public class OrderValidatorTests
     [InlineData("")]
     public void Validate_ClientIdIsNotValid_ReturnsInvalidResult(string? value)
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -237,7 +237,7 @@ public class OrderValidatorTests
     [Fact]
     public void Validate_OrderServiceTimeIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -281,7 +281,7 @@ public class OrderValidatorTests
     [Fact]
     public void Validate_OrderMinTimeIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -325,7 +325,7 @@ public class OrderValidatorTests
     [Fact]
     public void Validate_OrderMaxTimeIsNegative_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()
@@ -369,7 +369,7 @@ public class OrderValidatorTests
     [Fact]
     public void Validate_TruckIDsContainsInvalidElement_ReturnsInvalidResult()
     {
-        PVRPCloudProject project = new()
+        Project project = new()
         {
             Clients = [
                 new()

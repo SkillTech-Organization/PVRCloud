@@ -10,9 +10,9 @@ namespace PVRPCloudApiTester.Util;
 
 internal class GetResultResponse
 {
-    public PVRPCloudQueueResponse Result { get; set; }
+    public QueueResponse Result { get; set; }
 
-    public List<PVRPCloudResult> PVRPCloudResults { get; set; }
+    public List<Result> PVRPCloudResults { get; set; }
 
     public bool NoMoreMessages { get; set; } = false;
 
@@ -26,10 +26,10 @@ internal class GetResultResponse
 internal class QueueReader
 {
     private readonly QueueClient queueClient;
-    private readonly PVRPCloudApiTesterSettings settings;
+    private readonly ApiTesterSettings settings;
     private readonly ILogger _logger;
 
-    public QueueReader(PVRPCloudApiTesterSettings s, IConfiguration configuration)
+    public QueueReader(ApiTesterSettings s, IConfiguration configuration)
     {
         settings = s;
         queueClient = new QueueClient(settings.AzureStorageConnectionString, settings.QueueName);
@@ -80,7 +80,7 @@ internal class QueueReader
                         try
                         {
                             _logger.Debug("Parsing message...");
-                            var queueResponse = msgText.ToDeserializedJson<PVRPCloudQueueResponse>();
+                            var queueResponse = msgText.ToDeserializedJson<QueueResponse>();
                             _logger.Debug("Parsing message...done");
 
                             if (queueResponse == null)
@@ -92,7 +92,7 @@ internal class QueueReader
                                 var res = queueResponse;
                                 if (res != null)
                                 {
-                                    if (res.Status == PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.RESULT)
+                                    if (res.Status == QueueResponse.QueueResponseStatus.RESULT)
                                     {
                                         _logger.Information("Result found.");
 
@@ -100,7 +100,7 @@ internal class QueueReader
                                         resp.ResultReceived = true;
                                         return resp;
                                     }
-                                    else if (res.Status == PVRPCloudQueueResponse.PVRPCloudQueueResponseStatus.ERROR)
+                                    else if (res.Status == QueueResponse.QueueResponseStatus.ERROR)
                                     {
                                         _logger.Information("Error found.");
 

@@ -15,14 +15,14 @@ public sealed class ValidationExceptionHandler : IExceptionHandler
             return false;
         }
 
-        PVRPCloudResponse response = new()
+        Response response = new()
         {
             Results = validationException.Errors
                 .Select(error => (
-                    ErrorMessage: PVRPCloudResErrMsg.ValidationError(error.PropertyName, error.ErrorMessage),
+                    ErrorMessage: ResErrMsg.ValidationError(error.PropertyName, error.ErrorMessage),
                     Error: error
                 ))
-                .Select(errorTuple => PVRPCloudResult.ValidationError(errorTuple.ErrorMessage, (string)errorTuple.Error.CustomState))
+                .Select(errorTuple => Result.ValidationError(errorTuple.ErrorMessage, (string)errorTuple.Error.CustomState))
                 .ToList()
         };
 

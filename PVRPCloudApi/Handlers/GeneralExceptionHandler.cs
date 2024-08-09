@@ -11,10 +11,10 @@ public static class GeneralExceptionHandler
         var exceptionHandlerFeature = context.Features.GetRequiredFeature<IExceptionHandlerPathFeature>();
 
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        await context.Response.WriteAsJsonAsync(new PVRPCloudResponse()
+        await context.Response.WriteAsJsonAsync(new Response()
         {
             Results = [
-                PVRPCloudResult.Exception(PVRPCloudResErrMsg.FromException(exceptionHandlerFeature.Error))
+                Result.Exception(ResErrMsg.FromException(exceptionHandlerFeature.Error))
             ]
         });
     }
