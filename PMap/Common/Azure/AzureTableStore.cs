@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using PMapCore.Common.Attrib;
 using Newtonsoft.Json;
 using System.Runtime.ExceptionServices;
+using ZstdSharp.Unsafe;
 
 namespace PMapCore.Common.Azure
 {
@@ -456,7 +457,7 @@ namespace PMapCore.Common.Azure
 
             CloudTable table = null;
             table = m_client.GetTableReference(t.Name);
-            _ = table.CreateIfNotExistsAsync().Result;
+            table.CreateIfNotExistsAsync().Wait();
 
             PropertyInfo PartitionKeyProp = t.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
             if (PartitionKeyProp == null)
@@ -749,7 +750,7 @@ namespace PMapCore.Common.Azure
 
 
                 var query = new TableQuery<DynamicTableEntity>().Where(segmentFilter).Take(BATCHSIZE);
-                segment = table.ExecuteQuerySegmentedAsync(query, segment?.ContinuationToken).Result;
+                segment = table.ExecuteQuerySegmentedAsync<DynamicTableEntity>(query, segment == null ? null : segment.ContinuationToken).Result;
 
                 processor(segment.Results);
             }

@@ -64,7 +64,7 @@ namespace PMapCore.Common
         public double CutExtDegree { get; private set; }               //A kivágásnál mekkora ráhagyással kel dolgozni? (fokban megadva)
         public int CalcPMapRoutesMemTreshold { get; private set; }      //Útvonalszámítás memória KB-ben
 
-        public Dictionary<int, int> dicSpeed { get; private set; }
+        public Dictionary<int, int> DicSpeeds { get;  set; }
 
         public int MapType { get; private set; }
 
@@ -243,14 +243,14 @@ namespace PMapCore.Common
                 CalcPMapRoutesMemTreshold = 100;
 
 
-            dicSpeed = new Dictionary<int, int>();
+            DicSpeeds = new Dictionary<int, int>();
             for (int i = 1; i <= 7; i++)
             {
                 string sSpeed = ini.ReadString(Global.iniSpeeds, Global.iniSpeed + i.ToString());
                 if (sSpeed != "")
-                    dicSpeed.Add(i, Convert.ToInt32(sSpeed));
+                    DicSpeeds.Add(i, Convert.ToInt32(sSpeed));
                 else
-                    dicSpeed.Add(i, aSpeedDefaults[i - 1]);
+                    DicSpeeds.Add(i, aSpeedDefaults[i - 1]);
             }
 
 

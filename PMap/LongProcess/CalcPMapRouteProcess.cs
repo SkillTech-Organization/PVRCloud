@@ -86,7 +86,7 @@ namespace PMapCore.LongProcess
 
 
                     PMapRoutingProvider provider = new PMapRoutingProvider();
-                    RouteData.Instance.Init(m_DB, PMapIniParams.Instance.dicSpeed);
+                    RouteData.Instance.Init(m_DB);
                     RectLatLng boundary = new RectLatLng();
 
                     if (m_CalcDistances.Count > 0)

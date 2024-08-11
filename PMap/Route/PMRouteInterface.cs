@@ -118,7 +118,7 @@ namespace PMapCore.Route
             {
 
 
-                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, PMapIniParams.Instance.dicSpeed);
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB);
 
                 List<boRoute>[] calcDistances = new List<boRoute>[PMapIniParams.Instance.RouteThreadNum];
                 for (int i = 0; i < PMapIniParams.Instance.RouteThreadNum; i++)

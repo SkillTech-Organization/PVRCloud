@@ -25,11 +25,10 @@ namespace PMapCore.BO
         public int RZN_ID ; //{ get; set; }
         public int RST_ID ; //{ get; set; }
         public string WZONE ; //{ get; set; }
-        public string EDG_ETLCODE ; //{ get; set; }
+        public string EDG_ETRCODE ; //{ get; set; }
         public float CalcSpeed ; //{ get; set; }                      //idealizált sebességprofil sebesség (ez alapján számítjuk a leggyorsabb utat)
         public float CalcDuration ; //{ get; set; }                   //menetidő (idealizált sebességprofil alapján) megj.:futásidő miatt float
 
-        public Dictionary<int, double> Tolls ; //{ get; set; }      //Útdíjak járműkategóriánként, teljes szelvénydíjakkal
         public PointLatLng fromLatLng ; //{ get; set; }                //LatLng kiemelése, hogy gyors lehessen a térképkivágás útvonalszámításnál
 
         public PointLatLng toLatLng ; //{ get; set; }

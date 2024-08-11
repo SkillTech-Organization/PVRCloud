@@ -44,11 +44,9 @@ namespace PMapCore.Common.Azure
     public static class CloudExtensions
     {
 
-        public static IEnumerable<TElement> StartsWith<TElement>(
-            this CloudTable table,
-            string partitionKey,
-            string searchStr,
-            string columnName = "RowKey") where TElement : ITableEntity, new()
+        public static IEnumerable<TElement> StartsWith<TElement>
+        (this CloudTable table, string partitionKey, string searchStr,
+        string columnName = "RowKey") where TElement : ITableEntity, new()
         {
             if (string.IsNullOrEmpty(searchStr)) return null;
 

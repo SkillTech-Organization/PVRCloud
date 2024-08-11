@@ -126,17 +126,19 @@ namespace BlobUtils
             return downloadedData;
         }
 
-        public async Task<Stream> DownloadfromStream(string blobContainerName, string blobName, string localFilePath)
+        public async Task<Stream> DownloadfromStream(string blobContainerName, string blobName)
+        {
+            BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+            return await blobClient.OpenReadAsync();
+        }
+
+        public bool CheckIfBlobExist(string blobContainerName, string blobName)
         {
             BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
 
-            using (var stream = await blobClient.OpenReadAsync())
-            {
-                FileStream fileStream = File.OpenWrite(localFilePath);
-                await stream.CopyToAsync(fileStream);
-                return stream;
-            }
+            return blobClient.Exists().Value;
         }
     }
 }

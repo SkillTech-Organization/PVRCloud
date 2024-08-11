@@ -97,7 +97,7 @@ namespace PMapCore.LongProcess
                 PMapRoutingProvider provider = new PMapRoutingProvider();
                 foreach (var tourPoint in p_tour.TourPoints.GroupBy(g => g.NOD_ID))
                 {
-                    RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, PMapIniParams.Instance.dicSpeed);
+                    RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB);
 
                     var toNodes = p_tour.TourPoints.GroupBy(g => g.NOD_ID).Where(w => w.Key != tourPoint.First().NOD_ID).Select(s => s.Key).ToList();
                     var resRoute = provider.GetAllRoutes(routePar, tourPoint.First().NOD_ID, toNodes,

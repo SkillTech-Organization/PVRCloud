@@ -15,52 +15,34 @@ namespace PMapCore.BO
         [WriteFieldAttribute(Insert = false, Update = false)]
         public int ID { get; set; }
 
-        [DisplayNameAttributeX("Azonosítókód")]
+        [DisplayNameAttributeX("Járműkategória")]
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ETL_CODE { get; set; }
+        public int ETL_ETOLLCAT { get; set; }
 
-        [DisplayNameAttributeX("Hosszúság KM")]
+        [DisplayNameAttributeX("Jármű emissziós kategória")]
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ETL_LEN_KM { get; set; }
+        public int ETL_ENGINEEURO { get; set; }
 
-        [DisplayNameAttributeX("J2 útdíj KM")]
+        [DisplayNameAttributeX("Gyorsforgalmi km díj")]
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ETL_J2_TOLL_KM { get; set; }
+        public double ETL_TOLL_SPEEDWAY { get; set; }
 
-        [DisplayNameAttributeX("J3 útdíj KM")]
+        [DisplayNameAttributeX("Főút km díj")]
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ETL_J3_TOLL_KM { get; set; }
+        public double ETL_TOLL_ROAD { get; set; }
 
-        [DisplayNameAttributeX("J4 útdíj KM")]
+        [DisplayNameAttributeX("Zajártalmi költség külvárosi")]
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ETL_J4_TOLL_KM { get; set; }
+        public double ETL_NOISE_CITY { get; set; }
+
+        [DisplayNameAttributeX("Zajártalmi költség telepüésközi")]
         [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ETL_NOISE_OUTER { get; set; }
 
-        [DisplayNameAttributeX("J2 útdíj szakasz összesen")]
-        public double ETL_J2_TOLL_FULL { get; set; }
-
-        [DisplayNameAttributeX("J3 útdíj szakasz összesen")]
+        [DisplayNameAttributeX("Co2 költség")]
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ETL_J3_TOLL_FULL { get; set; }
-
-        [DisplayNameAttributeX("J4 útdíj szakasz összesen")]
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ETL_J4_TOLL_FULL { get; set; }
-
-        [DisplayNameAttributeX("Utolsó módosítás")]
-        [WriteFieldAttribute(Insert = false, Update = true)]
+        public double ETL_CO2 { get; set; }
         public DateTime LASTDATE { get; set; }
-
-        [WriteFieldAttribute(Insert = false, Update = false)]
-        public Dictionary<int, double> TollsToDict()
-        {
-            Dictionary<int, double> retTolls = new Dictionary<int, double>();
-            retTolls.Add(Global.ETOLLCAT_J0, 0);
-            retTolls.Add(Global.ETOLLCAT_J2, ETL_J2_TOLL_FULL);
-            retTolls.Add(Global.ETOLLCAT_J3, ETL_J3_TOLL_FULL);
-            retTolls.Add(Global.ETOLLCAT_J4, ETL_J4_TOLL_FULL);
-            return retTolls;
-        }
 
     }
 }

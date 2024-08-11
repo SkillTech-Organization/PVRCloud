@@ -45,7 +45,10 @@ namespace PMapCore.BO
         public DateTime OPEN { get; set; }
         public DateTime CLOSE { get; set; }
         public string OPENCLOSE { get; set; }
-
+    //    [JsonIgnore]
+    //    public PPlanMarker Marker { get; set; }
+    //    [JsonIgnore]
+    //    public GMapRoute Route { get; set; }
         [JsonIgnore]
         public boPlanTourPoint NextTourPoint { get; set; }
         public string DEP_CODE { get; set; }
