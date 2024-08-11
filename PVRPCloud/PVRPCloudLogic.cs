@@ -9,7 +9,7 @@ using PVRPCloudInsightsLogger.Settings;
 
 namespace PVRPCloud;
 
-public sealed class PVRPCloudLogic
+public sealed class PVRPCloudLogic : IPVRPCloudLogic
 {
     private ITelemetryLogger? _logger { get; set; }
     private LoggerSettings _loggerSettings { get; set; }

@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using PVRPCloud;
 using PVRPCloud.Settings;
 using PVRPCloudApi;
 using PVRPCloudApi.DTO.Response;
@@ -61,7 +62,7 @@ builder.Services.Configure<LoggerSettings>(
 builder.Services.Configure<MapStorageSettings>(
     builder.Configuration.GetSection("MapStorage"));
 
-builder.Services.AddTransient<IApiHandler, ApiHandler>();
+builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
