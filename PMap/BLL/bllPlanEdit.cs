@@ -12,7 +12,6 @@ using PMapCore.BLL.Base;
 using PMapCore.Common;
 using System.Globalization;
 using PMapCore.Strings;
-using System.Windows.Forms;
 using PMapCore.BO.DataXChange;
 using System.Runtime.ExceptionServices;
 using PMapCore.Common.PPlan;
@@ -109,7 +108,7 @@ namespace PMapCore.BLL
 
                     if (p_reOrder)
                     {
-                        //CTE-vel átszámolás 
+                        //CTE-vel átszámolás
                         /*
                         string sSQL = "WITH CTE_Main AS ( " + Environment.NewLine +
                                       "select " + Environment.NewLine +
@@ -249,8 +248,8 @@ namespace PMapCore.BLL
         }
 
         /// <summary>
-        /// Különböző árutipus-mennyiségekből rakodási mennyiség generálása. 
-        /// 
+        /// Különböző árutipus-mennyiségekből rakodási mennyiség generálása.
+        ///
         /// Megjegyzés: A QTY4 -es dohányárut jelent, annak nincs mennyisége!!!
         /// /// </summary>
         /// <param name="p_QTY1"></param>
@@ -385,7 +384,7 @@ namespace PMapCore.BLL
             return Convert.ToInt32(linq.Sum(itm => itm.Duration));
         }
 
- 
+
         public bool IsBundleInTour(int pTPL_ID, int pLastPoint)
         {
             string sSQLStr;

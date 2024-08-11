@@ -65,24 +65,28 @@ namespace PMapCore.Common.Azure
                 prefixCondition
                 );
             var query = new TableQuery<TElement>().Where(filterString);
-            return table.ExecuteQuery<TElement>(query);
+            var res = table.GetType().GetMethod("ExecuteQuery").Invoke(table, [query]);
+            return (IEnumerable<TElement>)res;
         }
     }
     public static class TableQueryExtensions
     {
         public static TableQuery<TElement> AndWhere<TElement>(this TableQuery<TElement> @this, string filter)
+            where TElement : ITableEntity, new()
         {
             @this.FilterString = TableQuery.CombineFilters(@this.FilterString, TableOperators.And, filter);
             return @this;
         }
 
         public static TableQuery<TElement> OrWhere<TElement>(this TableQuery<TElement> @this, string filter)
+            where TElement : ITableEntity, new()
         {
             @this.FilterString = TableQuery.CombineFilters(@this.FilterString, TableOperators.Or, filter);
             return @this;
         }
 
         public static TableQuery<TElement> NotWhere<TElement>(this TableQuery<TElement> @this, string filter)
+            where TElement : ITableEntity, new()
         {
             @this.FilterString = TableQuery.CombineFilters(@this.FilterString, TableOperators.Not, filter);
             return @this;

@@ -7,12 +7,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace PMapCore.Common
 {
-    
+
     public static class BinarySerializer
     {
         public static void Serialize(Stream stream, object value)
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             formatter.Serialize(stream, value);
         }
 
@@ -35,7 +37,9 @@ namespace PMapCore.Common
         }
         public static object Deserialize(Stream stream)
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             return formatter.Deserialize(stream);
         }
 
