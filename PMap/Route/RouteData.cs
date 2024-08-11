@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 using Azure.Storage.Blobs;
+using System.Collections.Frozen;
 
 namespace PMapCore.Route
 {
@@ -39,17 +40,17 @@ namespace PMapCore.Route
 
         private static volatile bool m_Initalized = false;
 
-        public Dictionary<string, boEdge> Edges = null; //Az útvonalak korlátozás-zónatípusonként
+        public FrozenDictionary<string, boEdge> Edges = null; //Az útvonalak korlátozás-zónatípusonként
 
-        public Dictionary<int, PointLatLng> NodePositions = null;  //Node koordináták
+        public FrozenDictionary<int, PointLatLng> NodePositions = null;  //Node koordináták
 
-        public Dictionary<string, boEtoll> Etolls = null; //Útdíjak és szorzók
+        public FrozenDictionary<string, boEtoll> Etolls = null; //Útdíjak és szorzók
 
-        public Dictionary<string, boEtRoad> EtRoads = null; //Díjköteles útszelvények 
+        public FrozenDictionary<string, boEtRoad> EtRoads = null; //Díjköteles útszelvények
 
-        public Dictionary<int, string> RZN_ID_LIST = null;          //Behajtási zónák súlyonként
+        public FrozenDictionary<int, string> RZN_ID_LIST = null;          //Behajtási zónák súlyonként
 
-        public Dictionary<string, int> allRZones = null;            //Összes behajtási zóna
+        public FrozenDictionary<string, int> allRZones = null;            //Összes behajtási zóna
 
         public int NodeCount
         {
@@ -89,8 +90,8 @@ namespace PMapCore.Route
                     //string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1250));
                     string etRoadsContent = getContentFromBlob(bh, Global.EXTFILE_ETROADS, Encoding.GetEncoding(1250));
 
-                    Etolls = loadEtolls(etollContent); //Útdíjak és szorzók
-                    EtRoads = loadEtRoads(etRoadsContent); //Díjköteles útszelvények 
+                    Etolls = LoadEtolls(etollContent); //Útdíjak és szorzók
+                    EtRoads = LoadEtRoads(etRoadsContent); //Díjköteles útszelvények
 
 
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
@@ -99,7 +100,7 @@ namespace PMapCore.Route
                     //string strEdges = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
                     string strEdges = getContentFromBlob(bh, Global.EXTFILE_EDG, Encoding.UTF8);
 
-                    var xEdges = JsonConvert.DeserializeObject<Dictionary<string, boEdge>>(strEdges);
+                    var xEdges = JsonConvert.DeserializeObject<FrozenDictionary<string, boEdge>>(strEdges);
                     Edges = xEdges;
                     foreach (var edg in Edges)
                     {
@@ -111,18 +112,18 @@ namespace PMapCore.Route
 
                     //string strNodePositions = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
                     string strNodePositions = getContentFromBlob(bh, Global.EXTFILE_NOD, Encoding.UTF8);
-                    var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
+                    var xNodePositions = JsonConvert.DeserializeObject<FrozenDictionary<int, PointLatLng>>(strNodePositions);
                     NodePositions = xNodePositions;
 
                     //string strallRZones = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
                     string strallRZones = getContentFromBlob(bh, Global.EXTFILE_RZN, Encoding.UTF8);
-                    var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
+                    var xallRZones = JsonConvert.DeserializeObject<FrozenDictionary<string, int>>(strallRZones);
                     allRZones = xallRZones;
 
 
                     //string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
                     string strRZN_ID_LIST = getContentFromBlob(bh, Global.EXTFILE_RZNTyp, Encoding.UTF8);
-                    var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
+                    var xRZN_ID_LIST = JsonConvert.DeserializeObject<FrozenDictionary<int, string>>(strRZN_ID_LIST);
                     RZN_ID_LIST = xRZN_ID_LIST;
 
                     m_Initalized = true;
@@ -140,7 +141,7 @@ namespace PMapCore.Route
             return result;
         }
 
-        private Dictionary<string, boEtoll> loadEtolls(string CSVContent)
+        private FrozenDictionary<string, boEtoll> LoadEtolls(string CSVContent)
         {
 
             NumberFormatInfo nfi = CultureInfo.CurrentCulture.NumberFormat;
@@ -148,7 +149,7 @@ namespace PMapCore.Route
             var result = new Dictionary<string, boEtoll>();
             var counter = 1;
 
-            CSVItems.ForEach(async item =>
+            CSVItems.ForEach(item =>
             {
                 var ID = counter++;
                 var ETL_ETOLLCAT = Int32.Parse(item["Díjkategória"].Replace("J", ""));
@@ -159,17 +160,17 @@ namespace PMapCore.Route
                 else if (sETL_ENGINEEURO == "Euro I")
                     ETL_ENGINEEURO = 1;
                 else if (sETL_ENGINEEURO == "Euro II")
-                    ETL_ENGINEEURO = 2; 
+                    ETL_ENGINEEURO = 2;
                 else if (sETL_ENGINEEURO == "Euro III")
-                    ETL_ENGINEEURO = 3; 
+                    ETL_ENGINEEURO = 3;
                 else if (sETL_ENGINEEURO == "Euro IV")
-                    ETL_ENGINEEURO = 4; 
+                    ETL_ENGINEEURO = 4;
                 else if (sETL_ENGINEEURO == "Euro V")
-                    ETL_ENGINEEURO = 5; 
+                    ETL_ENGINEEURO = 5;
                 else if (sETL_ENGINEEURO == "Euro VI")
-                    ETL_ENGINEEURO = 6; 
+                    ETL_ENGINEEURO = 6;
                 else if (sETL_ENGINEEURO == "A1")
-                    ETL_ENGINEEURO = 99; 
+                    ETL_ENGINEEURO = 99;
                 else if (sETL_ENGINEEURO == "A0")
                     ETL_ENGINEEURO = 100;
 
@@ -194,12 +195,11 @@ namespace PMapCore.Route
 
             });
 
-            return result;
+            return result.ToFrozenDictionary();
         }
 
-        private Dictionary<string, boEtRoad> loadEtRoads(string CSVContent)
+        private FrozenDictionary<string, boEtRoad> LoadEtRoads(string CSVContent)
         {
-
             NumberFormatInfo nfi = CultureInfo.CurrentCulture.NumberFormat;
             var CSVItems = Util.LoadCSV(CSVContent);
             var result = new Dictionary<string, boEtRoad>();
@@ -228,33 +228,28 @@ namespace PMapCore.Route
                 }
             });
 
-            return result;
+            return result.ToFrozenDictionary();
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="p_DBA"></param>
         public void Init(SQLServerAccess p_DBA, bool p_Forced = false)
         {
-
-
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
             {
                 if (!m_Initalized || p_Forced)
                 {
-
-
                     bllRoute m_bllRoute;
                     m_bllRoute = new bllRoute(p_DBA);
 
-                    Etolls = m_bllRoute.GetEtolls(); //Útdíjak és szorzók
-                    EtRoads = m_bllRoute.GetEtRoads(); //Díjköteles útszelvények 
+                    Etolls = m_bllRoute.GetEtolls().ToFrozenDictionary(); //Útdíjak és szorzók
+                    EtRoads = m_bllRoute.GetEtRoads().ToFrozenDictionary(); //Díjköteles útszelvények
 
-
-                    Edges = new Dictionary<string, boEdge>();
+                    Dictionary<string, boEdge> edges = [];
+                    // Edges = new Dictionary<string, boEdge>();
                     NodePositions = null;
-
-
 
                     /// <summary>
                     /// Teljes térkép felolvasása
@@ -262,13 +257,12 @@ namespace PMapCore.Route
                     /// </summary>
                     try
                     {
-                        //üríteni! a EDG_ETRCODE='67u81k45m67u88k' 
+                        //üríteni! a EDG_ETRCODE='67u81k45m67u88k'
                         DateTime dtStart = DateTime.Now;
                         DataTable dt = m_bllRoute.GetEdgesToDT();
 
                         foreach (DataRow dr in dt.Rows)
                         {
-
                             int Source = Util.getFieldValue<int>(dr, "NOD_NUM");
                             int Destination = Util.getFieldValue<int>(dr, "NOD_NUM2");
                             bool OneWay = Util.getFieldValue<bool>(dr, "EDG_ONEWAY");
@@ -304,17 +298,16 @@ namespace PMapCore.Route
                                 EDG_MAXWEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXWEIGHT"),
                                 EDG_MAXHEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXHEIGHT"),
                                 EDG_MAXWIDTH = Util.getFieldValue<int>(dr, "EDG_MAXWIDTH")
-
                             };
 
-                            if (!Edges.ContainsKey(keyFrom))
+                            if (!edges.ContainsKey(keyFrom))
                             {
-                                Edges.Add(keyFrom, edgeFrom);
+                                edges.Add(keyFrom, edgeFrom);
                             }
                             else
                             {
-                                if (Edges[keyFrom].RDT_VALUE > edgeFrom.RDT_VALUE)
-                                    Edges[keyFrom] = edgeFrom;
+                                if (edges[keyFrom].RDT_VALUE > edgeFrom.RDT_VALUE)
+                                    edges[keyFrom] = edgeFrom;
                             }
 
                             if (!OneWay)
@@ -346,18 +339,16 @@ namespace PMapCore.Route
                                     EDG_MAXWIDTH = Util.getFieldValue<int>(dr, "EDG_MAXWIDTH")
                                 };
 
-                                if (!Edges.ContainsKey(keyTo))
+                                if (!edges.ContainsKey(keyTo))
                                 {
-                                    Edges.Add(keyTo, edgeTo);
+                                    edges.Add(keyTo, edgeTo);
                                 }
                                 else
                                 {
-                                    if (Edges[keyTo].RDT_VALUE > edgeTo.RDT_VALUE)
-                                        Edges[keyTo] = edgeTo;
+                                    if (edges[keyTo].RDT_VALUE > edgeTo.RDT_VALUE)
+                                        edges[keyTo] = edgeTo;
                                 }
-
                             }
-
                         }
 
                         DataTable dtNodes = m_bllRoute.GetAllNodesToDT();
@@ -366,9 +357,7 @@ namespace PMapCore.Route
                                          {
                                              Key = Util.getFieldValue<int>(row, "ID"),
                                              Value = new PointLatLng(Util.getFieldValue<double>(row, "NOD_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(row, "NOD_XPOS") / Global.LatLngDivider)
-                                         }).ToDictionary(n => n.Key, n => n.Value);
-
-
+                                         }).ToFrozenDictionary(n => n.Key, n => n.Value);
 
                         Util.Log2File("RouteData.Init()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
                         m_Initalized = true;
@@ -378,11 +367,12 @@ namespace PMapCore.Route
                         ExceptionDispatchInfo.Capture(e).Throw();
                         throw;
                     }
-
                     finally
                     {
                         //             PMapCommonVars.Instance.CT_DB.CloseQuery();
                     }
+
+                    Edges = edges.ToFrozenDictionary();
                     m_Initalized = true;
                 }
             }
@@ -394,7 +384,7 @@ namespace PMapCore.Route
         }
 
         /// <summary>
-        /// Az útvonalszámításhoz a feltételeknek megfelelő teljes és vágott térkép készítése 
+        /// Az útvonalszámításhoz a feltételeknek megfelelő teljes és vágott térkép készítése
         /// </summary>
         /// <param name="p_boundary"></param>
         /// <param name="aRZN_ID_LIST">Behajtásiövezet-lista</param>
@@ -425,7 +415,7 @@ namespace PMapCore.Route
 
 
         /// <summary>
-        /// Az útvonalszámításhoz a feltételeknek megfelelő teljes és vágott térkép készítése 
+        /// Az útvonalszámításhoz a feltételeknek megfelelő teljes és vágott térkép készítése
         /// </summary>
         /// <param name="p_boundary"></param>
         /// <param name="aRZN_ID_LIST">Behajtásiövezet-lista</param>
@@ -463,14 +453,14 @@ namespace PMapCore.Route
             //Az adott feletételeknek megfelelő élek beválogatása
             var lstEdges = RouteData.Instance.Edges
                 .Where(edg =>
-                   (edg.Value.EDG_DESTTRAFFIC && PMapIniParams.Instance.DestTraffic)      /// PMapIniParams.Instance.DestTraffic paraméter beállítása esetén a célforgalomban használható 
+                   (edg.Value.EDG_DESTTRAFFIC && PMapIniParams.Instance.DestTraffic)      /// PMapIniParams.Instance.DestTraffic paraméter beállítása esetén a célforgalomban használható
                        ||                                                                            /// utaknál nem veszük a korlátozást figyelembe (SzL, 2013.04.16)
                    //Övezet feltételek
                    //
                    ( /*sRZN_ID_LIST == "" */                                                    /// Van-e rajta behajtási korlátozást figyelembe vegyünk-e? ( sRZN_ID_LIST == "" --> NEM)
                         edg.Value.RZN_ID != 0 &&                                               /// Védett övezet-e
-                         (aRZN.Contains(edg.Value.RZN_ID.ToString())                            /// Az él szerepel-e a zónalistában? 
-                         || tourPointsRzn.Contains(edg.Value.RZN_ID))                           /// Az él szerepel-e a túrapontok zónalistában? 
+                         (aRZN.Contains(edg.Value.RZN_ID.ToString())                            /// Az él szerepel-e a zónalistában?
+                         || tourPointsRzn.Contains(edg.Value.RZN_ID))                           /// Az él szerepel-e a túrapontok zónalistában?
                         )
                     //Korlátozás feltételek
                     //
@@ -544,7 +534,7 @@ namespace PMapCore.Route
             //      .Where(
             //    w => Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
             //        (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-            //        ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) 
+            //        ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider))
             //        &&
             //        Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
             //        (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
@@ -583,13 +573,13 @@ namespace PMapCore.Route
             ////TODO: Nézzük meg, hogy koordiáta alaján pontosan megtaláljuk-e node-ot. (utána lenne a legközelebbi élhez található móka)
 
             ////A legközlebbi élhez található közelebb eső node megkeresése. Azért van így megoldva, mert hosszú országúti szakaszoknál,
-            ////egy, az él 'mellett' lévő koordináta (pl. egy kanyarban van a jármű) esetén az útvonal edge legyen kiválaszva, ne egy legközelebbi 
+            ////egy, az él 'mellett' lévő koordináta (pl. egy kanyarban van a jármű) esetén az útvonal edge legyen kiválaszva, ne egy legközelebbi
             ////település pontja (ami közelebb van, mint az országúti szakasz kezdő- vagy végpontja) Hortobágy és Balmazújváros problémakör
 
             //var nearest = RouteData.Instance.Edges.Where(
             //    w => (Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
             //        (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-            //        ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) 
+            //        ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider))
             //        &&
             //        Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
             //        (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
