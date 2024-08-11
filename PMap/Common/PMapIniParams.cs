@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GMap.NET;
 using System.IO;
+using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Threading;
 using System.Globalization;
@@ -20,12 +21,12 @@ namespace PMapCore.Common
             nolog = 0,      //no logging
             normal = 1,     //normal (default)
             debug = 2,      //additional debugging information + .DBG debug console log
-            sql = 3,        //debugging information + sql log into .SQL
+            sql = 3,        //debugging information + sql log into .SQL 
         }
 
 
         //Útvonalszámítás sebességprofil default értékek
-        private static int[] aSpeedDefaults =
+        private static int[] aSpeedDefaults = 
         {
             70,  //Autópálya
 		    50,  //Autóút
@@ -62,9 +63,9 @@ namespace PMapCore.Common
         public bool DestTraffic { get; private set; }
         public bool CutMapForRouting { get;  set; }           //Útvonalszámítás vágja-e a térképet?
         public double CutExtDegree { get; private set; }               //A kivágásnál mekkora ráhagyással kel dolgozni? (fokban megadva)
-        public int CalcPMapRoutesMemTreshold { get; private set; }      //Útvonalszámítás memória KB-ben
+        public int CalcPMapRoutesMemTreshold { get; private set; }      //Útvonalszámítás memória KB-ben 
 
-        public Dictionary<int, int> dicSpeed { get; private set; }
+        public Dictionary<int, int> DicSpeeds { get;  set; }
 
         public int MapType { get; private set; }
 
@@ -101,13 +102,13 @@ namespace PMapCore.Common
         public string DBPwd { get; set; }
         public int DBCmdTimeOut { get; set; }
 
-
+    
 
         //Lazy objects are thread safe, double checked and they have better performance than locks.
         //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
         private static readonly Lazy<PMapIniParams> m_instance = new Lazy<PMapIniParams>(() => new PMapIniParams(), true);
 
-
+ 
         static public PMapIniParams Instance                //inicializálódik, ezért biztos létrejon az instance osztály)
         {
             get
@@ -123,7 +124,7 @@ namespace PMapCore.Common
 
         public void ReadParams(string p_iniPath, string p_dbConf, string p_iniFileName = "PMap.ini")
         {
-
+  
             if (p_iniPath == "")
                 p_iniPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
             IniPath = p_iniPath;
@@ -243,14 +244,14 @@ namespace PMapCore.Common
                 CalcPMapRoutesMemTreshold = 100;
 
 
-            dicSpeed = new Dictionary<int, int>();
+            DicSpeeds = new Dictionary<int, int>();
             for (int i = 1; i <= 7; i++)
             {
                 string sSpeed = ini.ReadString(Global.iniSpeeds, Global.iniSpeed + i.ToString());
                 if (sSpeed != "")
-                    dicSpeed.Add(i, Convert.ToInt32(sSpeed));
+                    DicSpeeds.Add(i, Convert.ToInt32(sSpeed));
                 else
-                    dicSpeed.Add(i, aSpeedDefaults[i - 1]);
+                    DicSpeeds.Add(i, aSpeedDefaults[i - 1]);
             }
 
 
@@ -260,7 +261,7 @@ namespace PMapCore.Common
                 MapType = Convert.ToInt32(sMapType);
             else
                 MapType = Global.mtGMap;
-
+            
             switch (MapType)
             {
                 case Global.mtGMap:
@@ -283,8 +284,8 @@ namespace PMapCore.Common
                 case Global.mtTest:
                     PPlanCommonVars.Instance.MapProvider = GMapProviders.YandexMap;
                     break;
-
-
+                 
+                 
                  */
 
                 default:
@@ -320,7 +321,7 @@ namespace PMapCore.Common
             TrkMaxWorkTime = Convert.ToInt32("0" + ini.ReadString(Global.iniPlan, Global.iniTrkMaxWorkTime));
             if (TrkMaxWorkTime == 0)
                 TrkMaxWorkTime = 1440;
-
+           
 
             OrdVolumeMultiplier = Convert.ToDouble("0" + ini.ReadString(Global.iniPlan, Global.iniOrdVolumeMultiplier).Replace(',', '.'), CultureInfo.InvariantCulture);
             if (OrdVolumeMultiplier == 0)
@@ -347,7 +348,7 @@ namespace PMapCore.Common
                 GMapProvider.WebProxy = null;
             }
 
-
+        
             Loaded = true;
 
         }

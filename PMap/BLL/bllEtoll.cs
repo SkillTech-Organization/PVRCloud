@@ -30,14 +30,13 @@ namespace PMapCore.BLL
                         {
 
                             ID = Util.getFieldValue<int>(o, "ID"),
-                            ETL_CODE = Util.getFieldValue<string>(o, "ETL_CODE"),
-                            ETL_LEN_KM = Util.getFieldValue<double>(o, "ETL_LEN_KM"),
-                            ETL_J2_TOLL_KM = Util.getFieldValue<double>(o, "ETL_J2_TOLL_KM"),
-                            ETL_J3_TOLL_KM = Util.getFieldValue<double>(o, "ETL_J3_TOLL_KM"),
-                            ETL_J4_TOLL_KM = Util.getFieldValue<double>(o, "ETL_J4_TOLL_KM"),
-                            ETL_J2_TOLL_FULL = Util.getFieldValue<double>(o, "ETL_J2_TOLL_FULL"),
-                            ETL_J3_TOLL_FULL = Util.getFieldValue<double>(o, "ETL_J3_TOLL_FULL"),
-                            ETL_J4_TOLL_FULL = Util.getFieldValue<double>(o, "ETL_J4_TOLL_FULL"),
+                            ETL_ETOLLCAT = Util.getFieldValue<int>(o, "ETL_ETOLLCAT"),
+                            ETL_ENGINEEURO = Util.getFieldValue<int>(o, "ETL_ENGINEEURO"),
+                            ETL_TOLL_SPEEDWAY = Util.getFieldValue<double>(o, "ETL_TOLL_SPEEDWAY"),
+                            ETL_TOLL_ROAD = Util.getFieldValue<double>(o, "ETL_TOLL_ROAD"),
+                            ETL_NOISE_CITY = Util.getFieldValue<double>(o, "ETL_NOISE_CITY"),
+                            ETL_NOISE_OUTER = Util.getFieldValue<double>(o, "ETL_NOISE_OUTER"),
+                            ETL_CO2 = Util.getFieldValue<double>(o, "ETL_CO2"),
                             LASTDATE = Util.getFieldValue<DateTime>(o, "LASTDATE")
                         });
             return linq.ToList();

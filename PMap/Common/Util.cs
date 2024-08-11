@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Reflection;
 using Microsoft.Win32;
 using System.Security.AccessControl;
+using System.Windows.Forms;
 using System.IO.Compression;
 using System.Globalization;
 using System.Net;
@@ -26,6 +27,8 @@ using System.Runtime.ExceptionServices;
 using LZ4;
 using System.IO.MemoryMappedFiles;
 using Newtonsoft.Json.Bson;
+using PMapCore.BO;
+using System.Threading.Tasks;
 
 namespace PMapCore.Common
 {
@@ -62,7 +65,7 @@ namespace PMapCore.Common
         );
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         /// <param name="p_tosplit"></param>
         /// <param name="p_splitby"></param>
@@ -112,7 +115,7 @@ namespace PMapCore.Common
 
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         /// <param name="p_s"></param>
         /// <param name="p_file"></param>
@@ -149,7 +152,8 @@ namespace PMapCore.Common
                     tw.Write(p_s);
                     tw.Close();
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
@@ -177,7 +181,7 @@ namespace PMapCore.Common
             string sMsg = String.Format("{0}: {1}", DateTime.Now.ToString(Global.DATETIMEFORMAT), p_msg);
             Console.WriteLine(sMsg);
             String2File(sMsg + Environment.NewLine, LogFileName, true);
-         }
+        }
 
         public static void ExceptionLog(Exception p_ecx)
         {
@@ -195,7 +199,7 @@ namespace PMapCore.Common
         }
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
@@ -220,7 +224,7 @@ namespace PMapCore.Common
         public static string FileToString2(string p_file, Encoding p_enc = null)
         {
             var ret = File.ReadAllText(p_file, p_enc);
-                     return ret;
+            return ret;
         }
 
         public static string FileToString3(string p_file, Encoding p_enc = null)
@@ -229,7 +233,7 @@ namespace PMapCore.Common
 
             StringBuilder s = new StringBuilder();
 
-            const int MAX_BUFFER = 1048576; //1MB
+            const int MAX_BUFFER = 1048576; //1MB 
             byte[] buffer = new byte[MAX_BUFFER];
             int bytesRead;
             int cycle = 0;
@@ -259,12 +263,12 @@ namespace PMapCore.Common
                 ret = ret.Remove(0, BOMMarkUtf8.Length);
             return ret;
         }
-            /// <summary>
-            ///
-            /// </summary>
-            /// <param name="filename"></param>
-            /// <returns></returns>
-            public static byte[] FileToByteArray(string p_filename)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static byte[] FileToByteArray(string p_filename)
         {
             FileStream fs = File.OpenRead(p_filename);
             BinaryReader br = new BinaryReader(fs);
@@ -338,7 +342,7 @@ namespace PMapCore.Common
         }
 
         /// <summary>
-        /// Ketteoszt egy tombot: a,1,b,2,c,3 => a,b,c/1,2,3
+        /// Ketteoszt egy tombot: a,1,b,2,c,3 => a,b,c/1,2,3 
         /// </summary>
         /// <param name="input">Bemeneti tomb</param>
         /// <param name="output1">Kimeneti tomb1</param>
@@ -632,7 +636,7 @@ namespace PMapCore.Common
         /// <returns></returns>
         public static double DistanceBetweenSegmentAndPoint(double Xa, double Ya, double Xb, double Yb, double Xp, double Yp)
         {
- //           return LineToPointDistance2D(new double[] { Xa, Ya }, new double[] { Xb, Yb }, new double[] { Xp, Yp }, true);
+            //           return LineToPointDistance2D(new double[] { Xa, Ya }, new double[] { Xb, Yb }, new double[] { Xp, Yp }, true);
             // Psuedocode for returning the absolute distance to a line segment from a point.
             //Xa,Ya is point 1 on the line segment.
             //Xb,Yb is point 2 on the line segment.
@@ -701,7 +705,7 @@ namespace PMapCore.Common
 
             return Math.Sqrt(dx * dx + dy * dy);
         }
-        /*
+        /* 
         //Compute the dot product AB . AC
         private static double DotProduct(double[] pointA, double[] pointB, double[] pointC)
         {
@@ -976,9 +980,9 @@ namespace PMapCore.Common
             T minValue = p_paramList[0];
             for (int i = 1; i < p_paramList.Length; i++)
             {
-                if(Double.Parse(minValue.ToString()) == 0)
+                if (Double.Parse(minValue.ToString()) == 0)
                     minValue = p_paramList[i];
-                else if (Double.Parse(p_paramList[i].ToString()) > 0 )
+                else if (Double.Parse(p_paramList[i].ToString()) > 0)
                     minValue = (p_paramList[i].CompareTo(minValue) > 0 ? minValue : p_paramList[i]);
             }
             return minValue;
@@ -992,7 +996,7 @@ namespace PMapCore.Common
             {
                 if (Double.Parse(maxValue.ToString()) == 0)
                     maxValue = p_paramList[i];
-                else if (Double.Parse(p_paramList[i].ToString()) > 0 )
+                else if (Double.Parse(p_paramList[i].ToString()) > 0)
                     maxValue = (p_paramList[i].CompareTo(maxValue) > 0 ? p_paramList[i] : maxValue);
             }
             return maxValue;
@@ -1046,9 +1050,7 @@ namespace PMapCore.Common
         }
         public static int GetObjectSize(object TestObject)
         {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
             BinaryFormatter bf = new BinaryFormatter();
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
             MemoryStream ms = new MemoryStream();
             byte[] Array;
             bf.Serialize(ms, TestObject);
@@ -1056,7 +1058,7 @@ namespace PMapCore.Common
             return Array.Length;
         }
 
-        public static void ParseAddress(string p_Addr, out string o_ZIP_NUM, out  string o_City, out string o_Street, out string o_StreetType, out int o_AddrNum)
+        public static void ParseAddress(string p_Addr, out string o_ZIP_NUM, out string o_City, out string o_Street, out string o_StreetType, out int o_AddrNum)
         {
             o_ZIP_NUM = "";
             o_City = "";
@@ -1107,7 +1109,7 @@ namespace PMapCore.Common
             //Házszám keresése
             if (parts.Length > nCurrPart)
             {
-                var addrNum = parts.Last().Replace( " ", "").Replace(".", "").Replace(",", "");
+                var addrNum = parts.Last().Replace(" ", "").Replace(".", "").Replace(",", "");
                 string[] addrNumParts = addrNum.Split('/');
 
                 int.TryParse(addrNumParts.First(), out o_AddrNum);
@@ -1167,7 +1169,7 @@ namespace PMapCore.Common
             do
             {
                 date = date.AddDays(1);
-            } while (Holidays.Contains(date)  || IsWeekEnd(date));
+            } while (Holidays.Contains(date) || IsWeekEnd(date));
             return date;
         }
 
@@ -1192,8 +1194,8 @@ namespace PMapCore.Common
             Type typeDest = p_destination.GetType();
             Type typeSrc = p_source.GetType();
 
-            // Iterate the Properties of the source instance and
-            // populate them from their desination counterparts
+            // Iterate the Properties of the source instance and  
+            // populate them from their desination counterparts  
             PropertyInfo[] srcProps = typeSrc.GetProperties();
             foreach (PropertyInfo srcProp in srcProps)
             {
@@ -1248,11 +1250,56 @@ namespace PMapCore.Common
             return retContent;
         }
 
-        public static int GetDurationValue( double dDuration)
+        public static int GetDurationValue(double dDuration)
         {
             return (int)Math.Floor(dDuration);
         }
 
+
+        public static List<Dictionary<string, string>> LoadCSV(string CSVContent)
+        {
+
+
+            var fieldSeparator = ";";
+            string regExpPattern = $"{fieldSeparator}(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))";
+            Regex regexp = new Regex(regExpPattern);
+
+            var CSVItems = new List<Dictionary<string, string>>();
+
+            var lines = CSVContent.Split('\n').ToList();
+
+            int counter = 0;
+            string[] headerArray = null;
+
+            lines.ToList().ForEach(currentLine =>
+            {
+                if (counter == 0)
+                {
+                    headerArray = regexp.Split(currentLine.Replace("\r", ""));
+                    //üres header mezők feltöltése
+                    for (int i = 0; i < headerArray.Length; i++)
+                    {
+                        if (string.IsNullOrWhiteSpace(headerArray[i]))
+                            headerArray[i] = "col_" + i.ToString();
+                    }
+
+                }
+                else if (!string.IsNullOrWhiteSpace(currentLine))
+                {
+                    Debug.WriteLine(currentLine);
+                    string[] currentFieldsArray = regexp.Split(currentLine.Replace("\r", ""));
+                    var item = new Dictionary<string, string>();
+                    for (int i = 0; i < currentFieldsArray.Length; i++)
+                    {
+                        item.Add(headerArray[i], currentFieldsArray[i]);
+                    }
+                    CSVItems.Add(item);
+
+                }
+                counter++;
+            });
+            return CSVItems;
+        }
     }
 }
 

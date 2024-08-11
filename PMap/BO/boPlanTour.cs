@@ -195,17 +195,25 @@ namespace PMapCore.BO
         [DisplayNameAttributeX(Name = "Jármű megjegyzés", Order = 37)]
         public string TRK_COMMENT { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 38)]
-        public double TollMultiplier { get; set; }
 
-        [DisplayNameAttributeX(Name = "Szállító neve", Order = 39)]
+        [DisplayNameAttributeX(Name = "Szállító neve", Order = 38)]
         public string CRR_NAME { get; set; }
 
-        [DisplayNameAttributeX(Name = "Fuvarszám", Order = 40)]
+        [DisplayNameAttributeX(Name = "Fuvarszám", Order = 39)]
         public string Bordero { get; set; }                             //MAPEI spec.
 
 
- 
+        //Technikai mezők
+        //
+
+        //[JsonIgnore]
+        //[DisplayNameAttributeX(Name = "Megjelenítés réteg", Order = 99)]
+        //public GMapOverlay Layer { get; set; }
+
+        [JsonIgnore]
+        [DisplayNameAttributeX(Name = "Megjelenítés réteg", Order = 100)]
+        public bool PSelect { get; set; }
+
       
 
     }

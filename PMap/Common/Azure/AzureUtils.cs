@@ -44,11 +44,9 @@ namespace PMapCore.Common.Azure
     public static class CloudExtensions
     {
 
-        public static IEnumerable<TElement> StartsWith<TElement>(
-            this CloudTable table,
-            string partitionKey,
-            string searchStr,
-            string columnName = "RowKey") where TElement : ITableEntity, new()
+        public static IEnumerable<TElement> StartsWith<TElement>
+        (this CloudTable table, string partitionKey, string searchStr,
+        string columnName = "RowKey") where TElement : ITableEntity, new()
         {
             if (string.IsNullOrEmpty(searchStr)) return null;
 
@@ -67,28 +65,24 @@ namespace PMapCore.Common.Azure
                 prefixCondition
                 );
             var query = new TableQuery<TElement>().Where(filterString);
-            var res = table.GetType().GetMethod("ExecuteQuery").Invoke(table, [query]);
-            return (IEnumerable<TElement>)res;
+            return table.ExecuteQuery<TElement>(query);
         }
     }
     public static class TableQueryExtensions
     {
         public static TableQuery<TElement> AndWhere<TElement>(this TableQuery<TElement> @this, string filter)
-            where TElement : ITableEntity, new()
         {
             @this.FilterString = TableQuery.CombineFilters(@this.FilterString, TableOperators.And, filter);
             return @this;
         }
 
         public static TableQuery<TElement> OrWhere<TElement>(this TableQuery<TElement> @this, string filter)
-            where TElement : ITableEntity, new()
         {
             @this.FilterString = TableQuery.CombineFilters(@this.FilterString, TableOperators.Or, filter);
             return @this;
         }
 
         public static TableQuery<TElement> NotWhere<TElement>(this TableQuery<TElement> @this, string filter)
-            where TElement : ITableEntity, new()
         {
             @this.FilterString = TableQuery.CombineFilters(@this.FilterString, TableOperators.Not, filter);
             return @this;

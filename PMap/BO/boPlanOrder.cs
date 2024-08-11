@@ -98,6 +98,9 @@ namespace PMapCore.BO
         public string DEP_WEIGHTAREA { get; set; }
 
         //Technikai mezők
+        // [JsonIgnore]
+        // public PPlanMarkerUnPlanned Marker { get; set; }
+
         [JsonIgnore]
         public string ToolTipText { get; set; }
     }

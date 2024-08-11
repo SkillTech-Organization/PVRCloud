@@ -14,6 +14,12 @@ using PMapCore.Common;
 using System.IO;
 using Newtonsoft.Json;
 using System.Runtime.ExceptionServices;
+using System.Diagnostics;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
+using Azure.Storage.Blobs;
 
 namespace PMapCore.Route
 {
@@ -35,15 +41,21 @@ namespace PMapCore.Route
 
         public Dictionary<string, boEdge> Edges = null; //Az útvonalak korlátozás-zónatípusonként
 
-        public Dictionary<int, PointLatLng> NodePositions  = null;  //Node koordináták
+        public Dictionary<int, PointLatLng> NodePositions = null;  //Node koordináták
+
+        public Dictionary<string, boEtoll> Etolls = null; //Útdíjak és szorzók
+
+        public Dictionary<string, boEtRoad> EtRoads = null; //Díjköteles útszelvények 
 
         public Dictionary<int, string> RZN_ID_LIST = null;          //Behajtási zónák súlyonként
 
         public Dictionary<string, int> allRZones = null;            //Összes behajtási zóna
-        public int NodeCount {
+
+        public int NodeCount
+        {
             get
             {
-               return NodePositions.Keys.Max() + 1;
+                return NodePositions.Keys.Max() + 1;
             }
         }
 
@@ -61,50 +73,55 @@ namespace PMapCore.Route
         }
 
 
-        public void InitFromFiles(string p_dir, Dictionary<int, int> p_speeds, bool p_Forced = false)
+        public void InitFromFiles(string p_mapStorageConnectionString, bool p_Forced = false)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
-
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
             {
                 if (!m_Initalized || p_Forced)
                 {
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                    var bh = new BlobUtils.BlobHandler(p_mapStorageConnectionString);
+
+
+                    //string etollContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETOLL), Encoding.GetEncoding(1250));
+                    string etollContent = getContentFromBlob(bh, Global.EXTFILE_ETOLL, Encoding.GetEncoding(1250));
+                    //string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1250));
+                    string etRoadsContent = getContentFromBlob(bh, Global.EXTFILE_ETROADS, Encoding.GetEncoding(1250));
+
+                    Etolls = loadEtolls(etollContent); //Útdíjak és szorzók
+                    EtRoads = loadEtRoads(etRoadsContent); //Díjköteles útszelvények 
+
 
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
-//Util.String2File("strEdges begin", Path.Combine(p_dir, "trc.log"));
 
-                    string strEdges = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-//Util.String2File("strEdges end", Path.Combine(p_dir, "trc.log"));
+                    DateTime dtStart = DateTime.Now;
+                    //string strEdges = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
+                    string strEdges = getContentFromBlob(bh, Global.EXTFILE_EDG, Encoding.UTF8);
+
                     var xEdges = JsonConvert.DeserializeObject<Dictionary<string, boEdge>>(strEdges);
-//Util.String2File("strEdges json", Path.Combine(p_dir, "trc.log"));
                     Edges = xEdges;
                     foreach (var edg in Edges)
                     {
-                        float CalcSpeed = p_speeds[edg.Value.RDT_VALUE];
-                        float CalcDuration = (float)(edg.Value.EDG_LENGTH / p_speeds[edg.Value.RDT_VALUE] / 3.6 * 60);
+                        float CalcSpeed = PMapIniParams.Instance.DicSpeeds[edg.Value.RDT_VALUE];
+                        float CalcDuration = (float)(edg.Value.EDG_LENGTH / PMapIniParams.Instance.DicSpeeds[edg.Value.RDT_VALUE] / 3.6 * 60);
                         edg.Value.CalcSpeed = CalcSpeed;
                         edg.Value.CalcDuration = CalcDuration;
                     }
 
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-
-//Util.String2File("strNodePositions begin", Path.Combine(p_dir, "trc.log"));
-                    string strNodePositions = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
-//Util.String2File("strNodePositions end", Path.Combine(p_dir, "trc.log"));
+                    //string strNodePositions = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
+                    string strNodePositions = getContentFromBlob(bh, Global.EXTFILE_NOD, Encoding.UTF8);
                     var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
-//Util.String2File("strNodePositions json", Path.Combine(p_dir, "trc.log"));
                     NodePositions = xNodePositions;
 
-
-                    string strallRZones = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
+                    //string strallRZones = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
+                    string strallRZones = getContentFromBlob(bh, Global.EXTFILE_RZN, Encoding.UTF8);
                     var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
                     allRZones = xallRZones;
 
 
-                    string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
+                    //string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
+                    string strRZN_ID_LIST = getContentFromBlob(bh, Global.EXTFILE_RZNTyp, Encoding.UTF8);
                     var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
                     RZN_ID_LIST = xRZN_ID_LIST;
 
@@ -112,12 +129,112 @@ namespace PMapCore.Route
                 }
             }
         }
+        private string getContentFromBlob(BlobUtils.BlobHandler bh, string filename, Encoding enc = null)
+        {
+            string result = "";
+            using (StreamReader streamReader = new StreamReader(bh.DownloadfromStream("map", filename).GetAwaiter().GetResult(), enc, true))
+            {
+                // Read the stream and convert it to a string
+                result = streamReader.ReadToEnd();
+            }
+            return result;
+        }
 
+        private Dictionary<string, boEtoll> loadEtolls(string CSVContent)
+        {
+
+            NumberFormatInfo nfi = CultureInfo.CurrentCulture.NumberFormat;
+            var CSVItems = Util.LoadCSV(CSVContent);
+            var result = new Dictionary<string, boEtoll>();
+            var counter = 1;
+
+            CSVItems.ForEach(async item =>
+            {
+                var ID = counter++;
+                var ETL_ETOLLCAT = Int32.Parse(item["Díjkategória"].Replace("J", ""));
+                var ETL_ENGINEEURO = 0;
+                var sETL_ENGINEEURO = item["Környezetvédelmi besorolás"];
+                if (sETL_ENGINEEURO == "Euro 0")
+                    ETL_ENGINEEURO = 0;
+                else if (sETL_ENGINEEURO == "Euro I")
+                    ETL_ENGINEEURO = 1;
+                else if (sETL_ENGINEEURO == "Euro II")
+                    ETL_ENGINEEURO = 2; 
+                else if (sETL_ENGINEEURO == "Euro III")
+                    ETL_ENGINEEURO = 3; 
+                else if (sETL_ENGINEEURO == "Euro IV")
+                    ETL_ENGINEEURO = 4; 
+                else if (sETL_ENGINEEURO == "Euro V")
+                    ETL_ENGINEEURO = 5; 
+                else if (sETL_ENGINEEURO == "Euro VI")
+                    ETL_ENGINEEURO = 6; 
+                else if (sETL_ENGINEEURO == "A1")
+                    ETL_ENGINEEURO = 99; 
+                else if (sETL_ENGINEEURO == "A0")
+                    ETL_ENGINEEURO = 100;
+
+                var ETL_TOLL_SPEEDWAY = Double.Parse( item["Gyorsforgalmi (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_TOLL_ROAD = Double.Parse(item["Főűt (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_NOISE_CITY = Double.Parse(item["Külvárosi utak (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_NOISE_OUTER = Double.Parse(item["Településeket összekötő utak (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_CO2 = Double.Parse(item["CO2 (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+
+                var boEtoll = new boEtoll()
+                {
+                    ID = ID,
+                    ETL_ETOLLCAT = ETL_ETOLLCAT,
+                    ETL_ENGINEEURO = ETL_ENGINEEURO,
+                    ETL_TOLL_SPEEDWAY = ETL_TOLL_SPEEDWAY,
+                    ETL_TOLL_ROAD = ETL_TOLL_ROAD,
+                    ETL_NOISE_CITY = ETL_NOISE_CITY,
+                    ETL_NOISE_OUTER = ETL_NOISE_OUTER,
+                    ETL_CO2 = ETL_CO2
+                };
+                result.Add($"{ETL_ETOLLCAT}_{ETL_ENGINEEURO}", boEtoll);
+
+            });
+
+            return result;
+        }
+
+        private Dictionary<string, boEtRoad> loadEtRoads(string CSVContent)
+        {
+
+            NumberFormatInfo nfi = CultureInfo.CurrentCulture.NumberFormat;
+            var CSVItems = Util.LoadCSV(CSVContent);
+            var result = new Dictionary<string, boEtRoad>();
+            var counter = 1;
+
+            CSVItems.ForEach(async item =>
+            {
+                var ID = counter++;
+                if (counter > 3)
+                {
+                    var ETR_CODE = item["B"];
+
+                    var ETR_ROADTYPE = (item["F"] == "gyorsforgalmi" ? 1 : 2);
+                    var ETR_LEN_M = Double.Parse(item["E"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                    var ETR_COSTFACTOR = Double.Parse(item["G"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+
+                    var boEtRoad = new boEtRoad()
+                    {
+                        ID = ID,
+                        ETR_CODE = ETR_CODE,
+                        ETR_ROADTYPE = ETR_ROADTYPE,
+                        ETR_LEN_M = ETR_LEN_M,
+                        ETR_COSTFACTOR = ETR_COSTFACTOR
+                    };
+                    result.Add(ETR_CODE, boEtRoad);
+                }
+            });
+
+            return result;
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="p_DBA"></param>
-        public void Init(SQLServerAccess p_DBA,Dictionary<int, int> p_speeds,  bool p_Forced = false)
+        public void Init(SQLServerAccess p_DBA, bool p_Forced = false)
         {
 
 
@@ -125,17 +242,19 @@ namespace PMapCore.Route
             {
                 if (!m_Initalized || p_Forced)
                 {
-                    Dictionary<string, Dictionary<int, double>> dicAllTolls = new Dictionary<string, Dictionary<int, double>>();
+
 
                     bllRoute m_bllRoute;
                     m_bllRoute = new bllRoute(p_DBA);
+
+                    Etolls = m_bllRoute.GetEtolls(); //Útdíjak és szorzók
+                    EtRoads = m_bllRoute.GetEtRoads(); //Díjköteles útszelvények 
 
 
                     Edges = new Dictionary<string, boEdge>();
                     NodePositions = null;
 
-                    //összes útdíj felolvasása
-                    dicAllTolls = m_bllRoute.GetAllTolls();
+
 
                     /// <summary>
                     /// Teljes térkép felolvasása
@@ -143,7 +262,7 @@ namespace PMapCore.Route
                     /// </summary>
                     try
                     {
-                        //üríteni! a EDG_ETLCODE='67u81k45m67u88k' 
+                        //üríteni! a EDG_ETRCODE='67u81k45m67u88k' 
                         DateTime dtStart = DateTime.Now;
                         DataTable dt = m_bllRoute.GetEdgesToDT();
 
@@ -163,24 +282,23 @@ namespace PMapCore.Route
                                 ID = Util.getFieldValue<int>(dr, "ID"),
                                 NOD_ID_FROM = Source,
                                 NOD_ID_TO = Destination,
-                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
+                                //                                EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
                                 EDG_LENGTH = Util.getFieldValue<float>(dr, "EDG_LENGTH"),
                                 RDT_VALUE = Util.getFieldValue<int>(dr, "RDT_VALUE"),
                                 RZN_ID = Util.getFieldValue<int>(dr, "RZN_ID"),
                                 RST_ID = Util.getFieldValue<int>(dr, "RST_ID"),
-                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
-                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
-                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
-                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
+                                //                                EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
+                                //                                EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
+                                //                                EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
+                                //                                EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
                                 ZIP_NUM_FROM = Util.getFieldValue<int>(dr, "ZIP_NUM_FROM"),
                                 ZIP_NUM_TO = Util.getFieldValue<int>(dr, "ZIP_NUM_TO"),
                                 EDG_ONEWAY = OneWay,
                                 EDG_DESTTRAFFIC = DestTraffic,
                                 WZONE = Util.getFieldValue<string>(dr, "RZN_ZONECODE") + " " + Util.getFieldValue<string>(dr, "RZN_ZoneName"),
-                                CalcSpeed = p_speeds[Util.getFieldValue<int>(dr, "RDT_VALUE")],
-                                CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / p_speeds[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
-                                EDG_ETLCODE = Util.getFieldValue<string>(dr, "EDG_ETLCODE"),
-                                Tolls = dicAllTolls[Util.getFieldValue<string>(dr, "EDG_ETLCODE")],
+                                CalcSpeed = PMapIniParams.Instance.DicSpeeds[Util.getFieldValue<int>(dr, "RDT_VALUE")],
+                                CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / PMapIniParams.Instance.DicSpeeds[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
+                                EDG_ETRCODE = Util.getFieldValue<string>(dr, "EDG_ETRCODE"),
                                 fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
                                 toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider),
                                 EDG_MAXWEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXWEIGHT"),
@@ -206,22 +324,21 @@ namespace PMapCore.Route
                                     ID = Util.getFieldValue<int>(dr, "ID"),
                                     NOD_ID_FROM = Destination,
                                     NOD_ID_TO = Source,
-                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
+                                    //                                  EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
                                     EDG_LENGTH = Util.getFieldValue<float>(dr, "EDG_LENGTH"),
                                     RDT_VALUE = Util.getFieldValue<int>(dr, "RDT_VALUE"),
                                     RZN_ID = Util.getFieldValue<int>(dr, "RZN_ID"),
                                     RST_ID = Util.getFieldValue<int>(dr, "RST_ID"),
-                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
-                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
-                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
-                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
+                                    //                                   EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
+                                    //                                   EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
+                                    //                                   EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
+                                    //                                   EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
                                     EDG_ONEWAY = OneWay,
                                     EDG_DESTTRAFFIC = DestTraffic,
                                     WZONE = Util.getFieldValue<string>(dr, "RZN_ZONECODE") + " " + Util.getFieldValue<string>(dr, "RZN_ZoneName"),
-                                    CalcSpeed = p_speeds[Util.getFieldValue<int>(dr, "RDT_VALUE")],
-                                    CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / p_speeds[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
-                                    EDG_ETLCODE = Util.getFieldValue<string>(dr, "EDG_ETLCODE"),
-                                    Tolls = dicAllTolls[Util.getFieldValue<string>(dr, "EDG_ETLCODE")],
+                                    CalcSpeed = PMapIniParams.Instance.DicSpeeds[Util.getFieldValue<int>(dr, "RDT_VALUE")],
+                                    CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / PMapIniParams.Instance.DicSpeeds[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
+                                    EDG_ETRCODE = Util.getFieldValue<string>(dr, "EDG_ETRCODE"),
                                     fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider),
                                     toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
                                     EDG_MAXWEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXWEIGHT"),
@@ -242,6 +359,7 @@ namespace PMapCore.Route
                             }
 
                         }
+
                         DataTable dtNodes = m_bllRoute.GetAllNodesToDT();
                         NodePositions = (from row in dtNodes.AsEnumerable()
                                          select new
@@ -300,7 +418,7 @@ namespace PMapCore.Route
                 o_neighborsFull.Add(routePar.Hash, MapFull);
                 o_neighborsCut.Add(routePar.Hash, MapCut);
 
-          
+
             }
             Console.WriteLine("getNeigboursByBound " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString() + ", mmry:" + GC.GetTotalMemory(false));
         }
@@ -319,7 +437,7 @@ namespace PMapCore.Route
             bool CalcForCompletedTour = false;
 
 
-           // Util.Log2File($"PrepareMap available { (int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K");
+            // Util.Log2File($"PrepareMap available { (int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K");
 
             int nEdgCnt = 0;
 
@@ -410,7 +528,7 @@ namespace PMapCore.Route
         /// <returns></returns>
         public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff)
         {
-             
+
             r_diff = Int32.MaxValue;
 
             // TODO boEdge méretcsökkentés miatt kiszedve
@@ -455,7 +573,7 @@ namespace PMapCore.Route
         public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width, out int r_diff)
         {
             r_diff = Int32.MaxValue;
- 
+
             // TODO boEdge méretcsökkentés miatt kiszedve
 
             ////Legyünk következetesek, a PMAp-os térkép esetében:
@@ -493,6 +611,5 @@ namespace PMapCore.Route
             //}
             return 0;
         }
-
     }
 }

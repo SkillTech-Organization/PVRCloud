@@ -711,7 +711,7 @@ namespace PMapCore.BLL
 
             DataTable dt;
             string sSql = "";
-            RouteData.Instance.Init(DBA, PMapIniParams.Instance.dicSpeed);
+            RouteData.Instance.Init(DBA);
 
             Dictionary<int, boEdge> lstAllEdges = RouteData.Instance.Edges.GroupBy(g => g.Value.ID)
                         .Select(s => s.First()).ToDictionary(i => i.Value.ID, i => i.Value);
@@ -912,7 +912,7 @@ namespace PMapCore.BLL
 
 
                     duration = lstSelEdges.Sum(i => (double)i.EDG_LENGTH / (double)(dicSPV[i.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60));
-                    durationCalc = lstSelEdges.Sum(i => (double)i.EDG_LENGTH / ((double)PMapIniParams.Instance.dicSpeed[i.RDT_VALUE] / 3.6 * 60));
+                    durationCalc = lstSelEdges.Sum(i => (double)i.EDG_LENGTH / ((double)PMapIniParams.Instance.DicSpeeds[i.RDT_VALUE] / 3.6 * 60));
                     if ( (boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID == 2 &&
                          boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID == 73)
                         ||

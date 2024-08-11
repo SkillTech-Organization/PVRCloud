@@ -11,6 +11,7 @@ using PMapCore.Strings;
 using PMapCore.DB.Base;
 using System.Diagnostics;
 using PMapCore.Common;
+using System.Windows.Forms;
 using System.Runtime.ExceptionServices;
 
 namespace PMapCore.LongProcess
@@ -184,7 +185,7 @@ namespace PMapCore.LongProcess
 
                         //leállt a process és van eredményfájl, készítünk egy OK.dat-ot
                         if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile)            //van már eredmény
-                            && !errHappened)                  //nicns error
+                            && !errHappened)                  //nicns error   
                         {
                             Util.String2File(PMapMessages.E_OPT_ERREXITED, PMapIniParams.Instance.PlanOK);
                             return;
@@ -202,7 +203,7 @@ namespace PMapCore.LongProcess
                 catch (Exception ex)
                 {
                     //A PVRP elszállhat akkor is, amikor fogja az error.dat-ot amiben a Global.OPT_NOERROR szöveg van.
-                    //Nincs még result file sem.
+                    //Nincs még result file sem. 
                     //Jobb híjján készítünk egy OK.dat-ot és egy üres resultot, hogy az optimizerprocess be tudjon fejeződni
                     if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
                     {

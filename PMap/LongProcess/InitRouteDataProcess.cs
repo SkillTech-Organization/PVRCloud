@@ -25,7 +25,7 @@ namespace PMapCore.LongProcess
    
         protected override void DoWork()
         {
-            RouteData.Instance.Init(m_DB, PMapIniParams.Instance.dicSpeed, false);
+            RouteData.Instance.Init(m_DB, false);
 
         }
     }

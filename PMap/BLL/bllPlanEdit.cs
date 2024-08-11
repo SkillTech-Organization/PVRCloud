@@ -12,6 +12,7 @@ using PMapCore.BLL.Base;
 using PMapCore.Common;
 using System.Globalization;
 using PMapCore.Strings;
+using System.Windows.Forms;
 using PMapCore.BO.DataXChange;
 using System.Runtime.ExceptionServices;
 using PMapCore.Common.PPlan;
@@ -108,7 +109,7 @@ namespace PMapCore.BLL
 
                     if (p_reOrder)
                     {
-                        //CTE-vel átszámolás
+                        //CTE-vel átszámolás 
                         /*
                         string sSQL = "WITH CTE_Main AS ( " + Environment.NewLine +
                                       "select " + Environment.NewLine +
@@ -248,8 +249,8 @@ namespace PMapCore.BLL
         }
 
         /// <summary>
-        /// Különböző árutipus-mennyiségekből rakodási mennyiség generálása.
-        ///
+        /// Különböző árutipus-mennyiségekből rakodási mennyiség generálása. 
+        /// 
         /// Megjegyzés: A QTY4 -es dohányárut jelent, annak nincs mennyisége!!!
         /// /// </summary>
         /// <param name="p_QTY1"></param>
@@ -384,31 +385,7 @@ namespace PMapCore.BLL
             return Convert.ToInt32(linq.Sum(itm => itm.Duration));
         }
 
-        /// <summary>
-        /// Egy útvonal útdíj kiszámítása
-        /// </summary>
-        /// <param name="p_Edges">Útvonal élei</param>
-        /// <param name="p_TRK_ETOLLCAT">Jármű útdíjkategória</param>
-        /// <param name="p_TollMultiplier">Jármű útdíjszorzó</param>
-        /// <param name="p_lastETLCODE">A számolandó útvonal előtti útdíjal elszámolt szakasz azonosítója. A Törvény úgy szól, hogy minden megkezdett szakaszra kell kifizetni az útdíjat.
-        /// Amennyiben a kiszámolandó útszakasz egy olyan útvonal KÖZVETLEN folytatása, amelyre már lett útdíj elszámolva, a p_lastETLCODE-adjuk át a legutolsó útdíjazonosítót (és arra már
-        /// nem számol díjat). A rutin ezt a paramétert visszadja, hogy amennyiben a következő  számítás evvel az útszakasszal kezdődne, ne számoljunk el arra már díjat.</param>
-        /// <returns></returns>
-        public static double GetToll(List<boEdge> p_Edges, int p_TRK_ETOLLCAT, double p_TollMultiplier, ref string p_lastETLCODE)
-        {
-            double dToll = 0;
-
-            foreach (boEdge edge in p_Edges)
-            {
-                if (p_TRK_ETOLLCAT > 1 && p_lastETLCODE != edge.EDG_ETLCODE)
-                {
-                    dToll += edge.Tolls[p_TRK_ETOLLCAT] * p_TollMultiplier;
-                    p_lastETLCODE = edge.EDG_ETLCODE;
-                }
-            }
-            return dToll;
-        }
-
+ 
         public bool IsBundleInTour(int pTPL_ID, int pLastPoint)
         {
             string sSQLStr;
@@ -805,7 +782,7 @@ namespace PMapCore.BLL
                     double dToll = 0;
 
                     int lastNOD_ID = -1;
-                    string lastETLCODE = "";
+                    string lastETRCODE = "";
                     foreach (DataRow dr in dt.Rows)
                     {
                         int TRK_ETOLLCAT = Util.getFieldValue<int>(dr, "TRK_ETOLLCAT");
@@ -817,8 +794,6 @@ namespace PMapCore.BLL
                             int TRK_ENGINEEURO = Util.getFieldValue<int>(dr, "TRK_ENGINEEURO");
                             if (TRK_ENGINEEURO == 0)
                                 TRK_ENGINEEURO = 1;
-                            double dTollMultiplier = GetTollMultiplier(TRK_ETOLLCAT, TRK_ENGINEEURO);
-
                             int NOD_ID = Util.getFieldValue<int>(dr, "NOD_ID");
                             string RZN_ID_LIST = Util.getFieldValue<string>(dr, "RZN_ID_LIST");
 
@@ -831,13 +806,15 @@ namespace PMapCore.BLL
                                     foreach (boEdge edge in dst.Edges)
                                     {
 
-                                        if (lastETLCODE != edge.EDG_ETLCODE)
+                                        if (lastETRCODE != edge.EDG_ETRCODE)
                                         {
-                                            if (edge.EDG_ETLCODE.Length > 0)
+                                            if (edge.EDG_ETRCODE.Length > 0)
                                             {
-                                                dToll += edge.Tolls[TRK_ETOLLCAT] * dTollMultiplier;
+                                                dToll += bllRoute.GetToll(new List<boEdge>() { edge },
+                                                              TRK_ETOLLCAT, TRK_ENGINEEURO,
+                                                              ref lastETRCODE);
                                             }
-                                            lastETLCODE = edge.EDG_ETLCODE;
+                                            lastETRCODE = edge.EDG_ETRCODE;
                                         }
                                     }
                                 }
@@ -860,41 +837,6 @@ namespace PMapCore.BLL
                 }
             }
         }
-
-        //Környezetvédelmi kategóriánkénti szorzók (J1 kategória = 0)
-        //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória
-        //A kategória (≥EURO III.)	        0,85	            0,85
-        //B kategória (EURO II.)	        1	                  1
-        //C kategória (≤ EURO I.)	        1,15	            1,2
-
-
-        //2019:https://hu-go.hu/articles/article/a-dijszamitasrol
-
-
-        public static double GetTollMultiplier(int p_TRK_ETOLLCAT, int p_TRK_ENGINEEURO)
-        {
-            if (p_TRK_ETOLLCAT == 1)
-                return 1;
-
-            double dMultiplier = 1;
-            if (p_TRK_ENGINEEURO >= 3)
-                dMultiplier = 0.85;
-            else if (p_TRK_ENGINEEURO == 2)
-                dMultiplier = 1;
-            else
-            {
-                //p_TRK_ENGINEEURO == 1
-                if (p_TRK_ETOLLCAT == Global.ETOLLCAT_J2 || p_TRK_ETOLLCAT == Global.ETOLLCAT_J3)
-                    dMultiplier = 1.15;
-                else
-                    dMultiplier = 1.2;
-
-            }
-
-            return dMultiplier;
-        }
-
-
         public void RecalcTour(int p_PTP_ORDER, int p_TPL_ID, int p_Weather)
         {
 
@@ -950,7 +892,7 @@ namespace PMapCore.BLL
                 {
 
 
-                    string lastETLCODE = "";
+                    string lastETRCODE = "";
                     foreach (DataRow dr in dt.Rows)
                     {
 
@@ -964,8 +906,6 @@ namespace PMapCore.BLL
                             int TRK_ENGINEEURO = Util.getFieldValue<int>(dr, "TRK_ENGINEEURO");
                             if (TRK_ENGINEEURO == 0)
                                 TRK_ENGINEEURO = 1;
-                            double dTollMultiplier = GetTollMultiplier(TRK_ETOLLCAT, TRK_ENGINEEURO);
-
                             int NOD_ID = Util.getFieldValue<int>(dr, "NOD_ID");
                             string RZN_ID_LIST = Util.getFieldValue<string>(dr, "RZN_ID_LIST");
 
@@ -978,13 +918,15 @@ namespace PMapCore.BLL
                                     foreach (boEdge edge in dst.Edges)
                                     {
 
-                                        if (lastETLCODE != edge.EDG_ETLCODE)
+                                        if (lastETRCODE != edge.EDG_ETRCODE)
                                         {
-                                            if (edge.EDG_ETLCODE.Length > 0)
+                                            if (edge.EDG_ETRCODE.Length > 0)
                                             {
-                                                dToll += edge.Tolls[TRK_ETOLLCAT] * dTollMultiplier;
+                                                dToll += bllRoute.GetToll(new List<boEdge>() { edge },
+                                                               TRK_ETOLLCAT, TRK_ENGINEEURO,
+                                                               ref lastETRCODE);
                                             }
-                                            lastETLCODE = edge.EDG_ETLCODE;
+                                            lastETRCODE = edge.EDG_ETRCODE;
                                         }
                                     }
                                 }

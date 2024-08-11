@@ -291,7 +291,6 @@ namespace PMapCore.BLL
                 TRK_ETOLLCAT = Util.getFieldValue<int>(p_dr, "TRK_ETOLLCAT"),
                 TRK_ENGINEEURO = Util.getFieldValue<int>(p_dr, "TRK_ENGINEEURO"),
                 TRK_COMMENT = Util.getFieldValue<string>(p_dr, "TRK_COMMENT"),
-                TollMultiplier = bllPlanEdit.GetTollMultiplier(Util.getFieldValue<int>(p_dr, "TRK_ETOLLCAT"), Util.getFieldValue<int>(p_dr, "TRK_ENGINEEURO")),
                 START = Util.getFieldValue<DateTime>(p_dr, "START"),
                 END = Util.getFieldValue<DateTime>(p_dr, "ENDT"),
                 QTY = Util.getFieldValue<double>(p_dr, "TPLANQTY"),

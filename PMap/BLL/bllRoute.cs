@@ -62,7 +62,7 @@ namespace PMapCore.BLL
         public DataTable GetEdgesToDT()
         {
             String sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
-                         "select EDG.ID, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, EDG.RDT_VALUE ,EDG.EDG_ETLCODE, EDG.EDG_ONEWAY, " + Environment.NewLine +
+                         "select EDG.ID, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, EDG.RDT_VALUE ,EDG.EDG_ETRCODE, EDG.EDG_ONEWAY, " + Environment.NewLine +
                          "EDG.EDG_DESTTRAFFIC, EDG.NOD_NUM, EDG.NOD_NUM2, EDG.RZN_ZONECODE,EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4,  " + Environment.NewLine +
                          "NOD1.NOD_YPOS as NOD1_YPOS, NOD1.NOD_XPOS as NOD1_XPOS, " + Environment.NewLine +
                          "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName, ZIP1.ZIP_NUM as ZIP_NUM_FROM, ZIP2.ZIP_NUM as ZIP_NUM_TO, " + Environment.NewLine +
@@ -392,7 +392,7 @@ namespace PMapCore.BLL
                     {
                         sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                                "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-                               "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME,EDG_MAXWEIGHT,EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine +
+                               "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETRCODE, RZN.RZN_ZONENAME,EDG_MAXWEIGHT,EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine +
                                " from EDG_EDGE (NOLOCK) EDG  " + Environment.NewLine +
                                "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
                                " where EDG.ID in (" + edges + ")";
@@ -407,15 +407,12 @@ namespace PMapCore.BLL
                                             ID = Util.getFieldValue<int>(r, "EDGID"),
                                             NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
                                             NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
-                                            // TODO boEdge méretcsökkentés miatt kiszedve EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME") != "" ? Util.getFieldValue<string>(r, "EDG_NAME") : "*** nincs név ***",
                                             EDG_LENGTH = Util.getFieldValue<int>(r, "EDG_LENGTH"),
                                             RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE"),
                                             WZONE = Util.getFieldValue<string>(r, "RZN_ZONENAME"),
                                             EDG_ONEWAY = Util.getFieldValue<bool>(r, "EDG_ONEWAY"),
                                             EDG_DESTTRAFFIC = Util.getFieldValue<bool>(r, "EDG_DESTTRAFFIC"),
-                                            EDG_ETLCODE = Util.getFieldValue<string>(r, "EDG_ETLCODE"),
-                                            Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(r, "EDG_ETLCODE"))
-                                                   .DefaultIfEmpty(new boEtoll()).First().TollsToDict(),
+                                            EDG_ETRCODE = Util.getFieldValue<string>(r, "EDG_ETRCODE"),
                                             EDG_MAXWEIGHT = Util.getFieldValue<int>(r, "EDG_MAXWEIGHT"),
                                             EDG_MAXHEIGHT = Util.getFieldValue<int>(r, "EDG_MAXHEIGHT"),
                                             EDG_MAXWIDTH = Util.getFieldValue<int>(r, "EDG_MAXWIDTH")
@@ -1068,7 +1065,7 @@ namespace PMapCore.BLL
         {
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
               "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, ZIP.ZIP_NUM as ZIP_NUM_FROM, ZIP2.ZIP_NUM as ZIP_NUM_TO  " + Environment.NewLine +
+              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETRCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, ZIP.ZIP_NUM as ZIP_NUM_FROM, ZIP2.ZIP_NUM as ZIP_NUM_TO  " + Environment.NewLine +
               "from EDG_EDGE (NOLOCK) EDG " + Environment.NewLine +
               "inner join NOD_NODE (NOLOCK) NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
               "inner join ZIP_ZIPCODE (NOLOCK) ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
@@ -1085,7 +1082,7 @@ namespace PMapCore.BLL
 
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                    "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-                   "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, ZIP.ZIP_NUM as ZIP_NUM_FROM, ZIP2.ZIP_NUM as ZIP_NUM_TO " + Environment.NewLine +
+                   "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETRCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, ZIP.ZIP_NUM as ZIP_NUM_FROM, ZIP2.ZIP_NUM as ZIP_NUM_TO " + Environment.NewLine +
                    "from EDG_EDGE  (NOLOCK) EDG " + Environment.NewLine +
                    "inner join NOD_NODE (NOLOCK) NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
                     "inner join ZIP_ZIPCODE (NOLOCK) ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
@@ -1107,21 +1104,19 @@ namespace PMapCore.BLL
                     ID = Util.getFieldValue<int>(dt.Rows[0], "EDGID"),
                     NOD_ID_FROM = Util.getFieldValue<int>(dt.Rows[0], "NOD_NUM"),
                     NOD_ID_TO = Util.getFieldValue<int>(dt.Rows[0], "NOD_NUM2"),
-                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_NAME = Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") != "" ? Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") : "*** nincs név ***",
+                    //EDG_NAME = Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") != "" ? Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") : "*** nincs név ***",
                     EDG_LENGTH = Util.getFieldValue<int>(dt.Rows[0], "EDG_LENGTH"),
                     RDT_VALUE = Util.getFieldValue<int>(dt.Rows[0], "RDT_VALUE"),
                     WZONE = Util.getFieldValue<string>(dt.Rows[0], "RZN_ZONENAME"),
                     EDG_ONEWAY = Util.getFieldValue<bool>(dt.Rows[0], "EDG_ONEWAY"),
                     EDG_DESTTRAFFIC = Util.getFieldValue<bool>(dt.Rows[0], "EDG_DESTTRAFFIC"),
-                    EDG_ETLCODE = Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"),
+                    EDG_ETRCODE = Util.getFieldValue<string>(dt.Rows[0], "EDG_ETRCODE"),
                     EDG_MAXWEIGHT = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXWEIGHT"),
                     EDG_MAXHEIGHT = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXHEIGHT"),
                     EDG_MAXWIDTH = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXWIDTH"),
                     ZIP_NUM_FROM = Util.getFieldValue<int>(dt.Rows[0], "ZIP_NUM_FROM"),
                     ZIP_NUM_TO = Util.getFieldValue<int>(dt.Rows[0], "ZIP_NUM_TO"),
 
-                    Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"))
-                           .DefaultIfEmpty(new boEtoll()).First().TollsToDict()
 
                 };
                 return res;
@@ -1520,6 +1515,12 @@ namespace PMapCore.BLL
 
             var request = WebRequest.Create(requestUri);
 
+            if (PMapIniParams.Instance.UseProxy)
+            {
+                request.Proxy = new WebProxy(PMapIniParams.Instance.ProxyServer, PMapIniParams.Instance.ProxyPort);
+                request.Proxy.Credentials = new NetworkCredential(PMapIniParams.Instance.ProxyUser, PMapIniParams.Instance.ProxyPassword, PMapIniParams.Instance.ProxyDomain);
+            }
+
 
             var response = request.GetResponse();
             var xdoc = XDocument.Load(response.GetResponseStream());
@@ -1744,33 +1745,50 @@ namespace PMapCore.BLL
                 return false;
             }
         }
-
-        public Dictionary<string, Dictionary<int, double>> GetAllTolls()
+        public Dictionary<string, boEtRoad> GetEtRoads()
         {
-            Dictionary<string, Dictionary<int, double>> dicAllTolls = new Dictionary<string, Dictionary<int, double>>();
+            var result = new Dictionary<string, boEtRoad>();
 
-            string sSql = "select * from ETL_ETOLL ETL order by ETL.ETL_CODE";
+            string sSql = "select * from ETR_ETROAD ETR order by ETR.ETR_CODE";
             DataTable dte = DBA.Query2DataTable(sSql);
             foreach (DataRow dre in dte.Rows)
             {
-                Dictionary<int, double> tolls = new Dictionary<int, double>();
-                tolls.Add(Global.ETOLLCAT_J0, 0);
-                tolls.Add(Global.ETOLLCAT_J2, Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
-                tolls.Add(Global.ETOLLCAT_J3, Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
-                tolls.Add(Global.ETOLLCAT_J4, Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
-                dicAllTolls.Add(Util.getFieldValue<string>(dre, "ETL_CODE"), tolls);
-
+                var item = new boEtRoad()
+                {
+                    ID = Util.getFieldValue<int>(dre, "ID"),
+                    ETR_CODE = Util.getFieldValue<string>(dre, "ETR_CODE"),
+                    ETR_ROADTYPE = Util.getFieldValue<double>(dre, "ETR_ROADTYPE"),
+                    ETR_LEN_M = Util.getFieldValue<double>(dre, "ETR_LEN_M"),
+                    ETR_COSTFACTOR = Util.getFieldValue<double>(dre, "ETR_COSTFACTOR")
+                };
+                result.Add(item.ETR_CODE, item);
             }
-            //díjnélküli tétel
-            Dictionary<int, double> tollsX = new Dictionary<int, double>();
-            tollsX.Add(Global.ETOLLCAT_J0, 0);
-            tollsX.Add(Global.ETOLLCAT_J2, 0);
-            tollsX.Add(Global.ETOLLCAT_J3, 0);
-            tollsX.Add(Global.ETOLLCAT_J4, 0);
-            dicAllTolls.Add("", tollsX);
-
-            return dicAllTolls;
+            return result;
         }
+        public Dictionary<string, boEtoll> GetEtolls()
+        {
+            var result = new Dictionary<string, boEtoll>();
+
+            string sSql = "select * from ETL_ETOLL ETL order by ETL.ETL_ETOLLCAT,ETL_ENGINEEURO";
+            DataTable dte = DBA.Query2DataTable(sSql);
+            foreach (DataRow dre in dte.Rows)
+            {
+                var item = new boEtoll()
+                {
+                    ID = Util.getFieldValue<int>(dre, "ID"),
+                    ETL_ETOLLCAT = Util.getFieldValue<int>(dre, "ETL_ETOLLCAT"),
+                    ETL_ENGINEEURO = Util.getFieldValue<int>(dre, "ETL_ENGINEEURO"),
+                    ETL_TOLL_SPEEDWAY = Util.getFieldValue<double>(dre, "ETL_TOLL_SPEEDWAY"),
+                    ETL_TOLL_ROAD = Util.getFieldValue<double>(dre, "ETL_TOLL_ROAD"),
+                    ETL_NOISE_CITY = Util.getFieldValue<double>(dre, "ETL_NOISE_CITY"),
+                    ETL_NOISE_OUTER = Util.getFieldValue<double>(dre, "ETL_NOISE_OUTER"),
+                    ETL_CO2 = Util.getFieldValue<double>(dre, "ETL_CO2")
+                };
+                result.Add($"{item.ETL_ETOLLCAT}_{item.ETL_ENGINEEURO}", item);
+            }
+            return result;
+        }
+
 
         public DataTable GetNotReverseGeocodedNodesToDT(int p_RDT_VALUE)
         {
@@ -1825,5 +1843,78 @@ namespace PMapCore.BLL
             DBA.ExecuteNonQuery(sSQL);
         }
 
+        /// <summary>
+        /// Egy útvonal útdíj kiszámítása
+        /// </summary>
+        /// <param name="p_Edges">Útvonal élei</param>
+        /// <param name="p_TRK_ETOLLCAT">Jármű útdíjkategória</param>
+        /// <param name="p_TRK_ENGINEEURO">Jármű euro besorolás</param>
+        /// <param name="p_lastETRCODE">A számolandó útvonal előtti útdíjal elszámolt szakasz azonosítója. A Törvény úgy szól, hogy minden megkezdett szakaszra kell kifizetni az útdíjat.
+        /// Amennyiben a kiszámolandó útszakasz egy olyan útvonal KÖZVETLEN folytatása, amelyre már lett útdíj elszámolva, a p_lastETRCODE-adjuk át a legutolsó útdíjazonosítót (és arra már 
+        /// nem számol díjat). A rutin ezt a paramétert visszadja, hogy amennyiben a következő  számítás evvel az útszakasszal kezdődne, ne számoljunk el arra már díjat.</param>
+        /// 
+        /// https://nemzetiutdij.hu/hu/hirek/2024-januar-1-jetol-ervenyes-e-utdij-arak
+        /// 
+        /// külsőköltségdíj-tényező:
+        /// Az adott elemi útszakaszban a külvárosi útszakaszok hosszaránya. (Például ha egy elemi útszakasz teljes
+        /// hosszában települési összekötő területjellegű, akkor az ahhoz tartozó külsőköltségdíj-tényező 0, ha 50%-ban
+        /// külvárosi, 50%-ban pedig települési összekötő területjellegű, akkor a külsőköltségdíj-tényező 0,50, ha pedig
+        /// teljes hosszában külvárosi területjellegű, akkor a külsőköltségdíj-tényező 1
+
+        /// <returns></returns>
+        /// 
+        public static double GetToll(List<boEdge> p_Edges, int p_TRK_ETOLLCAT, int p_TRK_ENGINEEURO, ref string p_lastETRCODE)
+        {
+            double dToll = 0;
+            foreach (boEdge edge in p_Edges)
+            {
+                if (p_TRK_ETOLLCAT > 1 && p_lastETRCODE != edge.EDG_ETRCODE && !string.IsNullOrWhiteSpace(edge.EDG_ETRCODE))
+                {
+                    double roadToll = 0.0;
+                    double noiseToll = 0.0;
+                    double coToll = 0.0;
+                    if (RouteData.Instance.EtRoads.ContainsKey(edge.EDG_ETRCODE))
+                    {
+                        var etollKey = $"{p_TRK_ETOLLCAT}_{p_TRK_ENGINEEURO}";
+                        if (RouteData.Instance.Etolls.ContainsKey(etollKey))
+                        {
+                            var road = RouteData.Instance.EtRoads[edge.EDG_ETRCODE];
+                            var etoll = RouteData.Instance.Etolls[etollKey];
+
+                            double roadKm = road.ETR_LEN_M / 1000;
+                            
+                            //Infrastruktúra díj
+                            if (road.ETR_ROADTYPE == 1) //1=gyorsforgalmi, 2=főút
+                            {
+                                roadToll = etoll.ETL_TOLL_SPEEDWAY * roadKm;
+                            }
+                            else
+                            {
+                                roadToll = etoll.ETL_TOLL_ROAD * roadKm;
+                            }
+
+                            //külsőköltségdíj-tényező
+                            //
+                            
+                            
+                            //Külvárosi
+                            noiseToll += etoll.ETL_NOISE_CITY * road.ETR_COSTFACTOR * roadKm;
+
+                            //településközi
+                            noiseToll += etoll.ETL_NOISE_OUTER * (1.0 - road.ETR_COSTFACTOR) * roadKm;
+
+                            //Co2
+                            coToll += etoll.ETL_CO2 * roadKm;
+                            
+                        }
+                        //díjkötles szakasz       
+                        dToll += Math.Round(roadToll) + Math.Round(noiseToll) + Math.Round(coToll);
+                        //dToll += Math.Round(roadToll) ;
+                    }
+                }
+                p_lastETRCODE = edge.EDG_ETRCODE;
+            }
+            return dToll;
+        }
     }
 }
