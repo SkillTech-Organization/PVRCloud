@@ -1,9 +1,10 @@
 using Microsoft.OpenApi.Models;
-using PVRPCloudInsightsLogger.Settings;
+using PVRPCloud.Settings;
 using PVRPCloudApi;
+using PVRPCloudApi.DTO.Response;
 using PVRPCloudApi.Handlers;
 using PVRPCloudApi.Util;
-using PVRPCloudApi.DTO.Response;
+using PVRPCloudInsightsLogger.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,8 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddValidation();
-builder.Services.AddExceptionHandler(option => {
+builder.Services.AddExceptionHandler(option =>
+{
     option.ExceptionHandler = GeneralExceptionHandler.HandleAsync;
 });
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
@@ -56,6 +58,9 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.Configure<LoggerSettings>(
     builder.Configuration.GetSection("PVRPCloudLogger"));
 
+builder.Services.Configure<MapStorageSettings>(
+    builder.Configuration.GetSection("MapStorage"));
+
 builder.Services.AddTransient<IApiHandler, ApiHandler>();
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
@@ -81,4 +86,4 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program {}
+public partial class Program { }

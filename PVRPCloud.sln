@@ -16,10 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		doc\ChkRoute.docx = doc\ChkRoute.docx
 		Correct-Tour.ini = Correct-Tour.ini
 		Installer\Correct-Tour.ini = Installer\Correct-Tour.ini
-		doc\PVRPCloudSupporter adatszerkezetek.xlsx = doc\PVRPCloudSupporter adatszerkezetek.xlsx
-		doc\PVRPCloudSupporter használata.docx = doc\PVRPCloudSupporter használata.docx
-		Installer\PVRPCloudSupporterInstaller2.nsi = Installer\PVRPCloudSupporterInstaller2.nsi
-		Installer\PVRPCloudSupporterSetup.exe = Installer\PVRPCloudSupporterSetup.exe
 		Installer\MapeiOrder2.nsi = Installer\MapeiOrder2.nsi
 		Templates\MPEmail.htm = Templates\MPEmail.htm
 		Installer\PMAdmin2.nsi = Installer\PMAdmin2.nsi
@@ -39,6 +35,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		doc\pmmanualx.docx = doc\pmmanualx.docx
 		Installer\PMRoute2.nsi = Installer\PMRoute2.nsi
 		Installer\PMRouteSetup.exe = Installer\PMRouteSetup.exe
+		doc\PVRPCloudSupporter adatszerkezetek.xlsx = doc\PVRPCloudSupporter adatszerkezetek.xlsx
+		doc\PVRPCloudSupporter használata.docx = doc\PVRPCloudSupporter használata.docx
+		Installer\PVRPCloudSupporterInstaller2.nsi = Installer\PVRPCloudSupporterInstaller2.nsi
+		Installer\PVRPCloudSupporterSetup.exe = Installer\PVRPCloudSupporterSetup.exe
 		Installer\RegAsm.exe = Installer\RegAsm.exe
 		Installer\SWHInterfaceInstaller2.nsi = Installer\SWHInterfaceInstaller2.nsi
 		doc\SWH_RDP.txt = doc\SWH_RDP.txt
@@ -50,8 +50,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudTest", "PVRPCloudT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudApi", "PVRPCloudApi\PVRPCloudApi.csproj", "{8A164903-3553-4C3F-A783-462AA74A6F64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FTLSupporter", "FTLSupporter\FTLSupporter.csproj", "{B4FE3066-F14F-4625-85BB-57EA97751A6E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudInsightsLogger", "PVRPCloudInsightsLogger\PVRPCloudInsightsLogger.csproj", "{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudApiTester", "PVRPCloudApiTester\PVRPCloudApiTester.csproj", "{61864368-6F5C-4D2F-AD5C-69FB44555A87}"
@@ -62,9 +60,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtils", "CommonUtils\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobUtils", "BlobManager\BlobUtils.csproj", "{E0619808-77AE-4E3B-919B-6A3D2130B77D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRPCloud", "PVRPCloud\PVRPCloud.csproj", "{C7349DC9-69A2-4738-B4F3-86D75379AC73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloud", "PVRPCloud\PVRPCloud.csproj", "{C7349DC9-69A2-4738-B4F3-86D75379AC73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRPCloudApiTests", "PVRPCloudApiTests\PVRPCloudApiTests.csproj", "{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudApiTests", "PVRPCloudApiTests\PVRPCloudApiTests.csproj", "{ECAF6E31-EBEC-4E80-BBF8-5EA649483AF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,22 +135,6 @@ Global
 		{8A164903-3553-4C3F-A783-462AA74A6F64}.Release|x64.Build.0 = Release|Any CPU
 		{8A164903-3553-4C3F-A783-462AA74A6F64}.Release|x86.ActiveCfg = Release|Any CPU
 		{8A164903-3553-4C3F-A783-462AA74A6F64}.Release|x86.Build.0 = Release|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|x64.Build.0 = Debug|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|x86.Build.0 = Debug|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|x64.ActiveCfg = Release|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|x64.Build.0 = Release|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|x86.ActiveCfg = Release|Any CPU
-		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|x86.Build.0 = Release|Any CPU
 		{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
