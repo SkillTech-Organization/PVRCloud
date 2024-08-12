@@ -22,6 +22,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     public string _mapStorageConnectionString;
 
+    private Dictionary<int, object> _results = [];
+
     public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings, IOptions<MapStorageSettings> mapStorageSettings)
     {
         _loggerSettings = loggerSettings.Value;
@@ -73,25 +75,40 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
     }
 
-    public void Valami(Depot depot, Client client)
+    public Result? GetNodeIdsForDepoAndClients(Depot depot, IEnumerable<Client> clients)
     {
+        Result? result = null;
+
         boEdge[] edgesArr = RouteData.Instance.Edges.Select(s => s.Value).ToArray();
 
         int depotNode = PVRPGetNearestNOD_ID(edgesArr, new PointLatLng(depot.Lat, depot.Lng));
-        int clientNode = PVRPGetNearestNOD_ID(edgesArr, new PointLatLng(client.Lat, client.Lng));
 
-        List<Result> results = [];
-        if (depotNode == 0)
+        if (depotNode != 0)
         {
-            var result = GetValidationError(depot, "?", $"Helytelen koordináta: lat: {depot.Lat}, long : {depot.Lng}.");
-            results.Add(result);
+            _results.Add(depotNode, depot);
+        }
+        else
+        {
+            return GetValidationError(depot, "?", $"Helytelen koordináta: lat: {depot.Lat}, long : {depot.Lng}.");
         }
 
-        if (clientNode == 0)
+        foreach (var client in clients)
         {
-            var result = GetValidationError(depot, "?", $"Helytelen koordináta: lat: {depot.Lat}, long : {depot.Lng}.");
-            results.Add(result);
+            int clientNode = PVRPGetNearestNOD_ID(edgesArr, new PointLatLng(client.Lat, client.Lng));
+
+            if (clientNode != 0)
+            {
+                _results.Add(clientNode, client);
+            }
+            else
+            {
+                _results.Clear();
+
+                return GetValidationError(depot, "?", $"Helytelen koordináta: lat: {depot.Lat}, long : {depot.Lng}.");
+            }
         }
+
+        return null;
     }
 
     private int PVRPGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
