@@ -17,14 +17,13 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     public string _mapStorageConnectionString;
 
-    public PVRPCloudLogic(LoggerSettings loggerSettings, ITelemetryLogger logger, IOptions<MapStorageSettings> mapStorageSettings)
+    public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings, IOptions<MapStorageSettings> mapStorageSettings)
     {
-        _loggerSettings = loggerSettings;
-        if (logger == null)
-        {
-            _logger = TelemetryClientFactory.Create(loggerSettings);
-            _logger.LogToQueueMessage = LogToQueueMessage;
-        }
+        _loggerSettings = loggerSettings.Value;
+
+        _logger = TelemetryClientFactory.Create(_loggerSettings);
+        _logger.LogToQueueMessage = LogToQueueMessage;
+
         _mapStorageConnectionString = mapStorageSettings.Value.AzureStorageConnectionString;
     }
 

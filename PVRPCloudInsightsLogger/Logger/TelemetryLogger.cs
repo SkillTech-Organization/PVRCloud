@@ -63,7 +63,7 @@ public interface ITelemetryLogger
     Task CommitAsync(CancellationToken? cancellationToken);
 }
 
-public class TelemetryLogger : ITelemetryLogger, IDisposable
+public sealed class TelemetryLogger : ITelemetryLogger, IDisposable
 {
     public MessageToQueueMessage LogToQueueMessage { get; set; }
 
