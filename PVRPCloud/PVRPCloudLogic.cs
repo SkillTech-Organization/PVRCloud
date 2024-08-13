@@ -39,7 +39,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         var typeParsed = Enum.TryParse((string)(args[1] ?? ""), out LogTypes type);
         var m = new QueueResponse
         {
-            RequestID = _requestID,
+            RequestID = _requestID ?? string.Empty,
             Log = new Log
             {
                 Message = (string)args[0],
@@ -51,12 +51,12 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return m.ToJson();
     }
 
-
     public string GenerateRequestId()
     {
         return DateTime.UtcNow.Ticks.ToString();
     }
-    public void Init(string requestId = null)
+
+    public void Init(string? requestId = null)
     {
         try
         {
@@ -75,9 +75,9 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
     }
 
-    public Result? GetNodeIdsForDepoAndClients(Depot depot, IEnumerable<Client> clients)
+    public IEnumerable<Result> GetNodeIdsForDepoAndClients(Depot depot, IEnumerable<Client> clients)
     {
-        Result? result = null;
+        List<Result> errors = [];
 
         boEdge[] edgesArr = RouteData.Instance.Edges.Select(s => s.Value).ToArray();
 
@@ -89,7 +89,11 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
         else
         {
-            return GetValidationError(depot, "?", $"Helytelen koordináta: lat: {depot.Lat}, long : {depot.Lng}.");
+            var error = GetValidationError(depot,
+                                           depot.DepotName,
+                                           $"{depot.DepotName}: Helytelen koordináta: lat: {depot.Lat}, long : {depot.Lng}.");
+
+            errors.Add(error);
         }
 
         foreach (var client in clients)
@@ -102,13 +106,15 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             }
             else
             {
-                _results.Clear();
+                var error = GetValidationError(client,
+                                               client.ClientName,
+                                               $"{client.ClientName}: Helytelen koordináta: lat: {depot.Lat}, long : {depot.Lng}.");
 
-                return GetValidationError(depot, "?", $"Helytelen koordináta: lat: {depot.Lat}, long : {depot.Lng}.");
+                errors.Add(error);
             }
         }
 
-        return null;
+        return errors;
     }
 
     private int PVRPGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
