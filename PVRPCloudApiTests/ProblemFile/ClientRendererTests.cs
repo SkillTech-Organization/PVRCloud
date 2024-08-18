@@ -98,6 +98,79 @@ public class ClientRendererTests
 
         var element = _sut.Clients.First();
         element.Key.Should().Be(1);
-        element.Value.Should().BeSameAs(depot);
+        element.Value.Depot.Should().BeSameAs(depot);
+    }
+
+    [Fact]
+    public void Render_CalledWithClient_ContainsACreateClientSection()
+    {
+        Client client = new()
+        {
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0
+        };
+
+        var result = _sut.Render([client]);
+
+        var expected = "createClient(\"client name\", 12000000, 15000000)";
+
+        result.ToString().Should().Contain(expected);
+    }
+
+    [Fact]
+    public void Render_CalledWithClient_ContainsASetClientInformationSection()
+    {
+        Client client = new()
+        {
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+        };
+
+        var result = _sut.Render([client]);
+
+        var expected = "setClientInformation(2, 6, 0, 0, 0, 0, 0)";
+
+        result.ToString().Should().Contain(expected);
+    }
+
+    [Fact]
+    public void Render_CalledWithClient_ReturnsTheSectionsInACorrectOrder()
+    {
+        Client client = new()
+        {
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+        };
+
+        var result = _sut.Render([client]);
+
+        var expected = "createClient(\"client name\", 12000000, 15000000)\nsetClientInformation(2, 6, 0, 0, 0, 0, 0)";
+
+        result.ToString().Should().Contain(expected);
+    }
+
+    [Fact]
+    public void Render_CalledWithClient_SetsAnEntryInClients()
+    {
+        Client client = new()
+        {
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+        };
+
+        _ = _sut.Render([client]);
+
+        _sut.Clients.Count.Should().Be(1);
+
+        var element = _sut.Clients.First();
+        element.Key.Should().Be(2);
+        element.Value.Client.Should().BeSameAs(client);
     }
 }
