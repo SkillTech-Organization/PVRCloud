@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.Serialization;
+using PVRPCloud.Requests;
 
 namespace PVRPCloud;
 
@@ -22,26 +23,43 @@ public sealed class Result
         LOG
     };
 
-    public ResultStatus Status { get; set; }
-    public string ItemID { get; set; } = string.Empty;
-    public required object Data { get; set; }
+    public ResultStatus Status { get; private set; }
+    public string ItemID { get; private set; } = string.Empty;
+    public Project? Project { get; private set; }
+    public ProjectRes? ProjectResult { get; private set; }
+    public ResErrMsg? ResErrMsg { get; private set; }
 
-    public static Result Success(object obj) => new()
+    private Result() {}
+
+    public static Result Success(Project project) => new()
     {
         Status = ResultStatus.RESULT,
-        Data = obj
+        Project = project
+    };
+
+    public static Result Success(ProjectRes projectResult) => new()
+    {
+        Status = ResultStatus.RESULT,
+        ProjectResult = projectResult,
     };
 
     public static Result ValidationError(ResErrMsg error, string itemId) => new()
     {
         ItemID = itemId,
         Status = ResultStatus.VALIDATIONERROR,
-        Data = error,
+        ResErrMsg = error,
+    };
+
+    public static Result Error(ResErrMsg error, string itemId = "") => new()
+    {
+        ItemID = itemId,
+        Status = ResultStatus.ERROR,
+        ResErrMsg = error,
     };
 
     public static Result Exception(ResErrMsg error) => new()
     {
         Status = ResultStatus.EXCEPTION,
-        Data = error,
+        ResErrMsg = error,
     };
 }
