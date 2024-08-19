@@ -38,7 +38,7 @@ public class CapacityProfileRendererTests
         _sut.Profiles.Count.Should().Be(1);
 
         var entry = _sut.Profiles.First();
-        entry.Key.Should().Be(1);
-        entry.Value.Should().BeSameAs(cp);
+        entry.Key.Should().Be("capacity profile id");
+        entry.Value.Should().Be(1);
     }
 }
