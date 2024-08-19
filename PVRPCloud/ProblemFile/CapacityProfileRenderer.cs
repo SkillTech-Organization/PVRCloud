@@ -5,9 +5,9 @@ namespace PVRPCloud.ProblemFile;
 
 public sealed class CapacityProfileRenderer
 {
-    private readonly Dictionary<int, CapacityProfile> _profiles = [];
+    private readonly Dictionary<string, int> _profiles = [];
 
-    public IReadOnlyDictionary<int, CapacityProfile> Profiles => _profiles.AsReadOnly();
+    public IReadOnlyDictionary<string, int> Profiles => _profiles.AsReadOnly();
 
     public StringBuilder Render(IEnumerable<CapacityProfile> capacityProfiles)
     {
@@ -16,7 +16,7 @@ public sealed class CapacityProfileRenderer
         int pvrpId = 1;
         foreach (var capacityProfile in capacityProfiles)
         {
-            _profiles.Add(pvrpId, capacityProfile);
+            _profiles.Add(capacityProfile.ID, pvrpId);
             pvrpId++;
 
             sb.AppendLine($"createCapacityProfile({capacityProfile.Capacity1}, {capacityProfile.Capacity2}, 0, 0, 0)");

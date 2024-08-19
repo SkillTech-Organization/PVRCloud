@@ -3,11 +3,11 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloud.ProblemFile;
 
-public sealed class CreateCostProfileRenderer
+public sealed class CostProfileRenderer
 {
-    private readonly Dictionary<int, CostProfile> _costProfiles = [];
+    private readonly Dictionary<string, int> _costProfiles = [];
 
-    public IReadOnlyDictionary<int, CostProfile> CostProfiles => _costProfiles.AsReadOnly();
+    public IReadOnlyDictionary<string, int> CostProfiles => _costProfiles.AsReadOnly();
 
     public StringBuilder Render(IEnumerable<CostProfile> costProfiles)
     {
@@ -16,7 +16,7 @@ public sealed class CreateCostProfileRenderer
         int pvrpId = 1;
         foreach (var costProfile in costProfiles)
         {
-            _costProfiles.Add(pvrpId, costProfile);
+            _costProfiles.Add(costProfile.ID, pvrpId);
             pvrpId++;
 
             sb.AppendLine($"createCostProfile({costProfile.FixCost}, {costProfile.KmCost}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {costProfile.HourCost}, 0, 0, 0, 0)");

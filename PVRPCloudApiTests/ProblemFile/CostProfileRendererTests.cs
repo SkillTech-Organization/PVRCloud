@@ -4,9 +4,9 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
-public class CreateCostProfileRendererTests
+public class CostProfileRendererTests
 {
-    private readonly CreateCostProfileRenderer _sut = new();
+    private readonly CostProfileRenderer _sut = new();
 
     [Fact]
     public void Render_PassingEmptyCollection_ReturnsEmptyStringBuilder()
@@ -45,7 +45,7 @@ public class CreateCostProfileRendererTests
             },
             new()
             {
-                ID = "cost profile id",
+                ID = "cost profile id2",
                 FixCost = 20,
                 HourCost = 21,
                 KmCost = 22,
@@ -73,7 +73,7 @@ public class CreateCostProfileRendererTests
         _sut.CostProfiles.Count.Should().Be(1);
 
         var expectedCostProfile = _sut.CostProfiles.First();
-        expectedCostProfile.Key.Should().Be(1);
-        expectedCostProfile.Value.Should().BeSameAs(costProfile);
+        expectedCostProfile.Key.Should().Be("cost profile id");
+        expectedCostProfile.Value.Should().Be(1);
     }
 }
