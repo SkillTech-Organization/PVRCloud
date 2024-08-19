@@ -6,7 +6,7 @@ namespace PVRPCloudApiTests.ProblemFile;
 
 public class CreateCostProfileRendererTests
 {
-    private readonly CreateCostProfileRenderer _sut = new();
+    private readonly CostProfileRenderer _sut = new();
 
     [Fact]
     public void Render_PassingEmptyCollection_ReturnsEmptyStringBuilder()

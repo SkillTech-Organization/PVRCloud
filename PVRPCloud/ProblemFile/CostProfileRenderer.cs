@@ -3,7 +3,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloud.ProblemFile;
 
-public sealed class CreateCostProfileRenderer
+public sealed class CostProfileRenderer
 {
     private readonly Dictionary<int, CostProfile> _costProfiles = [];
 
