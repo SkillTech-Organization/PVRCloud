@@ -4,7 +4,7 @@ using PVRPCloud.Requests;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
-public class CreateCostProfileRendererTests
+public class CostProfileRendererTests
 {
     private readonly CostProfileRenderer _sut = new();
 
