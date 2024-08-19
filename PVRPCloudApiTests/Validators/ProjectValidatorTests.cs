@@ -57,6 +57,7 @@ public class ProjectValidatorTests
                     TruckTypeID = "truck type id",
                     ArrDepotMaxTime = 1,
                     CapacityProfileID = "capacity profile id",
+                    CostProfileID = "cost profile ID",
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,

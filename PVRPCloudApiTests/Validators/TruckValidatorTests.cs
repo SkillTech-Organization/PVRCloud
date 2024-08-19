@@ -25,6 +25,12 @@ public class TruckValidatorTests
                     ID = "capacity profile id"
                 }
             ],
+            CostProfiles = [
+                new()
+                {
+                    ID = "cost profile id"
+                }
+            ],
             Trucks = [
                 new()
                 {
@@ -33,6 +39,7 @@ public class TruckValidatorTests
                     TruckTypeID = "truck type id",
                     ArrDepotMaxTime = 1,
                     CapacityProfileID = "capacity profile id",
+                    CostProfileID = "cost profile id",
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
@@ -580,6 +587,104 @@ public class TruckValidatorTests
                     TruckTypeID = "truck type id",
                     ArrDepotMaxTime = 1,
                     CapacityProfileID = "not valuid",
+                    MaxWorkTime = 1,
+                    EarliestStart = 1,
+                    LatestStart = 2,
+                },
+            ]
+        };
+
+        TruckValidator sut = new(project);
+
+        var result = sut.Validate(project.Trucks[0]);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    public void Validate_CostProfileIdIsNotValid_ReturnsInvalidResult(string? value)
+    {
+        Project project = new()
+        {
+            MinTime = 0,
+            MaxTime = 3,
+            TruckTypes = [
+                new()
+                {
+                    ID = "truck type id"
+                }
+            ],
+            CapacityProfiles = [
+                new()
+                {
+                    ID = "capacity profile id"
+                }
+            ],
+            CostProfiles = [
+                new()
+                {
+                    ID = "cost profile id"
+                }
+            ],
+            Trucks = [
+                new()
+                {
+                    ID = "not unique id",
+                    TruckName = "name",
+                    TruckTypeID = "truck type id",
+                    ArrDepotMaxTime = 1,
+                    CapacityProfileID = "capacity profile id",
+                    CostProfileID = value!,
+                    MaxWorkTime = 1,
+                    EarliestStart = 1,
+                    LatestStart = 2,
+                },
+            ]
+        };
+
+        TruckValidator sut = new(project);
+
+        var result = sut.Validate(project.Trucks[0]);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Validate_CostProfileIdIsNotFound_ReturnsInvalidResult()
+    {
+        Project project = new()
+        {
+            MinTime = 0,
+            MaxTime = 3,
+            TruckTypes = [
+                new()
+                {
+                    ID = "truck type id"
+                }
+            ],
+            CapacityProfiles = [
+                new()
+                {
+                    ID = "capacity profile id"
+                }
+            ],
+            CostProfiles = [
+                new()
+                {
+                    ID = "cost profile id"
+                }
+            ],
+            Trucks = [
+                new()
+                {
+                    ID = "not unique id",
+                    TruckName = "name",
+                    TruckTypeID = "truck type id",
+                    ArrDepotMaxTime = 1,
+                    CapacityProfileID = "capacity profile id",
+                    CostProfileID = "not valid",
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
