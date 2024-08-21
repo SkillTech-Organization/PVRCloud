@@ -270,7 +270,7 @@ namespace PMapCore.Common
         private void ReadSpeeds(IniStreamConfigurationProvider ini)
         {
             DicSpeeds = new Dictionary<int, int>();
-            string? part = null;
+            string part = null;
             for (int i = 1; i <= 7; i++)
             {
                 ini.TryGet(Global.iniSpeeds + Global.iniSpeed + i.ToString(), out part);
@@ -375,7 +375,6 @@ namespace PMapCore.Common
                 ProxyServer = part;
 
                 ini.TryGet(Global.iniProxy + Global.ProxyPort, out part);
-                // string sProxyPort = ini.ReadString(Global.iniProxy, Global.ProxyPort);
                 if (!string.IsNullOrEmpty(part))
                     ProxyPort = Convert.ToInt32(part);
 
