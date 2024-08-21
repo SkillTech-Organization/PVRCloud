@@ -127,6 +127,27 @@ namespace PMapCore.Common
 
             ini.Load();
 
+            ReadPMapSection(ini);
+
+            ReadPrioritySection(ini);
+
+            ReadGeoCodingSection(ini);
+
+            ReadRouteSection(ini);
+
+            ReadSpeeds(ini);
+
+            ReadGMapSection(ini);
+
+            ReadPlanSection(ini);
+
+            ReadProxySection(ini);
+
+            Loaded = true;
+        }
+
+        private void ReadPMapSection(IniStreamConfigurationProvider ini)
+        {
             ini.TryGet(Global.iniPMap + Global.iniLogDir, out string part);
             if (!string.IsNullOrEmpty(part))
             {
@@ -187,13 +208,11 @@ namespace PMapCore.Common
                 if (WeightAreaDegree <= 0)
                     WeightAreaDegree = Global.WEIGHTAREA_DEGREE;
             }
+        }
 
-
-
-
-
-
-            ini.TryGet(Global.iniPriority + Global.iniInitRouteDataProcess, out part);
+        private void ReadPrioritySection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniPriority + Global.iniInitRouteDataProcess, out string part);
             if (!string.IsNullOrEmpty(part))
                 InitRouteDataProcess = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), part);
             else
@@ -210,16 +229,17 @@ namespace PMapCore.Common
                 CalcPMapRoutesByOrders = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), part);
             else
                 CalcPMapRoutesByOrders = ThreadPriority.Normal;
+        }
 
-
-
-            ini.TryGet(Global.iniGeocoding + Global.iniGeocodeByGoogle, out part);
+        private void ReadGeoCodingSection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniGeocoding + Global.iniGeocodeByGoogle, out string part);
             GeocodingByGoogle = (part == "1" || part.ToLower() == "true");
+        }
 
-
-
-
-            ini.TryGet(Global.iniRoute + Global.iniRouteThreadNum, out part);
+        private void ReadRouteSection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniRoute + Global.iniRouteThreadNum, out string part);
             if (!string.IsNullOrEmpty(part))
                 RouteThreadNum = Convert.ToInt32(part);
             else
@@ -245,9 +265,12 @@ namespace PMapCore.Common
                 CalcPMapRoutesMemTreshold = Convert.ToInt32(part);
             else
                 CalcPMapRoutesMemTreshold = 100;
+        }
 
-
+        private void ReadSpeeds(IniStreamConfigurationProvider ini)
+        {
             DicSpeeds = new Dictionary<int, int>();
+            string? part = null;
             for (int i = 1; i <= 7; i++)
             {
                 ini.TryGet(Global.iniSpeeds + Global.iniSpeed + i.ToString(), out part);
@@ -256,10 +279,11 @@ namespace PMapCore.Common
                 else
                     DicSpeeds.Add(i, aSpeedDefaults[i - 1]);
             }
+        }
 
-
-
-            ini.TryGet(Global.iniGMap + Global.iniMapType, out part);
+        private void ReadGMapSection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniGMap + Global.iniMapType, out string part);
             if (!string.IsNullOrEmpty(part))
                 MapType = Convert.ToInt32(part);
             else
@@ -303,13 +327,11 @@ namespace PMapCore.Common
                 if (MapCacheDB.Substring(MapCacheDB.Length - 1, 1) != "\\")
                     MapCacheDB += "\\";
             }
+        }
 
-
-
-
-
-
-            ini.TryGet(Global.iniPlan + Global.iniPlanFile, out part);
+        private void ReadPlanSection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniPlan + Global.iniPlanFile, out string part);
             PlanFile = part;
 
             ini.TryGet(Global.iniPlan + Global.iniPlanResultFile, out part);
@@ -341,8 +363,11 @@ namespace PMapCore.Common
             OrdVolumeMultiplier = Convert.ToDouble("0" + part.Replace(',', '.'), CultureInfo.InvariantCulture);
             if (OrdVolumeMultiplier == 0)
                 OrdVolumeMultiplier = 0.001;         //alapértelmezés 0.001 a dm3 --> m3 konverzióhoz
+        }
 
-            ini.TryGet(Global.iniProxy + Global.UseProxy, out part);
+        private void ReadProxySection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniProxy + Global.UseProxy, out string part);
             UseProxy = (part == "1" || part.ToLower() == "true");
             if (UseProxy)
             {
@@ -370,8 +395,6 @@ namespace PMapCore.Common
             {
                 GMapProvider.WebProxy = null;
             }
-
-            Loaded = true;
         }
     }
 }
