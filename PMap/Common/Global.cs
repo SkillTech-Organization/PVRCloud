@@ -29,7 +29,7 @@ namespace PMapCore.Common
         public const string PMapRegINI = "ini";
         public const string PMapRegLOG = "log";
 
-        public const string iniPMap = "PMap";
+        public const string iniPMap = "PMap:";
         public const string iniIDFile = "IDFile";
         public const string iniCTIniFile = "CTIniFile";
         public const string iniLogDir = "LogDir";
@@ -55,15 +55,15 @@ namespace PMapCore.Common
         public const string iniWebDriverTemplate = "WebDriverTemplate";
         public const string iniWebDriverSenderEmail = "WebDriverSenderEmail";
 
-        public const string iniPriority = "Priority";
+        public const string iniPriority = "Priority:";
         public const string iniInitRouteDataProcess = "InitRouteDataProcess";
         public const string iniCalcPMapRoutesByPlan = "CalcPMapRoutesByPlan";
         public const string iniCalcPMapRoutesByOrders = "CalcPMapRoutesByOrders";
 
-        public const string iniGeocoding = "Geocoding";
+        public const string iniGeocoding = "Geocoding:";
         public const string iniGeocodeByGoogle = "GeocodeByGoogle";
 
-        public const string iniRoute = "Route";
+        public const string iniRoute = "Route:";
         public const string iniRouteThreadNum = "RouteThreadNum";
         public const string iniFastestPath = "FastestPath";
         public const string iniDestTraffic = "DestTraffic";
@@ -72,17 +72,17 @@ namespace PMapCore.Common
         public const string CalcPMapRoutesMemTreshold = "CalcPMapRoutesMemTreshold";
 
 
-        public const string iniSpeeds = "Speeds";
+        public const string iniSpeeds = "Speeds:";
         public const string iniSpeed = "Speed";
 
-        public const string iniGMap = "GMap";
+        public const string iniGMap = "GMap:";
         public const string iniMapType = "MapType";
         public const string iniGoogleMapsAPIKey = "GoogleMapsAPIKey";
         public const string iniMapCacheMode = "MapCacheMode";
         public const string iniMapCacheDB = "MapCacheDB";
 
 
-        public const string iniPlan = "Plan";
+        public const string iniPlan = "Plan:";
         public const string iniPlanFile = "PlanFile";
         public const string iniPlanResultFile = "PlanResultFile";
         public const string iniPlanAppl = "PlanAppl";
@@ -93,7 +93,7 @@ namespace PMapCore.Common
         public const string iniTrkMaxWorkTime = "TrkMaxWorkTime";
         public const string iniOrdVolumeMultiplier = "OrdVolumeMultiplier";
 
-        public const string iniProxy = "Proxy";
+        public const string iniProxy = "Proxy:";
         public const string UseProxy = "UseProxy";
         public const string ProxyServer = "Server";
         public const string ProxyPort = "Port";
@@ -159,7 +159,7 @@ namespace PMapCore.Common
         //Túraponttípusok
         public const int PTP_TYPE_WHS_S = 0;     //Raktári felrakás (túra kezdete) Raktárból ki
         public const int PTP_TYPE_WHS_E = 1;     //Raktári lerakás (túra vége) Raktárba vissza
-        public const int PTP_TYPE_DEP = 2;       //Túrapont, le/felrakás 
+        public const int PTP_TYPE_DEP = 2;       //Túrapont, le/felrakás
 
         public const int TPS_VALUE_NOTEXEC = 0;
         public const int TPS_VALUE_OK = 1;
@@ -190,7 +190,7 @@ namespace PMapCore.Common
 
         public static DateTime SQLMINDATE = new DateTime(1753, 1, 1);
 
-        public const double ROUTE_APPROACH = 0.002;    // 
+        public const double ROUTE_APPROACH = 0.002;    //
 
         //Térképre illesztés paraméterek (lehet, hogy ini paraméterbe ki kell ezeket tenni)
         //
