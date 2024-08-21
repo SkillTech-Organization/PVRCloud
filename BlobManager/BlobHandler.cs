@@ -126,7 +126,7 @@ namespace BlobUtils
             return downloadedData;
         }
 
-        public async Task<Stream> DownloadfromStream(string blobContainerName, string blobName)
+        public async Task<Stream> DownloadfromStreamAsync(string blobContainerName, string blobName)
         {
             BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);

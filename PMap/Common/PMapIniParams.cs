@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GMap.NET;
 using System.IO;
-using Microsoft.Win32;
 using System.Threading;
 using System.Globalization;
 using GMap.NET.MapProviders;
 using System.Net;
+using Microsoft.Extensions.Options;
+using BlobUtils;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration.Ini;
 
 namespace PMapCore.Common
 {
     public sealed class PMapIniParams
     {
-
         public enum eLogVerbose
         {
             nolog = 0,      //no logging
@@ -105,7 +105,7 @@ namespace PMapCore.Common
 
         //Lazy objects are thread safe, double checked and they have better performance than locks.
         //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
-        private static readonly Lazy<PMapIniParams> m_instance = new Lazy<PMapIniParams>(() => new PMapIniParams(), true);
+        private static readonly Lazy<PMapIniParams> m_instance = new(() => new PMapIniParams(), true);
 
 
         static public PMapIniParams Instance                //inicializálódik, ezért biztos létrejon az instance osztály)
@@ -116,19 +116,28 @@ namespace PMapCore.Common
             }
         }
 
-        private PMapIniParams()
+        public async Task ReadParamsAsync(string connectionString, string iniFileName = "PMAP.ini")
         {
-            Loaded = false;
-        }
+            var bh = new BlobHandler(connectionString);
 
-        public void ReadParams(string p_iniPath, string p_dbConf, string p_iniFileName = "PMap.ini")
-        {
+            using Stream contentStream = await bh.DownloadfromStreamAsync("parameters", iniFileName);
 
-            if (p_iniPath == "")
-                p_iniPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-            IniPath = p_iniPath;
-            DBConf = p_dbConf;
+            IniStreamConfigurationSource source = new()
+            {
+                Stream = contentStream
+            };
 
+            IniStreamConfigurationProvider iniProvider = new(source);
+            iniProvider.Load();
+            bool success = iniProvider.TryGet("xPlan:xPlanFile", out string result);
+
+            // if (p_iniPath == "")
+            //     p_iniPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+            // IniPath = p_iniPath;
+            // DBConf = p_dbConf;
+
+
+#if Valami
             INIFile ini = new INIFile(Path.Combine(p_iniPath, p_iniFileName));
 
 
@@ -350,6 +359,7 @@ namespace PMapCore.Common
 
             Loaded = true;
 
+#endif
         }
 
     }

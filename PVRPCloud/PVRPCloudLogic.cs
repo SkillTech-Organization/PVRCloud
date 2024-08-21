@@ -8,7 +8,6 @@ using PMapCore.Common;
 using PMapCore.Common.Attrib;
 using PMapCore.Route;
 using PVRPCloud.Requests;
-using PVRPCloud.Settings;
 using PVRPCloudInsightsLogger.Logger;
 using PVRPCloudInsightsLogger.Settings;
 
@@ -20,7 +19,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     private LoggerSettings _loggerSettings { get; set; }
     private string? _requestID { get; set; }
 
-    public string _mapStorageConnectionString;
+    public string? _mapStorageConnectionString;
 
     private Dictionary<int, object> _results = [];
 
