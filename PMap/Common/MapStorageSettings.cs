@@ -2,7 +2,7 @@
 
 namespace PMapCore.Common;
 
-public class MapStorageSettings
+public class MapStorage
 {
     public string? AzureStorageConnectionString { get; set; }
 }

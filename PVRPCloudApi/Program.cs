@@ -59,15 +59,14 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.Configure<LoggerSettings>(
     builder.Configuration.GetSection("PVRPCloudLogger"));
 
-builder.Services.Configure<MapStorageSettings>(
+builder.Services.Configure<MapStorage>(
     builder.Configuration.GetSection("MapStorage"));
 
 builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
 
-var valami = builder.Configuration.GetSection("MapStorage");
-var valami2 = valami["AzureStorageConnectionString"];
+var storageConnectionString = builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"];
 
-await PMapIniParams.Instance.ReadParamsAsync(valami2);
+await PMapIniParams.Instance.ReadParamsAsync(storageConnectionString);
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 

@@ -23,7 +23,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     private Dictionary<int, object> _results = [];
 
-    public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings, IOptions<MapStorageSettings> mapStorageSettings)
+    public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings, IOptions<MapStorage> mapStorageSettings)
     {
         _loggerSettings = loggerSettings.Value;
 
