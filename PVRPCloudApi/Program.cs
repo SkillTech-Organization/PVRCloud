@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
+using PMapCore.Common;
 using PVRPCloud;
-using PVRPCloud.Settings;
 using PVRPCloudApi;
 using PVRPCloudApi.DTO.Response;
 using PVRPCloudApi.Handlers;
@@ -59,10 +59,14 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.Configure<LoggerSettings>(
     builder.Configuration.GetSection("PVRPCloudLogger"));
 
-builder.Services.Configure<MapStorageSettings>(
+builder.Services.Configure<MapStorage>(
     builder.Configuration.GetSection("MapStorage"));
 
 builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
+
+var storageConnectionString = builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"];
+
+await PMapIniParams.Instance.ReadParamsAsync(storageConnectionString);
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 

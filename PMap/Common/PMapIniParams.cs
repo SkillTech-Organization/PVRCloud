@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GMap.NET;
 using System.IO;
-using Microsoft.Win32;
 using System.Threading;
 using System.Globalization;
 using GMap.NET.MapProviders;
 using System.Net;
+using BlobUtils;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration.Ini;
 
 namespace PMapCore.Common
 {
     public sealed class PMapIniParams
     {
-
         public enum eLogVerbose
         {
             nolog = 0,      //no logging
@@ -105,7 +104,7 @@ namespace PMapCore.Common
 
         //Lazy objects are thread safe, double checked and they have better performance than locks.
         //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
-        private static readonly Lazy<PMapIniParams> m_instance = new Lazy<PMapIniParams>(() => new PMapIniParams(), true);
+        private static readonly Lazy<PMapIniParams> m_instance = new(() => new PMapIniParams(), true);
 
 
         static public PMapIniParams Instance                //inicializálódik, ezért biztos létrejon az instance osztály)
@@ -116,148 +115,177 @@ namespace PMapCore.Common
             }
         }
 
-        private PMapIniParams()
+        public async Task ReadParamsAsync(string connectionString, string iniFileName = "PMAP.ini")
         {
-            Loaded = false;
+            var bh = new BlobHandler(connectionString);
+            using Stream contentStream = await bh.DownloadfromStreamAsync("parameters", iniFileName);
+
+            IniStreamConfigurationProvider ini = new(new IniStreamConfigurationSource()
+            {
+                Stream = contentStream
+            });
+
+            ini.Load();
+
+            ReadPMapSection(ini);
+
+            ReadPrioritySection(ini);
+
+            ReadGeoCodingSection(ini);
+
+            ReadRouteSection(ini);
+
+            ReadSpeeds(ini);
+
+            ReadGMapSection(ini);
+
+            ReadPlanSection(ini);
+
+            ReadProxySection(ini);
+
+            Loaded = true;
         }
 
-        public void ReadParams(string p_iniPath, string p_dbConf, string p_iniFileName = "PMap.ini")
+        private void ReadPMapSection(IniStreamConfigurationProvider ini)
         {
-
-            if (p_iniPath == "")
-                p_iniPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-            IniPath = p_iniPath;
-            DBConf = p_dbConf;
-
-            INIFile ini = new INIFile(Path.Combine(p_iniPath, p_iniFileName));
-
-
-            LogDir = ini.ReadString(Global.iniPMap, Global.iniLogDir);
-            if (LogDir != "")
+            ini.TryGet(Global.iniPMap + Global.iniLogDir, out string part);
+            if (!string.IsNullOrEmpty(part))
             {
+                LogDir = part;
+
                 if (LogDir.Substring(LogDir.Length - 1, 1) != "\\")
                     LogDir += "\\";
             }
             else
                 LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\";
 
-            MapJSonDir = ini.ReadString(Global.iniPMap, Global.iniMapJsonDir);
-            if (MapJSonDir != "")
+            ini.TryGet(Global.iniPMap + Global.iniMapJsonDir, out part);
+            if (!string.IsNullOrEmpty(part))
             {
+                MapJSonDir = part;
                 if (MapJSonDir.Substring(MapJSonDir.Length - 1, 1) != "\\")
                     MapJSonDir += "\\";
             }
             else
                 MapJSonDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\";
 
-            string sLogVerbose = ini.ReadString(Global.iniPMap, Global.iniLogVerbose);
-            if (sLogVerbose != "")
-                LogVerbose = (eLogVerbose)Enum.Parse(typeof(eLogVerbose), sLogVerbose);
+            ini.TryGet(Global.iniPMap + Global.iniLogVerbose, out part);
+            if (!string.IsNullOrEmpty(part))
+                LogVerbose = (eLogVerbose)Enum.Parse(typeof(eLogVerbose), part);
             else
                 LogVerbose = eLogVerbose.normal;
 
+            ini.TryGet(Global.iniPMap + Global.iniTourRoute, out part);
+            TourRoute = (part == "1" || part.ToLower() == "true");
 
-
-
-            string sTourRoute = ini.ReadString(Global.iniPMap, Global.iniTourRoute);
-            TourRoute = (sTourRoute == "1" || sTourRoute.ToLower() == "true");
-
-            string sTourpointToolTip = ini.ReadString(Global.iniPMap, Global.iniTourpointToolTip);
-            if( string.IsNullOrWhiteSpace(sTourpointToolTip))
+            ini.TryGet(Global.iniPMap + Global.iniTourpointToolTip, out part);
+            if (string.IsNullOrWhiteSpace(part))
             {
-
-          //      sTourpointToolTip = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET";
-                sTourpointToolTip = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET + " +
+                //      sTourpointToolTip = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET";
+                part = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET + " +
                         "'\\nTérfogat:'+CAST(ORD_VOLUME AS VARCHAR)+', Mennyiség:' + CAST(TOD_QTY AS VARCHAR)+'\\n'+ ORD_COMMENT";
             }
-            TourpointToolTip = sTourpointToolTip;
+            TourpointToolTip = part;
             //ToolTipText = (PMapIniParams.Instance.DepCodeInToolTip ? Util.getFieldValue<string>(p_dr, "DEP_CODE") + "  " : "") + Util.getFieldValue<string>(p_dr, "DEP_NAME") + "\n" + Util.getFieldValue<int>(p_dr, "ZIP_NUM") + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
-            string sTruckCode = ini.ReadString(Global.iniPMap, Global.iniTruckCode);
-            if (string.IsNullOrWhiteSpace(sTruckCode))
+
+            ini.TryGet(Global.iniPMap + Global.iniTruckCode, out part);
+            if (string.IsNullOrWhiteSpace(part))
             {
-
-                sTruckCode = "TRK_REG_NUM + case when isnull(TRK_TRAILER, '') <> '' then '/' + TRK_TRAILER else '' end";
+                part = "TRK_REG_NUM + case when isnull(TRK_TRAILER, '') <> '' then '/' + TRK_TRAILER else '' end";
             }
-            TruckCode = sTruckCode;
+            TruckCode = part;
 
-
-            string sRoutesExpire = ini.ReadString(Global.iniPMap, Global.iniRoutesExpire);
-            if (sRoutesExpire != "")
-                RoutesExpire = Convert.ToInt32(sRoutesExpire);
+            ini.TryGet(Global.iniPMap + Global.iniRoutesExpire, out part);
+            if (!string.IsNullOrEmpty(part))
+                RoutesExpire = Convert.ToInt32(part);
             else
                 RoutesExpire = -1;
 
+            ini.TryGet(Global.iniPMap + Global.iniWeightAreaDegree, out part);
+            if (!string.IsNullOrEmpty(part))
+            {
+                WeightAreaDegree = Convert.ToDouble("0" + part.Replace(',', '.'), CultureInfo.InvariantCulture);
+                if (WeightAreaDegree <= 0)
+                    WeightAreaDegree = Global.WEIGHTAREA_DEGREE;
+            }
+        }
 
-            string sWeightAreaDegree = ini.ReadString(Global.iniPMap, Global.iniWeightAreaDegree);
-            WeightAreaDegree = Convert.ToDouble("0" + sWeightAreaDegree.Replace(',', '.'), CultureInfo.InvariantCulture);
-            if (WeightAreaDegree <= 0)
-                WeightAreaDegree = Global.WEIGHTAREA_DEGREE;
-
-            string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);
-            if (sInitRouteDataProcess != "")
-                InitRouteDataProcess = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), sInitRouteDataProcess);
+        private void ReadPrioritySection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniPriority + Global.iniInitRouteDataProcess, out string part);
+            if (!string.IsNullOrEmpty(part))
+                InitRouteDataProcess = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), part);
             else
                 InitRouteDataProcess = ThreadPriority.Normal;
 
-            string sCalcPMapRoutesByPlan = ini.ReadString(Global.iniPriority, Global.iniCalcPMapRoutesByPlan);
-            if (sCalcPMapRoutesByPlan != "")
-                CalcPMapRoutesByPlan = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), sCalcPMapRoutesByPlan);
+            ini.TryGet(Global.iniPriority + Global.iniCalcPMapRoutesByPlan, out part);
+            if (!string.IsNullOrEmpty(part))
+                CalcPMapRoutesByPlan = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), part);
             else
                 CalcPMapRoutesByPlan = ThreadPriority.Normal;
 
-            string sCalcPMapRoutesByOrders = ini.ReadString(Global.iniPriority, Global.iniCalcPMapRoutesByOrders);
-            if (sInitRouteDataProcess != "")
-                CalcPMapRoutesByOrders = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), sCalcPMapRoutesByOrders);
+            ini.TryGet(Global.iniPriority + Global.iniCalcPMapRoutesByOrders, out part);
+            if (!string.IsNullOrEmpty(part))
+                CalcPMapRoutesByOrders = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), part);
             else
                 CalcPMapRoutesByOrders = ThreadPriority.Normal;
+        }
 
-            string sGeocodingByGoogle = ini.ReadString(Global.iniGeocoding, Global.iniGeocodeByGoogle);
-            GeocodingByGoogle = (sGeocodingByGoogle == "1" || sGeocodingByGoogle.ToLower() == "true");
+        private void ReadGeoCodingSection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniGeocoding + Global.iniGeocodeByGoogle, out string part);
+            GeocodingByGoogle = (part == "1" || part.ToLower() == "true");
+        }
 
-
-            string sRouteThreadNum = ini.ReadString(Global.iniRoute, Global.iniRouteThreadNum);
-            if (sRouteThreadNum != "")
-                RouteThreadNum = Convert.ToInt32(sRouteThreadNum);
+        private void ReadRouteSection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniRoute + Global.iniRouteThreadNum, out string part);
+            if (!string.IsNullOrEmpty(part))
+                RouteThreadNum = Convert.ToInt32(part);
             else
                 RouteThreadNum = 1;
 
-            string sFastestPath = ini.ReadString(Global.iniRoute, Global.iniFastestPath);
-            FastestPath = (sFastestPath == "1" || sFastestPath.ToLower() == "true");
+            ini.TryGet(Global.iniRoute + Global.iniFastestPath, out part);
+            FastestPath = (part == "1" || part.ToLower() == "true");
 
-            string sDestTraffic = ini.ReadString(Global.iniRoute, Global.iniDestTraffic);
-            DestTraffic = (sDestTraffic == "1" || sDestTraffic.ToLower() == "true");
+            ini.TryGet(Global.iniRoute + Global.iniDestTraffic, out part);
+            DestTraffic = (part == "1" || part.ToLower() == "true");
 
-            string sCutMapForRouting = ini.ReadString(Global.iniRoute, Global.iniCutMapForRouting);
-            CutMapForRouting = (sCutMapForRouting == "1" || sCutMapForRouting.ToLower() == "true");
+            ini.TryGet(Global.iniRoute + Global.iniCutMapForRouting, out part);
+            CutMapForRouting = (part == "1" || part.ToLower() == "true");
 
-            string sCutExtDegree = ini.ReadString(Global.iniRoute, Global.iniCutExtDegree);
-            CutExtDegree = Convert.ToDouble("0" + sCutExtDegree.Replace(',', '.'), CultureInfo.InvariantCulture);
+            ini.TryGet(Global.iniRoute + Global.iniCutExtDegree, out part);
+            CutExtDegree = Convert.ToDouble("0" + part.Replace(',', '.'), CultureInfo.InvariantCulture);
             if (CutExtDegree <= 0)
                 CutExtDegree = 0.05;
 
 
-            string sCalcPMapRoutesMemTreshold = ini.ReadString(Global.iniRoute, Global.CalcPMapRoutesMemTreshold);
-            if (sCalcPMapRoutesMemTreshold != "")
-                CalcPMapRoutesMemTreshold = Convert.ToInt32(sCalcPMapRoutesMemTreshold);
+            ini.TryGet(Global.iniRoute + Global.CalcPMapRoutesMemTreshold, out part);
+            if (!string.IsNullOrEmpty(part))
+                CalcPMapRoutesMemTreshold = Convert.ToInt32(part);
             else
                 CalcPMapRoutesMemTreshold = 100;
+        }
 
-
+        private void ReadSpeeds(IniStreamConfigurationProvider ini)
+        {
             DicSpeeds = new Dictionary<int, int>();
+            string part = null;
             for (int i = 1; i <= 7; i++)
             {
-                string sSpeed = ini.ReadString(Global.iniSpeeds, Global.iniSpeed + i.ToString());
-                if (sSpeed != "")
-                    DicSpeeds.Add(i, Convert.ToInt32(sSpeed));
+                ini.TryGet(Global.iniSpeeds + Global.iniSpeed + i.ToString(), out part);
+                if (!string.IsNullOrEmpty(part))
+                    DicSpeeds.Add(i, Convert.ToInt32(part));
                 else
                     DicSpeeds.Add(i, aSpeedDefaults[i - 1]);
             }
+        }
 
-
-
-            string sMapType = ini.ReadString(Global.iniGMap, Global.iniMapType);
-            if (sMapType != "")
-                MapType = Convert.ToInt32(sMapType);
+        private void ReadGMapSection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniGMap + Global.iniMapType, out string part);
+            if (!string.IsNullOrEmpty(part))
+                MapType = Convert.ToInt32(part);
             else
                 MapType = Global.mtGMap;
 
@@ -283,74 +311,89 @@ namespace PMapCore.Common
                 case Global.mtTest:
                     PPlanCommonVars.Instance.MapProvider = GMapProviders.YandexMap;
                     break;
-
-
                  */
-
                 default:
                     PMapCommonVars.Instance.MapProvider = GMapProviders.GoogleTerrainMap;
                     break;
-
             }
 
+            ini.TryGet(Global.iniGMap + Global.iniGoogleMapsAPIKey, out part);
+            GoogleMapProvider.Instance.APIKey = part;
 
-            GoogleMapsAPIKey = ini.ReadString(Global.iniGMap, Global.iniGoogleMapsAPIKey);
-            GoogleMapProvider.Instance.APIKey = GoogleMapsAPIKey;
-
-
-
-
-            MapCacheDB = ini.ReadString(Global.iniGMap, Global.iniMapCacheDB);
-            if (MapCacheDB != "")
+            ini.TryGet(Global.iniGMap + Global.iniMapCacheDB, out part);
+            if (!string.IsNullOrEmpty(part))
             {
+                MapCacheDB = part;
                 if (MapCacheDB.Substring(MapCacheDB.Length - 1, 1) != "\\")
                     MapCacheDB += "\\";
             }
+        }
 
-            PlanFile = ini.ReadString(Global.iniPlan, Global.iniPlanFile);
-            PlanResultFile = ini.ReadString(Global.iniPlan, Global.iniPlanResultFile);
-            PlanAppl = ini.ReadString(Global.iniPlan, Global.iniPlanAppl);
-            PlanArgs = ini.ReadString(Global.iniPlan, Global.iniPlanArgs);
-            PlanOK = ini.ReadString(Global.iniPlan, Global.iniPlanOK);
-            PlanErr = ini.ReadString(Global.iniPlan, Global.iniPlanErr);
-            OptimizeTimeOutSec = Convert.ToInt32("0" + ini.ReadString(Global.iniPlan, Global.iniOptimizeTimeOutSec));
+        private void ReadPlanSection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniPlan + Global.iniPlanFile, out string part);
+            PlanFile = part;
+
+            ini.TryGet(Global.iniPlan + Global.iniPlanResultFile, out part);
+            PlanResultFile = part;
+
+            ini.TryGet(Global.iniPlan + Global.iniPlanAppl, out part);
+            PlanAppl = part;
+
+            ini.TryGet(Global.iniPlan + Global.iniPlanArgs, out part);
+            PlanArgs = part;
+
+            ini.TryGet(Global.iniPlan + Global.iniPlanOK, out part);
+            PlanOK = part;
+
+            ini.TryGet(Global.iniPlan + Global.iniPlanErr, out part);
+            PlanErr = part;
+
+            ini.TryGet(Global.iniPlan + Global.iniOptimizeTimeOutSec, out part);
+            OptimizeTimeOutSec = Convert.ToInt32("0" + part);
             if (OptimizeTimeOutSec < 60)
                 OptimizeTimeOutSec = 60;
 
-            TrkMaxWorkTime = Convert.ToInt32("0" + ini.ReadString(Global.iniPlan, Global.iniTrkMaxWorkTime));
+            ini.TryGet(Global.iniPlan + Global.iniTrkMaxWorkTime, out part);
+            TrkMaxWorkTime = Convert.ToInt32("0" + part);
             if (TrkMaxWorkTime == 0)
                 TrkMaxWorkTime = 1440;
 
-
-            OrdVolumeMultiplier = Convert.ToDouble("0" + ini.ReadString(Global.iniPlan, Global.iniOrdVolumeMultiplier).Replace(',', '.'), CultureInfo.InvariantCulture);
+            ini.TryGet(Global.iniPlan + Global.iniOrdVolumeMultiplier, out part);
+            OrdVolumeMultiplier = Convert.ToDouble("0" + part.Replace(',', '.'), CultureInfo.InvariantCulture);
             if (OrdVolumeMultiplier == 0)
                 OrdVolumeMultiplier = 0.001;         //alapértelmezés 0.001 a dm3 --> m3 konverzióhoz
+        }
 
-            string sUseProxy = ini.ReadString(Global.iniProxy, Global.UseProxy);
-            UseProxy = (sUseProxy == "1" || sUseProxy.ToLower() == "true");
+        private void ReadProxySection(IniStreamConfigurationProvider ini)
+        {
+            ini.TryGet(Global.iniProxy + Global.UseProxy, out string part);
+            UseProxy = (part == "1" || part.ToLower() == "true");
             if (UseProxy)
             {
-                ProxyServer = ini.ReadString(Global.iniProxy, Global.ProxyServer);
-                string sProxyPort = ini.ReadString(Global.iniProxy, Global.ProxyPort);
-                if (sProxyPort != "")
-                    ProxyPort = Convert.ToInt32(sProxyPort);
-                ProxyUser = ini.ReadString(Global.iniProxy, Global.ProxyUser);
-                ProxyPassword = ini.ReadString(Global.iniProxy, Global.ProxyPassword);
-                ProxyDomain = ini.ReadString(Global.iniProxy, Global.ProxyDomain);
+                ini.TryGet(Global.iniProxy + Global.ProxyServer, out part);
+                ProxyServer = part;
+
+                ini.TryGet(Global.iniProxy + Global.ProxyPort, out part);
+                if (!string.IsNullOrEmpty(part))
+                    ProxyPort = Convert.ToInt32(part);
+
+                ini.TryGet(Global.iniProxy + Global.ProxyUser, out part);
+                ProxyUser = part;
+
+                ini.TryGet(Global.iniProxy + Global.ProxyPassword, out part);
+                ProxyPassword = part;
+
+                ini.TryGet(Global.iniProxy + Global.ProxyDomain, out part);
+                ProxyDomain = part;
 
                 GMapProvider.WebProxy = new WebProxy(ProxyServer, ProxyPort);
                 GMapProvider.WebProxy.Credentials = new NetworkCredential(ProxyUser, ProxyPassword, ProxyDomain);
-
             }
             else
             {
                 GMapProvider.WebProxy = null;
             }
-
-
-            Loaded = true;
-
         }
-
     }
 }
