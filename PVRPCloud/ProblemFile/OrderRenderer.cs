@@ -7,13 +7,15 @@ public sealed class OrderRenderer
 {
     private readonly StringBuilder _sb = new();
     private readonly IReadOnlyDictionary<string, int> _clientIds;
+    private readonly IReadOnlyDictionary<string, int> _truckIds;
     private readonly Dictionary<string, int> _orderIds = [];
 
     public IReadOnlyDictionary<string, int> OrderIds => _orderIds.AsReadOnly();
 
-    public OrderRenderer(IReadOnlyDictionary<string, int> clientIds)
+    public OrderRenderer(IReadOnlyDictionary<string, int> clientIds, IReadOnlyDictionary<string, int> truckIds)
     {
         _clientIds = clientIds;
+        _truckIds = truckIds;
     }
 
     public StringBuilder Render(IEnumerable<Order> orders)
@@ -31,6 +33,8 @@ public sealed class OrderRenderer
             }
 
             AddOrderTimeWindow(pvrpId, order);
+
+            AddOrderTrucks(pvrpId, order.TruckIDs);
 
             pvrpId++;
         }
@@ -60,5 +64,15 @@ public sealed class OrderRenderer
     private void AddOrderTimeWindow(int pvrpId, Order order)
     {
         _sb.AppendLine($"addOrderTimeWindow({pvrpId}, {order.OrderMinTime}, {order.OrderMaxTime})");
+    }
+
+    private void AddOrderTrucks(int pvrpId, List<string> truckIds)
+    {
+        foreach (var truckId in truckIds)
+        {
+            int truckPvrpId = _truckIds[truckId];
+
+            _sb.AppendLine($"addOrderTruck({pvrpId}, {truckPvrpId})");
+        }
     }
 }
