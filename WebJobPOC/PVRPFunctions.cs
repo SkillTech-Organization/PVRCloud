@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 
 namespace WebJobPOC
 {
+    public class PVRPTimeOutException : Exception
+    {
+        public PVRPTimeOutException(string message) : base(message) { }
+    }
+
     public class PVRPFunctions
     {
         public static string AzureWebJobsStorageParName = "AzureWebJobsStorage";
@@ -276,6 +281,7 @@ namespace WebJobPOC
                                 if (!exeProcess.HasExited)
                                 {
                                     exeProcess.Kill();
+                                    new PVRPTimeOutException($"Timeout happened! {timeoutMS}");
                                 }
                             }
                         });
@@ -295,8 +301,7 @@ namespace WebJobPOC
         {
             bool res = false;
 
-            if ((System.IO.File.Exists(resultFileWithPath)) && (System.IO.File.Exists(okFileWithPath))
-                && ((System.IO.File.Exists(errorFileWithPath))))
+            if (System.IO.File.Exists(resultFileWithPath) && System.IO.File.Exists(okFileWithPath) && System.IO.File.Exists(errorFileWithPath))
             {
                 res = true;
             }
