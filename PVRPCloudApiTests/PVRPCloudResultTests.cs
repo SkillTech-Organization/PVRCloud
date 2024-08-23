@@ -1,10 +1,9 @@
 ﻿using System.Net;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace PVRPCloudApiTests;
 
-public class PVRPCloudResultTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
+public class PVRPCloudResultTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
 {
     private const string Endpoint = "/v1/PVRPCloudResult/";
 

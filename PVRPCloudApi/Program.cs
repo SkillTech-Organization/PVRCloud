@@ -66,7 +66,11 @@ builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
 
 var storageConnectionString = builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"];
 
-await PMapIniParams.Instance.ReadParamsAsync(storageConnectionString);
+// @Workaround
+if (builder.Environment.EnvironmentName != "Testing")
+{
+    await PMapIniParams.Instance.ReadParamsAsync(storageConnectionString);
+}
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
