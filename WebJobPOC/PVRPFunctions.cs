@@ -26,7 +26,15 @@ namespace WebJobPOC
         private string _fileName;
         private string _blobFileName;
         private string _iniFileName;
-        private string _localPath;
+        private string _workDir;
+        private string _okFileName;
+        private string _errorFileName;
+        private string _resultFileName;
+        private string _stdOutFileName;
+        private string _stdErrFileName;
+
+
+
         private IConfiguration _config;
         private ILogger _logger;
 
@@ -40,13 +48,25 @@ namespace WebJobPOC
             _fileName = $"{_requestID}_optimize.dat";
             _blobFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
             _iniFileName = $"{_requestID}_init.cl";
-            _localPath = Directory.CreateTempSubdirectory("PVRPTemp").FullName;
+            _workDir = $"C:\\local\\Temp\\xx{DateTime.UtcNow.Ticks}";
+
+            _okFileName = $"{_requestID}_ok.dat";
+            _errorFileName = $"{_requestID}_error.dat";
+            _resultFileName = $"{_requestID}_result.dat";
+            _stdOutFileName = $"{_requestID}_stdout.dat";
+            _stdErrFileName = $"{_requestID}_stderr.dat";
+
+
         }
         public bool Optimize()
         {
 
             Console.WriteLine($"--{_requestID} STARTED");
             Console.WriteLine($"-- Parameters RequsestID:{_requestID} maxCompTime:{_maxCompTime}");
+            Console.WriteLine($"--Work dir:{_workDir}");
+
+            //_workingDir = Directory.CreateTempSubdirectory("PVRPTemp").FullName;
+            Directory.CreateDirectory(_workDir);
 
 
             // NOTODO: download the optimize.dat file from blob store
@@ -68,12 +88,11 @@ namespace WebJobPOC
             ExecPVRP(ExecTimeOutMS);
 
             // NOTODO: check  the result file
-            string okFileName = $"{_requestID}_ok.dat";
-            string errorFileName = $"{_requestID}_error.dat";
-            string resultFileName = $"{_requestID}_result.dat";
-            var okFileWithPath = System.IO.Path.Combine(_localPath, okFileName);
-            var errorFileWithPath = System.IO.Path.Combine(_localPath, errorFileName);
-            var resultFileWithPath = System.IO.Path.Combine(_localPath, resultFileName);
+            var okFileWithPath = System.IO.Path.Combine(_workDir, _okFileName);
+            var errorFileWithPath = System.IO.Path.Combine(_workDir, _errorFileName);
+            var resultFileWithPath = System.IO.Path.Combine(_workDir, _resultFileName);
+            var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
+            var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
 
             bool resultWasOk = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath);
 
@@ -82,14 +101,18 @@ namespace WebJobPOC
             string blobOkFileName = $"REQ_{_requestID}/{_requestID}_ok.dat";
             string blobErrorFileName = $"REQ_{_requestID}/{_requestID}_error.dat";
             string blobResultFileName = $"REQ_{_requestID}/{_requestID}_result.dat";
-            UploadToBlobStore(resultFileWithPath, okFileWithPath, errorFileWithPath, blobResultFileName, blobOkFileName, blobErrorFileName);
+            string blobStdOutFileName = $"REQ_{_requestID}/{_requestID}_stdout.dat";
+            string blobStdErrFileName = $"REQ_{_requestID}/{_requestID}_stderr.dat";
+            UploadToBlobStore(resultFileWithPath, okFileWithPath, errorFileWithPath, stdoutFileWithPath, stderrFileWithPath,
+                blobResultFileName, blobOkFileName, blobErrorFileName, blobStdOutFileName, blobStdErrFileName);
             Console.WriteLine($"--{_requestID} end upload to blobstore");
 
             return resultWasOk;
         }
 
 
-        private void UploadToBlobStore(string resultFileWithPath, string okFileWithPath, string errorFileWithPath, string resultFileName, string okFileName, string errorFileName)
+        private void UploadToBlobStore(string resultFileWithPath, string okFileWithPath, string errorFileWithPath, string stdoutFileWithPath, string stderrFileWithPath,
+            string blobResultFileName, string blobOkFileName, string blobErrorFileName, string blobStdOutFileName, string blobStdErrFileName)
         {
             try
             {
@@ -101,41 +124,13 @@ namespace WebJobPOC
 
                 // Retrieve reference to a previously created container.
                 CloudBlobContainer container = blobClient.GetContainerReference(CalcContainerName);
+                uploadToBlob(container, resultFileWithPath, blobResultFileName);
+                uploadToBlob(container, okFileWithPath, blobOkFileName);
+                uploadToBlob(container, errorFileWithPath, blobErrorFileName);
+                uploadToBlob(container, stdoutFileWithPath, blobStdOutFileName);
+                uploadToBlob(container, stderrFileWithPath, blobStdErrFileName);
 
-                if (File.Exists(resultFileWithPath))
-                {
-                    CloudBlockBlob blockBlob_result = container.GetBlockBlobReference(resultFileName);
-                    Console.WriteLine(String.Format("--upload file with path: {0}", resultFileWithPath));
-                    // Save file to blob content.
-                    using (var fileStream = System.IO.File.OpenRead(resultFileWithPath))
-                    {
-                        blockBlob_result.UploadFromStreamAsync(fileStream).GetAwaiter().GetResult();
-                    }
-                }
-
-                if (File.Exists(okFileWithPath))
-                {
-                    CloudBlockBlob blockBlob_ok = container.GetBlockBlobReference(okFileName);
-                    Console.WriteLine(String.Format("--upload file with path: {0}", okFileWithPath));
-                    // Save file to blob content.
-                    using (var fileStream = System.IO.File.OpenRead(okFileWithPath))
-                    {
-                        blockBlob_ok.UploadFromStreamAsync(fileStream).GetAwaiter().GetResult();
-                    }
-                }
-
-                if (File.Exists(errorFileWithPath))
-                {
-                    CloudBlockBlob blockBlob_error = container.GetBlockBlobReference(errorFileName);
-                    Console.WriteLine(String.Format("--upload file with path: {0}", errorFileWithPath));
-                    // Save file to blob content.
-                    using (var fileStream = System.IO.File.OpenRead(errorFileWithPath))
-                    {
-                        blockBlob_error.UploadFromStreamAsync(fileStream).GetAwaiter().GetResult();
-                    }
-                }
-
-                DeleteFilesAndFoldersRecursively(_localPath);
+                //                DeleteFilesAndFoldersRecursively(_workDir);
             }
             catch (Exception ex)
             {
@@ -145,6 +140,19 @@ namespace WebJobPOC
 
         }
 
+        private void uploadToBlob(CloudBlobContainer container, string fileWithPath, string blobFileName)
+        {
+            if (File.Exists(fileWithPath))
+            {
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobFileName);
+                Console.WriteLine(String.Format("--upload file with path: {0}", fileWithPath));
+                // Save file to blob content.
+                using (var fileStream = System.IO.File.OpenRead(fileWithPath))
+                {
+                    blockBlob.UploadFromStreamAsync(fileStream).GetAwaiter().GetResult();
+                }
+            }
+        }
 
         private void DownloadFromBlobStore(string blobFileName, string fileName)
         {
@@ -162,7 +170,7 @@ namespace WebJobPOC
                 // Retrieve reference to a blob named "photo1.jpg".
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobFileName);
 
-                var dwnlFileWithPath = System.IO.Path.Combine(_localPath, fileName);
+                var dwnlFileWithPath = System.IO.Path.Combine(_workDir, fileName);
 
                 Console.WriteLine(String.Format("--downloaded file with path: {0}", dwnlFileWithPath));
 
@@ -182,22 +190,22 @@ namespace WebJobPOC
 
         private void CreateInifile(string iniFileName)
         {
-            var iniFileWithPath = System.IO.Path.Combine(_localPath, iniFileName);
+            var iniFileWithPath = System.IO.Path.Combine(_workDir, iniFileName);
             Console.WriteLine(String.Format("--ini file with path: {0}", iniFileWithPath));
 
-            var optimizeFileWithPath = System.IO.Path.Combine(_localPath, $"{_requestID}_optimize");
+            var optimizeFileWithPath = System.IO.Path.Combine(_workDir, $"{_requestID}_optimize");
             optimizeFileWithPath = optimizeFileWithPath.Replace("\\", "\\\\");//.Remove(optimizeFileWithPath.LastIndexOf("."));
             Console.WriteLine(String.Format("--optimize file with path: {0}", optimizeFileWithPath));
 
-            var outfileFileWithPath = System.IO.Path.Combine(_localPath, $"{_requestID}_result");
+            var outfileFileWithPath = System.IO.Path.Combine(_workDir, $"{_requestID}_result");
             outfileFileWithPath = outfileFileWithPath.Replace("\\", "\\\\");
             Console.WriteLine(String.Format("--outfile file with path: {0}", outfileFileWithPath));
 
-            var okfileFileWithPath = System.IO.Path.Combine(_localPath, $"{_requestID}_ok");
+            var okfileFileWithPath = System.IO.Path.Combine(_workDir, $"{_requestID}_ok");
             okfileFileWithPath = okfileFileWithPath.Replace("\\", "\\\\");
             Console.WriteLine(String.Format("--okfile file with path: {0}", okfileFileWithPath));
 
-            var errorfileFileWithPath = System.IO.Path.Combine(_localPath, $"{_requestID}_error");
+            var errorfileFileWithPath = System.IO.Path.Combine(_workDir, $"{_requestID}_error");
             errorfileFileWithPath = errorfileFileWithPath.Replace("\\", "\\\\");
             Console.WriteLine(String.Format("--errorfile file with path: {0}", errorfileFileWithPath));
 
@@ -244,35 +252,69 @@ namespace WebJobPOC
             Console.WriteLine(readText);
         }
 
+        private string CreateBatFile(string batFileName, string iniFileName)
+        {
+            var batFileWithPath = System.IO.Path.Combine(_workDir, batFileName);
+            Console.WriteLine(String.Format("--bat file with path: {0}", batFileWithPath));
+
+            var iniFileWithPath = System.IO.Path.Combine(_workDir, iniFileName);
+
+            //iniFileWithPath = iniFileWithPath.Replace("\\", "\\\\");
+
+            Console.WriteLine(String.Format("--ini file with path: {0}", iniFileWithPath));
+
+            if (!System.IO.File.Exists(batFileWithPath))
+            {
+                using (System.IO.StreamWriter sw = System.IO.File.CreateText(batFileWithPath))
+                {
+                    String s = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "PVRP.exe") + " -s 9 9 -f " + iniFileWithPath + " > PVRP.log";
+                    sw.WriteLine(s);
+                }
+            }
+
+            string readText = System.IO.File.ReadAllText(batFileWithPath);
+            Console.WriteLine(readText);
+
+            return batFileWithPath;
+        }
+
+
         private void ExecPVRP(int timeoutMS)
         {
-            var iniFileWithPath = System.IO.Path.Combine(_localPath, _iniFileName);
-            iniFileWithPath = iniFileWithPath.Replace("\\", "\\\\");
+            var iniFileWithPath = System.IO.Path.Combine(_workDir, _iniFileName);
+
+            //iniFileWithPath = iniFileWithPath.Replace("\\", "\\\\");
             Console.WriteLine(String.Format("--ini file with path: {0}", iniFileWithPath));
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.CreateNoWindow = false;
-            startInfo.UseShellExecute = false;
 
+
+            /* BAT file 
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = true;
 
-            //string p = @"%WEBROOT_PATH%\App_Data\jobs\%WEBJOBS_TYPE%\%WEBJOBS_NAME%";
-            ///var batFileWithPath = System.IO.Path.Combine(_localPath, batFileName);
-            //var batFileWithPath = System.IO.Path.Combine(p, batFileName);
-            ///Console.WriteLine(String.Format("--bat file with path: {0}", batFileWithPath));
-            //startInfo.FileName = "P-VRP.bat";// batFileWithPath;
-            startInfo.FileName = "PVRP.exe";// batFileWithPath;
-            startInfo.Arguments = "-s 9 9  -f  " + iniFileWithPath;
+            var batFileWithPath = CreateBatFile("PVRP.bat", iniFileWithPath);
+            startInfo.FileName = batFileWithPath;
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            */
 
+
+            startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = false;
+            startInfo.FileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "PVRP.exe");
+            startInfo.Arguments = "-s 9 9  -f  " + iniFileWithPath;
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            startInfo.RedirectStandardError = true;
+            startInfo.RedirectStandardOutput = true;
 
             try
             {
+                Console.WriteLine($"--PRVP.EXE started :{startInfo.FileName} {startInfo.Arguments}");
                 // Start the process with the info we specified.
                 // Call WaitForExit and then the using-statement will close.
                 using (Process exeProcess = Process.Start(startInfo))
                 {
+
                     Task.Factory.StartNew(() =>
                         {
                             if (exeProcess != null)
@@ -281,20 +323,63 @@ namespace WebJobPOC
                                 if (!exeProcess.HasExited)
                                 {
                                     exeProcess.Kill();
+                                    Console.WriteLine("--PRVP.EXE timeout!");
                                     new PVRPTimeOutException($"Timeout happened! {timeoutMS}");
                                 }
                             }
                         });
 
                     exeProcess.WaitForExit(timeoutMS);
+
+                    string stdout = exeProcess.StandardOutput.ReadToEnd();
+                    string stderr = exeProcess.StandardError.ReadToEnd();
+
+                    var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
+                    var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
+
+                    File.WriteAllText(stdoutFileWithPath, stdout);
+                    File.WriteAllText(stderrFileWithPath, stderr);
+
+
+                    Console.WriteLine($"--PRVP.EXE finished! exit code:{exeProcess.ExitCode}");
+                    Console.WriteLine($"--PRVP.EXE output:{stdout}");
+                    Console.WriteLine($"--PRVP.EXE error:{stderr}");
                 }
-                Console.WriteLine("PRVP.EXE finished!");
             }
             catch (Exception ex)
             {
                 // Log error.
                 Console.WriteLine("--ERROR: {0}: ", ex.Message);
             }
+        }
+
+        static void ExecuteCommand(string command)
+        {
+            int exitCode;
+            ProcessStartInfo processInfo;
+            Process process;
+
+            processInfo = new ProcessStartInfo("cmd.exe", "/c " + command);
+            processInfo.CreateNoWindow = true;
+            processInfo.UseShellExecute = false;
+            // *** Redirect the output ***
+            processInfo.RedirectStandardError = true;
+            processInfo.RedirectStandardOutput = true;
+
+            process = Process.Start(processInfo);
+            process.WaitForExit();
+
+            // *** Read the streams ***
+            // Warning: This approach can lead to deadlocks, see Edit #2
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+            exitCode = process.ExitCode;
+
+            Console.WriteLine("output>>" + (String.IsNullOrEmpty(output) ? "(none)" : output));
+            Console.WriteLine("error>>" + (String.IsNullOrEmpty(error) ? "(none)" : error));
+            Console.WriteLine("ExitCode: " + exitCode.ToString(), "ExecuteCommand");
+            process.Close();
         }
 
         private bool CheckResultFiles(string resultFileWithPath, string okFileWithPath, string errorFileWithPath)
