@@ -11,7 +11,13 @@ public class OrderRendererTests
         ["client 2"] = 2
     };
 
-    private readonly OrderRenderer _sut = new(clientIds);
+    private static readonly Dictionary<string, int> truckIds = new()
+    {
+        ["truck 1"] = 1,
+        ["truck 2"] = 22,
+    };
+
+    private readonly OrderRenderer _sut = new(clientIds, truckIds);
 
     [Fact]
     public void Render_CalledWithOrder_CreatesCreateOrderSection()
@@ -104,6 +110,34 @@ public class OrderRendererTests
     }
 
     [Fact]
+    public void Render_CalledWithTruckId_CreatesAddOrderTruckSection()
+    {
+        Order order = new()
+        {
+            TruckIDs = ["truck 1"],
+            ClientID = "client 2"
+        };
+
+        var result = _sut.Render([order]);
+
+        result.ToString().Should().Contain("addOrderTruck(1, 1)");
+    }
+
+    [Fact]
+    public void Render_CalledWithTruckIds_CreatesAddOrderTruckSection()
+    {
+        Order order = new()
+        {
+            TruckIDs = ["truck 1", "truck 2"],
+            ClientID = "client 2"
+        };
+
+        var result = _sut.Render([order]);
+
+        result.ToString().Should().Contain("addOrderTruck(1, 1)\naddOrderTruck(1, 22)");
+    }
+
+    [Fact]
     public void Render_CalledWithOrder_SetsSectionsInACorrectOrder()
     {
         Order order = new()
@@ -116,11 +150,12 @@ public class OrderRendererTests
             OrderMinTime = 4,
             OrderMaxTime = 6,
             OrderServiceTime = 15,
+            TruckIDs = ["truck 1"],
         };
 
         var result = _sut.Render([order]);
 
-        string expected = "createOrder(2)\nsetOrderInformation(1, 12, 20, 0, 0, 0, 9, 0, 0, 0, 0, 0)\nsetOrderServiceTime(1, 15)\naddOrderTimeWindow(1, 4, 6)\n";
+        string expected = "createOrder(2)\nsetOrderInformation(1, 12, 20, 0, 0, 0, 9, 0, 0, 0, 0, 0)\nsetOrderServiceTime(1, 15)\naddOrderTimeWindow(1, 4, 6)\naddOrderTruck(1, 1)\n";
 
         result.ToString().Should().Be(expected);
     }
