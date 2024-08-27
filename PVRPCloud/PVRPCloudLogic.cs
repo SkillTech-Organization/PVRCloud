@@ -183,4 +183,55 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         return itemRes;
     }
+
+    public void Calculate(Project project)
+    {
+        List<(int From, int To)> nodeCombinations = GenerateNodeCombinations();
+
+        List<PMapRoute> routes = GenerateRoutes(project, nodeCombinations);
+
+        CalcRouteProcess crp = new(routes);
+        crp.RunWait();
+    }
+
+    private List<(int From, int To)> GenerateNodeCombinations()
+    {
+        List<(int From, int To)> nodeCombinations = [];
+
+        int[] nodes = [.. _results.Keys];
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            for (int j = 0; j < nodes.Length; j++)
+            {
+                if (nodes[i] != nodes[j])
+                {
+                    nodeCombinations.Add((nodes[i], nodes[j]));
+                }
+            }
+        }
+
+        return nodeCombinations;
+    }
+
+    private List<PMapRoute> GenerateRoutes(Project project, List<(int From, int To)> nodeCombinations)
+    {
+        List<PMapRoute> routes = [];
+        foreach (var (from, to) in nodeCombinations)
+        {
+            foreach (var truckType in project.TruckTypes)
+            {
+                routes.Add(new PMapRoute()
+                {
+                    fromNOD_ID = from,
+                    toNOD_ID = to,
+                    RZN_ID_LIST = string.Join(",", truckType.RestrictedZones),
+                    GVWR = truckType.Weight,
+                    Height = 0,
+                    Width = 0,
+                });
+            }
+        }
+
+        return routes;
+    }
 }
