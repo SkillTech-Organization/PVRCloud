@@ -3,7 +3,7 @@
 namespace PVRPCloud;
 
 [Serializable]
-internal class PMapRoute
+public class PMapRoute : IEquatable<PMapRoute>
 {
     public class PVRPCloudToll
     {
@@ -12,41 +12,54 @@ internal class PMapRoute
         public double Toll { get; set; }                           //Útdíj
     }
 
-    public PMapRoute()
-    {
-        route = null;
-    }
-    public int fromNOD_ID { get; set; }
-    public int toNOD_ID { get; set; }
-    public string RZN_ID_LIST { get; set; }
+    public int fromNOD_ID { get; init; }
+    public int toNOD_ID { get; init; }
+    public string RZN_ID_LIST { get; init; } = string.Empty;
 
-    public int GVWR { get; set; }
-    public int Height { get; set; }
-    public int Width { get; set; }
+    public string TruckTypeId { get; init; } = string.Empty;
+    public int GVWR { get; init; }
+    public int Height { get; init; }
+    public int Width { get; init; }
 
-
-    public boRoute route { get; set; }
+    public boRoute? route { get; set; } = null;
 
     public string NODEList
     {
         get
         {
-            return fromNOD_ID.ToString() + "," + string.Join(",", route.Edges.Select(x => x.NOD_ID_TO.ToString()).ToArray());
-
+            return fromNOD_ID.ToString() + "," + string.Join(",", route?.Edges.Select(x => x.NOD_ID_TO.ToString()).ToArray() ?? []);
         }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj == null) return false;
-        PMapRoute rk = (PMapRoute)obj;
-        return fromNOD_ID == rk.fromNOD_ID && toNOD_ID == rk.toNOD_ID &&
-            RZN_ID_LIST == rk.RZN_ID_LIST && GVWR == rk.GVWR && Height == rk.Height && Width == rk.Width;
-    }
-    public override int GetHashCode()
-    {
-        return string.Format("{0}_{1}_{2}_{3}_{4}_{5}", fromNOD_ID, toNOD_ID, RZN_ID_LIST, GVWR, Height, Width).GetHashCode();
+        if (obj is null) return false;
+
+        return Equals(obj as PMapRoute);
     }
 
+    public bool Equals(PMapRoute? other)
+    {
+        return other is not null &&
+            fromNOD_ID == other.fromNOD_ID &&
+            toNOD_ID == other.toNOD_ID &&
+            RZN_ID_LIST == other.RZN_ID_LIST &&
+            GVWR == other.GVWR &&
+            Height == other.Height &&
+            Width == other.Width;
+    }
+
+    public override int GetHashCode()
+    {
+        HashCode hash = new();
+        hash.Add(fromNOD_ID);
+        hash.Add(toNOD_ID);
+        hash.Add(RZN_ID_LIST);
+        hash.Add(GVWR);
+        hash.Add(Height);
+        hash.Add(Width);
+
+        return hash.ToHashCode();
+    }
 
 }
