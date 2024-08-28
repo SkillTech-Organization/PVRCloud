@@ -6,6 +6,7 @@ namespace PVRPCloud.ProblemFile;
 public sealed class RelationsRenderer
 {
     private readonly StringBuilder _sb = new();
+
     private readonly IReadOnlyList<TruckType> _truckTypes;
     private readonly IReadOnlyDictionary<string, int> _truckTypeIds;
     private readonly List<(ClientNodeIdPair From, ClientNodeIdPair To)> _clientNodes;
