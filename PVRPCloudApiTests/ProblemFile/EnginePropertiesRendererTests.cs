@@ -8,14 +8,12 @@ public class EnginePropertiesRendererTests
     [Fact]
     public void Render_CalledWithProjectName_ReturnsTheEngineConfigurationWithTheProjectName()
     {
-        string result = new EnginePropertiesRenderer().Render("my project name");
+        var result = new EnginePropertiesRenderer().Render("my project name");
 
-        string expected = """
-        setProblemFile("my project name")
-        setEngineParameters(0, 1, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        runEngine()
-        """;
+        string expected = "setProblemFile(\"my project name\")\n" +
+        "setEngineParameters(0, 1, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0)\n" +
+        "runEngine()\n";
 
-        result.Should().Be(expected);
+        result.ToString().Should().Be(expected);
     }
 }
