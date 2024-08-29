@@ -1,8 +1,11 @@
 using Microsoft.OpenApi.Models;
+using PMapCore.Common;
+using PVRPCloud;
 using PVRPCloudApi;
 using PVRPCloudApi.DTO.Response;
 using PVRPCloudApi.Handlers;
 using PVRPCloudApi.Util;
+using PVRPCloudInsightsLogger.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +55,7 @@ builder.Services.AddSwaggerGen(options =>
         //}
     });
 });
-/*
+
 builder.Services.Configure<LoggerSettings>(
     builder.Configuration.GetSection("PVRPCloudLogger"));
 
@@ -69,7 +72,7 @@ if (builder.Environment.EnvironmentName != "Testing")
 {
     await PMapIniParams.Instance.ReadParamsAsync(storageConnectionString);
 }
-*/
+
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
 var app = builder.Build();
