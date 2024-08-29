@@ -13,6 +13,7 @@ namespace WebJobPOC
     public class PVRPFunctions
     {
         public static string AzureWebJobsStorageParName = "AzureWebJobsStorage";
+        public static string PVRPParsParName = "PVRPPars";
         public static string CalcContainerName = "calculations";
 
 
@@ -258,7 +259,7 @@ namespace WebJobPOC
             ///Console.WriteLine(String.Format("--bat file with path: {0}", batFileWithPath));
             //startInfo.FileName = "P-VRP.bat";// batFileWithPath;
             startInfo.FileName = "PVRP.exe";// batFileWithPath;
-            startInfo.Arguments = "-s 9 9  -f  " + iniFileWithPath;
+            startInfo.Arguments = $"{_config[PVRPParsParName]}  -f  " + iniFileWithPath;
 
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
 
