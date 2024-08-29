@@ -7,7 +7,9 @@ public sealed class ProjectRenderer : IProjectRenderer
 {
     private readonly StringBuilder _sb = new();
 
-    public string Render(Project project)
+    public string Render(Project project,
+                         List<(ClientNodeIdPair From, ClientNodeIdPair To)> clientPairs,
+                         IEnumerable<PMapRoute> routes)
     {
         _sb.AppendLine(new SetCustomerIdRenderer().Render());
 
@@ -31,6 +33,14 @@ public sealed class ProjectRenderer : IProjectRenderer
         OrderRenderer orderRenderer = new(clientRenderer.Clients, truckRenderer.TruckIds);
         _sb.Append(orderRenderer.Render(project.Orders));
 
+        RelationsRenderer relationsRenderer = new(project.TruckTypes,
+                                                  truckTypeRenderer.TruckTypeIds,
+                                                  clientPairs,
+                                                  clientRenderer.Clients);
+        _sb.Append(relationsRenderer.Render(routes));
+
+        EnginePropertiesRenderer enginePropertiesRenderer = new();
+        _sb.Append(enginePropertiesRenderer.Render(project.ProjectName));
 
         return _sb.ToString();
     }
