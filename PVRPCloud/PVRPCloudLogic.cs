@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using System.Text;
+using BlobUtils;
 using CommonUtils;
 using GMap.NET;
 using Microsoft.Extensions.Options;
@@ -15,15 +17,17 @@ namespace PVRPCloud;
 
 public sealed class PVRPCloudLogic : IPVRPCloudLogic
 {
-    private ITelemetryLogger? _logger { get; set; }
-    private LoggerSettings _loggerSettings { get; set; }
+    private readonly ITelemetryLogger? _logger;
+    private readonly LoggerSettings _loggerSettings;
+    private readonly IBlobHandler _blobHandler;
+
     private string? _requestID { get; set; }
 
     public string? _mapStorageConnectionString;
 
     private readonly List<ClientNodeIdPair> _clientNodes = [];
 
-    public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings, IOptions<MapStorage> mapStorageSettings)
+    public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings, IOptions<MapStorage> mapStorageSettings, IBlobHandler blobHandler)
     {
         _loggerSettings = loggerSettings.Value;
 
@@ -31,6 +35,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _logger.LogToQueueMessage = LogToQueueMessage;
 
         _mapStorageConnectionString = mapStorageSettings.Value.AzureStorageConnectionString;
+        _blobHandler = blobHandler;
     }
 
     public object LogToQueueMessage(params object[] args)
@@ -236,5 +241,19 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
 
         return routes;
+    }
+
+    private async Task UploadToBlobStorage(string content, CancellationToken cancellationToken)
+    {
+        using MemoryStream ms = new();
+        using StreamWriter sw = new(ms, Encoding.UTF8);
+        await sw.WriteAsync(content);
+
+        await sw.FlushAsync(cancellationToken);
+        ms.Position = 0;
+
+        string fileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
+
+        await _blobHandler.UploadAsync("parameters", fileName, ms, cancellationToken);
     }
 }

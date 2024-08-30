@@ -1,3 +1,4 @@
+using BlobUtils;
 using Microsoft.OpenApi.Models;
 using PMapCore.Common;
 using PVRPCloud;
@@ -63,13 +64,16 @@ builder.Services.Configure<MapStorage>(
     builder.Configuration.GetSection("MapStorage"));
 
 builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
-
-var storageConnectionString = builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"];
+builder.Services.AddTransient<IBlobHandler, BlobHandler>(serviceProvider =>
+{
+    return new BlobHandler(builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"]);
+});
 
 
 // @Workaround
 if (builder.Environment.EnvironmentName != "Testing")
 {
+    string storageConnectionString = builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"] ?? string.Empty;
     await PMapIniParams.Instance.ReadParamsAsync(storageConnectionString);
 }
 
