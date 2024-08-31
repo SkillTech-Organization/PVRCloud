@@ -13,12 +13,14 @@ public class PVRPCloudController : ControllerBase
     [ProducesResponseType<Response>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult PVRPCloudRequest(Project request)
+    public async Task<IActionResult> PVRPCloudRequest(Project request, IPVRPCloudLogic pvrpCloudLogic, CancellationToken cancellationToken)
     {
+        await pvrpCloudLogic.Handle(request, cancellationToken);
+
         return Accepted(new Response
         {
             RequestID = "12345678",
-            Results = [ PVRPCloud.Result.Success(request) ]
+            Results = [Result.Success(request)]
         });
     }
 

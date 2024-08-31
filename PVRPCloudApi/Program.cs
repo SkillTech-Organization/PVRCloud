@@ -1,4 +1,5 @@
 using BlobUtils;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using PMapCore.Common;
 using PVRPCloud;
@@ -66,7 +67,8 @@ builder.Services.Configure<MapStorage>(
 builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
 builder.Services.AddTransient<IBlobHandler, BlobHandler>(serviceProvider =>
 {
-    return new BlobHandler(builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"]);
+    var mapStorageConfiguration = serviceProvider.GetRequiredService<IOptions<MapStorage>>();
+    return new BlobHandler(mapStorageConfiguration.Value.AzureStorageConnectionString);
 });
 
 

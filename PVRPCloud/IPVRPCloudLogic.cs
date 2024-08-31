@@ -1,9 +1,9 @@
-﻿namespace PVRPCloud
+﻿using PVRPCloud.Requests;
+
+namespace PVRPCloud
 {
     public interface IPVRPCloudLogic
     {
-        string GenerateRequestId();
-        void Init(string requestId = null);
-        object LogToQueueMessage(params object[] args);
+        Task<string> Handle(Project project, CancellationToken cancellationToken);
     }
 }
