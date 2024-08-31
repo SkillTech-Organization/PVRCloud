@@ -133,7 +133,7 @@ namespace PMapCore.Route
         private string getContentFromBlob(BlobUtils.BlobHandler bh, string filename, Encoding enc = null)
         {
             string result = "";
-            using (StreamReader streamReader = new StreamReader(bh.DownloadfromStreamAsync("map", filename).GetAwaiter().GetResult(), enc, true))
+            using (StreamReader streamReader = new StreamReader(bh.DownloadFromStreamAsync("map", filename).GetAwaiter().GetResult(), enc, true))
             {
                 // Read the stream and convert it to a string
                 result = streamReader.ReadToEnd();

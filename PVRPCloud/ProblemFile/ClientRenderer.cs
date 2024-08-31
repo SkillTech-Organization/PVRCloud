@@ -8,12 +8,12 @@ public sealed class ClientRenderer
     private const int LatLngChange = 1_000_000;
     private const int DepotPVRPId = 1;
 
-    private readonly Dictionary<int, Entry> _clients = [];
+    private readonly Dictionary<string, int> _clients = [];
 
     private readonly StringBuilder _depotStringBuilder = new();
     private readonly StringBuilder _clientsStringBuilder = new();
 
-    public IReadOnlyDictionary<int, Entry> Clients => _clients.AsReadOnly();
+    public IReadOnlyDictionary<string, int> Clients => _clients.AsReadOnly();
 
     public StringBuilder Render(Depot depot, int projectMinTime)
     {
@@ -48,7 +48,7 @@ public sealed class ClientRenderer
 
     private void CreateEntry(Depot depot)
     {
-        _clients.Add(DepotPVRPId, new Entry(depot));
+        _clients.Add(depot.ID, DepotPVRPId);
     }
 
     public StringBuilder Render(IEnumerable<Client> clients)
@@ -75,36 +75,6 @@ public sealed class ClientRenderer
 
     private void CreateEntry(int pvrpId, Client client)
     {
-        _clients.Add(pvrpId, new Entry(client));
-    }
-
-    public sealed class Entry
-    {
-        private readonly Depot? _depot;
-
-        private readonly Client? _client;
-
-        public Depot Depot => _depot ?? throw EntryMissmatchException.NotADepot();
-
-        public Client Client => _client ?? throw EntryMissmatchException.NotAClient();
-
-        public Entry(Depot depot)
-        {
-            _depot = depot;
-        }
-
-        public Entry(Client client)
-        {
-            _client = client;
-        }
-    }
-
-    private sealed class EntryMissmatchException : Exception
-    {
-        public static EntryMissmatchException NotADepot() => new("Entry is not a Depot");
-
-        public static EntryMissmatchException NotAClient() => new("Entry is not a Client");
-
-        private EntryMissmatchException(string message): base(message) {}
+        _clients.Add(client.ID, pvrpId);
     }
 }
