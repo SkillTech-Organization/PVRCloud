@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
@@ -23,6 +24,11 @@ namespace WebJobPOC
                     b.AddConsole();
                 });
 
+            builder.ConfigureAppConfiguration((hostContext, configApp) =>
+             {
+                 configApp.AddJsonFile("appsettings.json", optional: false);
+                 configApp.AddEnvironmentVariables();
+             });
 
             var host = builder.Build();
             using (host)

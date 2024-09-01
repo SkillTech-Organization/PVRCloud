@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace WebJobPOC
@@ -14,6 +15,7 @@ namespace WebJobPOC
 
     public class CalcResposne
     {
+        public int Ver { get; set; } = 12;
         public int RequestID { get; set; }
         public string Status { get; set; }
         public string Msg { get; set; }
@@ -28,20 +30,29 @@ namespace WebJobPOC
         [return: Queue("pmapcalcoutputmsgs")]
         public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgs")] CalcRequest req, ILogger logger)
         {
-            var confBuilder = new ConfigurationBuilder()
-                 .SetBasePath(Directory.GetCurrentDirectory())
-                 .AddJsonFile("appsettings.json", optional: false);
-
-            IConfiguration config = confBuilder.Build();
-
             var msg = $"Processed queue message:{JsonConvert.SerializeObject(req)}";
-            logger.LogInformation(msg);
+            var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg };
+            try
+            {
+                var confBuilder = new ConfigurationBuilder()
+                     .SetBasePath(Directory.GetCurrentDirectory())
+                     .AddJsonFile("appsettings.json", optional: false)
+                     .AddEnvironmentVariables();                        //https://stackoverflow.com/questions/56045191/azure-webjobs-does-not-override-appsettings-json-with-azure-application-settings
 
-            var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger);
-            var result = fn.Optimize();
+                IConfiguration config = confBuilder.Build();
 
+                logger.LogInformation(msg);
 
-            var resp = new CalcResposne() { RequestID = req.RequestID, Status = (result ? "OK" : "ERR"), Msg = msg };
+                var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger);
+                var result = fn.Optimize();
+
+                resp.Status = (result ? "OK" : "ERR");
+            }
+            catch (Exception ex)
+            {
+                resp.Status = "EXCEPTION";
+                resp.Msg += $"\nException:{ex.Message}";
+            }
             return resp;
         }
     }
