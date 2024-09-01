@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using PMapCore.Common;
 using PVRPCloud;
+using PVRPCloud.ProblemFile;
 using PVRPCloudApi;
 using PVRPCloudApi.DTO.Response;
 using PVRPCloudApi.Handlers;
@@ -64,6 +65,7 @@ builder.Services.Configure<LoggerSettings>(
 builder.Services.Configure<MapStorage>(
     builder.Configuration.GetSection("MapStorage"));
 
+builder.Services.AddTransient<IProjectRenderer, ProjectRenderer>();
 builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
 builder.Services.AddTransient<IBlobHandler, BlobHandler>(serviceProvider =>
 {
@@ -77,6 +79,7 @@ if (builder.Environment.EnvironmentName != "Testing")
 {
     string storageConnectionString = builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"] ?? string.Empty;
     await PMapIniParams.Instance.ReadParamsAsync(storageConnectionString);
+    PMapCore.Route.RouteData.Instance.InitFromFiles(storageConnectionString, p_Forced: false);
 }
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");

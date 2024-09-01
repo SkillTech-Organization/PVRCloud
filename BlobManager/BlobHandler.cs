@@ -137,7 +137,7 @@ namespace BlobUtils
             return blobClient.Exists().Value;
         }
 
-        public async Task UploadAsync(string container, string blobName, Stream content, CancellationToken cancellationToken)
+        public async Task UploadAsync(string container, string blobName, Stream content, CancellationToken cancellationToken = default)
         {
             var containerClient = Client.GetBlobContainerClient(container);
             var blobClient = containerClient.GetBlobClient(blobName);

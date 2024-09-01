@@ -63,38 +63,19 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return m.ToJson();
     }
 
-    public async Task<string> Handle(Project project, CancellationToken cancellationToken)
+    public string Handle(Project project)
     {
-        Init();
-
         var clientNodes = GetNodeIdsForDepoAndClients(project.Depot, project.Clients);
 
         var (nodeCombinations, routes) = Calculate(project, clientNodes);
 
-        string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
+        _ = Task.Run(async () => {
+            string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
 
-        await UploadToBlobStorage(fileContent, cancellationToken);
+            await UploadToBlobStorage(fileContent);
+        });
 
         return _requestID;
-    }
-
-    public void Init()
-    {
-        try
-        {
-            _logger.Info(string.Format("{0} {1}", "PVRPCloud", "Init"), _logger.GetStatusProperty(_requestID));
-
-            var dtStart = _timeProvider.GetUtcNow();
-            RouteData.Instance.InitFromFiles(_mapStorageConnectionString, p_Forced: false);
-            var sysInfo = Util.GetSysInfo();
-
-            var timeSpan = _timeProvider.GetUtcNow() - dtStart;
-            _logger.Info("RouteData.InitFromFiles()  " + sysInfo + " Időtartam:" + timeSpan);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
     }
 
     private string GenerateRequestId()
@@ -264,17 +245,17 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return routes;
     }
 
-    private async Task UploadToBlobStorage(string content, CancellationToken cancellationToken)
+    private async Task UploadToBlobStorage(string content)
     {
         using MemoryStream ms = new();
         using StreamWriter sw = new(ms, Encoding.UTF8);
         await sw.WriteAsync(content);
 
-        await sw.FlushAsync(cancellationToken);
+        await sw.FlushAsync();
         ms.Position = 0;
 
         string fileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
-        await _blobHandler.UploadAsync("parameters", fileName, ms, cancellationToken);
+        await _blobHandler.UploadAsync("parameters", fileName, ms);
     }
 }

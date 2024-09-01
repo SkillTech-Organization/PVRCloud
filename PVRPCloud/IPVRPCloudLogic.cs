@@ -4,6 +4,6 @@ namespace PVRPCloud
 {
     public interface IPVRPCloudLogic
     {
-        Task<string> Handle(Project project, CancellationToken cancellationToken);
+        string Handle(Project project);
     }
 }
