@@ -1,3 +1,4 @@
+using BlobManager;
 using BlobUtils;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -65,12 +66,18 @@ builder.Services.Configure<LoggerSettings>(
 builder.Services.Configure<MapStorage>(
     builder.Configuration.GetSection("MapStorage"));
 
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddTransient<IProjectRenderer, ProjectRenderer>();
 builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
 builder.Services.AddTransient<IBlobHandler, BlobHandler>(serviceProvider =>
 {
     var mapStorageConfiguration = serviceProvider.GetRequiredService<IOptions<MapStorage>>();
     return new BlobHandler(mapStorageConfiguration.Value.AzureStorageConnectionString);
+});
+builder.Services.AddSingleton<IPmapInputQueue, PmapInputQueue>(serviceProvider =>
+{
+    var mapStorageConfiguration = serviceProvider.GetRequiredService<IOptions<MapStorage>>().Value;
+    return new PmapInputQueue(mapStorageConfiguration.AzureStorageConnectionString, mapStorageConfiguration.InputQueueName);
 });
 
 
