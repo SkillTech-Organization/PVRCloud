@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
+using BlobManager;
 using BlobUtils;
 using CommonUtils;
 using GMap.NET;
@@ -20,6 +21,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     private readonly ITelemetryLogger _logger;
     private readonly LoggerSettings _loggerSettings;
     private readonly IBlobHandler _blobHandler;
+    private readonly IPmapInputQueue _pmapInputQueue;
     private readonly IProjectRenderer _projectRenderer;
     private readonly TimeProvider _timeProvider;
 
@@ -30,6 +32,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings,
                           IOptions<MapStorage> mapStorageSettings,
                           IBlobHandler blobHandler,
+                          IPmapInputQueue pmapInputQueue,
                           IProjectRenderer projectRenderer,
                           TimeProvider timeProvider)
     {
@@ -40,6 +43,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         _mapStorageConnectionString = mapStorageSettings.Value.AzureStorageConnectionString;
         _blobHandler = blobHandler;
+        _pmapInputQueue = pmapInputQueue;
         _projectRenderer = projectRenderer;
         _timeProvider = timeProvider;
 
@@ -73,6 +77,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
 
             await UploadToBlobStorage(fileContent);
+
+            await QueueMessageAsync();
         });
 
         return _requestID;
@@ -257,5 +263,21 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         string fileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
         await _blobHandler.UploadAsync("parameters", fileName, ms);
+    }
+
+    private async Task QueueMessageAsync()
+    {
+        const int MaxCompTime = 12_000_000;
+
+        var optimizeTimeOutSec = PMapIniParams.Instance.OptimizeTimeOutSec * 1000;
+
+        if (optimizeTimeOutSec == 0)
+            optimizeTimeOutSec = MaxCompTime;
+
+        await _pmapInputQueue.SendMessageAsync(new CalcRequest()
+        {
+            RequestID = _requestID,
+            MaxCompTime = optimizeTimeOutSec
+        });
     }
 }
