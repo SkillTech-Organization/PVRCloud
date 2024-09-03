@@ -292,11 +292,14 @@ namespace WebJobPOC
             var fullExeFileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), PVRP_exe);
             var arguments = $"{_config[PVRPParsParName]}  -f  " + iniFileWithPath;
 
-            var startInfo = new ProcessStartInfo("cmd.exe", "/c " + fullExeFileName + " " + arguments);
 
-            //            ProcessStartInfo startInfo = new ProcessStartInfo();
-            // startInfo.FileName = fullExeFileName;
-            // startInfo.Arguments = arguments;
+            //fullExeFileName = "dir *.*";
+            //arguments = "";
+            //var startInfo = new ProcessStartInfo("cmd.exe", "/c " + fullExeFileName + " " + arguments);
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = fullExeFileName;
+            startInfo.Arguments = arguments;
 
 
             /* BAT file 
@@ -310,14 +313,17 @@ namespace WebJobPOC
             */
 
 
-
+            /*
             startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = true;
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            */
+
+            startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
 
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.RedirectStandardError = true;
             startInfo.RedirectStandardOutput = true;
-
 
 
             try
@@ -332,7 +338,7 @@ namespace WebJobPOC
                         {
                             if (exeProcess != null)
                             {
-                                Thread.Sleep(timeoutMS - 1000);
+                                Thread.Sleep(timeoutMS + 1000);
                                 if (!exeProcess.HasExited)
                                 {
                                     saveStdOut(exeProcess);
@@ -343,6 +349,7 @@ namespace WebJobPOC
                                 }
                             }
                         });
+
 
                     exeProcess.WaitForExit(timeoutMS);
 
