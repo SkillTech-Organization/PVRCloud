@@ -70,16 +70,29 @@ builder.Services.Configure<MapStorage>(
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddTransient<IProjectRenderer, ProjectRenderer>();
 builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
+
 builder.Services.AddTransient<IBlobHandler, BlobHandler>(serviceProvider =>
 {
     var mapStorageConfiguration = serviceProvider.GetRequiredService<IOptions<MapStorage>>();
     return new BlobHandler(mapStorageConfiguration.Value.AzureStorageConnectionString);
 });
+
 builder.Services.AddSingleton<IPmapInputQueue, PmapInputQueue>(serviceProvider =>
 {
     var mapStorageConfiguration = serviceProvider.GetRequiredService<IOptions<MapStorage>>().Value;
     return new PmapInputQueue(mapStorageConfiguration.AzureStorageConnectionString, mapStorageConfiguration.InputQueueName);
 });
+
+builder.Services.AddSingleton(static serviceProvider =>
+{
+    PMapIniParams pMapIniParams = new();
+
+    var property = pMapIniParams.GetType().GetProperty(nameof(pMapIniParams.Instance)) ?? throw new InvalidOperationException("""Property "Instance" not found""");
+    property.SetValue(pMapIniParams, pMapIniParams);
+
+    return pMapIniParams;
+});
+builder.Services.AddSingleton<IPMapIniParams, PMapIniParams>(sp => sp.GetRequiredService<PMapIniParams>());
 
 builder.Services.AddSingleton(static serviceProvider =>
 {
@@ -101,7 +114,8 @@ if (app.Environment.EnvironmentName != "Testing")
 {
     var options = app.Services.GetRequiredService<IOptions<MapStorage>>().Value;
 
-    await PMapIniParams.Instance.ReadParamsAsync(options.AzureStorageConnectionString);
+    var pMapIniParams = app.Services.GetRequiredService<PMapIniParams>();
+    await pMapIniParams.ReadParamsAsync(options.AzureStorageConnectionString);
 
     var routeData = app.Services.GetRequiredService<PMapCore.Route.RouteData>();
     routeData.InitFromFiles(options.AzureStorageConnectionString, p_Forced: false);

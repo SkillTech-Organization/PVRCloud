@@ -12,7 +12,12 @@ using Microsoft.Extensions.Configuration.Ini;
 
 namespace PMapCore.Common
 {
-    public sealed class PMapIniParams
+    public interface IPMapIniParams
+    {
+        int OptimizeTimeOutSec { get; }
+    }
+
+    public sealed class PMapIniParams : IPMapIniParams
     {
         public enum eLogVerbose
         {
@@ -101,19 +106,7 @@ namespace PMapCore.Common
         public int DBCmdTimeOut { get; set; }
 
 
-
-        //Lazy objects are thread safe, double checked and they have better performance than locks.
-        //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
-        private static readonly Lazy<PMapIniParams> m_instance = new(() => new PMapIniParams(), true);
-
-
-        static public PMapIniParams Instance                //inicializálódik, ezért biztos létrejon az instance osztály)
-        {
-            get
-            {
-                return m_instance.Value;            //It's thread safe!
-            }
-        }
+        static public PMapIniParams Instance { get; private set; }
 
         public async Task ReadParamsAsync(string connectionString, string iniFileName = "PMAP.ini")
         {

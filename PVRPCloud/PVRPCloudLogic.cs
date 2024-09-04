@@ -24,6 +24,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     private readonly IPmapInputQueue _pmapInputQueue;
     private readonly IProjectRenderer _projectRenderer;
     private readonly IRouteData _routeData;
+    private readonly IPMapIniParams _pmapIniParams;
     private readonly TimeProvider _timeProvider;
 
     private readonly string _requestID;
@@ -33,7 +34,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                           IPmapInputQueue pmapInputQueue,
                           IProjectRenderer projectRenderer,
                           TimeProvider timeProvider,
-                          IRouteData routeData)
+                          IRouteData routeData,
+                          IPMapIniParams pmapIniParams)
     {
         _loggerSettings = loggerSettings.Value;
 
@@ -47,6 +49,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         _requestID = GenerateRequestId();
         _routeData = routeData;
+        _pmapIniParams = pmapIniParams;
     }
 
     private object LogToQueueMessage(params object[] args)
@@ -268,7 +271,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     {
         const int MaxCompTime = 12_000_000;
 
-        var optimizeTimeOutSec = PMapIniParams.Instance.OptimizeTimeOutSec * 1000;
+        var optimizeTimeOutSec = _pmapIniParams.OptimizeTimeOutSec * 1000;
 
         if (optimizeTimeOutSec == 0)
             optimizeTimeOutSec = MaxCompTime;
