@@ -21,18 +21,12 @@ namespace PMapCore.Route
         public int NOD_ID_FROM { get; set; }
         public string RZN_ID_LIST { get; set; }
     }
-    /// <summary>
-    /// </summary>
-    public class RouteData
+
+    public class RouteData : IRouteData
     {
-
-        //Lazy objects are thread safe, double checked and they have better performance than locks.
-        //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
-        private static readonly Lazy<RouteData> m_instance = new Lazy<RouteData>(() => new RouteData(), true);
-
         private static volatile bool m_Initalized = false;
 
-        public FrozenDictionary<string, boEdge> Edges = null; //Az útvonalak korlátozás-zónatípusonként
+        public FrozenDictionary<string, boEdge> Edges { get; private set; } = null; //Az útvonalak korlátozás-zónatípusonként
 
         public FrozenDictionary<int, PointLatLng> NodePositions = null;  //Node koordináták
 
@@ -52,18 +46,8 @@ namespace PMapCore.Route
             }
         }
 
-        private RouteData()
-        {
-        }
-
         //Singleton technika...
-        static public RouteData Instance                                  //inicializálódik, ezért biztos létrejon az instance osztály)
-        {
-            get
-            {
-                return m_instance.Value;            //It's thread safe!
-            }
-        }
+        static public RouteData Instance { get; private set; }
 
 
         public void InitFromFiles(string p_mapStorageConnectionString, bool p_Forced = false)

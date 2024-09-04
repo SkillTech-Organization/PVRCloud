@@ -23,31 +23,30 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     private readonly IBlobHandler _blobHandler;
     private readonly IPmapInputQueue _pmapInputQueue;
     private readonly IProjectRenderer _projectRenderer;
+    private readonly IRouteData _routeData;
     private readonly TimeProvider _timeProvider;
 
     private readonly string _requestID;
 
-    public string? _mapStorageConnectionString;
-
     public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings,
-                          IOptions<MapStorage> mapStorageSettings,
                           IBlobHandler blobHandler,
                           IPmapInputQueue pmapInputQueue,
                           IProjectRenderer projectRenderer,
-                          TimeProvider timeProvider)
+                          TimeProvider timeProvider,
+                          IRouteData routeData)
     {
         _loggerSettings = loggerSettings.Value;
 
         _logger = TelemetryClientFactory.Create(_loggerSettings);
         _logger.LogToQueueMessage = LogToQueueMessage;
 
-        _mapStorageConnectionString = mapStorageSettings.Value.AzureStorageConnectionString;
         _blobHandler = blobHandler;
         _pmapInputQueue = pmapInputQueue;
         _projectRenderer = projectRenderer;
         _timeProvider = timeProvider;
 
         _requestID = GenerateRequestId();
+        _routeData = routeData;
     }
 
     private object LogToQueueMessage(params object[] args)
@@ -94,7 +93,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         List<Result> errors = [];
         List<ClientNodeIdPair> clientNodes = new(clients.Count + 1);
 
-        boEdge[] edgesArr = RouteData.Instance.Edges.Select(s => s.Value).ToArray();
+        boEdge[] edgesArr = _routeData.Edges.Select(s => s.Value).ToArray();
 
         FillClientNodes(depot, edgesArr, clientNodes, errors);
 
@@ -158,7 +157,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - p_pt.Lng) + Math.Abs(o.fromLatLng.Lat - p_pt.Lat)).FirstOrDefault();
 
         // Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
-        _logger.Info(string.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.UtcNow - dtXDate2).ToString()), _logger.GetStatusProperty(_requestID));
+        _logger.Info(string.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count, (DateTime.UtcNow - dtXDate2).ToString()), _logger.GetStatusProperty(_requestID));
 
         if (nearest != null)
         {

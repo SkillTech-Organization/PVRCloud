@@ -3,6 +3,7 @@ using BlobUtils;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using PMapCore.Common;
+using PMapCore.Route;
 using PVRPCloud;
 using PVRPCloud.ProblemFile;
 using PVRPCloudApi;
@@ -80,18 +81,31 @@ builder.Services.AddSingleton<IPmapInputQueue, PmapInputQueue>(serviceProvider =
     return new PmapInputQueue(mapStorageConfiguration.AzureStorageConnectionString, mapStorageConfiguration.InputQueueName);
 });
 
-
-// @Workaround
-if (builder.Environment.EnvironmentName != "Testing")
+builder.Services.AddSingleton(static serviceProvider =>
 {
-    string storageConnectionString = builder.Configuration.GetSection("MapStorage")["AzureStorageConnectionString"] ?? string.Empty;
-    await PMapIniParams.Instance.ReadParamsAsync(storageConnectionString);
-    PMapCore.Route.RouteData.Instance.InitFromFiles(storageConnectionString, p_Forced: false);
-}
+    PMapCore.Route.RouteData routeData = new();
+    var property = routeData.GetType().GetProperty(nameof(routeData.Instance)) ?? throw new InvalidOperationException("""Property "Instance" not found""");
+    property.SetValue(routeData, routeData);
+
+    return routeData;
+});
+builder.Services.AddSingleton<IRouteData, PMapCore.Route.RouteData>(serviceProvider => serviceProvider.GetRequiredService<PMapCore.Route.RouteData>());
+
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
 var app = builder.Build();
+
+// @Workaround
+if (app.Environment.EnvironmentName != "Testing")
+{
+    var options = app.Services.GetRequiredService<IOptions<MapStorage>>().Value;
+
+    await PMapIniParams.Instance.ReadParamsAsync(options.AzureStorageConnectionString);
+
+    var routeData = app.Services.GetRequiredService<PMapCore.Route.RouteData>();
+    routeData.InitFromFiles(options.AzureStorageConnectionString, p_Forced: false);
+}
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
