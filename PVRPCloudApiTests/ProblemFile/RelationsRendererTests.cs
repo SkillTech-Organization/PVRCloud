@@ -3,7 +3,7 @@ using FluentAssertions;
 using PMapCore.BO;
 using PVRPCloud;
 using PVRPCloud.ProblemFile;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
