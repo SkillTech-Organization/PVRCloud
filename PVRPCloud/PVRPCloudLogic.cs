@@ -1,4 +1,7 @@
-﻿using CommonUtils;
+﻿using System.Reflection;
+using System.Text;
+using BlobUtils;
+using CommonUtils;
 using GMap.NET;
 using Microsoft.Extensions.Options;
 using PMapCore.BLL;
@@ -15,15 +18,17 @@ namespace PVRPCloud;
 
 public sealed class PVRPCloudLogic : IPVRPCloudLogic
 {
-    private ITelemetryLogger? _logger { get; set; }
-    private LoggerSettings _loggerSettings { get; set; }
+    private readonly ITelemetryLogger? _logger;
+    private readonly LoggerSettings _loggerSettings;
+    private readonly IBlobHandler _blobHandler;
+
     private string? _requestID { get; set; }
 
     public string? _mapStorageConnectionString;
 
-    private Dictionary<int, object> _results = [];
+    private readonly List<ClientNodeIdPair> _clientNodes = [];
 
-    public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings, IOptions<MapStorage> mapStorageSettings)
+    public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings, IOptions<MapStorage> mapStorageSettings, IBlobHandler blobHandler)
     {
         _loggerSettings = loggerSettings.Value;
 
@@ -31,6 +36,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _logger.LogToQueueMessage = LogToQueueMessage;
 
         _mapStorageConnectionString = mapStorageSettings.Value.AzureStorageConnectionString;
+        _blobHandler = blobHandler;
     }
 
     public object LogToQueueMessage(params object[] args)
@@ -84,7 +90,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         if (depotNode != 0)
         {
-            _results.Add(depotNode, depot);
+            _clientNodes.Add(new ClientNodeIdPair(depot, depotNode));
         }
         else
         {
@@ -101,7 +107,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
             if (clientNode != 0)
             {
-                _results.Add(clientNode, client);
+                _clientNodes.Add(new ClientNodeIdPair(client, clientNode));
             }
             else
             {
@@ -129,9 +135,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         int retNodID = 0;
         var dtXDate2 = DateTime.UtcNow;
 
-        var cnt = EdgesList.Count();
         var filteredEdg = new List<boEdge>();
-        for (int i = 0; i < cnt; i++)
+        for (int i = 0; i < EdgesList.Length; i++)
         {
             var w = EdgesList[i];
             if (Math.Abs(w.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.fromLatLng.Lat - p_pt.Lat) <
@@ -186,7 +191,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     public void Calculate(Project project)
     {
-        List<(int From, int To)> nodeCombinations = GenerateNodeCombinations();
+        List<(ClientNodeIdPair From, ClientNodeIdPair To)> nodeCombinations = GenerateNodeCombinations();
 
         List<PMapRoute> routes = GenerateRoutes(project, nodeCombinations);
 
@@ -194,18 +199,17 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         crp.RunWait();
     }
 
-    private List<(int From, int To)> GenerateNodeCombinations()
+    private List<(ClientNodeIdPair From, ClientNodeIdPair To)> GenerateNodeCombinations()
     {
-        List<(int From, int To)> nodeCombinations = [];
+        List<(ClientNodeIdPair From, ClientNodeIdPair To)> nodeCombinations = [];
 
-        int[] nodes = [.. _results.Keys];
-        for (int i = 0; i < nodes.Length; i++)
+        for (int i = 0; i < _clientNodes.Count; i++)
         {
-            for (int j = 0; j < nodes.Length; j++)
+            for (int j = 0; j < _clientNodes.Count; j++)
             {
-                if (nodes[i] != nodes[j])
+                if (_clientNodes[i] != _clientNodes[j])
                 {
-                    nodeCombinations.Add((nodes[i], nodes[j]));
+                    nodeCombinations.Add((_clientNodes[i], _clientNodes[j]));
                 }
             }
         }
@@ -213,10 +217,14 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return nodeCombinations;
     }
 
-    private List<PMapRoute> GenerateRoutes(Project project, List<(int From, int To)> nodeCombinations)
+    private List<PMapRoute> GenerateRoutes(Project project, List<(ClientNodeIdPair From, ClientNodeIdPair To)> nodeCombinations)
     {
         List<PMapRoute> routes = [];
-        foreach (var (from, to) in nodeCombinations)
+        var combinations = nodeCombinations
+            .Select(x => (From: x.From.NodeId, To: x.To.NodeId))
+            .Distinct();
+
+        foreach (var (from, to) in combinations)
         {
             foreach (var truckType in project.TruckTypes)
             {
@@ -224,6 +232,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 {
                     fromNOD_ID = from,
                     toNOD_ID = to,
+                    TruckTypeId = truckType.ID,
                     RZN_ID_LIST = string.Join(",", truckType.RestrictedZones),
                     GVWR = truckType.Weight,
                     Height = 0,
@@ -233,5 +242,19 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
 
         return routes;
+    }
+
+    private async Task UploadToBlobStorage(string content, CancellationToken cancellationToken)
+    {
+        using MemoryStream ms = new();
+        using StreamWriter sw = new(ms, Encoding.UTF8);
+        await sw.WriteAsync(content);
+
+        await sw.FlushAsync(cancellationToken);
+        ms.Position = 0;
+
+        string fileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
+
+        await _blobHandler.UploadAsync("parameters", fileName, ms, cancellationToken);
     }
 }

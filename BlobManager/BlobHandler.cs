@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Azure;
-using Azure.Core;
-using Azure.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 
 namespace BlobUtils
 {
-    public class BlobHandler
+    public sealed class BlobHandler : IBlobHandler
     {
         public BlobServiceClient Client { get; private set; }
 
@@ -33,7 +29,7 @@ namespace BlobUtils
             Client = new BlobServiceClient(connectionString);
         }
 
-        public async void AppendToBlob (string blobContainerName, MemoryStream logEntryStream, string blobName)
+        public async Task AppendToBlobAsync(string blobContainerName, MemoryStream logEntryStream, string blobName)
         {
             BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
             AppendBlobClient appendBlobClient = containerClient.GetAppendBlobClient(blobName);
@@ -126,7 +122,7 @@ namespace BlobUtils
             return downloadedData;
         }
 
-        public async Task<Stream> DownloadfromStreamAsync(string blobContainerName, string blobName)
+        public async Task<Stream> DownloadFromStreamAsync(string blobContainerName, string blobName)
         {
             BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
@@ -139,6 +135,19 @@ namespace BlobUtils
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
 
             return blobClient.Exists().Value;
+        }
+
+        public async Task UploadAsync(string container, string blobName, Stream content, CancellationToken cancellationToken)
+        {
+            var containerClient = Client.GetBlobContainerClient(container);
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            BlobUploadOptions options = new()
+            {
+                AccessTier = AccessTier.Cool,
+            };
+
+            await blobClient.UploadAsync(content, options, cancellationToken);
         }
     }
 }

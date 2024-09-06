@@ -85,6 +85,7 @@ public class ClientRendererTests
     {
         Depot depot = new()
         {
+            ID = "depot id",
             DepotName = "depot name",
             Lat = 12.0,
             Lng = 15.0,
@@ -97,8 +98,8 @@ public class ClientRendererTests
         _sut.Clients.Count.Should().Be(1);
 
         var element = _sut.Clients.First();
-        element.Key.Should().Be(1);
-        element.Value.Depot.Should().BeSameAs(depot);
+        element.Key.Should().Be("depot id");
+        element.Value.Should().Be(1);
     }
 
     [Fact]
@@ -159,6 +160,7 @@ public class ClientRendererTests
     {
         Client client = new()
         {
+            ID = "client id",
             ClientName = "client name",
             Lat = 12.0,
             Lng = 15.0,
@@ -170,7 +172,7 @@ public class ClientRendererTests
         _sut.Clients.Count.Should().Be(1);
 
         var element = _sut.Clients.First();
-        element.Key.Should().Be(2);
-        element.Value.Client.Should().BeSameAs(client);
+        element.Key.Should().Be("client id");
+        element.Value.Should().Be(2);
     }
 }
