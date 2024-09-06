@@ -1,6 +1,6 @@
 using FluentAssertions;
 using PVRPCloud.ProblemFile;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 
 namespace PVRPCloudApiTests.ProblemFile;
 

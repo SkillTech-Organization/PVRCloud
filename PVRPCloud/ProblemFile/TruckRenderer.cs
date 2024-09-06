@@ -24,7 +24,7 @@ public sealed class TruckRenderer
         _capacityProfileIds = capacityProfileIds;
     }
 
-    public StringBuilder Render(IEnumerable<Requests.Truck> trucks)
+    public StringBuilder Render(IEnumerable<Models.Truck> trucks)
     {
         int pvrpId = 1;
         foreach (var truck in trucks)
@@ -40,14 +40,14 @@ public sealed class TruckRenderer
         return _sb;
     }
 
-    private void CreateTruck(Requests.Truck truck)
+    private void CreateTruck(Models.Truck truck)
     {
         int truckTypeId = _truckTypeIds[truck.TruckTypeID];
 
         _sb.AppendLine($"""createTruck({truckTypeId}, "{truck.TruckName}", 1, 1)""");
     }
 
-    private void SetTruckInformation(int pvrpId, Requests.Truck truck)
+    private void SetTruckInformation(int pvrpId, Models.Truck truck)
     {
         int costProfileId = _costProfileIds[truck.CostProfileID];
 

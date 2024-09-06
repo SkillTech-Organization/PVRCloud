@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentValidation;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 using PVRPCloudApi.Validators;
 
 namespace PVRPCloudApiTests.Validators;

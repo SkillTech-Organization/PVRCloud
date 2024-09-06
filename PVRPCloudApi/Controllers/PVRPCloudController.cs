@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PVRPCloud;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 
 namespace PVRPCloudApi.Controllers;
 
@@ -18,7 +18,7 @@ public class PVRPCloudController : ControllerBase
         return Accepted(new Response
         {
             RequestID = "12345678",
-            Results = [ PVRPCloud.Result.Success(request) ]
+            Results = [PVRPCloud.Result.Success(request)]
         });
     }
 

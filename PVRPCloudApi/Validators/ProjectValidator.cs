@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using PVRPCloud;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 
 namespace PVRPCloudApi.Validators;
 

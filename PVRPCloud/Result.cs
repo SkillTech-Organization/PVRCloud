@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.Serialization;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 
 namespace PVRPCloud;
 

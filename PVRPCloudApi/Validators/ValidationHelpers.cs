@@ -1,4 +1,4 @@
-﻿using PVRPCloud.Requests;
+﻿using PVRPCloud.Models;
 
 namespace PVRPCloudApi.Validators;
 
