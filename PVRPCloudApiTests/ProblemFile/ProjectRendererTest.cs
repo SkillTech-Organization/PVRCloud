@@ -1,8 +1,8 @@
 using FluentAssertions;
 using PMapCore.BO;
 using PVRPCloud;
+using PVRPCloud.Models;
 using PVRPCloud.ProblemFile;
-using PVRPCloud.Requests;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
@@ -23,7 +23,7 @@ public class ProjectRendererTest
         "setDepotInformation(1, 1, 10, 15, 20, 0, 0, 0, 0)\n" +
         "createCapacityProfile(11, 22, 0, 0, 0)\n" +
         "createCapacityProfile(33, 44, 0, 0, 0)\n" +
-        """createTruck(1, "truck name", 1, 1)""" + "\n"+
+        """createTruck(1, "truck name", 1, 1)""" + "\n" +
         "setTruckInformation(1, 1, 1, 10000000, 1, 10, 2, 9, 0, 0, 0)\n" +
         """createClient("client name", 19000000, 20000000)""" + "\n" +
         "setClientInformation(2, 55, 0, 0, 0, 0, 0)\n" +
