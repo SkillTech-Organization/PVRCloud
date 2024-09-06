@@ -19,6 +19,7 @@ namespace WebJobPOC
     {
         public static string AzureWebJobsStorageParName = "AzureWebJobsStorage";
         public static string PVRPParsParName = "PVRPPars";
+        public static string ProcessMemoryInMBParName = "ProcessMemoryInMB";
         public static string CalcContainerName = "calculations";
         public static string PVRP_exe = "PVRP.exe";
 
@@ -333,13 +334,17 @@ namespace WebJobPOC
                 // Call WaitForExit and then the using-statement will close.
                 using (Process exeProcess = Process.Start(startInfo))
                 {
+                    var maxWorkingSet = Int64.Parse(_config[ProcessMemoryInMBParName]) * 1024 * 1024;
+                    //     exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
+                    Console.WriteLine($"--ProcessMemory:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
 
                     Task.Factory.StartNew(() =>
                         {
                             if (exeProcess != null)
                             {
-                                Thread.Sleep(timeoutMS + 1000);
-                                if (!exeProcess.HasExited)
+                                Thread.Sleep(timeoutMS + 5000);
+                                Console.WriteLine($"--{PVRP_exe} KILL,KILL! RequestID:{_requestID}");
+                                if (exeProcess != null && !exeProcess.HasExited)
                                 {
                                     saveStdOut(exeProcess);
                                     exeProcess.Kill();

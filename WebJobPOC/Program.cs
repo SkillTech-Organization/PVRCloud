@@ -21,6 +21,7 @@ namespace WebJobPOC
                 .ConfigureLogging((context, b) =>
                 {
                     b.SetMinimumLevel(LogLevel.Information);
+                    b.AddFilter("Azure.Core", LogLevel.Warning);
                     b.AddConsole();
                 });
 
