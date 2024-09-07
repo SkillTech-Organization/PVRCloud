@@ -17,7 +17,7 @@ namespace WebJobPOC
 
     public class PVRPFunctions
     {
-        public static string AzureWebJobsStorageParName = "AzureWebJobsStorage";
+        public static string AzureWebJobsStorageParName = "ConnectionStrings:AzureWebJobsStorage";
         public static string PVRPParsParName = "PVRPPars";
         public static string ProcessMemoryInMBParName = "ProcessMemoryInMB";
         public static string CalcContainerName = "calculations";
