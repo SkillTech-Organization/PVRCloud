@@ -334,8 +334,11 @@ namespace WebJobPOC
                 // Call WaitForExit and then the using-statement will close.
                 using (Process exeProcess = Process.Start(startInfo))
                 {
-                    var maxWorkingSet = Int64.Parse(_config[ProcessMemoryInMBParName]) * 1024 * 1024;
-                    //     exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
+                    var maxWorkingSet = Int64.Parse("0" + _config[ProcessMemoryInMBParName].Trim()) * 1024 * 1024;
+                    if (maxWorkingSet > 0)
+                    {
+                        exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
+                    }
                     Console.WriteLine($"--ProcessMemory:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
 
                     Task.Factory.StartNew(() =>

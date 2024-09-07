@@ -29,6 +29,7 @@ namespace WebJobPOC
              {
                  configApp.AddJsonFile("appsettings.json", optional: false);
                  configApp.AddEnvironmentVariables();
+                 configApp.AddUserSecrets<Program>();
              });
 
             var host = builder.Build();

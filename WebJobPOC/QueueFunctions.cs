@@ -37,7 +37,8 @@ namespace WebJobPOC
                 var confBuilder = new ConfigurationBuilder()
                      .SetBasePath(Directory.GetCurrentDirectory())
                      .AddJsonFile("appsettings.json", optional: false)
-                     .AddEnvironmentVariables();                        //https://stackoverflow.com/questions/56045191/azure-webjobs-does-not-override-appsettings-json-with-azure-application-settings
+                     .AddEnvironmentVariables()                        //https://stackoverflow.com/questions/56045191/azure-webjobs-does-not-override-appsettings-json-with-azure-application-settings
+                     .AddUserSecrets<Program>();
 
                 IConfiguration config = confBuilder.Build();
 
