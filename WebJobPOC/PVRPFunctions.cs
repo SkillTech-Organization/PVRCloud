@@ -6,7 +6,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WebJobPOC
 {
@@ -320,12 +319,13 @@ namespace WebJobPOC
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
             */
 
-            startInfo.CreateNoWindow = false;
+            startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
 
             startInfo.RedirectStandardError = true;
             startInfo.RedirectStandardOutput = true;
 
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
 
             try
             {
@@ -339,31 +339,22 @@ namespace WebJobPOC
                     {
                         exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
                     }
-                    Console.WriteLine($"--ProcessMemory:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
-
-                    Task.Factory.StartNew(() =>
-                        {
-                            if (exeProcess != null)
-                            {
-                                Thread.Sleep(timeoutMS + 5000);
-                                Console.WriteLine($"--{PVRP_exe} KILL,KILL! RequestID:{_requestID}");
-                                if (exeProcess != null && !exeProcess.HasExited)
-                                {
-                                    saveStdOut(exeProcess);
-                                    exeProcess.Kill();
-
-                                    Console.WriteLine($"--{PVRP_exe} timeout! RequestID:{_requestID}");
-                                    new PVRPTimeOutException($"Timeout happened! {timeoutMS}");
-                                }
-                            }
-                        });
+                    Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
 
 
-                    exeProcess.WaitForExit(timeoutMS);
-
+                    if (exeProcess.WaitForExit(timeoutMS))
+                    {
+                        Console.WriteLine($"--{PVRP_exe} executed normally, requestID:{_requestID}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"--{PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
+                        exeProcess.Kill();
+                    }
                     saveStdOut(exeProcess);
 
-                    Console.WriteLine($"--{PVRP_exe} finished! exit code:{exeProcess.ExitCode}");
+
+                    Console.WriteLine($"--{PVRP_exe} finished! exit code:{exeProcess.ExitCode}, requestID:{_requestID}");
                 }
             }
             catch (Exception ex)
@@ -378,14 +369,16 @@ namespace WebJobPOC
             string stdout = exeProcess.StandardOutput.ReadToEnd();
             string stderr = exeProcess.StandardError.ReadToEnd();
 
+            Console.WriteLine($"--{PVRP_exe} output:{stdout}");
+            Console.WriteLine($"--{PVRP_exe} error:{stderr}");
+
             var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
             var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
 
             File.WriteAllText(stdoutFileWithPath, stdout);
             File.WriteAllText(stderrFileWithPath, stderr);
 
-            Console.WriteLine($"--{PVRP_exe} output:{stdout}");
-            Console.WriteLine($"--{PVRP_exe} error:{stderr}");
+            Console.WriteLine($"--{PVRP_exe} standard outpup/error saved");
 
         }
 
