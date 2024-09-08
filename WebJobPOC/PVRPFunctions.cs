@@ -5,6 +5,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Threading;
 
 namespace WebJobPOC
@@ -291,6 +292,7 @@ namespace WebJobPOC
 
             var fullExeFileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), PVRP_exe);
             var arguments = $"{_config[PVRPParsParName]}  -f  " + iniFileWithPath;
+            //                            + " > " + System.IO.Path.Combine(_workDir, "stdout.datX");
 
 
             //fullExeFileName = "dir *.*";
@@ -318,20 +320,29 @@ namespace WebJobPOC
             startInfo.UseShellExecute = true;
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
             */
-
+            /*output redirect:
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            */
 
-            startInfo.RedirectStandardError = true;
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
 
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+
+            /*
+            startInfo.RedirectStandardError = true;
+            */
+            // startInfo.WindowStyle = ProcessWindowStyle.Normal;
 
             try
             {
                 Console.WriteLine($"--{PVRP_exe} started :{startInfo.FileName} {startInfo.Arguments}");
                 // Start the process with the info we specified.
                 // Call WaitForExit and then the using-statement will close.
+
+
                 using (Process exeProcess = Process.Start(startInfo))
                 {
                     var maxWorkingSet = Int64.Parse("0" + _config[ProcessMemoryInMBParName].Trim()) * 1024 * 1024;
@@ -341,17 +352,31 @@ namespace WebJobPOC
                     }
                     Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
 
+                    var stdout = new StringBuilder();
+                    exeProcess.OutputDataReceived += (sender, eventArgs) =>
+                    {
+                        stdout.AppendLine(eventArgs.Data);
+                    };
+                    exeProcess.BeginOutputReadLine();
 
+                    var stderr = new StringBuilder();
+                    /*
+                                        exeProcess.ErrorDataReceived += (sender, eventArgs) =>
+                                        {
+                                            stderr.AppendLine(eventArgs.Data);
+                                        };
+                                        exeProcess.BeginErrorReadLine();
+                    */
                     if (exeProcess.WaitForExit(timeoutMS))
                     {
                         Console.WriteLine($"--{PVRP_exe} executed normally, requestID:{_requestID}");
                     }
                     else
                     {
-                        Console.WriteLine($"--{PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
+                        Console.WriteLine($"--{PVRP_exe}        timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
                         exeProcess.Kill();
                     }
-                    saveStdOut(exeProcess);
+                    saveStdOut(stdout.ToString(), stderr.ToString());
 
 
                     Console.WriteLine($"--{PVRP_exe} finished! exit code:{exeProcess.ExitCode}, requestID:{_requestID}");
@@ -364,10 +389,8 @@ namespace WebJobPOC
             }
         }
 
-        private void saveStdOut(Process exeProcess)
+        private void saveStdOut(string stdout, string stderr)
         {
-            string stdout = exeProcess.StandardOutput.ReadToEnd();
-            string stderr = exeProcess.StandardError.ReadToEnd();
 
             Console.WriteLine($"--{PVRP_exe} output:{stdout}");
             Console.WriteLine($"--{PVRP_exe} error:{stderr}");
