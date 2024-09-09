@@ -62,9 +62,9 @@ public static class ProjectFactory
             Depot = new()
             {
                 ID = "depot id",
-                DepotName = "name",
-                Lat = 0,
-                Lng = 0,
+                DepotName = "depot name",
+                Lat = 0.01,
+                Lng = 0.02,
                 ServiceFixTime = 0,
                 ServiceVarTime = 0,
                 DepotMinTime = 1,
@@ -74,9 +74,9 @@ public static class ProjectFactory
                 new()
                 {
                     ID = "client id",
-                    ClientName = "name",
-                    Lat = 0,
-                    Lng = 0,
+                    ClientName = "client name",
+                    Lat = 0.003,
+                    Lng = 0.02,
                     ServiceFixTime = 0
                 }
             ],

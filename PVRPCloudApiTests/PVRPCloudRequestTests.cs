@@ -1,7 +1,11 @@
+using System.Collections.Frozen;
 using System.Net;
 using System.Text;
 using System.Text.Json;
 using FluentAssertions;
+using GMap.NET;
+using NSubstitute;
+using PMapCore.BO;
 
 namespace PVRPCloudApiTests;
 
@@ -14,6 +18,23 @@ public class PVRPCloudRequestTests(CustomWebApplicationFactory factory) : IClass
     [Fact]
     public async Task PVRPCloudRequest_ValidInput_MakesAValidResponse()
     {
+        Dictionary<string, boEdge> edges = new()
+        {
+            ["valami"] = new()
+            {
+                RDT_VALUE = 3,
+                NOD_ID_FROM = 6,
+                NOD_ID_TO = 7
+            },
+        };
+        factory.RouteData.Edges.Returns(edges.ToFrozenDictionary());
+
+        Dictionary<int, PointLatLng> nodePositions = new()
+        {
+            [7] = new()
+        };
+        factory.RouteData.NodePositions.Returns(nodePositions.ToFrozenDictionary());
+
         var project = ProjectFactory.CreateValidProject();
         string content = JsonSerializer.Serialize(project);
 

@@ -129,43 +129,43 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
     }
 
-    private int PVRPGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
+    private int PVRPGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng point)
     {
         //Legyünk következetesek, a PMAp-os térkép esetében:
         //X --> lng, Y --> lat
-        var ptKey = p_pt.ToString();
+        var ptKey = point.ToString();
         if (NodePtCache.Instance.Items.ContainsKey(ptKey))
         {
             return NodePtCache.Instance.Items[ptKey];
         }
 
         int retNodID = 0;
-        var dtXDate2 = DateTime.UtcNow;
+        var dtXDate2 = _timeProvider.GetUtcNow();
 
         var filteredEdg = new List<boEdge>();
         for (int i = 0; i < EdgesList.Length; i++)
         {
             var w = EdgesList[i];
-            if (Math.Abs(w.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.fromLatLng.Lat - p_pt.Lat) <
+            if (Math.Abs(w.fromLatLng.Lng - point.Lng) + Math.Abs(w.fromLatLng.Lat - point.Lat) <
                 (w.RDT_VALUE == 6 /* TODO boEdge méretcsökkentés miatt kiszedve || w.EDG_STRNUM1 != "0" || w.EDG_STRNUM2 != "0" || w.EDG_STRNUM3 != "0" || w.EDG_STRNUM4 != "0" */ ?
                 ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider))
                 &&
-                Math.Abs(w.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.toLatLng.Lat - p_pt.Lat) <
+                Math.Abs(w.toLatLng.Lng - point.Lng) + Math.Abs(w.toLatLng.Lat - point.Lat) <
                 (w.RDT_VALUE == 6 /* TODO boEdge méretcsökkentés miatt kiszedve|| w.EDG_STRNUM1 != "0" || w.EDG_STRNUM2 != "0" || w.EDG_STRNUM3 != "0" || w.EDG_STRNUM4 != "0" */ ?
                 ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)))
             {
                 filteredEdg.Add(w);
             }
         }
-        var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - p_pt.Lng) + Math.Abs(o.fromLatLng.Lat - p_pt.Lat)).FirstOrDefault();
+        var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - point.Lng) + Math.Abs(o.fromLatLng.Lat - point.Lat)).FirstOrDefault();
 
         // Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
         _logger.Info(string.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count, (DateTime.UtcNow - dtXDate2).ToString()), _logger.GetStatusProperty(_requestID));
 
         if (nearest != null)
         {
-            retNodID = Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
-                Math.Abs(nearest.toLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.toLatLng.Lat - p_pt.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
+            retNodID = Math.Abs(nearest.fromLatLng.Lng - point.Lng) + Math.Abs(nearest.fromLatLng.Lat - point.Lat) <
+                Math.Abs(nearest.toLatLng.Lng - point.Lng) + Math.Abs(nearest.toLatLng.Lat - point.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
 
             NodePtCache.Instance.Items.TryAdd(ptKey, retNodID);
         }
@@ -202,7 +202,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         List<PMapRoute> routes = GenerateRoutes(project, nodeCombinations);
 
-        CalcRouteProcess crp = new(routes);
+        CalcRouteProcess crp = new(routes, _routeData);
         crp.RunWait();
 
         return (nodeCombinations, routes);

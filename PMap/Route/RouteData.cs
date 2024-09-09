@@ -28,7 +28,7 @@ namespace PMapCore.Route
 
         public FrozenDictionary<string, boEdge> Edges { get; private set; } = null; //Az útvonalak korlátozás-zónatípusonként
 
-        public FrozenDictionary<int, PointLatLng> NodePositions = null;  //Node koordináták
+        public FrozenDictionary<int, PointLatLng> NodePositions { get; private set; } = null;  //Node koordináták
 
         public FrozenDictionary<string, boEtoll> Etolls = null; //Útdíjak és szorzók
 
