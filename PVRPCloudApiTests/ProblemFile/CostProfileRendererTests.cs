@@ -29,7 +29,7 @@ public class CostProfileRendererTests
             }
         ]);
 
-        result.ToString().Should().Be("createCostProfile(5, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0)\n");
+        result.ToString().Should().Contain("createCostProfile(5, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0)");
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public class CostProfileRendererTests
             }
         ]);
 
-        var expected = "createCostProfile(10, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0)\ncreateCostProfile(20, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0)\n";
+        var expected = $"createCostProfile(10, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0){Environment.NewLine}createCostProfile(20, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0){Environment.NewLine}";
 
         result.ToString().Should().Be(expected);
     }

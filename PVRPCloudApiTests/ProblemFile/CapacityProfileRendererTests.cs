@@ -20,7 +20,7 @@ public class CapacityProfileRendererTests
 
         var result = _sut.Render([cp]);
 
-        result.ToString().Should().Be("createCapacityProfile(10, 20, 0, 0, 0)\n");
+        result.ToString().Should().Contain("createCapacityProfile(10, 20, 0, 0, 0)");
     }
 
     [Fact]

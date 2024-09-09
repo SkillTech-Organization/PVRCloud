@@ -75,7 +75,7 @@ public class ClientRendererTests
 
         var result = _sut.Render(depot, 2);
 
-        var expected = "createClient(\"depot name\", 12000000, 15000000)\ncreateDepot(\"depot name\", 1)\nsetDepotInformation(1, 1, 5, 6, 2, 0, 0, 0, 0)";
+        var expected = $"""createClient("depot name", 12000000, 15000000){Environment.NewLine}createDepot("depot name", 1){Environment.NewLine}setDepotInformation(1, 1, 5, 6, 2, 0, 0, 0, 0)""";
 
         result.ToString().Should().Contain(expected);
     }
@@ -150,7 +150,7 @@ public class ClientRendererTests
 
         var result = _sut.Render([client]);
 
-        var expected = "createClient(\"client name\", 12000000, 15000000)\nsetClientInformation(2, 6, 0, 0, 0, 0, 0)";
+        var expected = $"""createClient("client name", 12000000, 15000000){Environment.NewLine}setClientInformation(2, 6, 0, 0, 0, 0, 0)""";
 
         result.ToString().Should().Contain(expected);
     }
