@@ -320,21 +320,24 @@ namespace WebJobPOC
             startInfo.UseShellExecute = true;
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
             */
-            /*output redirect:
-            startInfo.CreateNoWindow = true;
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
-            */
 
+            //out
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
 
 
+            /* ablakben megjelenik
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = true;
+            startInfo.RedirectStandardOutput = false;
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            */
+
             /*
             startInfo.RedirectStandardError = true;
             */
-            // startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            // 
 
             try
             {
@@ -343,23 +346,22 @@ namespace WebJobPOC
                 // Call WaitForExit and then the using-statement will close.
 
 
-                using (Process exeProcess = Process.Start(startInfo))
+                var stdout = new StringBuilder();
+                var stderr = new StringBuilder();
+                var exitCode = 0;
+                using (var exeProcess = new Process())
                 {
-                    var maxWorkingSet = Int64.Parse("0" + _config[ProcessMemoryInMBParName].Trim()) * 1024 * 1024;
-                    if (maxWorkingSet > 0)
-                    {
-                        exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
-                    }
-                    Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
+                    exeProcess.StartInfo = startInfo;
 
-                    var stdout = new StringBuilder();
+
                     exeProcess.OutputDataReceived += (sender, eventArgs) =>
                     {
-                        stdout.AppendLine(eventArgs.Data);
+                        if (eventArgs.Data != null)
+                        {
+                            stdout.AppendLine(eventArgs.Data);
+                        }
                     };
-                    exeProcess.BeginOutputReadLine();
 
-                    var stderr = new StringBuilder();
                     /*
                                         exeProcess.ErrorDataReceived += (sender, eventArgs) =>
                                         {
@@ -367,6 +369,19 @@ namespace WebJobPOC
                                         };
                                         exeProcess.BeginErrorReadLine();
                     */
+
+
+                    exeProcess.Start();
+                    var maxWorkingSet = Int64.Parse("0" + _config[ProcessMemoryInMBParName].Trim()) * 1024 * 1024;
+                    if (maxWorkingSet > 0)
+                    {
+                        exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
+                    }
+                    Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
+
+                    exeProcess.BeginOutputReadLine();
+
+
                     if (exeProcess.WaitForExit(timeoutMS))
                     {
                         Console.WriteLine($"--{PVRP_exe} executed normally, requestID:{_requestID}");
@@ -376,11 +391,10 @@ namespace WebJobPOC
                         Console.WriteLine($"--{PVRP_exe}        timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
                         exeProcess.Kill();
                     }
-                    saveStdOut(stdout.ToString(), stderr.ToString());
-
-
-                    Console.WriteLine($"--{PVRP_exe} finished! exit code:{exeProcess.ExitCode}, requestID:{_requestID}");
+                    exitCode = exeProcess.ExitCode;
                 }
+                saveStdOut(stdout.ToString(), stderr.ToString());
+                Console.WriteLine($"--{PVRP_exe} finished! exit code:{exitCode}, requestID:{_requestID}");
             }
             catch (Exception ex)
             {
