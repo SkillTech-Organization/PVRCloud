@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.Json;
 using FluentAssertions;
 using GMap.NET;
-using Google.Protobuf.WellKnownTypes;
 using NSubstitute;
 using PMapCore.BO;
 using PMapCore.Route;
@@ -21,24 +20,10 @@ public class PVRPCloudRequestTests(CustomWebApplicationFactory factory) : IClass
     [Fact]
     public async Task PVRPCloudRequest_ValidInput_MakesAValidResponse()
     {
-        Dictionary<string, boEdge> edges = new()
-        {
-            ["valami"] = new()
-            {
-                RDT_VALUE = 3,
-                NOD_ID_FROM = 6,
-                NOD_ID_TO = 7
-            },
-        };
-        factory.RouteData.Edges.Returns(edges.ToFrozenDictionary());
-
-        Dictionary<int, PointLatLng> nodePositions = new()
-        {
-            [7] = new()
-        };
-        factory.RouteData.NodePositions.Returns(nodePositions.ToFrozenDictionary());
-
         var project = ProjectFactory.CreateValidProject();
+
+        factory.PVRPCloudLogic.Handle(project).Returns("12345678");
+
         string content = JsonSerializer.Serialize(project);
 
         var response = await _client.PostAsync(Endpoint, new StringContent(content, Encoding.UTF8, "application/json"));
