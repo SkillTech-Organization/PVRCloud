@@ -1,4 +1,4 @@
-namespace PVRPCloud.Requests;
+namespace PVRPCloud.Models;
 
 public abstract class ClientBase : IIdentifiable
 {

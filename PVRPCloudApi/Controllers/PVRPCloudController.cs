@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PVRPCloud;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 
 namespace PVRPCloudApi.Controllers;
 

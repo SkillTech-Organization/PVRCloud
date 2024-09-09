@@ -1,4 +1,4 @@
-namespace PVRPCloud.Requests;
+namespace PVRPCloud.Models;
 
 public sealed class Depot : ClientBase
 {

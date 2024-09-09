@@ -1,5 +1,5 @@
 using PMapCore.BO;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 
 namespace PVRPCloud;
 

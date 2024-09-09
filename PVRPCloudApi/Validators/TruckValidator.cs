@@ -1,12 +1,12 @@
 using FluentValidation;
 using PVRPCloud;
-using PVRPCloud.Requests;
+using PVRPCloud.Models;
 
 namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class TruckValidator : AbstractValidator<PVRPCloud.Requests.Truck>
+public sealed class TruckValidator : AbstractValidator<PVRPCloud.Models.Truck>
 {
     public TruckValidator(Project project)
     {
