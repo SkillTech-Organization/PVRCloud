@@ -3,23 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GMap.NET;
-using PMapCore.DB;
 using System.Data;
 using PMapCore.DB.Base;
-using PMapCore.LongProcess.Base;
 using PMapCore.BO;
 using PMapCore.BLL;
-using PMapCore.Strings;
 using PMapCore.Common;
 using System.IO;
 using Newtonsoft.Json;
 using System.Runtime.ExceptionServices;
-using System.Diagnostics;
 using System.Globalization;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
-using Azure.Storage.Blobs;
 using System.Collections.Frozen;
 
 namespace PMapCore.Route
@@ -29,20 +21,14 @@ namespace PMapCore.Route
         public int NOD_ID_FROM { get; set; }
         public string RZN_ID_LIST { get; set; }
     }
-    /// <summary>
-    /// </summary>
-    public class RouteData
+
+    public class RouteData : IRouteData
     {
-
-        //Lazy objects are thread safe, double checked and they have better performance than locks.
-        //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
-        private static readonly Lazy<RouteData> m_instance = new Lazy<RouteData>(() => new RouteData(), true);
-
         private static volatile bool m_Initalized = false;
 
-        public FrozenDictionary<string, boEdge> Edges = null; //Az útvonalak korlátozás-zónatípusonként
+        public FrozenDictionary<string, boEdge> Edges { get; private set; } = null; //Az útvonalak korlátozás-zónatípusonként
 
-        public FrozenDictionary<int, PointLatLng> NodePositions = null;  //Node koordináták
+        public FrozenDictionary<int, PointLatLng> NodePositions { get; private set; } = null;  //Node koordináták
 
         public FrozenDictionary<string, boEtoll> Etolls = null; //Útdíjak és szorzók
 
@@ -60,18 +46,8 @@ namespace PMapCore.Route
             }
         }
 
-        private RouteData()
-        {
-        }
-
         //Singleton technika...
-        static public RouteData Instance                                  //inicializálódik, ezért biztos létrejon az instance osztály)
-        {
-            get
-            {
-                return m_instance.Value;            //It's thread safe!
-            }
-        }
+        static public RouteData Instance { get; private set; }
 
 
         public void InitFromFiles(string p_mapStorageConnectionString, bool p_Forced = false)
@@ -86,9 +62,9 @@ namespace PMapCore.Route
 
 
                     //string etollContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETOLL), Encoding.GetEncoding(1250));
-                    string etollContent = getContentFromBlob(bh, Global.EXTFILE_ETOLL, Encoding.GetEncoding(1250));
+                    string etollContent = GetContentFromBlob(bh, Global.EXTFILE_ETOLL, Encoding.GetEncoding(1250));
                     //string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1250));
-                    string etRoadsContent = getContentFromBlob(bh, Global.EXTFILE_ETROADS, Encoding.GetEncoding(1250));
+                    string etRoadsContent = GetContentFromBlob(bh, Global.EXTFILE_ETROADS, Encoding.GetEncoding(1250));
 
                     Etolls = LoadEtolls(etollContent); //Útdíjak és szorzók
                     EtRoads = LoadEtRoads(etRoadsContent); //Díjköteles útszelvények
@@ -98,10 +74,10 @@ namespace PMapCore.Route
 
                     DateTime dtStart = DateTime.Now;
                     //string strEdges = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
-                    string strEdges = getContentFromBlob(bh, Global.EXTFILE_EDG, Encoding.UTF8);
+                    string strEdges = GetContentFromBlob(bh, Global.EXTFILE_EDG, Encoding.UTF8);
 
-                    var xEdges = JsonConvert.DeserializeObject<FrozenDictionary<string, boEdge>>(strEdges);
-                    Edges = xEdges;
+                    var xEdges = JsonConvert.DeserializeObject<Dictionary<string, boEdge>>(strEdges);
+                    Edges = xEdges.ToFrozenDictionary();
                     foreach (var edg in Edges)
                     {
                         float CalcSpeed = PMapIniParams.Instance.DicSpeeds[edg.Value.RDT_VALUE];
@@ -111,26 +87,27 @@ namespace PMapCore.Route
                     }
 
                     //string strNodePositions = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
-                    string strNodePositions = getContentFromBlob(bh, Global.EXTFILE_NOD, Encoding.UTF8);
-                    var xNodePositions = JsonConvert.DeserializeObject<FrozenDictionary<int, PointLatLng>>(strNodePositions);
-                    NodePositions = xNodePositions;
+                    string strNodePositions = GetContentFromBlob(bh, Global.EXTFILE_NOD, Encoding.UTF8);
+                    var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
+                    NodePositions = xNodePositions.ToFrozenDictionary();
 
                     //string strallRZones = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
-                    string strallRZones = getContentFromBlob(bh, Global.EXTFILE_RZN, Encoding.UTF8);
-                    var xallRZones = JsonConvert.DeserializeObject<FrozenDictionary<string, int>>(strallRZones);
-                    allRZones = xallRZones;
+                    string strallRZones = GetContentFromBlob(bh, Global.EXTFILE_RZN, Encoding.UTF8);
+                    var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
+                    allRZones = xallRZones.ToFrozenDictionary();
 
 
                     //string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
-                    string strRZN_ID_LIST = getContentFromBlob(bh, Global.EXTFILE_RZNTyp, Encoding.UTF8);
-                    var xRZN_ID_LIST = JsonConvert.DeserializeObject<FrozenDictionary<int, string>>(strRZN_ID_LIST);
-                    RZN_ID_LIST = xRZN_ID_LIST;
+                    string strRZN_ID_LIST = GetContentFromBlob(bh, Global.EXTFILE_RZNTyp, Encoding.UTF8);
+                    var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
+                    RZN_ID_LIST = xRZN_ID_LIST.ToFrozenDictionary();
 
                     m_Initalized = true;
                 }
             }
         }
-        private string getContentFromBlob(BlobUtils.BlobHandler bh, string filename, Encoding enc = null)
+
+        private string GetContentFromBlob(BlobUtils.BlobHandler bh, string filename, Encoding enc = null)
         {
             string result = "";
             using (StreamReader streamReader = new StreamReader(bh.DownloadFromStreamAsync("map", filename).GetAwaiter().GetResult(), enc, true))
@@ -205,7 +182,7 @@ namespace PMapCore.Route
             var result = new Dictionary<string, boEtRoad>();
             var counter = 1;
 
-            CSVItems.ForEach(async item =>
+            CSVItems.ForEach(item =>
             {
                 var ID = counter++;
                 if (counter > 3)

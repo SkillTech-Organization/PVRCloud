@@ -134,7 +134,7 @@ public class OrderRendererTests
 
         var result = _sut.Render([order]);
 
-        result.ToString().Should().Contain("addOrderTruck(1, 1)\naddOrderTruck(1, 22)");
+        result.ToString().Should().Contain($"addOrderTruck(1, 1){Environment.NewLine}addOrderTruck(1, 22)");
     }
 
     [Fact]
@@ -155,7 +155,7 @@ public class OrderRendererTests
 
         var result = _sut.Render([order]);
 
-        string expected = "createOrder(2)\nsetOrderInformation(1, 12, 20, 0, 0, 0, 9, 0, 0, 0, 0, 0)\nsetOrderServiceTime(1, 15)\naddOrderTimeWindow(1, 4, 6)\naddOrderTruck(1, 1)\n";
+        string expected = $"createOrder(2){Environment.NewLine}setOrderInformation(1, 12, 20, 0, 0, 0, 9, 0, 0, 0, 0, 0){Environment.NewLine}setOrderServiceTime(1, 15){Environment.NewLine}addOrderTimeWindow(1, 4, 6){Environment.NewLine}addOrderTruck(1, 1){Environment.NewLine}";
 
         result.ToString().Should().Be(expected);
     }

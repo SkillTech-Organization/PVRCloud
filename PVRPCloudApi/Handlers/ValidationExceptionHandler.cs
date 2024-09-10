@@ -10,25 +10,46 @@ public sealed class ValidationExceptionHandler : IExceptionHandler
                                                 Exception exception,
                                                 CancellationToken cancellationToken)
     {
-        if (exception is not ValidationException validationException)
+        if (exception is ValidationException validationException)
         {
-            return false;
+            var response = CreateResponseFor(validationException);
+
+            await WriteResponseToHttpContext(response, httpContext, cancellationToken);
+
+            return true;
         }
 
-        Response response = new()
+        if (exception is DomainValidationException domainValidationException)
         {
-            Results = validationException.Errors
-                .Select(error => (
-                    ErrorMessage: ResErrMsg.ValidationError(error.PropertyName, error.ErrorMessage),
-                    Error: error
-                ))
-                .Select(errorTuple => Result.ValidationError(errorTuple.ErrorMessage, (string)errorTuple.Error.CustomState))
-                .ToList()
-        };
+            var response = CreateResponseFor(domainValidationException);
 
-        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-        await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
+            await WriteResponseToHttpContext(response, httpContext, cancellationToken);
 
-        return true;
+            return true;
+        }
+
+        return false;
+    }
+
+    private Response CreateResponseFor(ValidationException validationException) => new()
+    {
+        Results = validationException.Errors
+            .Select(error => (
+                ErrorMessage: ResErrMsg.ValidationError(error.PropertyName, error.ErrorMessage),
+                Error: error
+            ))
+            .Select(errorTuple => Result.ValidationError(errorTuple.ErrorMessage, (string)errorTuple.Error.CustomState))
+            .ToList()
+    };
+
+    private Response CreateResponseFor(DomainValidationException domainValidationException) => new()
+    {
+        Results = domainValidationException.Errors
+    };
+
+    private async Task WriteResponseToHttpContext(Response response, HttpContext context, CancellationToken cancellationToken)
+    {
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        await context.Response.WriteAsJsonAsync(response, cancellationToken);
     }
 }

@@ -82,7 +82,7 @@ public class TruckRendererTests
         var result = _sut.Render([truck]);
 
         result.ToString().Should()
-            .Contain("createTruck(2, \"trabi\", 1, 1)\nsetTruckInformation(1, 2, 1, 10000000, 3, 6, 2, 3, 0, 0, 0)\n");
+            .Contain($"createTruck(2, \"trabi\", 1, 1){Environment.NewLine}setTruckInformation(1, 2, 1, 10000000, 3, 6, 2, 3, 0, 0, 0){Environment.NewLine}");
     }
 
     [Fact]

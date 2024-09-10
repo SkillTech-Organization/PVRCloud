@@ -13,34 +13,34 @@ public class ProjectRendererTest
     {
         string result = new ProjectRenderer().Render(Project, ClientPairs, Routes);
 
-        string expected = "setCustomerId(2000)\n" +
-        "createCostProfile(5, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0)\n" +
-        "createCostProfile(9, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0)\n" +
-        """createTruckType("truck type name;KP1,ÉP1;3500;220;200")""" + "\n" +
-        """createTruckType("another truck type;SP1,DP1;8000;300;200")""" + "\n" +
-        """createClient("depot name", 12000000, 13000000)""" + "\n" +
-        """createDepot("depot name", 1)""" + "\n" +
-        "setDepotInformation(1, 1, 10, 15, 20, 0, 0, 0, 0)\n" +
-        "createCapacityProfile(11, 22, 0, 0, 0)\n" +
-        "createCapacityProfile(33, 44, 0, 0, 0)\n" +
-        """createTruck(1, "truck name", 1, 1)""" + "\n" +
-        "setTruckInformation(1, 1, 1, 10000000, 1, 10, 2, 9, 0, 0, 0)\n" +
-        """createClient("client name", 19000000, 20000000)""" + "\n" +
-        "setClientInformation(2, 55, 0, 0, 0, 0, 0)\n" +
-        """createClient("client name 2", 44000000, 86000000)""" + "\n" +
-        "setClientInformation(3, 19, 0, 0, 0, 0, 0)\n" +
-        "createOrder(2)\n" +
-        "setOrderInformation(1, 10, 20, 0, 0, 0, 12, 0, 0, 0, 0, 0)\n" +
-        "setOrderServiceTime(1, 16)\n" +
-        "addOrderTimeWindow(1, 4, 6)\n" +
-        "addOrderTruck(1, 1)\n" +
-        "setRelationAccess(1, 1, 2, 5, 12)\n" +
-        "setRelationAccess(2, 1, 2, 5, 12)\n" +
-        "setRelationAccess(1, 2, 1, 5, 12)\n" +
-        "setRelationAccess(2, 2, 1, 5, 12)\n" +
-        """setProblemFile("test project")""" + "\n" +
-        "setEngineParameters(0, 1, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0)\n" +
-        "runEngine()\n";
+        string expected = $"setCustomerId(2000){Environment.NewLine}" +
+        $"createCostProfile(5, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0){Environment.NewLine}" +
+        $"createCostProfile(9, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0){Environment.NewLine}" +
+        $"""createTruckType("truck type name;KP1,ÉP1;3500;220;200"){Environment.NewLine}""" +
+        $"""createTruckType("another truck type;SP1,DP1;8000;300;200"){Environment.NewLine}""" +
+        $"""createClient("depot name", 12000000, 13000000){Environment.NewLine}""" +
+        $"""createDepot("depot name", 1){Environment.NewLine}""" +
+        $"setDepotInformation(1, 1, 10, 15, 20, 0, 0, 0, 0){Environment.NewLine}" +
+        $"createCapacityProfile(11, 22, 0, 0, 0){Environment.NewLine}" +
+        $"createCapacityProfile(33, 44, 0, 0, 0){Environment.NewLine}" +
+        $"""createTruck(1, "truck name", 1, 1){Environment.NewLine}""" +
+        $"setTruckInformation(1, 1, 1, 10000000, 1, 10, 2, 9, 0, 0, 0){Environment.NewLine}" +
+        $"""createClient("client name", 19000000, 20000000){Environment.NewLine}""" +
+        $"setClientInformation(2, 55, 0, 0, 0, 0, 0){Environment.NewLine}" +
+        $"""createClient("client name 2", 44000000, 86000000){Environment.NewLine}""" +
+        $"setClientInformation(3, 19, 0, 0, 0, 0, 0){Environment.NewLine}" +
+        $"createOrder(2){Environment.NewLine}" +
+        $"setOrderInformation(1, 10, 20, 0, 0, 0, 12, 0, 0, 0, 0, 0){Environment.NewLine}" +
+        $"setOrderServiceTime(1, 16){Environment.NewLine}" +
+        $"addOrderTimeWindow(1, 4, 6){Environment.NewLine}" +
+        $"addOrderTruck(1, 1){Environment.NewLine}" +
+        $"setRelationAccess(1, 1, 2, 5, 12){Environment.NewLine}" +
+        $"setRelationAccess(2, 1, 2, 5, 12){Environment.NewLine}" +
+        $"setRelationAccess(1, 2, 1, 5, 12){Environment.NewLine}" +
+        $"setRelationAccess(2, 2, 1, 5, 12){Environment.NewLine}" +
+        $"""setProblemFile("test project"){Environment.NewLine}""" +
+        $"setEngineParameters(0, 1, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0){Environment.NewLine}" +
+        $"runEngine(){Environment.NewLine}";
 
         result.Should().Be(expected);
     }

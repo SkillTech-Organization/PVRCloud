@@ -10,9 +10,9 @@ public class EnginePropertiesRendererTests
     {
         var result = new EnginePropertiesRenderer().Render("my project name");
 
-        string expected = "setProblemFile(\"my project name\")\n" +
-        "setEngineParameters(0, 1, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0)\n" +
-        "runEngine()\n";
+        string expected = $"""setProblemFile("my project name"){Environment.NewLine}""" +
+        $"setEngineParameters(0, 1, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0){Environment.NewLine}" +
+        $"runEngine(){Environment.NewLine}";
 
         result.ToString().Should().Be(expected);
     }

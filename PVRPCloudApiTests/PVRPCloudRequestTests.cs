@@ -2,11 +2,11 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
+using NSubstitute;
 
 namespace PVRPCloudApiTests;
 
-public class PVRPCloudRequestTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
+public class PVRPCloudRequestTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
 {
     private const string Endpoint = "/v1/PVRPCloudRequest";
 
@@ -16,6 +16,9 @@ public class PVRPCloudRequestTests(WebApplicationFactory<Program> factory) : ICl
     public async Task PVRPCloudRequest_ValidInput_MakesAValidResponse()
     {
         var project = ProjectFactory.CreateValidProject();
+
+        factory.PVRPCloudLogic.Handle(project).Returns("12345678");
+
         string content = JsonSerializer.Serialize(project);
 
         var response = await _client.PostAsync(Endpoint, new StringContent(content, Encoding.UTF8, "application/json"));

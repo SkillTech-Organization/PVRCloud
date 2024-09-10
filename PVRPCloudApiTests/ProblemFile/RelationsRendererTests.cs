@@ -61,6 +61,6 @@ public class RelationsRendererTests
 
         var result = _sut.Render([route]);
 
-        result.ToString().Should().Be("setRelationAccess(1, 1, 2, 5, 12)\n");
+        result.ToString().Should().Be($"setRelationAccess(1, 1, 2, 5, 12){Environment.NewLine}");
     }
 }
