@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
-using BlobManager;
+﻿using BlobManager;
 using BlobUtils;
 using CommonUtils;
 using GMap.NET;
@@ -9,10 +7,12 @@ using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Common.Attrib;
 using PMapCore.Route;
-using PVRPCloud.ProblemFile;
 using PVRPCloud.Models;
+using PVRPCloud.ProblemFile;
 using PVRPCloudInsightsLogger.Logger;
 using PVRPCloudInsightsLogger.Settings;
+using System.Reflection;
+using System.Text;
 
 namespace PVRPCloud;
 
@@ -39,8 +39,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     {
         _loggerSettings = loggerSettings.Value;
 
-        _logger = TelemetryClientFactory.Create(_loggerSettings);
-        _logger.LogToQueueMessage = LogToQueueMessage;
+        //TODO:törölni   _logger = TelemetryClientFactory.Create(_loggerSettings);
+        //TODO:törölni   _logger.LogToQueueMessage = LogToQueueMessage;
 
         _blobHandler = blobHandler;
         _pmapInputQueue = pmapInputQueue;
@@ -75,7 +75,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         var (nodeCombinations, routes) = Calculate(project, clientNodes);
 
-        _ = Task.Run(async () => {
+        _ = Task.Run(async () =>
+        {
             string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
 
             await UploadToBlobStorage(fileContent);
@@ -160,7 +161,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - point.Lng) + Math.Abs(o.fromLatLng.Lat - point.Lat)).FirstOrDefault();
 
         // Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
-        _logger.Info(string.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count, (DateTime.UtcNow - dtXDate2).ToString()), _logger.GetStatusProperty(_requestID));
+        //_logger.Info(string.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count, (DateTime.UtcNow - dtXDate2).ToString()), _logger.GetStatusProperty(_requestID));
 
         if (nearest != null)
         {
@@ -190,7 +191,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         if (log)
         {
-            _logger.ValidationError(p_msg, _logger.GetStatusProperty(_requestID), msg);
+            //TODO: a validációs hibákat _logger.ValidationError(p_msg, _logger.GetStatusProperty(_requestID), msg);
         }
 
         return itemRes;
@@ -264,12 +265,12 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         string fileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
-        await _blobHandler.UploadAsync("parameters", fileName, ms);
+        await _blobHandler.UploadAsync("calculations", fileName, ms);
     }
 
     private async Task QueueMessageAsync()
     {
-        const int MaxCompTime = 12_000_000;
+        const int MaxCompTime = 60_000;
 
         var optimizeTimeOutSec = _pmapIniParams.OptimizeTimeOutSec * 1000;
 

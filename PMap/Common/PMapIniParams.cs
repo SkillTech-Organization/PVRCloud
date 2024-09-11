@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BlobUtils;
 using GMap.NET;
-using System.IO;
-using System.Threading;
-using System.Globalization;
 using GMap.NET.MapProviders;
-using System.Net;
-using BlobUtils;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration.Ini;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PMapCore.Common
 {
@@ -40,7 +40,7 @@ namespace PMapCore.Common
 	        15   //Fel/lehajtók, rámpák
         };
 
-        public bool  Loaded { get; private set; }
+        public bool Loaded { get; private set; }
 
         public string LogDir { get; private set; }
         public string MapJSonDir { get; private set; }
@@ -59,16 +59,16 @@ namespace PMapCore.Common
         public ThreadPriority CalcPMapRoutesByOrders { get; private set; } = ThreadPriority.Normal;
 
 
-        public bool GeocodingByGoogle { get; private set; }  = false;
+        public bool GeocodingByGoogle { get; private set; } = false;
 
         public int RouteThreadNum { get; private set; }
         public bool FastestPath { get; private set; }
         public bool DestTraffic { get; private set; }
-        public bool CutMapForRouting { get;  set; }           //Útvonalszámítás vágja-e a térképet?
+        public bool CutMapForRouting { get; set; }           //Útvonalszámítás vágja-e a térképet?
         public double CutExtDegree { get; private set; }               //A kivágásnál mekkora ráhagyással kel dolgozni? (fokban megadva)
         public int CalcPMapRoutesMemTreshold { get; private set; }      //Útvonalszámítás memória KB-ben
 
-        public Dictionary<int, int> DicSpeeds { get;  set; }
+        public Dictionary<int, int> DicSpeeds { get; set; }
 
         public int MapType { get; private set; }
 
@@ -344,8 +344,6 @@ namespace PMapCore.Common
 
             ini.TryGet(Global.iniPlan + Global.iniOptimizeTimeOutSec, out part);
             OptimizeTimeOutSec = Convert.ToInt32("0" + part);
-            if (OptimizeTimeOutSec < 60)
-                OptimizeTimeOutSec = 60;
 
             ini.TryGet(Global.iniPlan + Global.iniTrkMaxWorkTime, out part);
             TrkMaxWorkTime = Convert.ToInt32("0" + part);
