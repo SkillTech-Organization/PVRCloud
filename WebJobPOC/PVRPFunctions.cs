@@ -302,6 +302,7 @@ namespace WebJobPOC
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = fullExeFileName;
             startInfo.Arguments = arguments;
+            startInfo.WorkingDirectory = _workDir;
 
 
             /* BAT file 
@@ -320,24 +321,21 @@ namespace WebJobPOC
             startInfo.UseShellExecute = true;
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
             */
+            /*output redirect:
+            startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            */
 
-            //out
-            startInfo.CreateNoWindow = false;
+            startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
 
 
-            /* ablakben megjelenik
-            startInfo.CreateNoWindow = false;
-            startInfo.UseShellExecute = true;
-            startInfo.RedirectStandardOutput = false;
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
-            */
-
             /*
             startInfo.RedirectStandardError = true;
             */
-            // 
+            // startInfo.WindowStyle = ProcessWindowStyle.Normal;
 
             try
             {
@@ -348,11 +346,16 @@ namespace WebJobPOC
 
                 var stdout = new StringBuilder();
                 var stderr = new StringBuilder();
-                var exitCode = 0;
-                using (var exeProcess = new Process())
+                int exitCode;
+                var timeoutHappened = false;
+                using (Process exeProcess = Process.Start(startInfo))
                 {
-                    exeProcess.StartInfo = startInfo;
-
+                    var maxWorkingSet = Int64.Parse("0" + _config[ProcessMemoryInMBParName].Trim()) * 1024 * 1024;
+                    if (maxWorkingSet > 0)
+                    {
+                        exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
+                    }
+                    //Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
 
                     exeProcess.OutputDataReceived += (sender, eventArgs) =>
                     {
@@ -361,6 +364,7 @@ namespace WebJobPOC
                             stdout.AppendLine(eventArgs.Data);
                         }
                     };
+                    exeProcess.BeginOutputReadLine();
 
                     /*
                                         exeProcess.ErrorDataReceived += (sender, eventArgs) =>
@@ -369,32 +373,21 @@ namespace WebJobPOC
                                         };
                                         exeProcess.BeginErrorReadLine();
                     */
-
-
-                    exeProcess.Start();
-                    var maxWorkingSet = Int64.Parse("0" + _config[ProcessMemoryInMBParName].Trim()) * 1024 * 1024;
-                    if (maxWorkingSet > 0)
+                    if (!exeProcess.WaitForExit(timeoutMS))
                     {
-                        exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
-                    }
-                    Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
-
-                    exeProcess.BeginOutputReadLine();
-
-
-                    if (exeProcess.WaitForExit(timeoutMS))
-                    {
-                        Console.WriteLine($"--{PVRP_exe} executed normally, requestID:{_requestID}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"--{PVRP_exe}        timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
-                        exeProcess.Kill();
+                        timeoutHappened = true;
+                        exeProcess.Kill(true);
                     }
                     exitCode = exeProcess.ExitCode;
                 }
-                saveStdOut(stdout.ToString(), stderr.ToString());
+
                 Console.WriteLine($"--{PVRP_exe} finished! exit code:{exitCode}, requestID:{_requestID}");
+                if (timeoutHappened)
+                {
+                    Console.WriteLine($"--{PVRP_exe}        timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
+                }
+
+                saveStdOut(stdout.ToString(), stderr.ToString());
             }
             catch (Exception ex)
             {

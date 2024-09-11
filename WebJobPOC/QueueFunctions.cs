@@ -34,6 +34,9 @@ namespace WebJobPOC
             var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg };
             try
             {
+
+                Console.WriteLine($"--A message has arrived:{msg}");
+
                 var confBuilder = new ConfigurationBuilder()
                      .SetBasePath(Directory.GetCurrentDirectory())
                      .AddJsonFile("appsettings.json", optional: false)
