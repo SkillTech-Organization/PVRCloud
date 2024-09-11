@@ -256,7 +256,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     private async Task UploadToBlobStorage(string content)
     {
         using MemoryStream ms = new();
-        using StreamWriter sw = new(ms, Encoding.UTF8);
+        using StreamWriter sw = new(ms, Encoding.ASCII);
         await sw.WriteAsync(content);
 
         await sw.FlushAsync();
