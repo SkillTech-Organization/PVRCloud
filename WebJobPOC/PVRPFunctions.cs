@@ -5,8 +5,8 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WebJobPOC
 {
@@ -17,11 +17,14 @@ namespace WebJobPOC
 
     public class PVRPFunctions
     {
-        public static string AzureWebJobsStorageParName = "AzureWebJobsStorage";
+        public static string AzureWebJobsStorageParName = "ConnectionStrings:AzureWebJobsStorage";
+        public static string PVRPParsParName = "PVRPPars";
+        public static string ProcessMemoryInMBParName = "ProcessMemoryInMB";
         public static string CalcContainerName = "calculations";
+        public static string PVRP_exe = "PVRP.exe";
 
 
-        private int _requestID;
+        private long _requestID;
         private int _maxCompTime;
         private string _fileName;
         private string _blobFileName;
@@ -38,7 +41,7 @@ namespace WebJobPOC
         private IConfiguration _config;
         private ILogger _logger;
 
-        public PVRPFunctions(int requestID, int maxCompTime, IConfiguration config, ILogger logger)
+        public PVRPFunctions(long requestID, int maxCompTime, IConfiguration config, ILogger logger)
         {
             _requestID = requestID;
             _maxCompTime = maxCompTime;
@@ -267,7 +270,7 @@ namespace WebJobPOC
             {
                 using (System.IO.StreamWriter sw = System.IO.File.CreateText(batFileWithPath))
                 {
-                    String s = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "PVRP.exe") + " -s 9 9 -f " + iniFileWithPath + " > PVRP.log";
+                    String s = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), PVRP_exe) + " " + _config[PVRPParsParName] + " -f " + iniFileWithPath + " > PVRP.log";
                     sw.WriteLine(s);
                 }
             }
@@ -286,71 +289,127 @@ namespace WebJobPOC
             //iniFileWithPath = iniFileWithPath.Replace("\\", "\\\\");
             Console.WriteLine(String.Format("--ini file with path: {0}", iniFileWithPath));
 
+
+            var fullExeFileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), PVRP_exe);
+            var arguments = $"{_config[PVRPParsParName]}  -f  " + iniFileWithPath;
+            //                            + " > " + System.IO.Path.Combine(_workDir, "stdout.datX");
+
+
+            //fullExeFileName = "dir *.*";
+            //arguments = "";
+            //var startInfo = new ProcessStartInfo("cmd.exe", "/c " + fullExeFileName + " " + arguments);
+
             ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = fullExeFileName;
+            startInfo.Arguments = arguments;
+            startInfo.WorkingDirectory = _workDir;
 
 
             /* BAT file 
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = true;
-
-            var batFileWithPath = CreateBatFile("PVRP.bat", iniFileWithPath);
-            startInfo.FileName = batFileWithPath;
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //string p = @"%WEBROOT_PATH%\App_Data\jobs\%WEBJOBS_TYPE%\%WEBJOBS_NAME%";
+            ///var batFileWithPath = System.IO.Path.Combine(_localPath, batFileName);
+            //var batFileWithPath = System.IO.Path.Combine(p, batFileName);
+            ///Console.WriteLine(String.Format("--bat file with path: {0}", batFileWithPath));
+            //startInfo.FileName = "P-VRP.bat";// batFileWithPath;
             */
 
 
+            /*
+            startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = true;
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            */
+            /*output redirect:
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
-            startInfo.FileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "PVRP.exe");
-            startInfo.Arguments = "-s 9 9  -f  " + iniFileWithPath;
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
-            startInfo.RedirectStandardError = true;
             startInfo.RedirectStandardOutput = true;
+            */
+
+            startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+
+
+            /*
+            startInfo.RedirectStandardError = true;
+            */
+            // startInfo.WindowStyle = ProcessWindowStyle.Normal;
 
             try
             {
-                Console.WriteLine($"--PRVP.EXE started :{startInfo.FileName} {startInfo.Arguments}");
+                Console.WriteLine($"--{PVRP_exe} started :{startInfo.FileName} {startInfo.Arguments}");
                 // Start the process with the info we specified.
                 // Call WaitForExit and then the using-statement will close.
+
+
+                var stdout = new StringBuilder();
+                var stderr = new StringBuilder();
+                int exitCode;
+                var timeoutHappened = false;
                 using (Process exeProcess = Process.Start(startInfo))
                 {
+                    var maxWorkingSet = Int64.Parse("0" + _config[ProcessMemoryInMBParName].Trim()) * 1024 * 1024;
+                    if (maxWorkingSet > 0)
+                    {
+                        exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
+                    }
+                    //Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
 
-                    Task.Factory.StartNew(() =>
+                    exeProcess.OutputDataReceived += (sender, eventArgs) =>
+                    {
+                        if (eventArgs.Data != null)
                         {
-                            if (exeProcess != null)
-                            {
-                                Thread.Sleep(timeoutMS - 1000);
-                                if (!exeProcess.HasExited)
-                                {
-                                    exeProcess.Kill();
-                                    Console.WriteLine("--PRVP.EXE timeout!");
-                                    new PVRPTimeOutException($"Timeout happened! {timeoutMS}");
-                                }
-                            }
-                        });
+                            stdout.AppendLine(eventArgs.Data);
+                        }
+                    };
+                    exeProcess.BeginOutputReadLine();
 
-                    exeProcess.WaitForExit(timeoutMS);
-
-                    string stdout = exeProcess.StandardOutput.ReadToEnd();
-                    string stderr = exeProcess.StandardError.ReadToEnd();
-
-                    var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
-                    var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
-
-                    File.WriteAllText(stdoutFileWithPath, stdout);
-                    File.WriteAllText(stderrFileWithPath, stderr);
-
-
-                    Console.WriteLine($"--PRVP.EXE finished! exit code:{exeProcess.ExitCode}");
-                    Console.WriteLine($"--PRVP.EXE output:{stdout}");
-                    Console.WriteLine($"--PRVP.EXE error:{stderr}");
+                    /*
+                                        exeProcess.ErrorDataReceived += (sender, eventArgs) =>
+                                        {
+                                            stderr.AppendLine(eventArgs.Data);
+                                        };
+                                        exeProcess.BeginErrorReadLine();
+                    */
+                    if (!exeProcess.WaitForExit(timeoutMS))
+                    {
+                        timeoutHappened = true;
+                        exeProcess.Kill(true);
+                    }
+                    exitCode = exeProcess.ExitCode;
                 }
+
+                Console.WriteLine($"--{PVRP_exe} finished! exit code:{exitCode}, requestID:{_requestID}");
+                if (timeoutHappened)
+                {
+                    Console.WriteLine($"--{PVRP_exe}        timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
+                }
+
+                saveStdOut(stdout.ToString(), stderr.ToString());
             }
             catch (Exception ex)
             {
                 // Log error.
                 Console.WriteLine("--ERROR: {0}: ", ex.Message);
             }
+        }
+
+        private void saveStdOut(string stdout, string stderr)
+        {
+
+            Console.WriteLine($"--{PVRP_exe} output:{stdout}");
+            Console.WriteLine($"--{PVRP_exe} error:{stderr}");
+
+            var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
+            var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
+
+            File.WriteAllText(stdoutFileWithPath, stdout);
+            File.WriteAllText(stderrFileWithPath, stderr);
+
+            Console.WriteLine($"--{PVRP_exe} standard outpup/error saved");
+
         }
 
         static void ExecuteCommand(string command)

@@ -9,14 +9,14 @@ namespace WebJobPOC
 {
     public class CalcRequest
     {
-        public int RequestID { get; set; }
+        public long RequestID { get; set; }
         public int MaxCompTime { get; set; } = 30000;
     }
 
     public class CalcResposne
     {
-        public int Ver { get; set; } = 4;
-        public int RequestID { get; set; }
+        public int Ver { get; set; } = 30;
+        public long RequestID { get; set; }
         public string Status { get; set; }
         public string Msg { get; set; }
     }
@@ -34,9 +34,14 @@ namespace WebJobPOC
             var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg };
             try
             {
+
+                Console.WriteLine($"--A message has arrived:{msg}");
+
                 var confBuilder = new ConfigurationBuilder()
                      .SetBasePath(Directory.GetCurrentDirectory())
-                     .AddJsonFile("appsettings.json", optional: false);
+                     .AddJsonFile("appsettings.json", optional: false)
+                     .AddEnvironmentVariables()                        //https://stackoverflow.com/questions/56045191/azure-webjobs-does-not-override-appsettings-json-with-azure-application-settings
+                     .AddUserSecrets<Program>();
 
                 IConfiguration config = confBuilder.Build();
 
