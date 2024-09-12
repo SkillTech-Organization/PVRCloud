@@ -24,7 +24,7 @@ namespace WebJobPOC
         public static string PVRP_exe = "PVRP.exe";
 
 
-        private long _requestID;
+        private string _requestID;
         private int _maxCompTime;
         private string _fileName;
         private string _blobFileName;
@@ -41,7 +41,7 @@ namespace WebJobPOC
         private IConfiguration _config;
         private ILogger _logger;
 
-        public PVRPFunctions(long requestID, int maxCompTime, IConfiguration config, ILogger logger)
+        public PVRPFunctions(string requestID, int maxCompTime, IConfiguration config, ILogger logger)
         {
             _requestID = requestID;
             _maxCompTime = maxCompTime;

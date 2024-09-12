@@ -9,14 +9,14 @@ namespace WebJobPOC
 {
     public class CalcRequest
     {
-        public long RequestID { get; set; }
+        public string RequestID { get; set; }
         public int MaxCompTime { get; set; } = 30000;
     }
 
     public class CalcResposne
     {
         public int Ver { get; set; } = 30;
-        public long RequestID { get; set; }
+        public string RequestID { get; set; }
         public string Status { get; set; }
         public string Msg { get; set; }
     }
