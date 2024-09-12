@@ -8,7 +8,7 @@ public sealed class EnginePropertiesRenderer
     {
         StringBuilder sb = new();
 
-        sb.AppendLine($"""setProblemFile("{projectName}")""");
+        sb.AppendLine($"""setProblemName("{projectName}")""");
         sb.AppendLine("setEngineParameters(0, 1, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
         sb.AppendLine("runEngine()");
 

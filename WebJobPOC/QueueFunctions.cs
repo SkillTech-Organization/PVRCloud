@@ -10,7 +10,7 @@ namespace WebJobPOC
     public class CalcRequest
     {
         public int RequestID { get; set; }
-        public int MaxCompTime { get; set; } = 12000000;
+        public int MaxCompTime { get; set; } = 30000;
     }
 
     public class CalcResposne

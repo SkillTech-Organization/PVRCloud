@@ -38,7 +38,7 @@ public class ProjectRendererTest
         $"setRelationAccess(2, 1, 2, 5, 12){Environment.NewLine}" +
         $"setRelationAccess(1, 2, 1, 5, 12){Environment.NewLine}" +
         $"setRelationAccess(2, 2, 1, 5, 12){Environment.NewLine}" +
-        $"""setProblemFile("test project"){Environment.NewLine}""" +
+        $"""setProblemName("test project"){Environment.NewLine}""" +
         $"setEngineParameters(0, 1, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0){Environment.NewLine}" +
         $"runEngine(){Environment.NewLine}";
 
