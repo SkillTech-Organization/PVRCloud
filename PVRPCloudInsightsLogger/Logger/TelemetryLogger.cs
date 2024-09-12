@@ -1,12 +1,12 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
+﻿using CommonUtils;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using System;
-using CommonUtils;
+using Microsoft.ApplicationInsights.Extensibility;
 using PVRPCloudInsightsLogger.Settings;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PVRPCloudInsightsLogger.Logger;
 
@@ -95,7 +95,7 @@ public sealed class TelemetryLogger : ITelemetryLogger, IDisposable
         QueueLogger = queueLogger;
         QueueEnabled = settings.UseQueue;
 
-        QueueLogger.SetLogger(this);
+        //TODO> kivenni   QueueLogger.SetLogger(this);
 
         Blob = new BlobLogger(settings.AzureStorageConnectionString, this, settings.ResultBlobContainer);
     }
