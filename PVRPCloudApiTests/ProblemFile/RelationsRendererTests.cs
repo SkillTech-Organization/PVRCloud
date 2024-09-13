@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using PMapCore.BO;
 using PVRPCloud;
@@ -25,7 +24,7 @@ public class RelationsRendererTests
         ["truck type id"] = 1
     };
 
-    private static readonly (ClientNodeIdPair From, ClientNodeIdPair To) clientNodes = (
+    private static readonly NodeCombination clientNodes = new(
         new ClientNodeIdPair(new Depot() { ID = "depot" }, 15),
         new ClientNodeIdPair(new Client() { ID = "client" }, 29)
     );

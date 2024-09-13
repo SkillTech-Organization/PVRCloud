@@ -8,7 +8,7 @@ public sealed class ProjectRenderer : IProjectRenderer
     private readonly StringBuilder _sb = new();
 
     public string Render(Project project,
-                         List<(ClientNodeIdPair From, ClientNodeIdPair To)> clientPairs,
+                         List<NodeCombination> clientPairs,
                          IEnumerable<PMapRoute> routes)
     {
         _sb.AppendLine(new SetCustomerIdRenderer().Render());

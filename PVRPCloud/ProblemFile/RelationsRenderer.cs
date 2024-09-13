@@ -9,12 +9,12 @@ public sealed class RelationsRenderer
 
     private readonly IReadOnlyList<TruckType> _truckTypes;
     private readonly IReadOnlyDictionary<string, int> _truckTypeIds;
-    private readonly List<(ClientNodeIdPair From, ClientNodeIdPair To)> _clientNodes;
+    private readonly List<NodeCombination> _clientNodes;
     private readonly IReadOnlyDictionary<string, int> _clientIds;
 
     public RelationsRenderer(IReadOnlyList<TruckType> truckTypes,
                              IReadOnlyDictionary<string, int> truckTypeIds,
-                             List<(ClientNodeIdPair From, ClientNodeIdPair To)> clientNodes,
+                             List<NodeCombination> clientNodes,
                              IReadOnlyDictionary<string, int> clientIds)
     {
         _truckTypes = truckTypes;

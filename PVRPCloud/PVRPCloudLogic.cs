@@ -1,4 +1,4 @@
-﻿using BlobManager;
+using BlobManager;
 using BlobUtils;
 using GMap.NET;
 using PMapCore.BO;
@@ -177,9 +177,9 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return itemRes;
     }
 
-    private (List<(ClientNodeIdPair From, ClientNodeIdPair To)> nodeCombinations, List<PMapRoute> routes) Calculate(Project project, List<ClientNodeIdPair> clientNodes)
+    private (List<NodeCombination> nodeCombinations, List<PMapRoute> routes) Calculate(Project project, List<ClientNodeIdPair> clientNodes)
     {
-        List<(ClientNodeIdPair From, ClientNodeIdPair To)> nodeCombinations = GenerateNodeCombinations(clientNodes);
+        List<NodeCombination> nodeCombinations = GenerateNodeCombinations(clientNodes);
 
         List<PMapRoute> routes = GenerateRoutes(project, nodeCombinations);
 
@@ -189,9 +189,9 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return (nodeCombinations, routes);
     }
 
-    private List<(ClientNodeIdPair From, ClientNodeIdPair To)> GenerateNodeCombinations(List<ClientNodeIdPair> clientNodes)
+    private List<NodeCombination> GenerateNodeCombinations(List<ClientNodeIdPair> clientNodes)
     {
-        List<(ClientNodeIdPair From, ClientNodeIdPair To)> nodeCombinations = [];
+        List<NodeCombination> nodeCombinations = [];
 
         for (int i = 0; i < clientNodes.Count; i++)
         {
@@ -199,7 +199,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             {
                 if (clientNodes[i] != clientNodes[j])
                 {
-                    nodeCombinations.Add((clientNodes[i], clientNodes[j]));
+                    nodeCombinations.Add(new(clientNodes[i], clientNodes[j]));
                 }
             }
         }
@@ -207,7 +207,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return nodeCombinations;
     }
 
-    private List<PMapRoute> GenerateRoutes(Project project, List<(ClientNodeIdPair From, ClientNodeIdPair To)> nodeCombinations)
+    private List<PMapRoute> GenerateRoutes(Project project, List<NodeCombination> nodeCombinations)
     {
         List<PMapRoute> routes = [];
         var combinations = nodeCombinations
