@@ -1,4 +1,4 @@
-using BlobManager;
+﻿using BlobManager;
 using BlobUtils;
 using GMap.NET;
 using PMapCore.BO;
@@ -50,17 +50,13 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _ = Task.Run(async () =>
         {
             string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
-
             string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
-
             await UploadToBlobStorage(fileContent, problemFileName);
 
             await QueueMessageAsync();
 
-            string projectFileName = $"REQ_{_requestID}/{_requestID}_project.txt";
-
-            string serializedProject = JsonSerializer.Serialize(project);
-
+            string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.txt";
+            string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
             await UploadToBlobStorage(serializedProject, projectFileName);
         });
 

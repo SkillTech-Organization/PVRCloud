@@ -126,7 +126,7 @@ public class ProjectRendererTest
         new(new ClientNodeIdPair(Client, 2), new ClientNodeIdPair(Depot, 1)),
     ];
 
-    private PMapRoute[] Routes = [
+    private List<PMapRoute> Routes = [
         new()
         {
             fromNOD_ID = 1,
