@@ -1,16 +1,12 @@
 ﻿using BlobManager;
 using BlobUtils;
-using CommonUtils;
 using GMap.NET;
-using Microsoft.Extensions.Options;
 using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Common.Attrib;
 using PMapCore.Route;
 using PVRPCloud.Models;
 using PVRPCloud.ProblemFile;
-using PVRPCloudInsightsLogger.Logger;
-using PVRPCloudInsightsLogger.Settings;
 using System.Reflection;
 using System.Text;
 
@@ -18,8 +14,6 @@ namespace PVRPCloud;
 
 public sealed class PVRPCloudLogic : IPVRPCloudLogic
 {
-    private readonly ITelemetryLogger _logger;
-    private readonly LoggerSettings _loggerSettings;
     private readonly IBlobHandler _blobHandler;
     private readonly IPmapInputQueue _pmapInputQueue;
     private readonly IProjectRenderer _projectRenderer;
@@ -29,19 +23,13 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     private readonly string _requestID;
 
-    public PVRPCloudLogic(IOptions<LoggerSettings> loggerSettings,
-                          IBlobHandler blobHandler,
+    public PVRPCloudLogic(IBlobHandler blobHandler,
                           IPmapInputQueue pmapInputQueue,
                           IProjectRenderer projectRenderer,
                           TimeProvider timeProvider,
                           IRouteData routeData,
                           IPMapIniParams pmapIniParams)
     {
-        _loggerSettings = loggerSettings.Value;
-
-        //TODO:törölni   _logger = TelemetryClientFactory.Create(_loggerSettings);
-        //TODO:törölni   _logger.LogToQueueMessage = LogToQueueMessage;
-
         _blobHandler = blobHandler;
         _pmapInputQueue = pmapInputQueue;
         _projectRenderer = projectRenderer;
@@ -50,23 +38,6 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _requestID = GenerateRequestId();
         _routeData = routeData;
         _pmapIniParams = pmapIniParams;
-    }
-
-    private object LogToQueueMessage(params object[] args)
-    {
-        var typeParsed = Enum.TryParse((string)(args[1] ?? ""), out LogTypes type);
-        var m = new QueueResponse
-        {
-            RequestID = _requestID ?? string.Empty,
-            Log = new Log
-            {
-                Message = (string)args[0],
-                Timestamp = (DateTime)args[2],
-                Type = typeParsed ? type : LogTypes.STATUS
-            },
-            Status = QueueResponse.QueueResponseStatus.LOG
-        };
-        return m.ToJson();
     }
 
     public string Handle(Project project)
@@ -174,17 +145,17 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return retNodID;
     }
 
-    private Result GetValidationError(object p_obj, string p_field, string p_msg, bool log = true)
+    private Result GetValidationError(object obj, string field, string message, bool log = true)
     {
-        ResErrMsg msg = ResErrMsg.ValidationError(p_field, p_msg);
+        ResErrMsg msg = ResErrMsg.ValidationError(field, message);
 
-        PropertyInfo? ItemIDProp = p_obj.GetType()
+        PropertyInfo? ItemIDProp = obj.GetType()
             .GetProperties()
             .Where(pi => Attribute.IsDefined(pi, typeof(ItemIDAttr)))
             .FirstOrDefault();
 
         var itemId = ItemIDProp is not null
-            ? p_obj.GetType().GetProperty(ItemIDProp.Name)?.GetValue(p_obj, null)?.ToString() ?? "???"
+            ? obj.GetType().GetProperty(ItemIDProp.Name)?.GetValue(obj, null)?.ToString() ?? "???"
             : "???";
 
         Result itemRes = Result.ValidationError(msg, itemId);
