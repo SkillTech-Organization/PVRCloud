@@ -9,6 +9,7 @@ using PVRPCloud.Models;
 using PVRPCloud.ProblemFile;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 
 namespace PVRPCloud;
 
@@ -50,9 +51,17 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         {
             string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
 
-            await UploadToBlobStorage(fileContent);
+            string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
+
+            await UploadToBlobStorage(fileContent, problemFileName);
 
             await QueueMessageAsync();
+
+            string projectFileName = $"REQ_{_requestID}/{_requestID}_project.txt";
+
+            string serializedProject = JsonSerializer.Serialize(project);
+
+            await UploadToBlobStorage(serializedProject, projectFileName);
         });
 
         return _requestID;
@@ -225,7 +234,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return routes;
     }
 
-    private async Task UploadToBlobStorage(string content)
+    private async Task UploadToBlobStorage(string content, string fileName)
     {
         using MemoryStream ms = new();
         using StreamWriter sw = new(ms, Encoding.ASCII);
@@ -233,8 +242,6 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         await sw.FlushAsync();
         ms.Position = 0;
-
-        string fileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
         await _blobHandler.UploadAsync("calculations", fileName, ms);
     }
