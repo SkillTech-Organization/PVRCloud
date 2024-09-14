@@ -35,9 +35,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
     public async Task<ProjectRes> Handle(string requestId)
     {
-        string fileName = $"REQ_{requestId}/{requestId}_project_data.txt";
-        string json = await _blobHandler.DownloadToTextAsync("calculations", fileName);
-        var data = JsonSerializer.Deserialize<PvrpData>(json);
+        PvrpData? data = await GetPvrpData(requestId);
 
         if (data is null)
             throw new InvalidOperationException($"{nameof(data)} is null. Something went wrong during deserialization.");
@@ -53,67 +51,45 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             {
                 var matches = GetRouteNodeExeParameters().Matches(line);
 
-                if (matches.Count != 0)
+                if (matches.Count == 0)
+                    throw new InvalidOperationException($"Something went wrong during the parsing 'getRouteNodeExe': {line}");
+
+                int truckId = int.Parse(matches[0].Groups[TruckId].Value);
+                int routeIndex = int.Parse(matches[0].Groups[RouteIndex].Value);
+                int routeNodeIndex = int.Parse(matches[0].Groups[RouteNodeIndex].Value);
+                int nodeType = int.Parse(matches[0].Groups[NodeType].Value);
+                int arrTime = int.Parse(matches[0].Groups[ArrTime].Value);
+                int depTime = int.Parse(matches[0].Groups[DepTime].Value);
+                int orderId = int.Parse(matches[0].Groups[OrderId].Value);
+
+                if (currentTruck != truckId && currentRouteIndex != routeIndex)
                 {
-                    bool success1 = int.TryParse(matches[0].Groups[TruckId].Value, out int truckId);
-                    bool success2 = int.TryParse(matches[0].Groups[RouteIndex].Value, out int routeIndex);
-                    bool success3 = int.TryParse(matches[0].Groups[RouteNodeIndex].Value, out int routeNodeIndex);
-                    bool success4 = int.TryParse(matches[0].Groups[NodeType].Value, out int nodeType);
-                    bool success5 = int.TryParse(matches[0].Groups[ArrTime].Value, out int arrTime);
-                    bool success6 = int.TryParse(matches[0].Groups[DepTime].Value, out int depTime);
-                    bool success7 = int.TryParse(matches[0].Groups[OrderId].Value, out int orderId);
-
-                    if (currentTruck != truckId && currentRouteIndex != routeIndex)
+                    currentTour = new()
                     {
-                        currentTour = new()
-                        {
-                            Truck = data.Project.Trucks.Single(x => x.ID == data.TruckIds.Single(y => y.Value == truckId).Key)
-                        };
-                        tours.Add(currentTour);
-
-                        currentTruck = truckId;
-                        currentRouteIndex = routeIndex;
-                    }
-
-                    TourPoint tourPoint = (nodeType, routeNodeIndex) switch
-                    {
-                        (1, 1) => new()
-                        {
-                            Depot = data.Project.Depot,
-                            Lat = data.Project.Depot.Lat,
-                            Lng = data.Project.Depot.Lng,
-                            TourPointNo = routeNodeIndex,
-                            ServTime = data.Project.ProjectDate.AddMinutes(arrTime),
-                            ArrTime = data.Project.ProjectDate.AddMinutes(arrTime),
-                            DepTime = data.Project.ProjectDate.AddMinutes(depTime)
-                        },
-                        (0, _) => CreateTourPoint(data, orderId, routeNodeIndex),
-                        (1, > 1) => new()
-                        {
-                            Depot = data.Project.Depot,
-                            Lat = data.Project.Depot.Lat,
-                            Lng = data.Project.Depot.Lng,
-                            TourPointNo = routeNodeIndex
-                        },
-                        _ => throw new InvalidOperationException($"Not valid nodeType, routeNodeIndex combination ({nodeType}, {routeNodeIndex}).")
+                        Truck = data.Project.Trucks.Single(x => x.ID == data.TruckIds.Single(y => y.Value == truckId).Key)
                     };
+                    tours.Add(currentTour);
 
-                    currentTour.TourPoints.Add(tourPoint);
+                    currentTruck = truckId;
+                    currentRouteIndex = routeIndex;
                 }
+
+                TourPoint tourPoint = (nodeType, routeNodeIndex) switch
+                {
+                    (1, 1) => CreateTourPoint(data, routeNodeIndex, arrTime, depTime),
+                    (0, _) => CreateTourPoint(data, routeNodeIndex, orderId),
+                    (1, > 1) => CreateTourPoint(data, routeNodeIndex),
+                    _ => throw new InvalidOperationException($"Not valid nodeType, routeNodeIndex combination ({nodeType}, {routeNodeIndex}).")
+                };
+
+                currentTour.TourPoints.Add(tourPoint);
             }
 
             if (line.StartsWith("getIgnoredOrder"))
             {
-                var matches = GetIgnoredOrderParameters().Matches(line);
+                var order = ParseGetIgnoredOrder(line, data);
 
-                if (matches.Count != 0)
-                {
-                    int.TryParse(matches[0].Groups[OrderId].Value, out int orderId);
-
-                    Order order = data.Project.Orders.Single(x => x.ID == data.OrderIds.Single(y => y.Value == orderId).Key);
-
-                    unplannedOrders.Add(order);
-                }
+                unplannedOrders.Add(order);
             }
         }
 
@@ -123,6 +99,13 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             Tours = tours,
             UnplannedOrders = unplannedOrders,
         };
+    }
+
+    private async Task<PvrpData?> GetPvrpData(string requestId)
+    {
+        string fileName = $"REQ_{requestId}/{requestId}_project_data.txt";
+        string json = await _blobHandler.DownloadToTextAsync("calculations", fileName);
+        return JsonSerializer.Deserialize<PvrpData>(json);
     }
 
     private async Task<string[]> GetResultFileFromBlob(string requestId)
@@ -137,7 +120,21 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         return content.Split(Environment.NewLine);
     }
 
-    private TourPoint CreateTourPoint(PvrpData data, int orderId, int routeNodeIndex)
+    private TourPoint CreateTourPoint(PvrpData data, int routeNodeIndex, int arrTime, int depTime)
+    {
+        return new()
+        {
+            Depot = data.Project.Depot,
+            Lat = data.Project.Depot.Lat,
+            Lng = data.Project.Depot.Lng,
+            TourPointNo = routeNodeIndex,
+            ServTime = data.Project.ProjectDate.AddMinutes(arrTime),
+            ArrTime = data.Project.ProjectDate.AddMinutes(arrTime),
+            DepTime = data.Project.ProjectDate.AddMinutes(depTime)
+        };
+    }
+
+    private TourPoint CreateTourPoint(PvrpData data, int routeNodeIndex, int orderId)
     {
         var order = data.Project.Orders
             .Single(order => order.ID == data.OrderIds
@@ -155,5 +152,30 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             Lng = client.Lng,
             TourPointNo = routeNodeIndex,
         };
+    }
+
+    private TourPoint CreateTourPoint(PvrpData data, int routeNodeIndex)
+    {
+        return new()
+        {
+            Depot = data.Project.Depot,
+            Lat = data.Project.Depot.Lat,
+            Lng = data.Project.Depot.Lng,
+            TourPointNo = routeNodeIndex
+        };
+    }
+
+    private Order ParseGetIgnoredOrder(string line, PvrpData data)
+    {
+        var matches = GetIgnoredOrderParameters().Matches(line);
+
+        if (matches.Count == 0)
+            throw new InvalidOperationException($"Something went wrong matching 'getIgnoredOrder': {line}");
+
+        int.TryParse(matches[0].Groups[OrderId].Value, out int orderId);
+
+        Order order = data.Project.Orders.Single(x => x.ID == data.OrderIds.Single(y => y.Value == orderId).Key);
+
+        return order;
     }
 }
