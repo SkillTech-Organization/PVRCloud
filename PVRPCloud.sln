@@ -64,6 +64,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudApiTests", "PVRPCl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebJobPOC", "WebJobPOC\WebJobPOC.csproj", "{72D6DEC8-2F73-42EB-AE77-F97CF77746C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRPCalculation", "PVRPCalculation\PVRPCalculation.csproj", "{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -250,6 +252,22 @@ Global
 		{72D6DEC8-2F73-42EB-AE77-F97CF77746C7}.Release|x64.Build.0 = Release|Any CPU
 		{72D6DEC8-2F73-42EB-AE77-F97CF77746C7}.Release|x86.ActiveCfg = Release|Any CPU
 		{72D6DEC8-2F73-42EB-AE77-F97CF77746C7}.Release|x86.Build.0 = Release|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Debug|x64.Build.0 = Debug|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Debug|x86.Build.0 = Debug|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Release|x64.ActiveCfg = Release|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Release|x64.Build.0 = Release|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Release|x86.ActiveCfg = Release|Any CPU
+		{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,0 @@
-Saját útvonalszámítás beépítése
-Döntések:
-1. Az éleket az elsõ használatkor felolvassuk saját EDGE osztályba 
-2. Az éleket egy kétdimenziós tömbben tároljuk, amit a node1 node2 értékekkel címzünk meg. Remélhetõleg így gyors lesz
-3. Mivel nem írányított a gráfunk, minden élre igaz:node1 node2
-4
-
-1. Edge osztály létrehozása és feltöltése select * from viewmap alapján.
-2.
