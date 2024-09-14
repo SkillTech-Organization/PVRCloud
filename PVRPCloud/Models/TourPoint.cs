@@ -1,6 +1,6 @@
 namespace PVRPCloud.Models;
 
-public sealed class TourPoint
+public sealed record TourPoint
 {
     public Depot? Depot { get; init; }
     public Client? Client { get; init; }
@@ -10,7 +10,7 @@ public sealed class TourPoint
     public int Distance { get; init; }
     public int Duration { get; init; }
     public DateTime ArrTime { get; init; }
-    public DateTime ServTime { get; init; }
+    public int ServTime { get; init; }
     public DateTime DepTime { get; init; }
     public Order? Order { get; init; }
 }
