@@ -21,7 +21,10 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     private const string DepTime = "depTime";
 
     [GeneratedRegex($"(?<{TruckId}>\\d+),(?<{RouteIndex}>\\d+),(?<{RouteNodeIndex}>\\d+),(\\d+),(?<{NodeType}>\\d+),(?<{OrderId}>\\d+),(?<{ArrTime}>\\d+),(?<{DepTime}>\\d+),(\\d+)", RegexOptions.ExplicitCapture)]
-    private static partial Regex GetNumbers();
+    private static partial Regex GetRouteNodeExeParameters();
+
+    [GeneratedRegex($"(\\d+),(?<{OrderId}>\\d+),(\\d+)", RegexOptions.ExplicitCapture)]
+    private static partial Regex GetIgnoredOrderParameters();
 
     private readonly IBlobHandler _blobHandler;
 
@@ -40,6 +43,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             throw new InvalidOperationException($"{nameof(data)} is null. Something went wrong during deserialization.");
 
         List<Tour> tours = [];
+        List<Order> unplannedOrders = [];
         int currentTruck = 0;
         int currentRouteIndex = 0;
         Tour currentTour = new();
@@ -47,8 +51,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         {
             if (line.StartsWith("getRouteNodeExe"))
             {
-                Console.WriteLine(line);
-                var matches = GetNumbers().Matches(line);
+                var matches = GetRouteNodeExeParameters().Matches(line);
 
                 if (matches.Count != 0)
                 {
@@ -98,12 +101,27 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                     currentTour.TourPoints.Add(tourPoint);
                 }
             }
+
+            if (line.StartsWith("getIgnoredOrder"))
+            {
+                var matches = GetIgnoredOrderParameters().Matches(line);
+
+                if (matches.Count != 0)
+                {
+                    int.TryParse(matches[0].Groups[OrderId].Value, out int orderId);
+
+                    Order order = data.Project.Orders.Single(x => x.ID == data.OrderIds.Single(y => y.Value == orderId).Key);
+
+                    unplannedOrders.Add(order);
+                }
+            }
         }
 
         return new()
         {
             ProjectName = data.Project.ProjectName,
-            Tours = tours
+            Tours = tours,
+            UnplannedOrders = unplannedOrders,
         };
     }
 
