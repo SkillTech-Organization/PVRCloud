@@ -49,6 +49,7 @@ public sealed class ProjectRenderer : IProjectRenderer
             Routes = routes,
             TruckIds = truckRenderer.TruckIds,
             ClientIds = clientRenderer.ClientIds,
+            OrderIds = orderRenderer.OrderIds,
         };
 
         return _sb.ToString();

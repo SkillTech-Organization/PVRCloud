@@ -25,16 +25,14 @@ public class PVRPCloudController : ControllerBase
     }
 
     [HttpGet("{requestId}")]
-    [ProducesResponseType<QueueResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProjectRes>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PVRPCloudResult(string requestId, IQueueResponseHandler queueResponseHandler)
     {
-        await queueResponseHandler.Handle(requestId);
+        ProjectRes response = await queueResponseHandler.Handle(requestId);
 
-        return requestId == "12345678"
-            ? Ok(PVRPCloudMock.ResponseMock)
-            : NotFound();
+        return Ok(response);
     }
 }
