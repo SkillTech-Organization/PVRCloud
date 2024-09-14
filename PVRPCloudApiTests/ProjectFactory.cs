@@ -9,6 +9,7 @@ public static class ProjectFactory
         return new()
         {
             ProjectName = "name",
+            ProjectDate = DateTime.Parse("2024-05-11"),
             MinTime = 1,
             MaxTime = 4,
             MaxTourDuration = 5,
