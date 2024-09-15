@@ -20,7 +20,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     private const string OrderId = "ordId";
     private const string DepTime = "depTime";
 
-    [GeneratedRegex($"(?<{TruckId}>\\d+),(?<{RouteIndex}>\\d+),(?<{RouteNodeIndex}>\\d+),(\\d+),(?<{NodeType}>\\d+),(?<{OrderId}>\\d+),(?<{ArrTime}>\\d+),(?<{DepTime}>\\d+),(\\d+)", RegexOptions.ExplicitCapture)]
+    [GeneratedRegex($"(?<{TruckId}>-?\\d+),(?<{RouteIndex}>-?\\d+),(?<{RouteNodeIndex}>-?\\d+),(-?\\d+),(?<{NodeType}>-?\\d+),(?<{OrderId}>-?\\d+),(?<{ArrTime}>-?\\d+),(?<{DepTime}>-?\\d+),(-?\\d+)", RegexOptions.ExplicitCapture)]
     private static partial Regex GetRouteNodeExeParameters();
 
     [GeneratedRegex($"(\\d+),(?<{OrderId}>\\d+),(\\d+)", RegexOptions.ExplicitCapture)]
@@ -85,7 +85,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                 currentTour.TourPoints.Add(tourPoint);
             }
 
-            if (line.StartsWith("getIgnoredOrder"))
+            if (line.StartsWith("getIgnoredOrder") && !line.StartsWith("getIgnoredOrdersCount"))
             {
                 var order = ParseGetIgnoredOrder(line, data);
 
@@ -116,8 +116,9 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         using StreamReader reader = new(stream);
 
         string content = await reader.ReadToEndAsync();
+        var sss   = content.Split(Environment.NewLine, StringSplitOptions.TrimEntries);
 
-        return content.Split(Environment.NewLine);
+        return content.Split(Environment.NewLine, StringSplitOptions.TrimEntries);
     }
 
     private TourPoint CreateTourPoint(PvrpData data, int routeNodeIndex, int arrTime, int depTime)
