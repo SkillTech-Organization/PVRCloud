@@ -6,5 +6,5 @@ public sealed class ProjectRes
     public DateTime MinTime { get; init; }
     public DateTime MaxTime { get; init; }
     public List<Tour> Tours { get; init; } = [];
-    public List<UnplannedOrder> UnplannedOrders { get; init; } = [];
+    public List<Order> UnplannedOrders { get; init; } = [];
 }

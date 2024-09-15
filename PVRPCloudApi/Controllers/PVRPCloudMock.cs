@@ -3607,21 +3607,18 @@ public static class PVRPCloudMock
           }
         ],
         UnplannedOrders = [
-            new()
-          {
-            Order = new() {
-              ID =  "ord4",
-              OrderName = "Order4",
-              ClientID = "Cl03",
-              Quantity1 = 1,
-              Quantity2 = 0,
-              ReadyTime = 0,
-              TruckIDs = [],
-              OrderServiceTime = 10,
-              OrderMinTime = 480,
-              OrderMaxTime = 960
+            new() {
+                ID =  "ord4",
+                OrderName = "Order4",
+                ClientID = "Cl03",
+                Quantity1 = 1,
+                Quantity2 = 0,
+                ReadyTime = 0,
+                TruckIDs = [],
+                OrderServiceTime = 10,
+                OrderMinTime = 480,
+                OrderMaxTime = 960
             }
-          }
         ]
     };
 }
