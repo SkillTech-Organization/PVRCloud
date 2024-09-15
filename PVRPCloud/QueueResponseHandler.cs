@@ -1,7 +1,7 @@
-using System.Text.Json;
-using System.Text.RegularExpressions;
 using BlobUtils;
 using PVRPCloud.Models;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace PVRPCloud;
 
@@ -20,7 +20,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     private const string OrderId = "ordId";
     private const string DepTime = "depTime";
 
-    [GeneratedRegex($"(?<{TruckId}>\\d+),(?<{RouteIndex}>\\d+),(?<{RouteNodeIndex}>\\d+),(\\d+),(?<{NodeType}>\\d+),(?<{OrderId}>\\d+),(?<{ArrTime}>\\d+),(?<{DepTime}>\\d+),(\\d+)", RegexOptions.ExplicitCapture)]
+    [GeneratedRegex($"(?<{TruckId}>\\d+),(?<{RouteIndex}>\\d+),(?<{RouteNodeIndex}>\\d+),(\\d+),(?<{NodeType}>\\d+),(?<{OrderId}>-?\\d+),(?<{ArrTime}>-?\\d+),(?<{DepTime}>-?\\d+),(\\d+)", RegexOptions.ExplicitCapture)]
     private static partial Regex GetRouteNodeExeParameters();
 
     [GeneratedRegex($"(\\d+),(?<{OrderId}>\\d+),(\\d+)", RegexOptions.ExplicitCapture)]
@@ -62,7 +62,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                 int depTime = int.Parse(matches[0].Groups[DepTime].Value);
                 int orderId = int.Parse(matches[0].Groups[OrderId].Value);
 
-                if (currentTruck != truckId && currentRouteIndex != routeIndex)
+                if (currentTruck != truckId || currentRouteIndex != routeIndex)
                 {
                     currentTour = new()
                     {
@@ -85,7 +85,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                 currentTour.TourPoints.Add(tourPoint);
             }
 
-            if (line.StartsWith("getIgnoredOrder"))
+            if (line.StartsWith("getIgnoredOrder("))
             {
                 var order = ParseGetIgnoredOrder(line, data);
 
@@ -93,17 +93,43 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             }
         }
 
-        return new()
+        var projectRes = new ProjectRes()
         {
             ProjectName = data.Project.ProjectName,
             Tours = tours,
+            MinTime = data.Project.ProjectDate.AddMinutes(data.Project.MinTime).ToUniversalTime(),
+            MaxTime = data.Project.ProjectDate.AddMinutes(data.Project.MaxTime).ToUniversalTime(),
             UnplannedOrders = unplannedOrders,
         };
+
+        //Projektek átszámolása
+        projectRes.Tours.ForEach(tour =>
+        {
+            for (var i = 1; i < tour.TourPoints.Count; i++)
+            {
+                var prevTourPoint = tour.TourPoints[i - 1];
+                var currTourPoint = tour.TourPoints[i];
+
+                var prevNodeID = data.ClientNodes[(prevTourPoint.Depot != null ? prevTourPoint.Depot.ID : prevTourPoint.Client.ID)];
+                var currNodeID = data.ClientNodes[(currTourPoint.Depot != null ? currTourPoint.Depot.ID : currTourPoint.Client.ID)];
+
+                var route = data.Routes.FirstOrDefault(r => r.fromNOD_ID == prevNodeID && r.toNOD_ID == currNodeID && r.TruckTypeId == tour.Truck.TruckTypeID);
+
+
+
+            }
+            tour.StartTime = tour.TourPoints.First().ArrTime;
+            tour.EndTime = tour.TourPoints.Last().DepTime;
+        });
+
+        return projectRes;
     }
+
+
 
     private async Task<PvrpData?> GetPvrpData(string requestId)
     {
-        string fileName = $"REQ_{requestId}/{requestId}_project_data.txt";
+        string fileName = $"REQ_{requestId}/{requestId}_project_data.json";
         string json = await _blobHandler.DownloadToTextAsync("calculations", fileName);
         return JsonSerializer.Deserialize<PvrpData>(json);
     }

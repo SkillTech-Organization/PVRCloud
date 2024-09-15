@@ -55,7 +55,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
             await QueueMessageAsync();
 
-            string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.txt";
+            string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.json";
             string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
             await UploadToBlobStorage(serializedProject, projectFileName);
         });

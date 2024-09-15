@@ -1,5 +1,5 @@
-using System.Text;
 using PVRPCloud.Models;
+using System.Text;
 
 namespace PVRPCloud.ProblemFile;
 
@@ -50,6 +50,7 @@ public sealed class ProjectRenderer : IProjectRenderer
             TruckIds = truckRenderer.TruckIds,
             ClientIds = clientRenderer.ClientIds,
             OrderIds = orderRenderer.OrderIds,
+            ClientNodes = clientPairs.GroupBy(g => g.From).ToDictionary(k => k.Key.Identifable.ID, v => v.Key.NodeId)
         };
 
         return _sb.ToString();

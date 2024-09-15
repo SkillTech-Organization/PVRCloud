@@ -7,4 +7,7 @@ public record PvrpData
     public required Dictionary<string, int> TruckIds { get; init; }
     public required Dictionary<string, int> ClientIds { get; init; }
     public required Dictionary<string, int> OrderIds { get; init; }
+    public required Dictionary<string, int> ClientNodes { get; init; }
 }
+
+
