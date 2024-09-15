@@ -1,6 +1,3 @@
-using Azure;
-using Azure.Storage.Blobs.Models;
-using BlobUtils;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,16 +10,11 @@ namespace PVRPCloudApiTests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    public IRouteData RouteData { get; }
+    public IRouteData RouteData { get; } = Substitute.For<IRouteData>();
 
-    public IPVRPCloudLogic PVRPCloudLogic { get; }
+    public IPVRPCloudLogic PVRPCloudLogic { get; } = Substitute.For<IPVRPCloudLogic>();
 
-    public CustomWebApplicationFactory()
-    {
-        RouteData = Substitute.For<IRouteData>();
-
-        PVRPCloudLogic = Substitute.For<IPVRPCloudLogic>();
-    }
+    public IQueueResponseHandler QueueResponseHandler { get; } = Substitute.For<IQueueResponseHandler>();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -42,6 +34,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             var pvrpCloudDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IPVRPCloudLogic));
             services.Remove(pvrpCloudDescriptor!);
             services.AddSingleton(PVRPCloudLogic);
+
+            var queueResponseHandlerDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IQueueResponseHandler));
+            services.Remove(queueResponseHandlerDescriptor!);
+            services.AddSingleton(QueueResponseHandler);
         });
     }
 }
