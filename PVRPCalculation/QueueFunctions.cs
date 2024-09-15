@@ -71,10 +71,11 @@ namespace WebJobPOC
 
                     logger.LogInformation("C# HTTP trigger function processed a request.3");
                     logger.LogInformation("This is Information log3");
-                    logger.LogWarning("This is Warning log3");
-                    logger.LogError("This is Error log3");
-                    logger.LogCritical("This is Critical log3");
-
+                    logger.LogWarning("{dim1}This is Warning log4", 4);
+                    logger.LogError("This is Error log4");
+                    logger.LogCritical("This is Critical log4");
+                    logger.LogTrace("Trace4");
+                    logger.LogMetric("Metric4", 4);
                 }
 
                 var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger);
