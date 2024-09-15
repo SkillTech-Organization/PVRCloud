@@ -379,6 +379,12 @@ namespace WebJobPOC
                         exeProcess.Kill(true);
                     }
                     exitCode = exeProcess.ExitCode;
+
+                    if (!exeProcess.HasExited)
+                    {
+                        exeProcess.Kill(true);
+                    }
+
                 }
 
                 Console.WriteLine($"--{PVRP_exe} finished! exit code:{exitCode}, requestID:{_requestID}");

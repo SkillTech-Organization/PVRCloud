@@ -67,6 +67,7 @@ namespace WebJobPOC
             _stdOutFileName = $"{_requestID}_stdout.dat";
             _stdErrFileName = $"{_requestID}_stderr.dat";
 
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
         }
         public bool Optimize()
