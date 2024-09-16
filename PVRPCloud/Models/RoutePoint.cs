@@ -2,6 +2,6 @@ namespace PVRPCloud.Models;
 
 public sealed class RoutePoint
 {
-    public double Lat { get; init; }
-    public double Lng { get; init; }
+    public double Lat { get; set; }
+    public double Lng { get; set; }
 }

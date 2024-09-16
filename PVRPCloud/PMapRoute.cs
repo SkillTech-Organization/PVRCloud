@@ -1,4 +1,5 @@
 ﻿using PMapCore.BO;
+using System.Text.Json.Serialization;
 
 namespace PVRPCloud;
 
@@ -23,6 +24,7 @@ public class PMapRoute : IEquatable<PMapRoute>
 
     public boRoute? route { get; set; } = null;
 
+    [JsonIgnore]
     public string NODEList
     {
         get
