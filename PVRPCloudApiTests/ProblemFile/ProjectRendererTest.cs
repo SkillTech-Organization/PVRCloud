@@ -92,6 +92,8 @@ public class ProjectRendererTest
                 MaxWorkTime = 10,
                 EarliestStart = 2,
                 LatestStart = 9,
+                ETollCat = 2,
+                EnvironmentalClass = 4,
             }
         ],
         Clients = [
@@ -121,12 +123,12 @@ public class ProjectRendererTest
         ],
     };
 
-    private List<(ClientNodeIdPair From, ClientNodeIdPair To)> ClientPairs => [
-        (new ClientNodeIdPair(Depot, 1), new ClientNodeIdPair(Client, 2)),
-        (new ClientNodeIdPair(Client, 2), new ClientNodeIdPair(Depot, 1)),
+    private List<NodeCombination> ClientPairs => [
+        new(new ClientNodeIdPair(Depot, 1), new ClientNodeIdPair(Client, 2)),
+        new(new ClientNodeIdPair(Client, 2), new ClientNodeIdPair(Depot, 1)),
     ];
 
-    private PMapRoute[] Routes = [
+    private List<PMapRoute> Routes = [
         new()
         {
             fromNOD_ID = 1,

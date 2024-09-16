@@ -11,4 +11,6 @@ public sealed class Truck : IIdentifiable
     public int MaxWorkTime { get; init; }
     public int EarliestStart { get; init; }
     public int LatestStart { get; init; }
+    public int ETollCat { get; init; }
+    public int EnvironmentalClass { get; init; }
 }

@@ -14,6 +14,11 @@ public sealed class ProjectValidator : AbstractValidator<Project>
             .NotNull()
             .WithState(GetProjectName);
 
+        RuleFor(x => x.ProjectDate)
+            .NotNull()
+            .NotEmpty()
+            .WithState(GetProjectName);
+
         RuleFor(x => x.MinTime)
             .NotNull()
             .WithState(GetProjectName);

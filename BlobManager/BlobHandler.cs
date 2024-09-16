@@ -111,7 +111,7 @@ namespace BlobUtils
             return await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true);
         }
 
-        public async Task<string> DownloadToText(string blobContainerName, string blobName)
+        public async Task<string> DownloadToTextAsync(string blobContainerName, string blobName)
         {
             BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);

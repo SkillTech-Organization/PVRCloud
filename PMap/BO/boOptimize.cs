@@ -41,7 +41,7 @@ namespace PMapCore.BO
             public int TRK_WEIGHT { get; set; }
             public int TRK_XHEIGHT { get; set; }
             public int TRK_XWIDTH { get; set; }
-            public string ttName { get { return String.Format( "{0}_{1}_{2}_{3}", RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH); } }
+            public string ttName { get { return String.Format("{0}_{1}_{2}_{3}", RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH); } }
             public int SPP_ID { get; set; }
             public Dictionary<int, int> SpeedValues { get; set; }
         }
@@ -57,7 +57,7 @@ namespace PMapCore.BO
             public int depotStart { get; set; }                //indulási depó (raktár) azonosítója (>0)
             public int depotArr { get; set; }                  //érkezési depó (raktár) azonosítója (>0)
 
-            
+
             //***setTruckInformation
             public int cId { get; set; }                       //költség profil azonosító
             public int tOwned { get; set; }                    //1 – saját jármű, egyéb – nem saját jármű
@@ -184,7 +184,7 @@ namespace PMapCore.BO
             public int NOD_ID { get; set; }
             public double dQty1 { get; set; }           //Pozitív érték kiszállítás, negatív beszállítás ( bllOptimize.fillOrder()-ben kezelve van!)
 
-            public double dQty2 { get; set; }           
+            public double dQty2 { get; set; }
             public double dQty3 { get; set; }
             public double dQty4 { get; set; }
             public double dQty5 { get; set; }
@@ -370,7 +370,7 @@ namespace PMapCore.BO
             foreach (KeyValuePair<int, CTruck> kp in dicTruck)
             {
                 CTruck tr = (CTruck)kp.Value;
-                OptimizerContent += String.Format("createTruck( {0}, \"{1}\", {2}, {3})\n", 
+                OptimizerContent += String.Format("createTruck( {0}, \"{1}\", {2}, {3})\n",
                     tr.ttId, tr.tkName, tr.depotStart, tr.depotArr);
                 OptimizerContent += String.Format("setTruckInformation( {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10})\n",
                     tr.innerID, tr.cId, tr.tOwned, tr.maxDistance, tr.capId, tr.maxWorktime, tr.earliestStart, tr.latestStart, tr.dailyMax, tr.counterPF1, tr.counterPF2);
@@ -381,7 +381,7 @@ namespace PMapCore.BO
 
         public void P_CreateClient()
         {
-            foreach (KeyValuePair<int, CClient> kp in dicClient.Where(i => i.Key> 0))
+            foreach (KeyValuePair<int, CClient> kp in dicClient.Where(i => i.Key > 0))
             {
                 CClient cl = (CClient)kp.Value;
 
@@ -405,7 +405,7 @@ namespace PMapCore.BO
                 if (ord.orServiceTime > 0)           //opcionális
                     OptimizerContent += String.Format("setOrderServiceTime({0}, {1})\n", ord.innerID, ord.orServiceTime);
                 OptimizerContent += String.Format("addOrderTimeWindow({0}, {1}, {2})\n", ord.innerID, ord.orMinTime, ord.orMaxTime);
-            }   
+            }
         }
 
         public void P_AddOrderTruck()
@@ -425,9 +425,9 @@ namespace PMapCore.BO
             StringBuilder sb = new StringBuilder();
             foreach (CRelationAccess ra in lstRelationAccess)
             {
-                 sb.AppendFormat("setRelationAccess( {0}, {1}, {2}, {3}, {4})\n", ra.ttId, ra.clIdStart, ra.clIdEnd,
-                     (PMapIniParams.Instance.FastestPath ? Math.Ceiling( ra.clTimeCalc * 100) : ra.clDistance),       //Ha leggyorsabb úttal számolunk, a menetidőket kell itt átadnunk
-                     ra.clTime);
+                sb.AppendFormat("setRelationAccess( {0}, {1}, {2}, {3}, {4})\n", ra.ttId, ra.clIdStart, ra.clIdEnd,
+                    (PMapIniParams.Instance.FastestPath ? Math.Ceiling(ra.clTimeCalc * 100) : ra.clDistance),       //Ha leggyorsabb úttal számolunk, a menetidőket kell itt átadnunk
+                    ra.clTime);
             }
             OptimizerContent += sb.ToString();
         }
@@ -447,15 +447,15 @@ namespace PMapCore.BO
 
                 OptimizerContent += String.Format("getRouteNodesCount({0},{1}, {2})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex, tour.RouteExe.Count);
                 int exIndex = 1;
-                foreach (CPlanTours.CRouteExe ex in tour.RouteExe.OrderBy( o=>  o.tkRouteIndex*100000+ o.tkRouteNodeIndex))
+                foreach (CPlanTours.CRouteExe ex in tour.RouteExe.OrderBy(o => o.tkRouteIndex * 100000 + o.tkRouteNodeIndex))
                 {
                     OptimizerContent += String.Format("getRouteNodeExe({0},{1},{2},{3},{4},{5},{6},{7},{8})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex, exIndex, 0,
-                        ex.NodeType, ex.NodeType == 0 ? dicOrder[ex.OrId].innerID :  WHS_ID, ex.ArrTime, ex.DepTime, Convert.ToInt32( ex.quantity));
+                        ex.NodeType, ex.NodeType == 0 ? dicOrder[ex.OrId].innerID : WHS_ID, ex.ArrTime, ex.DepTime, Convert.ToInt32(ex.quantity));
                 }
                 OptimizerContent += String.Format("getRouteDuration({0},{1},{2})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex, tour.Duration);
                 OptimizerContent += String.Format("getRouteLength({0},{1},{2})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex, tour.Distance);
-                OptimizerContent += String.Format("getRouteLoad({0},{1},{2})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex,  Convert.ToInt32( tour.Qty));
-                OptimizerContent += String.Format("getRouteCost({0},{1},{2})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex,  Convert.ToInt32( tour.Cost));
+                OptimizerContent += String.Format("getRouteLoad({0},{1},{2})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex, Convert.ToInt32(tour.Qty));
+                OptimizerContent += String.Format("getRouteCost({0},{1},{2})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex, Convert.ToInt32(tour.Cost));
 
                 tkRouteIndex++;
             }

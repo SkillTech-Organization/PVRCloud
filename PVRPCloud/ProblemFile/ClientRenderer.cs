@@ -8,12 +8,10 @@ public sealed class ClientRenderer
     private const int LatLngChange = 1_000_000;
     private const int DepotPVRPId = 1;
 
-    private readonly Dictionary<string, int> _clients = [];
-
     private readonly StringBuilder _depotStringBuilder = new();
     private readonly StringBuilder _clientsStringBuilder = new();
 
-    public IReadOnlyDictionary<string, int> Clients => _clients.AsReadOnly();
+    public Dictionary<string, int> ClientIds { get; } = [];
 
     public StringBuilder Render(Depot depot, int projectMinTime)
     {
@@ -48,7 +46,7 @@ public sealed class ClientRenderer
 
     private void CreateEntry(Depot depot)
     {
-        _clients.Add(depot.ID, DepotPVRPId);
+        ClientIds.Add(depot.ID, DepotPVRPId);
     }
 
     public StringBuilder Render(IEnumerable<Client> clients)
@@ -75,6 +73,6 @@ public sealed class ClientRenderer
 
     private void CreateEntry(int pvrpId, Client client)
     {
-        _clients.Add(client.ID, pvrpId);
+        ClientIds.Add(client.ID, pvrpId);
     }
 }

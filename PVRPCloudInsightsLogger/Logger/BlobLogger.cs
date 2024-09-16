@@ -55,7 +55,7 @@ public class BlobLogger
     {
         try
         {
-            return await BlobHandler.DownloadToText(ContainerName, name);
+            return await BlobHandler.DownloadToTextAsync(ContainerName, name);
         }
         catch (Exception ex)
         {
@@ -68,7 +68,7 @@ public class BlobLogger
     {
         try
         {
-            return BlobHandler.DownloadToText(ContainerName, name).Result.ToDeserializedJson<T>();
+            return BlobHandler.DownloadToTextAsync(ContainerName, name).Result.ToDeserializedJson<T>();
         }
         catch (Exception ex)
         {
