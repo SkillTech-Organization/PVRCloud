@@ -49,7 +49,7 @@ namespace WebJobPOC
             _logger = logger;
 
             _fileName = $"{_requestID}_optimize.dat";
-            _blobFileName = $"{_requestID}_REQ/{_requestID}_optimize.dat";
+            _blobFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
             _iniFileName = $"{_requestID}_init.cl";
             _workDir = $"C:\\local\\Temp\\xx{DateTime.UtcNow.Ticks}";
 
@@ -101,11 +101,11 @@ namespace WebJobPOC
 
             // NOTODO: upload the result files
             Console.WriteLine($"--{_requestID} start upload to blobstore");
-            string blobOkFileName = $"{_requestID}_REQ/{_requestID}_ok.dat";
-            string blobErrorFileName = $"{_requestID}_REQ/{_requestID}_error.dat";
-            string blobResultFileName = $"{_requestID}_REQ/{_requestID}_result.dat";
-            string blobStdOutFileName = $"{_requestID}/_REQ{_requestID}_stdout.dat";
-            string blobStdErrFileName = $"{_requestID}_REQ/{_requestID}_stderr.dat";
+            string blobOkFileName = $"REQ_{_requestID}/{_requestID}_ok.dat";
+            string blobErrorFileName = $"REQ_{_requestID}/{_requestID}_error.dat";
+            string blobResultFileName = $"REQ_{_requestID}/{_requestID}_result.dat";
+            string blobStdOutFileName = $"REQ_{_requestID}/{_requestID}_stdout.dat";
+            string blobStdErrFileName = $"REQ_{_requestID}/{_requestID}_stderr.dat";
             UploadToBlobStore(resultFileWithPath, okFileWithPath, errorFileWithPath, stdoutFileWithPath, stderrFileWithPath,
                 blobResultFileName, blobOkFileName, blobErrorFileName, blobStdOutFileName, blobStdErrFileName);
             Console.WriteLine($"--{_requestID} end upload to blobstore");
