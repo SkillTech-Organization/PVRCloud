@@ -8,6 +8,6 @@ public sealed class Tour
     public int TourLength { get; set; }
     public int TourToll { get; set; }
     public int TourCost { get; set; }
-    public List<RoutePoint> RoutePoints { get; init; } = [];
-    public List<TourPoint> TourPoints { get; init; } = [];
+    public List<RoutePoint> RoutePoints { get; set; } = [];
+    public List<TourPoint> TourPoints { get; set; } = [];
 }

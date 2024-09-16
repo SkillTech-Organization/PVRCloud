@@ -1,5 +1,6 @@
 using BlobUtils;
 using PMapCore.BLL;
+using PMapCore.Route;
 using PVRPCloud.Models;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -28,10 +29,11 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     private static partial Regex GetIgnoredOrderParameters();
 
     private readonly IBlobHandler _blobHandler;
-
-    public QueueResponseHandler(IBlobHandler blobHandler)
+    private readonly IRouteData _routeData;
+    public QueueResponseHandler(IBlobHandler blobHandler, IRouteData routeData)
     {
         _blobHandler = blobHandler;
+        _routeData = routeData;
     }
 
     public async Task<ProjectRes> Handle(string requestId)
@@ -130,7 +132,16 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
                     tour.TourToll += Convert.ToInt32(Math.Round(bllRoute.GetToll(route.route.Edges, tour.Truck.ETollCat, tour.Truck.EnvironmentalClass, ref lastETRCODE)));
                     tour.TourLength += currTourPoint.Distance;
-                    tour.RoutePoints.AddRange(route.route.Route.Points.Select(r => new RoutePoint() { Lat = r.Lat, Lng = r.Lng }).ToList());
+
+                    //legelsõ pont
+                    var startPoint = route.route.Edges.First();
+                    tour.RoutePoints.Add(new RoutePoint() { Lat = startPoint.fromLatLng.Lat, Lng = startPoint.fromLatLng.Lng });
+
+                    //többi pont
+                    route.route.Edges.ForEach(e =>
+                    {
+                        tour.RoutePoints.Add(new RoutePoint() { Lat = e.toLatLng.Lat, Lng = e.toLatLng.Lng });
+                    });
 
                 }
                 currTourPoint.ArrTime = prevTourPoint.ArrTime.AddMinutes(currTourPoint.Duration);
