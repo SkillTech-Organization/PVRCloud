@@ -166,14 +166,14 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
     private async Task<PvrpData?> GetPvrpData(string requestId)
     {
-        string fileName = $"{requestId}_REQ/{requestId}_project_data.json";
+        string fileName = $"REQ_{requestId}/{requestId}_project_data.json";
         string json = await _blobHandler.DownloadToTextAsync("calculations", fileName);
         return JsonSerializer.Deserialize<PvrpData>(json);
     }
 
     private async Task<string[]> GetResultFileFromBlob(string requestId)
     {
-        string fileName = $"{requestId}_REQ/{requestId}_result.dat";
+        string fileName = $"REQ_{requestId}/{requestId}_result.dat";
 
         using Stream stream = await _blobHandler.DownloadFromStreamAsync("calculations", fileName);
         using StreamReader reader = new(stream);

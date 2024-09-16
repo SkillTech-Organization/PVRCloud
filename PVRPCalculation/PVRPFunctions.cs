@@ -1,12 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BlobUtils;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using System;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
-using System.Threading;
 
 namespace WebJobPOC
 {
@@ -26,8 +22,8 @@ namespace WebJobPOC
 
         private string _requestID;
         private int _maxCompTime;
-        private string _fileName;
-        private string _blobFileName;
+        private string _optimizefileName;
+        private string _blobOptimizeFileName;
         private string _iniFileName;
         private string _workDir;
         private string _okFileName;
@@ -36,6 +32,7 @@ namespace WebJobPOC
         private string _stdOutFileName;
         private string _stdErrFileName;
 
+        private readonly IBlobHandler _blobHandler;
 
 
         private IConfiguration _config;
@@ -48,10 +45,21 @@ namespace WebJobPOC
             _config = config;
             _logger = logger;
 
-            _fileName = $"{_requestID}_optimize.dat";
-            _blobFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
+
+
+            _blobHandler = new BlobHandler(_config[AzureWebJobsStorageParName]);
+
+            _optimizefileName = $"{_requestID}_optimize.dat";
+            _blobOptimizeFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
             _iniFileName = $"{_requestID}_init.cl";
+
+
+#if RELEASE                
+            _workDir = Directory.CreateTempSubdirectory("PVRPTemp").FullName;
+#else
             _workDir = $"C:\\local\\Temp\\xx{DateTime.UtcNow.Ticks}";
+            Directory.CreateDirectory(_workDir);
+#endif
 
             _okFileName = $"{_requestID}_ok.dat";
             _errorFileName = $"{_requestID}_error.dat";
@@ -59,136 +67,102 @@ namespace WebJobPOC
             _stdOutFileName = $"{_requestID}_stdout.dat";
             _stdErrFileName = $"{_requestID}_stderr.dat";
 
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
         }
         public bool Optimize()
         {
+            bool resultWasOk = false;
+            try
+            {
+                Console.WriteLine($"--{_requestID} STARTED");
+                Console.WriteLine($"-- Parameters RequsestID:{_requestID} maxCompTime:{_maxCompTime}");
+                Console.WriteLine($"--Work dir:{_workDir}");
 
-            Console.WriteLine($"--{_requestID} STARTED");
-            Console.WriteLine($"-- Parameters RequsestID:{_requestID} maxCompTime:{_maxCompTime}");
-            Console.WriteLine($"--Work dir:{_workDir}");
-
-            //_workingDir = Directory.CreateTempSubdirectory("PVRPTemp").FullName;
-            Directory.CreateDirectory(_workDir);
 
 
-            // NOTODO: download the optimize.dat file from blob store
-            Console.WriteLine($"--{_requestID} start download from blobstore");
+                // NOTODO: download the optimize.dat file from blob store
+                Console.WriteLine($"--{_requestID} start download from blobstore");
 
-            DownloadFromBlobStore(_blobFileName, _fileName);
+                downloadFromBlob(System.IO.Path.Combine(_workDir, _optimizefileName), _blobOptimizeFileName);
 
-            Console.WriteLine($"--{_requestID} end download from blobstore");
+                Console.WriteLine($"--{_requestID} end download from blobstore");
 
-            // NOTODO: create the .ini file
-            CreateInifile(_iniFileName);
+                // NOTODO: create the .ini file
+                CreateInifile(_iniFileName);
 
-            int ExecTimeOutMS = _maxCompTime + 2000;
+                int ExecTimeOutMS = _maxCompTime + 2000;
 
-            // NOTODO: create the .bat file
-            //CreateBatFile(_localPath, batFileName, iniFileName);
+                // NOTODO: create the .bat file
+                //CreateBatFile(_localPath, batFileName, iniFileName);
 
-            // NOTODO: start the .bat file
-            ExecPVRP(ExecTimeOutMS);
+                // NOTODO: start the .bat file
+                ExecPVRP(ExecTimeOutMS);
 
-            // NOTODO: check  the result file
-            var okFileWithPath = System.IO.Path.Combine(_workDir, _okFileName);
-            var errorFileWithPath = System.IO.Path.Combine(_workDir, _errorFileName);
-            var resultFileWithPath = System.IO.Path.Combine(_workDir, _resultFileName);
-            var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
-            var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
+                // NOTODO: check  the result file
+                var okFileWithPath = System.IO.Path.Combine(_workDir, _okFileName);
+                var errorFileWithPath = System.IO.Path.Combine(_workDir, _errorFileName);
+                var resultFileWithPath = System.IO.Path.Combine(_workDir, _resultFileName);
+                var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
+                var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
 
-            bool resultWasOk = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath);
+                resultWasOk = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath);
 
-            // NOTODO: upload the result files
-            Console.WriteLine($"--{_requestID} start upload to blobstore");
-            string blobOkFileName = $"REQ_{_requestID}/{_requestID}_ok.dat";
-            string blobErrorFileName = $"REQ_{_requestID}/{_requestID}_error.dat";
-            string blobResultFileName = $"REQ_{_requestID}/{_requestID}_result.dat";
-            string blobStdOutFileName = $"REQ_{_requestID}/{_requestID}_stdout.dat";
-            string blobStdErrFileName = $"REQ_{_requestID}/{_requestID}_stderr.dat";
-            UploadToBlobStore(resultFileWithPath, okFileWithPath, errorFileWithPath, stdoutFileWithPath, stderrFileWithPath,
-                blobResultFileName, blobOkFileName, blobErrorFileName, blobStdOutFileName, blobStdErrFileName);
-            Console.WriteLine($"--{_requestID} end upload to blobstore");
+                // NOTODO: upload the result files
+                Console.WriteLine($"--{_requestID} start upload to blobstore");
+                string blobOkFileName = $"REQ_{_requestID}/{_requestID}_ok.dat";
+                string blobErrorFileName = $"REQ_{_requestID}/{_requestID}_error.dat";
+                string blobResultFileName = $"REQ_{_requestID}/{_requestID}_result.dat";
+                string blobStdOutFileName = $"REQ_{_requestID}/{_requestID}_stdout.dat";
+                string blobStdErrFileName = $"REQ_{_requestID}/{_requestID}_stderr.dat";
+
+
+                uploadToBlob(resultFileWithPath, blobResultFileName);
+                uploadToBlob(okFileWithPath, blobOkFileName);
+                uploadToBlob(errorFileWithPath, blobErrorFileName);
+                uploadToBlob(stdoutFileWithPath, blobStdOutFileName);
+                uploadToBlob(stderrFileWithPath, blobStdErrFileName);
+
+
+
+                Console.WriteLine($"--{_requestID} end upload to blobstore");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(String.Format("--ERROR: {0}", ex.Message));
+                throw;
+            }
+
 
             return resultWasOk;
         }
 
-
-        private void UploadToBlobStore(string resultFileWithPath, string okFileWithPath, string errorFileWithPath, string stdoutFileWithPath, string stderrFileWithPath,
-            string blobResultFileName, string blobOkFileName, string blobErrorFileName, string blobStdOutFileName, string blobStdErrFileName)
-        {
-            try
-            {
-                // Retrieve storage account from connection string.
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_config[AzureWebJobsStorageParName]);
-
-                // Create the blob client.
-                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-                // Retrieve reference to a previously created container.
-                CloudBlobContainer container = blobClient.GetContainerReference(CalcContainerName);
-                uploadToBlob(container, resultFileWithPath, blobResultFileName);
-                uploadToBlob(container, okFileWithPath, blobOkFileName);
-                uploadToBlob(container, errorFileWithPath, blobErrorFileName);
-                uploadToBlob(container, stdoutFileWithPath, blobStdOutFileName);
-                uploadToBlob(container, stderrFileWithPath, blobStdErrFileName);
-
-                //                DeleteFilesAndFoldersRecursively(_workDir);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(String.Format("--ERROR: {0}", ex.Message));
-                throw;
-            }
-
-        }
-
-        private void uploadToBlob(CloudBlobContainer container, string fileWithPath, string blobFileName)
+        private void downloadFromBlob(string fileWithPath, string blobFileName)
         {
             if (File.Exists(fileWithPath))
             {
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobFileName);
-                Console.WriteLine(String.Format("--upload file with path: {0}", fileWithPath));
-                // Save file to blob content.
-                using (var fileStream = System.IO.File.OpenRead(fileWithPath))
-                {
-                    blockBlob.UploadFromStreamAsync(fileStream).GetAwaiter().GetResult();
-                }
+                File.Delete(fileWithPath);
             }
+
+            Console.WriteLine(String.Format("--download file with path: {0}", fileWithPath));
+            using (var fileStream = System.IO.File.OpenWrite(fileWithPath))
+            {
+                var blobStream = _blobHandler.DownloadFromStreamAsync(CalcContainerName, blobFileName).GetAwaiter().GetResult();
+                blobStream.CopyTo(fileStream);
+            }
+
         }
 
-        private void DownloadFromBlobStore(string blobFileName, string fileName)
+        private void uploadToBlob(string fileWithPath, string blobFileName)
         {
-            try
+            if (File.Exists(fileWithPath))
             {
-                // Retrieve storage account from connection string.
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_config[AzureWebJobsStorageParName]);
-
-                // Create the blob client.
-                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-                // Retrieve reference to a previously created container.
-                CloudBlobContainer container = blobClient.GetContainerReference(CalcContainerName);
-
-                // Retrieve reference to a blob named "photo1.jpg".
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobFileName);
-
-                var dwnlFileWithPath = System.IO.Path.Combine(_workDir, fileName);
-
-                Console.WriteLine(String.Format("--downloaded file with path: {0}", dwnlFileWithPath));
-
-                // Save blob contents to a file.
-                using (var fileStream = System.IO.File.OpenWrite(dwnlFileWithPath))
+                Console.WriteLine(String.Format("--upload file with path: {0}", fileWithPath));
+                using (var fileStream = System.IO.File.OpenRead(fileWithPath))
                 {
-                    blockBlob.DownloadToStreamAsync(fileStream).GetAwaiter().GetResult();
+                    _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream);
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(String.Format("--ERROR: {0}", ex.Message));
-                throw;
-            }
-
         }
 
         private void CreateInifile(string iniFileName)
@@ -241,16 +215,6 @@ namespace WebJobPOC
                     sw.WriteLine(s6);
                 }
             }
-            //            (INFILE := ".\\optimize",
-            //  OUTFILE:= ".\\result", 
-            //  OKFILE:= ".\\ok",
-            //  ERRORFILE:= ".\\error",
-            //  MAXCOMPTIME:= 120000000,
-            //  NOWAIT ? := false,
-            //  MULTITOURS ? := false,
-            //  go(),
-            //  exit(1)
-            //)
             string readText = System.IO.File.ReadAllText(iniFileWithPath);
             Console.WriteLine(readText);
         }
@@ -330,11 +294,8 @@ namespace WebJobPOC
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
-
-
-            /*
             startInfo.RedirectStandardError = true;
-            */
+
             // startInfo.WindowStyle = ProcessWindowStyle.Normal;
 
             try
@@ -355,7 +316,8 @@ namespace WebJobPOC
                     {
                         exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
                     }
-                    //Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
+
+                    Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
 
                     exeProcess.OutputDataReceived += (sender, eventArgs) =>
                     {
@@ -366,31 +328,24 @@ namespace WebJobPOC
                     };
                     exeProcess.BeginOutputReadLine();
 
-                    /*
-                                        exeProcess.ErrorDataReceived += (sender, eventArgs) =>
-                                        {
-                                            stderr.AppendLine(eventArgs.Data);
-                                        };
-                                        exeProcess.BeginErrorReadLine();
-                    */
+                    exeProcess.ErrorDataReceived += (sender, eventArgs) =>
+                    {
+                        stderr.AppendLine(eventArgs.Data);
+                    };
+                    exeProcess.BeginErrorReadLine();
+
                     if (!exeProcess.WaitForExit(timeoutMS))
                     {
                         timeoutHappened = true;
                         exeProcess.Kill(true);
                     }
                     exitCode = exeProcess.ExitCode;
-
-                    if (!exeProcess.HasExited)
-                    {
-                        exeProcess.Kill(true);
-                    }
-
                 }
 
                 Console.WriteLine($"--{PVRP_exe} finished! exit code:{exitCode}, requestID:{_requestID}");
                 if (timeoutHappened)
                 {
-                    Console.WriteLine($"--{PVRP_exe}        timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
+                    Console.WriteLine($"--{PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
                 }
 
                 saveStdOut(stdout.ToString(), stderr.ToString());
@@ -416,35 +371,6 @@ namespace WebJobPOC
 
             Console.WriteLine($"--{PVRP_exe} standard outpup/error saved");
 
-        }
-
-        static void ExecuteCommand(string command)
-        {
-            int exitCode;
-            ProcessStartInfo processInfo;
-            Process process;
-
-            processInfo = new ProcessStartInfo("cmd.exe", "/c " + command);
-            processInfo.CreateNoWindow = true;
-            processInfo.UseShellExecute = false;
-            // *** Redirect the output ***
-            processInfo.RedirectStandardError = true;
-            processInfo.RedirectStandardOutput = true;
-
-            process = Process.Start(processInfo);
-            process.WaitForExit();
-
-            // *** Read the streams ***
-            // Warning: This approach can lead to deadlocks, see Edit #2
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-
-            exitCode = process.ExitCode;
-
-            Console.WriteLine("output>>" + (String.IsNullOrEmpty(output) ? "(none)" : output));
-            Console.WriteLine("error>>" + (String.IsNullOrEmpty(error) ? "(none)" : error));
-            Console.WriteLine("ExitCode: " + exitCode.ToString(), "ExecuteCommand");
-            process.Close();
         }
 
         private bool CheckResultFiles(string resultFileWithPath, string okFileWithPath, string errorFileWithPath)

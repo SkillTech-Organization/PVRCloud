@@ -37,6 +37,7 @@ namespace WebJobPOC
             {
                 // The following code ensures that the WebJob will be running continuously
                 await host.RunAsync();
+                //await host.StartAsync();
             }
         }
     }

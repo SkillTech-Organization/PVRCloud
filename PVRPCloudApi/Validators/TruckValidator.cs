@@ -9,7 +9,7 @@ using static ValidationHelpers;
 public sealed class TruckValidator : AbstractValidator<PVRPCloud.Models.Truck>
 {
     private readonly int[] _eTollCategories = [1, 2, 2, 4, 5, 6];
-    private readonly int[] _environmentalClasses = [0, 1, 2, 2, 4, 5, 6, 99, 100];
+    private readonly int[] _environmentalClasses = [0, 1, 2, 3, 4, 5, 6, 99, 100];
 
     public TruckValidator(Project project)
     {
