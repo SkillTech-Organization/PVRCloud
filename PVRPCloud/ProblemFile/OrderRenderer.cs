@@ -8,9 +8,8 @@ public sealed class OrderRenderer
     private readonly StringBuilder _sb = new();
     private readonly IReadOnlyDictionary<string, int> _clientIds;
     private readonly IReadOnlyDictionary<string, int> _truckIds;
-    private readonly Dictionary<string, int> _orderIds = [];
 
-    public IReadOnlyDictionary<string, int> OrderIds => _orderIds.AsReadOnly();
+    public Dictionary<string, int> OrderIds { get; } = [];
 
     public OrderRenderer(IReadOnlyDictionary<string, int> clientIds, IReadOnlyDictionary<string, int> truckIds)
     {
@@ -44,7 +43,7 @@ public sealed class OrderRenderer
 
     private void CreateOrder(int pvrpId, Order order)
     {
-        _orderIds.Add(order.ID, pvrpId);
+        OrderIds.Add(order.ID, pvrpId);
 
         int clientId = _clientIds[order.ClientID];
 

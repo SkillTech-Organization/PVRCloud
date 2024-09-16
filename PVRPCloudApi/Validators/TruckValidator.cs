@@ -8,6 +8,9 @@ using static ValidationHelpers;
 
 public sealed class TruckValidator : AbstractValidator<PVRPCloud.Models.Truck>
 {
+    private readonly int[] _eTollCategories = [1, 2, 2, 4, 5, 6];
+    private readonly int[] _environmentalClasses = [0, 1, 2, 2, 4, 5, 6, 99, 100];
+
     public TruckValidator(Project project)
     {
         var truckIds = IdsToArray(project.Trucks);
@@ -64,5 +67,16 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Models.Truck>
             .GreaterThan(x => x.EarliestStart)
             .LessThan(project.MaxTime)
             .WithState(GetIdentifiableId);
+
+        RuleFor(x => x.ETollCat)
+            .NotEmpty()
+            .Must(x => _eTollCategories.Contains(x)).WithMessage(Messages.ERR_INVALID)
+            .WithState(GetIdentifiableId);
+
+        RuleFor(x => x.EnvironmentalClass)
+            .NotEmpty()
+            .Must(x => _environmentalClasses.Contains(x)).WithMessage(Messages.ERR_INVALID)
+            .WithState(GetIdentifiableId);
     }
+
 }

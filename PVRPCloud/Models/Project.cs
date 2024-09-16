@@ -3,6 +3,7 @@
 public sealed class Project
 {
     public string ProjectName { get; init; } = string.Empty;
+    public DateTime ProjectDate { get; init; }
     public int MinTime { get; init; }
     public int MaxTime { get; init; }
     public int MaxTourDuration { get; init; }

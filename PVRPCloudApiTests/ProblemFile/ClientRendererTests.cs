@@ -95,9 +95,9 @@ public class ClientRendererTests
 
         _ = _sut.Render(depot, 2);
 
-        _sut.Clients.Count.Should().Be(1);
+        _sut.ClientIds.Count.Should().Be(1);
 
-        var element = _sut.Clients.First();
+        var element = _sut.ClientIds.First();
         element.Key.Should().Be("depot id");
         element.Value.Should().Be(1);
     }
@@ -169,9 +169,9 @@ public class ClientRendererTests
 
         _ = _sut.Render([client]);
 
-        _sut.Clients.Count.Should().Be(1);
+        _sut.ClientIds.Count.Should().Be(1);
 
-        var element = _sut.Clients.First();
+        var element = _sut.ClientIds.First();
         element.Key.Should().Be("client id");
         element.Value.Should().Be(2);
     }

@@ -11,9 +11,7 @@ public sealed class TruckRenderer
     private readonly IReadOnlyDictionary<string, int> _costProfileIds;
     private readonly IReadOnlyDictionary<string, int> _capacityProfileIds;
 
-    private readonly Dictionary<string, int> _truckIds = [];
-
-    public IReadOnlyDictionary<string, int> TruckIds => _truckIds.AsReadOnly();
+    public Dictionary<string, int> TruckIds { get; } = [];
 
     public TruckRenderer(IReadOnlyDictionary<string, int> truckTypeIds,
                          IReadOnlyDictionary<string, int> costProfileIds,
@@ -33,7 +31,7 @@ public sealed class TruckRenderer
 
             SetTruckInformation(pvrpId, truck);
 
-            _truckIds.Add(truck.ID, pvrpId);
+            TruckIds.Add(truck.ID, pvrpId);
             pvrpId++;
         }
 

@@ -43,7 +43,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                }
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               }
             ]
         };
 
@@ -86,6 +88,8 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ]
         };
@@ -127,6 +131,8 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 },
                 new()
                 {
@@ -174,7 +180,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+            },
             ]
         };
 
@@ -215,7 +223,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -258,7 +268,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -301,7 +313,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+              },
             ]
         };
 
@@ -342,7 +356,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -383,7 +399,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 0,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -424,7 +442,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = -1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -465,7 +485,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 2,
                     LatestStart = 1,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -506,7 +528,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 2,
                     LatestStart = 4,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -549,7 +573,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -590,7 +616,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -640,7 +668,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 
@@ -688,7 +718,9 @@ public class TruckValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                },
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               },
             ]
         };
 

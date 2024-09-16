@@ -35,6 +35,7 @@ builder.Services.AddExceptionHandler(option =>
     option.ExceptionHandler = GeneralExceptionHandler.HandleAsync;
 });
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<BlobNotFoundExceptionHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -70,6 +71,7 @@ builder.Services.Configure<MapStorage>(
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddTransient<IProjectRenderer, ProjectRenderer>();
 builder.Services.AddTransient<IPVRPCloudLogic, PVRPCloudLogic>();
+builder.Services.AddTransient<IQueueResponseHandler, QueueResponseHandler>();
 
 builder.Services.AddTransient<IBlobHandler, BlobHandler>(serviceProvider =>
 {

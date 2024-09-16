@@ -29,7 +29,9 @@ public static class PVRPCloudMock
                 CapacityProfileID =  "2T",
                 MaxWorkTime =  1440,
                 EarliestStart =  0,
-                LatestStart =  1439
+                LatestStart =  1439,
+                ETollCat = 2,
+                EnvironmentalClass = 4,
             },
             StartTime =  DateTime.Parse("2024.05.25 06:45:00"),
             EndTime =  DateTime.Parse("2024.05.25 11:05:00"),
@@ -1258,7 +1260,7 @@ public static class PVRPCloudMock
                 Distance = 0,
                 Duration = 0,
                 ArrTime = DateTime.Parse("2024.05.25 06:45:00"),
-                ServTime = DateTime.Parse("2024.05.25 06:45:00"),
+                // ServTime = DateTime.Parse("2024.05.25 06:45:00"),
                 DepTime = DateTime.Parse("2024.05.25 06:46:00"),
                 Order = null
               },
@@ -1279,7 +1281,7 @@ public static class PVRPCloudMock
                 Distance = 24200,
                 Duration = 74,
                 ArrTime = DateTime.Parse("2024.07.25 08:00:00"),
-                ServTime = DateTime.Parse("2024.07.25 08:00:00"),
+                // ServTime = DateTime.Parse("2024.07.25 08:00:00"),
                 DepTime = DateTime.Parse("2024.07.25 09:50:00"),
                 Order = new(){
                   ID =  "ord1",
@@ -1317,7 +1319,7 @@ public static class PVRPCloudMock
                 Distance = 24170,
                 Duration = 74,
                 ArrTime = DateTime.Parse("2024.05.25 11:04:00"),
-                ServTime = DateTime.Parse("2024.05.25 11:04:00"),
+                // ServTime = DateTime.Parse("2024.05.25 11:04:00"),
                 DepTime = DateTime.Parse("2024.05.25 11:04:00"),
                 Order = null
               }
@@ -3506,7 +3508,7 @@ public static class PVRPCloudMock
                 Distance = 0,
                 Duration = 0,
                 ArrTime = DateTime.Parse("2024.07.25 04:52:00"),
-                ServTime = DateTime.Parse("2024.07.25 04:52:00"),
+                // ServTime = DateTime.Parse("2024.07.25 04:52:00"),
                 DepTime = DateTime.Parse("2024.07.25 04:53:00"),
                 Order = null
               },
@@ -3526,7 +3528,7 @@ public static class PVRPCloudMock
                 Distance = 193540,
                 Duration = 187,
                 ArrTime = DateTime.Parse("2024.07.25 08:00:00"),
-                ServTime = DateTime.Parse("2024.07.25 08:00:00"),
+                // ServTime = DateTime.Parse("2024.07.25 08:00:00"),
                 DepTime = DateTime.Parse("2024.07.25 13:05:00"),
                 Order = new() {
                   ID =  "ord3",
@@ -3561,7 +3563,7 @@ public static class PVRPCloudMock
                 Distance = 88250,
                 Duration = 86,
                 ArrTime = DateTime.Parse("2024.07.25 14:31:00"),
-                ServTime = DateTime.Parse("2024.07.25 14:31:00"),
+                // ServTime = DateTime.Parse("2024.07.25 14:31:00"),
                 DepTime = DateTime.Parse("2024.07.25 21:26:00"),
                 Order = new(){
                   ID =  "ord2",
@@ -3599,7 +3601,7 @@ public static class PVRPCloudMock
                 Distance = 11384,
                 Duration = 120,
                 ArrTime = DateTime.Parse("2024.07.25 23:26:00"),
-                ServTime = DateTime.Parse("2024.07.25 23:26:00"),
+                // ServTime = DateTime.Parse("2024.07.25 23:26:00"),
                 DepTime = DateTime.Parse("2024.07.25 23:26:00"),
                 Order = null
               }
@@ -3607,21 +3609,18 @@ public static class PVRPCloudMock
           }
         ],
         UnplannedOrders = [
-            new()
-          {
-            Order = new() {
-              ID =  "ord4",
-              OrderName = "Order4",
-              ClientID = "Cl03",
-              Quantity1 = 1,
-              Quantity2 = 0,
-              ReadyTime = 0,
-              TruckIDs = [],
-              OrderServiceTime = 10,
-              OrderMinTime = 480,
-              OrderMaxTime = 960
+            new() {
+                ID =  "ord4",
+                OrderName = "Order4",
+                ClientID = "Cl03",
+                Quantity1 = 1,
+                Quantity2 = 0,
+                ReadyTime = 0,
+                TruckIDs = [],
+                OrderServiceTime = 10,
+                OrderMinTime = 480,
+                OrderMaxTime = 960
             }
-          }
         ]
     };
 }

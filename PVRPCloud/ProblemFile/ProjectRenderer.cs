@@ -1,15 +1,16 @@
-using System.Text;
 using PVRPCloud.Models;
+using System.Text;
 
 namespace PVRPCloud.ProblemFile;
 
 public sealed class ProjectRenderer : IProjectRenderer
 {
     private readonly StringBuilder _sb = new();
+    private PvrpData? _pvrpData;
 
     public string Render(Project project,
-                         List<(ClientNodeIdPair From, ClientNodeIdPair To)> clientPairs,
-                         IEnumerable<PMapRoute> routes)
+                         List<NodeCombination> clientPairs,
+                         List<PMapRoute> routes)
     {
         _sb.AppendLine(new SetCustomerIdRenderer().Render());
 
@@ -30,18 +31,33 @@ public sealed class ProjectRenderer : IProjectRenderer
 
         _sb.Append(clientRenderer.Render(project.Clients));
 
-        OrderRenderer orderRenderer = new(clientRenderer.Clients, truckRenderer.TruckIds);
+        OrderRenderer orderRenderer = new(clientRenderer.ClientIds, truckRenderer.TruckIds);
         _sb.Append(orderRenderer.Render(project.Orders));
 
         RelationsRenderer relationsRenderer = new(project.TruckTypes,
                                                   truckTypeRenderer.TruckTypeIds,
                                                   clientPairs,
-                                                  clientRenderer.Clients);
+                                                  clientRenderer.ClientIds);
         _sb.Append(relationsRenderer.Render(routes));
 
         EnginePropertiesRenderer enginePropertiesRenderer = new();
         _sb.Append(enginePropertiesRenderer.Render(project.ProjectName));
 
+        _pvrpData = new()
+        {
+            Project = project,
+            Routes = routes,
+            TruckIds = truckRenderer.TruckIds,
+            ClientIds = clientRenderer.ClientIds,
+            OrderIds = orderRenderer.OrderIds,
+            ClientNodes = clientPairs.GroupBy(g => g.From).ToDictionary(k => k.Key.Identifable.ID, v => v.Key.NodeId)
+        };
+
         return _sb.ToString();
+    }
+
+    public PvrpData GetPvrpData()
+    {
+        return _pvrpData ?? throw new InvalidOperationException("PvrpData is null because it's empty. Call the Render method first.");
     }
 }

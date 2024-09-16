@@ -4,7 +4,8 @@ namespace GMap.NET
    using System;
    using System.Collections.Generic;
    using System.Runtime.Serialization;
-   using GMap.NET.MapProviders;
+    using System.Text.Json.Serialization;
+    using GMap.NET.MapProviders;
 
    /// <summary>
    /// represents route of map
@@ -63,6 +64,9 @@ namespace GMap.NET
          }
       }
 
+      [JsonConstructor]
+      private MapRoute() {}
+
       public MapRoute(string name)
       {
          Name = name;
@@ -93,7 +97,7 @@ namespace GMap.NET
 
             return distance;
          }
-      }    
+      }
 
       /// <summary>
       /// clears points and sets tag and name to null

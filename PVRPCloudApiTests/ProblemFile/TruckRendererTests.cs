@@ -1,6 +1,6 @@
 using FluentAssertions;
-using PVRPCloud.ProblemFile;
 using PVRPCloud.Models;
+using PVRPCloud.ProblemFile;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
@@ -36,6 +36,8 @@ public class TruckRendererTests
             MaxWorkTime = 6,
             EarliestStart = 2,
             LatestStart = 3,
+            ETollCat = 2,
+            EnvironmentalClass = 4,
         };
 
         var result = _sut.Render([truck]);
@@ -56,6 +58,8 @@ public class TruckRendererTests
             MaxWorkTime = 6,
             EarliestStart = 2,
             LatestStart = 3,
+            ETollCat = 2,
+            EnvironmentalClass = 4,
         };
 
         var result = _sut.Render([truck]);
@@ -77,6 +81,8 @@ public class TruckRendererTests
             MaxWorkTime = 6,
             EarliestStart = 2,
             LatestStart = 3,
+            ETollCat = 2,
+            EnvironmentalClass = 4,
         };
 
         var result = _sut.Render([truck]);
@@ -98,6 +104,8 @@ public class TruckRendererTests
             MaxWorkTime = 6,
             EarliestStart = 2,
             LatestStart = 3,
+            ETollCat = 2,
+            EnvironmentalClass = 4,
         };
 
         _ = _sut.Render([truck]);

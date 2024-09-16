@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using Azure.Storage.Queues;
 
@@ -18,8 +20,10 @@ public sealed class PmapInputQueue : IPmapInputQueue
     {
         QueueClient queueClient = new(_connectionString, _queueName);
 
-        string message = System.Text.Json.JsonSerializer.Serialize(request);
+        string json = System.Text.Json.JsonSerializer.Serialize(request);
 
-        await queueClient.SendMessageAsync(message);
+        byte[] message = Encoding.Latin1.GetBytes(json);
+
+        await queueClient.SendMessageAsync(Convert.ToBase64String(message));
     }
 }
