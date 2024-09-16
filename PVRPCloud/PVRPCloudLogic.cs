@@ -50,12 +50,12 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _ = Task.Run(async () =>
         {
             string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
-            string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
+            string problemFileName = $"{_requestID}_REQ/{_requestID}_optimize.dat";
             await UploadToBlobStorage(fileContent, problemFileName);
 
             await QueueMessageAsync();
 
-            string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.json";
+            string projectFileName = $"{_requestID}_REQ/{_requestID}_project_data.json";
             string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
             await UploadToBlobStorage(serializedProject, projectFileName);
         });

@@ -92,6 +92,8 @@ public class ProjectRendererTest
                 MaxWorkTime = 10,
                 EarliestStart = 2,
                 LatestStart = 9,
+                ETollCat = 2,
+                EnvironmentalClass = 4,
             }
         ],
         Clients = [

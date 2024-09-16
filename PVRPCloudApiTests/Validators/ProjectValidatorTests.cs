@@ -62,6 +62,8 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ],
             Depot = new()
@@ -162,6 +164,8 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ],
             Depot = new()
@@ -263,7 +267,9 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                }
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+             }
             ],
             Depot = new()
             {
@@ -364,7 +370,9 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                }
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               }
             ],
             Depot = new()
             {
@@ -463,7 +471,9 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                }
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+       }
             ],
             Depot = new()
             {
@@ -745,6 +755,8 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ],
             Depot = new()
@@ -830,6 +842,8 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ],
             Depot = new()
@@ -1016,7 +1030,9 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
-                }
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
+               }
             ],
             Depot = null!,
             Clients = [
@@ -1105,6 +1121,8 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ],
             Depot = new()
@@ -1195,6 +1213,8 @@ public class ProjectValidatorTests
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ],
             Depot = new()

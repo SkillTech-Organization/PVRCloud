@@ -4,13 +4,13 @@ public sealed record TourPoint
 {
     public Depot? Depot { get; init; }
     public Client? Client { get; init; }
-    public double Lat { get; init; }
-    public double Lng { get; init; }
-    public int TourPointNo { get; init; }
-    public int Distance { get; init; }
-    public int Duration { get; init; }
-    public DateTime ArrTime { get; init; }
-    public DateTime ServTime { get; init; }
-    public DateTime DepTime { get; init; }
+    public double Lat { get; set; }
+    public double Lng { get; set; }
+    public int TourPointNo { get; set; }
+    public int Distance { get; set; }
+    public int Duration { get; set; }
+    public DateTime ArrTime { get; set; }
+    public DateTime ServTime { get; set; }
+    public DateTime DepTime { get; set; }
     public Order? Order { get; init; }
 }

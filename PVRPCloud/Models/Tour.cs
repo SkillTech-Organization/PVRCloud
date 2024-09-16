@@ -7,6 +7,7 @@ public sealed class Tour
     public DateTime EndTime { get; set; }
     public int TourLength { get; set; }
     public int TourToll { get; set; }
+    public int TourCost { get; set; }
     public List<RoutePoint> RoutePoints { get; init; } = [];
     public List<TourPoint> TourPoints { get; init; } = [];
 }

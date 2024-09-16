@@ -29,7 +29,9 @@ public static class PVRPCloudMock
                 CapacityProfileID =  "2T",
                 MaxWorkTime =  1440,
                 EarliestStart =  0,
-                LatestStart =  1439
+                LatestStart =  1439,
+                ETollCat = 2,
+                EnvironmentalClass = 4,
             },
             StartTime =  DateTime.Parse("2024.05.25 06:45:00"),
             EndTime =  DateTime.Parse("2024.05.25 11:05:00"),

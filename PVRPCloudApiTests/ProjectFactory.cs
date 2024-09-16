@@ -58,6 +58,8 @@ public static class ProjectFactory
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ],
             Depot = new()
@@ -150,6 +152,8 @@ public static class ProjectFactory
                     MaxWorkTime = 1,
                     EarliestStart = 1,
                     LatestStart = 2,
+                    ETollCat = 2,
+                    EnvironmentalClass = 4,
                 }
             ],
             Depot = new()

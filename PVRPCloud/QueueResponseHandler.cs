@@ -1,4 +1,5 @@
 using BlobUtils;
+using PMapCore.BLL;
 using PVRPCloud.Models;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -76,9 +77,9 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
                 TourPoint tourPoint = (nodeType, routeNodeIndex) switch
                 {
-                    (1, 1) => CreateTourPoint(data, routeNodeIndex, arrTime, depTime),
+                    (1, 1) => CreateTourPointDepotDep(data, routeNodeIndex, arrTime, depTime),
                     (0, _) => CreateTourPoint(data, routeNodeIndex, orderId),
-                    (1, > 1) => CreateTourPoint(data, routeNodeIndex),
+                    (1, > 1) => CreateTourPointDepotArr(data, routeNodeIndex),
                     _ => throw new InvalidOperationException($"Not valid nodeType, routeNodeIndex combination ({nodeType}, {routeNodeIndex}).")
                 };
 
@@ -97,14 +98,21 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         {
             ProjectName = data.Project.ProjectName,
             Tours = tours,
-            MinTime = data.Project.ProjectDate.AddMinutes(data.Project.MinTime).ToUniversalTime(),
-            MaxTime = data.Project.ProjectDate.AddMinutes(data.Project.MaxTime).ToUniversalTime(),
+            MinTime = data.Project.ProjectDate.AddMinutes(data.Project.MinTime),
+            MaxTime = data.Project.ProjectDate.AddMinutes(data.Project.MaxTime),
             UnplannedOrders = unplannedOrders,
         };
 
         //Projektek átszámolása
         projectRes.Tours.ForEach(tour =>
         {
+            var lastETRCODE = "";
+
+            var costProfile = data.Project.CostProfiles.FirstOrDefault(c => c.ID == tour.Truck.CostProfileID);
+            var truckType = data.Project.TruckTypes.FirstOrDefault(t => t.ID == tour.Truck.TruckTypeID);
+            var depotTourPoint = tour.TourPoints.First();
+            depotTourPoint.Lat = depotTourPoint.Depot.Lat;
+            depotTourPoint.Lng = depotTourPoint.Depot.Lng;
             for (var i = 1; i < tour.TourPoints.Count; i++)
             {
                 var prevTourPoint = tour.TourPoints[i - 1];
@@ -113,13 +121,42 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                 var prevNodeID = data.ClientNodes[(prevTourPoint.Depot != null ? prevTourPoint.Depot.ID : prevTourPoint.Client.ID)];
                 var currNodeID = data.ClientNodes[(currTourPoint.Depot != null ? currTourPoint.Depot.ID : currTourPoint.Client.ID)];
 
-                var route = data.Routes.FirstOrDefault(r => r.fromNOD_ID == prevNodeID && r.toNOD_ID == currNodeID && r.TruckTypeId == tour.Truck.TruckTypeID);
+                if (prevNodeID != currNodeID)
+                {
+                    var route = data.Routes.FirstOrDefault(r => r.fromNOD_ID == prevNodeID && r.toNOD_ID == currNodeID && r.TruckTypeId == truckType.ID);
 
+                    currTourPoint.Duration = Convert.ToInt32(route.route.CalculateTravelTime(truckType));
+                    currTourPoint.Distance = Convert.ToInt32(route.route.CalcDistance);
+
+                    tour.TourToll += Convert.ToInt32(Math.Round(bllRoute.GetToll(route.route.Edges, tour.Truck.ETollCat, tour.Truck.EnvironmentalClass, ref lastETRCODE)));
+                    tour.TourLength += currTourPoint.Distance;
+                    tour.RoutePoints.AddRange(route.route.Route.Points.Select(r => new RoutePoint() { Lat = r.Lat, Lng = r.Lng }).ToList());
+
+                }
+                currTourPoint.ArrTime = prevTourPoint.ArrTime.AddMinutes(currTourPoint.Duration);
+                if (currTourPoint.Order != null)
+                {
+                    var clientOpened = data.Project.ProjectDate.AddMinutes(currTourPoint.Order.OrderMinTime);
+                    currTourPoint.ServTime = (currTourPoint.ArrTime > clientOpened ? currTourPoint.ArrTime : clientOpened);
+                    currTourPoint.DepTime = currTourPoint.ServTime.AddMinutes(currTourPoint.Order.OrderServiceTime);
+                }
+                else
+                {
+                    currTourPoint.ServTime = currTourPoint.ArrTime;
+                    currTourPoint.DepTime = currTourPoint.ArrTime;
+                }
+
+                currTourPoint.Lat = (currTourPoint.Depot != null ? currTourPoint.Depot.Lat : currTourPoint.Client.Lat);
+                currTourPoint.Lng = (currTourPoint.Depot != null ? currTourPoint.Depot.Lng : currTourPoint.Client.Lng);
 
 
             }
             tour.StartTime = tour.TourPoints.First().ArrTime;
             tour.EndTime = tour.TourPoints.Last().DepTime;
+            tour.TourCost = costProfile.FixCost +
+                            Convert.ToInt32(Math.Ceiling((tour.EndTime - tour.StartTime).TotalHours)) * costProfile.HourCost +
+                            (tour.TourLength / 1000) * costProfile.KmCost;
+
         });
 
         return projectRes;
@@ -129,14 +166,14 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
     private async Task<PvrpData?> GetPvrpData(string requestId)
     {
-        string fileName = $"REQ_{requestId}/{requestId}_project_data.json";
+        string fileName = $"{requestId}_REQ/{requestId}_project_data.json";
         string json = await _blobHandler.DownloadToTextAsync("calculations", fileName);
         return JsonSerializer.Deserialize<PvrpData>(json);
     }
 
     private async Task<string[]> GetResultFileFromBlob(string requestId)
     {
-        string fileName = $"REQ_{requestId}/{requestId}_result.dat";
+        string fileName = $"{requestId}_REQ/{requestId}_result.dat";
 
         using Stream stream = await _blobHandler.DownloadFromStreamAsync("calculations", fileName);
         using StreamReader reader = new(stream);
@@ -146,7 +183,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         return content.Split(Environment.NewLine, StringSplitOptions.TrimEntries);
     }
 
-    private TourPoint CreateTourPoint(PvrpData data, int routeNodeIndex, int arrTime, int depTime)
+    private TourPoint CreateTourPointDepotDep(PvrpData data, int routeNodeIndex, int arrTime, int depTime)
     {
         return new()
         {
@@ -180,7 +217,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         };
     }
 
-    private TourPoint CreateTourPoint(PvrpData data, int routeNodeIndex)
+    private TourPoint CreateTourPointDepotArr(PvrpData data, int routeNodeIndex)
     {
         return new()
         {
