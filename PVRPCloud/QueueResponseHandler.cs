@@ -1,7 +1,9 @@
+using Azure;
 using BlobUtils;
 using PMapCore.BLL;
 using PMapCore.Route;
 using PVRPCloud.Models;
+using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -38,6 +40,13 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
     public async Task<ProjectRes> Handle(string requestId)
     {
+        string fileName = $"REQ_{requestId}/{requestId}_result.dat";
+        if (!_blobHandler.CheckIfBlobExist("calculations", fileName))
+        {
+            throw new RequestFailedException((int)HttpStatusCode.NotFound, $"The result hasn't been created yet!");
+        }
+
+
         PvrpData? data = await GetPvrpData(requestId);
 
         if (data is null)
