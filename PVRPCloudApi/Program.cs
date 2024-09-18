@@ -10,7 +10,6 @@ using PVRPCloudApi;
 using PVRPCloudApi.DTO.Response;
 using PVRPCloudApi.Handlers;
 using PVRPCloudApi.Util;
-using PVRPCloudInsightsLogger.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,9 +60,6 @@ builder.Services.AddSwaggerGen(options =>
         //}
     });
 });
-
-builder.Services.Configure<LoggerSettings>(
-    builder.Configuration.GetSection("PVRPCloudLogger"));
 
 builder.Services.Configure<MapStorage>(
     builder.Configuration.GetSection("MapStorage"));

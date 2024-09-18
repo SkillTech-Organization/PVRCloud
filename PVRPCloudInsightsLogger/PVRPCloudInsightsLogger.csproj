@@ -31,4 +31,8 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.3" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logger/" />
+    <Folder Include="Settings/" />
+  </ItemGroup>
 </Project>
