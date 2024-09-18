@@ -34,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCloudApiTests", "PVRPCl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebJobPOC", "WebJobPOC\WebJobPOC.csproj", "{72D6DEC8-2F73-42EB-AE77-F97CF77746C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRPCalculation", "PVRPCalculation\PVRPCalculation.csproj", "{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVRPCalculation", "PVRPCalculation\PVRPCalculation.csproj", "{2D1E7F4D-850F-4F7B-96D5-82191E8730EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

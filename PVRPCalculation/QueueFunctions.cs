@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using CommonUtils;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -24,17 +25,16 @@ namespace WebJobPOC
     {
         // This function will get triggered/executed when a new message is written 
         // on an Azure Queue called queue.
-        [Singleton]
+        //    [Singleton]
         [FunctionName("ProcessQueueMessage")]
-        [return: Queue("pmapcalcoutputmsgs")]
-        public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgs")] CalcRequest req, ILogger logger)
+        [return: Queue("pmapcalcoutputmsgsdev")]
+        public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgsdev")] CalcRequest req, ILogger logger)
         {
             var msg = $"Processed queue message:{JsonSerializer.Serialize(req)}";
             var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg };
             try
             {
-
-                Console.WriteLine($"--A message has arrived:{msg}");
+                logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "START", msg);
 
                 var environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
                 if (environmentName == null)
@@ -49,44 +49,19 @@ namespace WebJobPOC
                      .AddUserSecrets<Program>();
 
                 IConfiguration config = confBuilder.Build();
-                /*
-                using var channel = new InMemoryChannel();
-
-                IServiceCollection services = new ServiceCollection();
-                services.Configure<TelemetryConfiguration>(config => config.TelemetryChannel = channel);
-                services.AddLogging(builder =>
-                {
-                    // Only Application Insights is registered as a logger provider
-                    builder.AddApplicationInsights(
-                        configureTelemetryConfiguration: (config) => config.ConnectionString = "InstrumentationKey=fac65681-a709-4509-8e33-2c1ad9addf9c;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/;ApplicationId=01e8c043-9888-4352-b4a5-4c5a82cff835",
-                        configureApplicationInsightsLoggerOptions: (options) => { }
-                    );
-                });
-                */
-                logger.LogInformation("{RequestID}: Processed queue message:{msg}", req.RequestID, msg);
-                //channel.Flush();
-                using (logger.BeginScope(new Dictionary<string, object> { ["MyKey"] = "MyValue" }))
-                {
-                    logger.LogInformation("An example of an Error level message");
-
-                    logger.LogInformation("C# HTTP trigger function processed a request.3");
-                    logger.LogInformation("This is Information log3");
-                    logger.LogWarning("{dim1}This is Warning log4", 4);
-                    logger.LogError("This is Error log4");
-                    logger.LogCritical("This is Critical log4");
-                    logger.LogTrace("Trace4");
-                    logger.LogMetric("Metric4", 4);
-                }
-
                 var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger);
                 var result = fn.Optimize();
 
                 resp.Status = (result ? "OK" : "ERR");
+
+                logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "END", $"eredmény:{JsonSerializer.Serialize(resp)}");
             }
             catch (Exception ex)
             {
                 resp.Status = "EXCEPTION";
                 resp.Msg += $"\nException:{ex.Message}";
+
+                logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "EXCEPTION", $"eredmény:{JsonSerializer.Serialize(resp)}");
             }
             return resp;
         }

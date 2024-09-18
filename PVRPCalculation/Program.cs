@@ -3,13 +3,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
 var environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
 if (environmentName == null)
 {
     environmentName = "";
 }
-
 
 
 var builder = new HostBuilder()
@@ -27,10 +27,17 @@ var builder = new HostBuilder()
     .ConfigureLogging((context, b) =>
     {
         //     b.SetMinimumLevel(LogLevel.Information);
-        //     b.AddFilter("Azure.Core", LogLevel.Information);
+        b.AddFilter("Microsoft.Azure.WebJobs.Hosting", LogLevel.Error);
+        b.AddFilter("Azure.Core", LogLevel.Error);
+        b.AddFilter("Microsoft.Azure.WebJobs.Extensions", LogLevel.Error);
+        b.AddFilter("Function.ProcessQueueMessage", LogLevel.Information);
+        b.AddFilter("QueueFunctions.ProcessQueueMessage", LogLevel.Information);
+        b.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Error);
+        b.AddFilter<ApplicationInsightsLoggerProvider>("Function.ProcessQueueMessage", LogLevel.Information);
+        b.AddFilter<ApplicationInsightsLoggerProvider>("QueueFunctions.ProcessQueueMessage", LogLevel.Information);
         b.AddApplicationInsights();
-    })
-    ;
+        b.AddConsole();
+    });
 
 builder.ConfigureAppConfiguration((hostContext, configApp) =>
 {

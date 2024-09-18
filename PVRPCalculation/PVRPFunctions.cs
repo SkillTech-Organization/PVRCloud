@@ -1,4 +1,5 @@
 ﻿using BlobUtils;
+using CommonUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -75,18 +76,12 @@ namespace WebJobPOC
             bool resultWasOk = false;
             try
             {
-                Console.WriteLine($"--{_requestID} STARTED");
-                Console.WriteLine($"-- Parameters RequsestID:{_requestID} maxCompTime:{_maxCompTime}");
-                Console.WriteLine($"--Work dir:{_workDir}");
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"workdir:{_workDir}");
 
 
 
                 // NOTODO: download the optimize.dat file from blob store
-                Console.WriteLine($"--{_requestID} start download from blobstore");
-
                 downloadFromBlob(System.IO.Path.Combine(_workDir, _optimizefileName), _blobOptimizeFileName);
-
-                Console.WriteLine($"--{_requestID} end download from blobstore");
 
                 // NOTODO: create the .ini file
                 CreateInifile(_iniFileName);
@@ -109,7 +104,7 @@ namespace WebJobPOC
                 resultWasOk = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath);
 
                 // NOTODO: upload the result files
-                Console.WriteLine($"--{_requestID} start upload to blobstore");
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{_requestID} start upload to blobstore");
                 string blobOkFileName = $"REQ_{_requestID}/{_requestID}_ok.dat";
                 string blobErrorFileName = $"REQ_{_requestID}/{_requestID}_error.dat";
                 string blobResultFileName = $"REQ_{_requestID}/{_requestID}_result.dat";
@@ -122,14 +117,10 @@ namespace WebJobPOC
                 uploadToBlob(errorFileWithPath, blobErrorFileName);
                 uploadToBlob(stdoutFileWithPath, blobStdOutFileName);
                 uploadToBlob(stderrFileWithPath, blobStdErrFileName);
-
-
-
-                Console.WriteLine($"--{_requestID} end upload to blobstore");
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"end uploads to blobstore");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(String.Format("--ERROR: {0}", ex.Message));
                 throw;
             }
 
@@ -144,12 +135,12 @@ namespace WebJobPOC
                 File.Delete(fileWithPath);
             }
 
-            Console.WriteLine(String.Format("--download file with path: {0}", fileWithPath));
             using (var fileStream = System.IO.File.OpenWrite(fileWithPath))
             {
                 var blobStream = _blobHandler.DownloadFromStreamAsync(CalcContainerName, blobFileName).GetAwaiter().GetResult();
                 blobStream.CopyTo(fileStream);
             }
+            _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been downloaded:{blobFileName} -> {fileWithPath}");
 
         }
 
@@ -157,34 +148,33 @@ namespace WebJobPOC
         {
             if (File.Exists(fileWithPath))
             {
-                Console.WriteLine(String.Format("--upload file with path: {0}", fileWithPath));
                 using (var fileStream = System.IO.File.OpenRead(fileWithPath))
                 {
                     _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream);
                 }
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
+            }
+            else
+            {
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file not found:{fileWithPath}");
             }
         }
 
         private void CreateInifile(string iniFileName)
         {
             var iniFileWithPath = System.IO.Path.Combine(_workDir, iniFileName);
-            Console.WriteLine(String.Format("--ini file with path: {0}", iniFileWithPath));
 
             var optimizeFileWithPath = System.IO.Path.Combine(_workDir, $"{_requestID}_optimize");
             optimizeFileWithPath = optimizeFileWithPath.Replace("\\", "\\\\");//.Remove(optimizeFileWithPath.LastIndexOf("."));
-            Console.WriteLine(String.Format("--optimize file with path: {0}", optimizeFileWithPath));
 
             var outfileFileWithPath = System.IO.Path.Combine(_workDir, $"{_requestID}_result");
             outfileFileWithPath = outfileFileWithPath.Replace("\\", "\\\\");
-            Console.WriteLine(String.Format("--outfile file with path: {0}", outfileFileWithPath));
 
             var okfileFileWithPath = System.IO.Path.Combine(_workDir, $"{_requestID}_ok");
             okfileFileWithPath = okfileFileWithPath.Replace("\\", "\\\\");
-            Console.WriteLine(String.Format("--okfile file with path: {0}", okfileFileWithPath));
 
             var errorfileFileWithPath = System.IO.Path.Combine(_workDir, $"{_requestID}_error");
             errorfileFileWithPath = errorfileFileWithPath.Replace("\\", "\\\\");
-            Console.WriteLine(String.Format("--errorfile file with path: {0}", errorfileFileWithPath));
 
             if (!System.IO.File.Exists(iniFileWithPath))
             {
@@ -216,19 +206,17 @@ namespace WebJobPOC
                 }
             }
             string readText = System.IO.File.ReadAllText(iniFileWithPath);
-            Console.WriteLine(readText);
+
+            _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"inifile ({iniFileWithPath}):{readText}");
         }
 
         private string CreateBatFile(string batFileName, string iniFileName)
         {
             var batFileWithPath = System.IO.Path.Combine(_workDir, batFileName);
-            Console.WriteLine(String.Format("--bat file with path: {0}", batFileWithPath));
 
             var iniFileWithPath = System.IO.Path.Combine(_workDir, iniFileName);
 
             //iniFileWithPath = iniFileWithPath.Replace("\\", "\\\\");
-
-            Console.WriteLine(String.Format("--ini file with path: {0}", iniFileWithPath));
 
             if (!System.IO.File.Exists(batFileWithPath))
             {
@@ -240,7 +228,7 @@ namespace WebJobPOC
             }
 
             string readText = System.IO.File.ReadAllText(batFileWithPath);
-            Console.WriteLine(readText);
+            _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"batfile ({batFileWithPath}):{readText}");
 
             return batFileWithPath;
         }
@@ -251,7 +239,6 @@ namespace WebJobPOC
             var iniFileWithPath = System.IO.Path.Combine(_workDir, _iniFileName);
 
             //iniFileWithPath = iniFileWithPath.Replace("\\", "\\\\");
-            Console.WriteLine(String.Format("--ini file with path: {0}", iniFileWithPath));
 
 
             var fullExeFileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), PVRP_exe);
@@ -285,6 +272,7 @@ namespace WebJobPOC
             startInfo.UseShellExecute = true;
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
             */
+
             /*output redirect:
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
@@ -300,7 +288,10 @@ namespace WebJobPOC
 
             try
             {
-                Console.WriteLine($"--{PVRP_exe} started :{startInfo.FileName} {startInfo.Arguments}");
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"--{PVRP_exe} started :{startInfo.FileName} {startInfo.Arguments}");
+
+
+
                 // Start the process with the info we specified.
                 // Call WaitForExit and then the using-statement will close.
 
@@ -317,7 +308,7 @@ namespace WebJobPOC
                         exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
                     }
 
-                    Console.WriteLine($"--ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
+                    _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
 
                     exeProcess.OutputDataReceived += (sender, eventArgs) =>
                     {
@@ -342,10 +333,10 @@ namespace WebJobPOC
                     exitCode = exeProcess.ExitCode;
                 }
 
-                Console.WriteLine($"--{PVRP_exe} finished! exit code:{exitCode}, requestID:{_requestID}");
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} finished! exit code:{exitCode}, requestID:{_requestID}");
                 if (timeoutHappened)
                 {
-                    Console.WriteLine($"--{PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
+                    _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
                 }
 
                 saveStdOut(stdout.ToString(), stderr.ToString());
@@ -353,15 +344,15 @@ namespace WebJobPOC
             catch (Exception ex)
             {
                 // Log error.
-                Console.WriteLine("--ERROR: {0}: ", ex.Message);
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"{PVRP_exe} exception happened! {ex.Message}");
             }
         }
 
         private void saveStdOut(string stdout, string stderr)
         {
 
-            Console.WriteLine($"--{PVRP_exe} output:{stdout}");
-            Console.WriteLine($"--{PVRP_exe} error:{stderr}");
+            _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} output:{stdout}");
+            _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} stderr:{stderr}");
 
             var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
             var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
@@ -369,7 +360,7 @@ namespace WebJobPOC
             File.WriteAllText(stdoutFileWithPath, stdout);
             File.WriteAllText(stderrFileWithPath, stderr);
 
-            Console.WriteLine($"--{PVRP_exe} standard outpup/error saved");
+            _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} standard outpup/error saved");
 
         }
 
