@@ -10,14 +10,7 @@ public sealed class ResponseObjectResult : ObjectResult
 {
     public static ResponseObjectResult Create(ModelStateDictionary modelState)
     {
-        return new(new PVRPCloud.Response()
-        {
-            Results = modelState
-                .Select(state => Result.ValidationError(
-                    ResErrMsg.ValidationError(string.Empty, state.Key),
-                    string.Empty)
-                ).ToList()
-        });
+        return new("Hibás JSON.");
     }
 
     private ResponseObjectResult([ActionResultObjectValue] object? value) : base(value)
