@@ -1,6 +1,7 @@
 ﻿using BlobManager;
 using BlobUtils;
 using GMap.NET;
+using Microsoft.Extensions.Logging;
 using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Common.Attrib;
@@ -15,6 +16,7 @@ namespace PVRPCloud;
 
 public sealed class PVRPCloudLogic : IPVRPCloudLogic
 {
+    private readonly ILogger<PVRPCloudLogic> _logger;
     private readonly IBlobHandler _blobHandler;
     private readonly IPmapInputQueue _pmapInputQueue;
     private readonly IProjectRenderer _projectRenderer;
@@ -29,7 +31,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                           IProjectRenderer projectRenderer,
                           TimeProvider timeProvider,
                           IRouteData routeData,
-                          IPMapIniParams pmapIniParams)
+                          IPMapIniParams pmapIniParams,
+                          ILogger<PVRPCloudLogic> logger)
     {
         _blobHandler = blobHandler;
         _pmapInputQueue = pmapInputQueue;
@@ -39,6 +42,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _requestID = GenerateRequestId();
         _routeData = routeData;
         _pmapIniParams = pmapIniParams;
+        _logger = logger;
     }
 
     public string Handle(Project project)
