@@ -108,14 +108,6 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     private int PVRPGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng point)
     {
-        //Legyünk következetesek, a PMAp-os térkép esetében:
-        //X --> lng, Y --> lat
-        var ptKey = point.ToString();
-        if (NodePtCache.Instance.Items.ContainsKey(ptKey))
-        {
-            return NodePtCache.Instance.Items[ptKey];
-        }
-
         int retNodID = 0;
         var dtXDate2 = _timeProvider.GetUtcNow();
 
@@ -143,8 +135,6 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         {
             retNodID = Math.Abs(nearest.fromLatLng.Lng - point.Lng) + Math.Abs(nearest.fromLatLng.Lat - point.Lat) <
                 Math.Abs(nearest.toLatLng.Lng - point.Lng) + Math.Abs(nearest.toLatLng.Lat - point.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
-
-            NodePtCache.Instance.Items.TryAdd(ptKey, retNodID);
         }
 
         return retNodID;
