@@ -1,22 +1,16 @@
-﻿using GMap.NET;
-using PMapCore.BO;
+﻿using PMapCore.BO;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.Concurrent;
 
 namespace PMapCore.Cache
 {
-   
-
     public class RouteCache
     {
         public static object Locker = new object();
 
-        public System.Collections.Concurrent.ConcurrentBag<boRoute> Items = null;
+        public readonly ConcurrentBag<boRoute> Items;
 
-        private static readonly Lazy<RouteCache> m_instance = new Lazy<RouteCache>(() => new RouteCache(), true);
-
+        private static readonly Lazy<RouteCache> m_instance = new(() => new RouteCache(), true);
 
         static public RouteCache Instance
         {
@@ -28,11 +22,7 @@ namespace PMapCore.Cache
 
         private RouteCache()
         {
-            Items = new System.Collections.Concurrent.ConcurrentBag<boRoute>();
+            Items = [];
         }
-
-
-
     }
-
 }
