@@ -10,7 +10,7 @@ public sealed class ClientValidator : AbstractValidator<Client>
 {
     public ClientValidator(Project project)
     {
-        string[] ids = [..IdsToArray(project.Clients), project.Depot.ID];
+        string[] ids = [..IdsToArray(project.Clients), project.Depot?.ID ?? string.Empty];
         RuleFor(x => x.ID)
             .NotEmpty()
             .NotNull()
