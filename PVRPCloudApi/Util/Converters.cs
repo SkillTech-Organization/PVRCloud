@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using static PVRPCloud.Result;
 
@@ -14,7 +13,7 @@ public class DateTimeConverter : JsonConverter<DateTime>
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.ToUniversalTime().ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture));
+        writer.WriteStringValue(value.ToString("O"));
     }
 }
 

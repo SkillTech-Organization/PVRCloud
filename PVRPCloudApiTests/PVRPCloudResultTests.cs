@@ -4,7 +4,6 @@ using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using PVRPCloud.Models;
-using PVRPCloudApi.Handlers;
 
 namespace PVRPCloudApiTests;
 
