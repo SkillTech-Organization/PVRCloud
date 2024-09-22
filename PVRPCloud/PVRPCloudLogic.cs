@@ -111,9 +111,9 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         //Legyünk következetesek, a PMAp-os térkép esetében:
         //X --> lng, Y --> lat
         var ptKey = point.ToString();
-        if (NodePtCache.Instance.Items.ContainsKey(ptKey))
+        if (NodePtCache.Instance.Contains(ptKey))
         {
-            return NodePtCache.Instance.Items[ptKey];
+            return NodePtCache.Instance.Get(ptKey);
         }
 
         int retNodID = 0;
@@ -144,7 +144,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             retNodID = Math.Abs(nearest.fromLatLng.Lng - point.Lng) + Math.Abs(nearest.fromLatLng.Lat - point.Lat) <
                 Math.Abs(nearest.toLatLng.Lng - point.Lng) + Math.Abs(nearest.toLatLng.Lat - point.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
 
-            NodePtCache.Instance.Items.TryAdd(ptKey, retNodID);
+            NodePtCache.Instance.Add(ptKey, retNodID);
         }
 
         return retNodID;
