@@ -1,7 +1,7 @@
 using Azure;
 using BlobUtils;
+using Microsoft.Extensions.Logging;
 using PMapCore.BLL;
-using PMapCore.Route;
 using PVRPCloud.Models;
 using System.Net;
 using System.Text.Json;
@@ -31,15 +31,18 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     private static partial Regex GetIgnoredOrderParameters();
 
     private readonly IBlobHandler _blobHandler;
-    private readonly IRouteData _routeData;
-    public QueueResponseHandler(IBlobHandler blobHandler, IRouteData routeData)
+    private readonly ILogger<QueueResponseHandler> _logger;
+
+    public QueueResponseHandler(IBlobHandler blobHandler, ILogger<QueueResponseHandler> logger)
     {
         _blobHandler = blobHandler;
-        _routeData = routeData;
+        _logger = logger;
     }
 
     public async Task<ProjectRes> Handle(string requestId)
     {
+        _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.Start, $"{nameof(QueueResponseHandler)} {nameof(Handle)}");
+
         string resFile = $"REQ_{requestId}/{requestId}_result.dat";
         string okFile = $"REQ_{requestId}/{requestId}_ok.dat";
         string errFile = $"REQ_{requestId}/{requestId}_error.dat";
@@ -49,7 +52,6 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         {
             throw new RequestFailedException((int)HttpStatusCode.NotFound, $"The result hasn't been created yet!");
         }
-
 
         PvrpData? data = await GetPvrpData(requestId);
 
@@ -118,7 +120,9 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             UnplannedOrders = unplannedOrders,
         };
 
-        //Projektek átszámolása
+        _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.Info, "Recalc projects");
+
+        //Projektek ï¿½tszï¿½molï¿½sa
         projectRes.Tours.ForEach(tour =>
         {
             var lastETRCODE = "";
@@ -146,11 +150,11 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                     tour.TourToll += Convert.ToInt32(Math.Round(bllRoute.GetToll(route.route.Edges, tour.Truck.ETollCat, tour.Truck.EnvironmentalClass, ref lastETRCODE)));
                     tour.TourLength += currTourPoint.Distance;
 
-                    //legelsõ pont
+                    //legelsï¿½ pont
                     var startPoint = route.route.Edges.First();
                     tour.RoutePoints.Add(new RoutePoint() { Lat = startPoint.fromLatLng.Lat, Lng = startPoint.fromLatLng.Lng });
 
-                    //többi pont
+                    //tï¿½bbi pont
                     route.route.Edges.ForEach(e =>
                     {
                         tour.RoutePoints.Add(new RoutePoint() { Lat = e.toLatLng.Lat, Lng = e.toLatLng.Lng });
@@ -183,20 +187,26 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
         });
 
+        _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.End, $"{nameof(QueueResponseHandler)} {nameof(Handle)}");
+
         return projectRes;
     }
 
-
-
     private async Task<PvrpData?> GetPvrpData(string requestId)
     {
+        _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.Start, $"{nameof(QueueResponseHandler)} {nameof(GetPvrpData)}");
+
         string fileName = $"REQ_{requestId}/{requestId}_project_data.json";
         string json = await _blobHandler.DownloadToTextAsync("calculations", fileName);
-        return JsonSerializer.Deserialize<PvrpData>(json);
+        var data = JsonSerializer.Deserialize<PvrpData>(json);
+
+        return data;
     }
 
     private async Task<string[]> GetResultFileFromBlob(string requestId)
     {
+        _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.Start, $"{nameof(QueueResponseHandler)} {nameof(GetResultFileFromBlob)}");
+
         string fileName = $"REQ_{requestId}/{requestId}_result.dat";
 
         using Stream stream = await _blobHandler.DownloadFromStreamAsync("calculations", fileName);
