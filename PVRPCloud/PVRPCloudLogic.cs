@@ -47,6 +47,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     public string Handle(Project project)
     {
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Start, $"PVRP Cloud {nameof(Handle)}");
+
         var clientNodes = GetNodeIdsForDepoAndClients(project.Depot, project.Clients);
 
         var (nodeCombinations, routes) = Calculate(project, clientNodes);
@@ -55,14 +57,21 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         {
             string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
             string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
+
+            var startTime = _timeProvider.GetTimestamp();
             await UploadToBlobStorage(fileContent, problemFileName);
+            _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"optimize.dat upload duration: {_timeProvider.GetElapsedTime(startTime)}");
 
             await QueueMessageAsync();
 
             string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.json";
             string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
+            startTime = _timeProvider.GetTimestamp();
             await UploadToBlobStorage(serializedProject, projectFileName);
+            _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data.json upload duration: {_timeProvider.GetElapsedTime(startTime)}");
         });
+
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.End, $"PVRP Cloud {nameof(Handle)}");
 
         return _requestID;
     }
@@ -94,6 +103,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     private void FillClientNodes(ClientBase client, boEdge[] edgesArr, List<ClientNodeIdPair> clientNodes, List<Result> errors)
     {
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, "Filling client nodes");
+
         int clientNode = PVRPGetNearestNOD_ID(edgesArr, new PointLatLng(client.Lat, client.Lng));
 
         if (clientNode != 0)
@@ -110,7 +121,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
     }
 
-    private int PVRPGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng point)
+    private int PVRPGetNearestNOD_ID(boEdge[] edgesList, PointLatLng point)
     {
         //Legyünk következetesek, a PMAp-os térkép esetében:
         //X --> lng, Y --> lat
@@ -121,12 +132,12 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
 
         int retNodID = 0;
-        var dtXDate2 = _timeProvider.GetUtcNow();
+        var startTime = _timeProvider.GetTimestamp();
 
         var filteredEdg = new List<boEdge>();
-        for (int i = 0; i < EdgesList.Length; i++)
+        for (int i = 0; i < edgesList.Length; i++)
         {
-            var w = EdgesList[i];
+            var w = edgesList[i];
             if (Math.Abs(w.fromLatLng.Lng - point.Lng) + Math.Abs(w.fromLatLng.Lat - point.Lat) <
                 (w.RDT_VALUE == 6 /* TODO boEdge méretcsökkentés miatt kiszedve || w.EDG_STRNUM1 != "0" || w.EDG_STRNUM2 != "0" || w.EDG_STRNUM3 != "0" || w.EDG_STRNUM4 != "0" */ ?
                 ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider))
@@ -140,10 +151,9 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
         var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - point.Lng) + Math.Abs(o.fromLatLng.Lat - point.Lat)).FirstOrDefault();
 
-        // Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
-        //_logger.Info(string.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count, (DateTime.UtcNow - dtXDate2).ToString()), _logger.GetStatusProperty(_requestID));
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"GetNearestReachableNOD_ID cnt:{filteredEdg.Count}, Időtartam:{_timeProvider.GetElapsedTime(startTime)}");
 
-        if (nearest != null)
+        if (nearest is not null)
         {
             retNodID = Math.Abs(nearest.fromLatLng.Lng - point.Lng) + Math.Abs(nearest.fromLatLng.Lat - point.Lat) <
                 Math.Abs(nearest.toLatLng.Lng - point.Lng) + Math.Abs(nearest.toLatLng.Lat - point.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
@@ -154,7 +164,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return retNodID;
     }
 
-    private Result GetValidationError(object obj, string field, string message, bool log = true)
+    private Result GetValidationError(object obj, string field, string message)
     {
         ResErrMsg msg = ResErrMsg.ValidationError(field, message);
 
@@ -169,10 +179,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         Result itemRes = Result.ValidationError(msg, itemId);
 
-        if (log)
-        {
-            //TODO: a validációs hibákat _logger.ValidationError(p_msg, _logger.GetStatusProperty(_requestID), msg);
-        }
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Error, message);
 
         return itemRes;
     }
@@ -183,16 +190,24 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         List<PMapRoute> routes = GenerateRoutes(project, nodeCombinations);
 
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Start, nameof(CalcRouteProcess));
+        var startTime = _timeProvider.GetTimestamp();
+
         CalcRouteProcess crp = new(routes, _routeData);
         crp.RunWait();
+
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.End, $"{nameof(CalcRouteProcess)} duration: {_timeProvider.GetElapsedTime(startTime)}");
 
         return (nodeCombinations, routes);
     }
 
     private List<NodeCombination> GenerateNodeCombinations(List<ClientNodeIdPair> clientNodes)
     {
-        List<NodeCombination> nodeCombinations = [];
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, "Generating node combinations");
 
+        var startTime = _timeProvider.GetTimestamp();
+
+        List<NodeCombination> nodeCombinations = [];
         for (int i = 0; i < clientNodes.Count; i++)
         {
             for (int j = 0; j < clientNodes.Count; j++)
@@ -204,11 +219,17 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             }
         }
 
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Node combinations duration: {_timeProvider.GetElapsedTime(startTime)}");
+
         return nodeCombinations;
     }
 
     private List<PMapRoute> GenerateRoutes(Project project, List<NodeCombination> nodeCombinations)
     {
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, "Generating routes");
+
+        var startTime = _timeProvider.GetTimestamp();
+
         List<PMapRoute> routes = [];
         var combinations = nodeCombinations
             .Select(x => (From: x.From.NodeId, To: x.To.NodeId))
@@ -230,6 +251,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 });
             }
         }
+
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Generating routes duration: {_timeProvider.GetElapsedTime(startTime)}");
 
         return routes;
     }

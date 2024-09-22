@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 using System.Runtime.ExceptionServices;
 using System.Globalization;
 using System.Collections.Frozen;
+using Microsoft.Extensions.Logging;
+using System.Threading;
 
 namespace PMapCore.Route
 {
@@ -25,6 +27,8 @@ namespace PMapCore.Route
     public class RouteData : IRouteData
     {
         private static volatile bool m_Initalized = false;
+
+        private readonly ILogger<RouteData> _logger;
 
         public FrozenDictionary<string, boEdge> Edges { get; private set; } = null; //Az útvonalak korlátozás-zónatípusonként
 
@@ -49,10 +53,14 @@ namespace PMapCore.Route
         //Singleton technika...
         static public RouteData Instance { get; private set; }
 
+        public RouteData(ILogger<RouteData> logger)
+        {
+            _logger = logger;
+        }
 
         public void InitFromFiles(string p_mapStorageConnectionString, bool p_Forced = false)
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu-HU");
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
             {
                 if (!m_Initalized || p_Forced)

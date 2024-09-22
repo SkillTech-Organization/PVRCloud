@@ -52,7 +52,7 @@ public static class AddPvrpServicesExtension
 
         services.AddSingleton(static serviceProvider =>
         {
-            PMapCore.Route.RouteData routeData = new();
+            PMapCore.Route.RouteData routeData = new(serviceProvider.GetRequiredService<ILogger<PMapCore.Route.RouteData>>());
             var property = routeData.GetType().GetProperty(nameof(routeData.Instance)) ?? throw new InvalidOperationException("""Property "Instance" not found""");
             property.SetValue(routeData, routeData);
 
