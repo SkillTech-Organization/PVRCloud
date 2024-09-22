@@ -29,6 +29,7 @@ namespace PMapCore.Route
         private static volatile bool m_Initalized = false;
 
         private readonly ILogger<RouteData> _logger;
+        private readonly TimeProvider _timeProvider;
 
         public FrozenDictionary<string, boEdge> Edges { get; private set; } = null; //Az útvonalak korlátozás-zónatípusonként
 
@@ -53,13 +54,17 @@ namespace PMapCore.Route
         //Singleton technika...
         static public RouteData Instance { get; private set; }
 
-        public RouteData(ILogger<RouteData> logger)
+        public RouteData(ILogger<RouteData> logger, TimeProvider timeProvider)
         {
             _logger = logger;
+            _timeProvider = timeProvider;
         }
 
         public void InitFromFiles(string p_mapStorageConnectionString, bool p_Forced = false)
         {
+            _logger.LogInformation("{App} {RequestId}: {Status} {Message}", "API", "init", "Information", $"Init of: {nameof(RouteData)} {nameof(InitFromFiles)}");
+            var startTime = _timeProvider.GetTimestamp();
+
             Thread.CurrentThread.CurrentCulture = new CultureInfo("hu-HU");
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
             {
@@ -113,6 +118,8 @@ namespace PMapCore.Route
                     m_Initalized = true;
                 }
             }
+
+            _logger.LogInformation("{App} {RequestId}: {Status} {Message}", "API", "init", "Information", $"Init of: {nameof(RouteData)} {nameof(InitFromFiles)} duration: {_timeProvider.GetElapsedTime(startTime)}");
         }
 
         private string GetContentFromBlob(BlobUtils.BlobHandler bh, string filename, Encoding enc = null)
