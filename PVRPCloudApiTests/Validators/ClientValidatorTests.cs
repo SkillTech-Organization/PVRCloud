@@ -11,6 +11,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -35,6 +36,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -59,6 +61,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -83,6 +86,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -115,6 +119,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -139,6 +144,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -166,6 +172,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -192,6 +199,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -219,6 +227,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -245,6 +254,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
@@ -269,6 +279,7 @@ public class ClientValidatorTests
     {
         Project project = new()
         {
+            Depot = new() { ID = "depot id" },
             Clients = [
                 new()
                 {
