@@ -1,4 +1,5 @@
-﻿using BlobUtils;
+﻿using Azure.Storage.Blobs.Models;
+using BlobUtils;
 using CommonUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,7 @@ namespace WebJobPOC
         private string _iniFileName;
         private string _workDir;
         private string _okFileName;
+        private string _finishFileName;
         private string _errorFileName;
         private string _resultFileName;
         private string _stdOutFileName;
@@ -64,6 +66,7 @@ namespace WebJobPOC
 
             _okFileName = $"{_requestID}_ok.dat";
             _errorFileName = $"{_requestID}_error.dat";
+            _finishFileName = $"{_requestID}_finish.dat";
             _resultFileName = $"{_requestID}_result.dat";
             _stdOutFileName = $"{_requestID}_stdout.dat";
             _stdErrFileName = $"{_requestID}_stderr.dat";
@@ -97,6 +100,7 @@ namespace WebJobPOC
                 // NOTODO: check  the result file
                 var okFileWithPath = System.IO.Path.Combine(_workDir, _okFileName);
                 var errorFileWithPath = System.IO.Path.Combine(_workDir, _errorFileName);
+                var finishFileWithPath = System.IO.Path.Combine(_workDir, _finishFileName);
                 var resultFileWithPath = System.IO.Path.Combine(_workDir, _resultFileName);
                 var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
                 var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
@@ -104,19 +108,21 @@ namespace WebJobPOC
                 resultWasOk = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath);
 
                 // NOTODO: upload the result files
-                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{_requestID} start upload to blobstore");
-                string blobOkFileName = $"REQ_{_requestID}/{_requestID}_ok.dat";
-                string blobErrorFileName = $"REQ_{_requestID}/{_requestID}_error.dat";
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"Start upload to blobstore");
                 string blobResultFileName = $"REQ_{_requestID}/{_requestID}_result.dat";
                 string blobStdOutFileName = $"REQ_{_requestID}/{_requestID}_stdout.dat";
                 string blobStdErrFileName = $"REQ_{_requestID}/{_requestID}_stderr.dat";
+                string blobOkFileName = $"REQ_{_requestID}/{_requestID}_ok.dat";
+                string blobErrorFileName = $"REQ_{_requestID}/{_requestID}_error.dat";
+                string blobFinishFileName = $"REQ_{_requestID}/{_requestID}_finish.dat";
 
 
-                uploadToBlob(resultFileWithPath, blobResultFileName);
-                uploadToBlob(okFileWithPath, blobOkFileName);
-                uploadToBlob(errorFileWithPath, blobErrorFileName);
+                uploadToBlob(resultFileWithPath, blobResultFileName, AccessTier.Hot);
                 uploadToBlob(stdoutFileWithPath, blobStdOutFileName);
                 uploadToBlob(stderrFileWithPath, blobStdErrFileName);
+                uploadToBlob(okFileWithPath, blobOkFileName);
+                uploadToBlob(errorFileWithPath, blobErrorFileName);
+                uploadToBlob(finishFileWithPath, blobFinishFileName);
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"end uploads to blobstore");
             }
             catch (Exception)
@@ -143,14 +149,13 @@ namespace WebJobPOC
             _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been downloaded:{blobFileName} -> {fileWithPath}");
 
         }
-
-        private void uploadToBlob(string fileWithPath, string blobFileName)
+        private void uploadToBlob(string fileWithPath, string blobFileName, AccessTier? accessTier = null)
         {
             if (File.Exists(fileWithPath))
             {
                 using (var fileStream = System.IO.File.OpenRead(fileWithPath))
                 {
-                    _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream);
+                    _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream, accessTier);
                 }
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
             }
@@ -236,6 +241,7 @@ namespace WebJobPOC
 
         private void ExecPVRP(int timeoutMS)
         {
+            var finishMsg = "???";
             var iniFileWithPath = System.IO.Path.Combine(_workDir, _iniFileName);
 
             //iniFileWithPath = iniFileWithPath.Replace("\\", "\\\\");
@@ -333,18 +339,27 @@ namespace WebJobPOC
                     exitCode = exeProcess.ExitCode;
                 }
 
-                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} finished! exit code:{exitCode}, requestID:{_requestID}");
+                //Megjegyzés: A _logger.LogInformation-ba ne a finishMsg -t küldjük, mert a AppInsightsMsgTemplate-ben lévő named placehldereket használjuk!
+                finishMsg = $"PVRP {_requestID} INFO {PVRP_exe} finished! exit code:{exitCode}";
+
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} finished! exit code:{exitCode}");
                 if (timeoutHappened)
                 {
-                    _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}, requestID:{_requestID}");
+                    finishMsg = $"PVRP {_requestID} INFO {PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}";
+                    _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}");
                 }
-
-                saveStdOut(stdout.ToString(), stderr.ToString());
             }
             catch (Exception ex)
             {
                 // Log error.
+                finishMsg = $"PVRP {_requestID} EXCEPTION {PVRP_exe} exception happened! {ex.Message}";
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"{PVRP_exe} exception happened! {ex.Message}");
+            }
+
+            var finishFileWithPath = System.IO.Path.Combine(_workDir, _finishFileName);
+            using (System.IO.StreamWriter sw = System.IO.File.CreateText(finishFileWithPath))
+            {
+                sw.WriteLine(finishMsg);
             }
         }
 

@@ -41,11 +41,8 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     public async Task<ProjectRes> Handle(string requestId)
     {
         string resFile = $"REQ_{requestId}/{requestId}_result.dat";
-        string okFile = $"REQ_{requestId}/{requestId}_ok.dat";
-        string errFile = $"REQ_{requestId}/{requestId}_error.dat";
-        if (!_blobHandler.CheckIfBlobExist("calculations", resFile)
-            || (!_blobHandler.CheckIfBlobExist("calculations", okFile) && !_blobHandler.CheckIfBlobExist("calculations", errFile))
-            )
+        string finishFile = $"REQ_{requestId}/{requestId}_finish.dat";
+        if (!_blobHandler.CheckIfBlobExist("calculations", resFile) || !_blobHandler.CheckIfBlobExist("calculations", finishFile))
         {
             throw new RequestFailedException((int)HttpStatusCode.NotFound, $"The result hasn't been created yet!");
         }

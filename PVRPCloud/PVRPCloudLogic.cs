@@ -1,4 +1,5 @@
-﻿using BlobManager;
+﻿using Azure.Storage.Blobs.Models;
+using BlobManager;
 using BlobUtils;
 using GMap.NET;
 using PMapCore.BO;
@@ -51,13 +52,13 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         {
             string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
             string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
-            await UploadToBlobStorage(fileContent, problemFileName);
+            await UploadToBlobStorage(fileContent, problemFileName, AccessTier.Cool);
 
             await QueueMessageAsync();
 
             string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.json";
             string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
-            await UploadToBlobStorage(serializedProject, projectFileName);
+            await UploadToBlobStorage(serializedProject, projectFileName, AccessTier.Cool);
         });
 
         return _requestID;
@@ -230,7 +231,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return routes;
     }
 
-    private async Task UploadToBlobStorage(string content, string fileName)
+    private async Task UploadToBlobStorage(string content, string fileName, AccessTier? accessTier)
     {
         using MemoryStream ms = new();
         using StreamWriter sw = new(ms, Encoding.ASCII);
@@ -239,7 +240,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         await sw.FlushAsync();
         ms.Position = 0;
 
-        await _blobHandler.UploadAsync("calculations", fileName, ms);
+        await _blobHandler.UploadAsync("calculations", fileName, ms, accessTier);
     }
 
     private async Task QueueMessageAsync()
