@@ -47,6 +47,7 @@ builder.Logging.AddApplicationInsights(config =>
     config.ConnectionString =  builder.Configuration.GetSection("ApplicationInsights:ConnectionString").Value;
 }, options => {});
 builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(null, LogLevel.Information);
+builder.Logging.AddConsole();
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
