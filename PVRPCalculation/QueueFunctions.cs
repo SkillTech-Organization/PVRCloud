@@ -30,7 +30,7 @@ namespace WebJobPOC
         //        [return: Queue("pmapcalcoutputmsgsdev")]
         [return: Queue("pmapcalcoutputmsgs")]
         //        public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgsdev")] CalcRequest req, ILogger logger)
-        public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgs")] CalcRequest req, ILogger logger)
+        public static async Task<CalcResposne> ProcessQueueMessageAsync([QueueTrigger("pmapcalcinputmsgs")] CalcRequest req, ILogger logger)
         {
             var msg = $"Processed queue message:{JsonSerializer.Serialize(req)}";
             var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg };
@@ -52,7 +52,7 @@ namespace WebJobPOC
 
                 IConfiguration config = confBuilder.Build();
                 var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger);
-                var result = fn.Optimize();
+                var result = await fn.OptimizeAsync();
 
                 resp.Status = (result ? "OK" : "ERR");
 

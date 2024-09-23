@@ -74,7 +74,7 @@ namespace WebJobPOC
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
         }
-        public bool Optimize()
+        public async Task<bool> OptimizeAsync()
         {
             bool resultWasOk = false;
             try
@@ -84,7 +84,7 @@ namespace WebJobPOC
 
 
                 // NOTODO: download the optimize.dat file from blob store
-                downloadFromBlob(System.IO.Path.Combine(_workDir, _optimizefileName), _blobOptimizeFileName);
+                await downloadFromBlobAsync(System.IO.Path.Combine(_workDir, _optimizefileName), _blobOptimizeFileName);
 
                 // NOTODO: create the .ini file
                 CreateInifile(_iniFileName);
@@ -117,12 +117,12 @@ namespace WebJobPOC
                 string blobFinishFileName = $"REQ_{_requestID}/{_requestID}_finish.dat";
 
 
-                uploadToBlob(resultFileWithPath, blobResultFileName, AccessTier.Hot);
-                uploadToBlob(stdoutFileWithPath, blobStdOutFileName);
-                uploadToBlob(stderrFileWithPath, blobStdErrFileName);
-                uploadToBlob(okFileWithPath, blobOkFileName, AccessTier.Hot);
-                uploadToBlob(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
-                uploadToBlob(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
+                await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
+                await uploadToBlobAsync(stdoutFileWithPath, blobStdOutFileName);
+                await uploadToBlobAsync(stderrFileWithPath, blobStdErrFileName);
+                await uploadToBlobAsync(okFileWithPath, blobOkFileName, AccessTier.Hot);
+                await uploadToBlobAsync(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
+                await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"end uploads to blobstore");
             }
             catch (Exception)
@@ -134,7 +134,7 @@ namespace WebJobPOC
             return resultWasOk;
         }
 
-        private void downloadFromBlob(string fileWithPath, string blobFileName)
+        private async Task downloadFromBlobAsync(string fileWithPath, string blobFileName)
         {
             if (File.Exists(fileWithPath))
             {
@@ -143,13 +143,13 @@ namespace WebJobPOC
 
             using (var fileStream = System.IO.File.OpenWrite(fileWithPath))
             {
-                var blobStream = _blobHandler.DownloadFromStreamAsync(CalcContainerName, blobFileName).GetAwaiter().GetResult();
+                var blobStream = await _blobHandler.DownloadFromStreamAsync(CalcContainerName, blobFileName);
                 blobStream.CopyTo(fileStream);
             }
             _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been downloaded:{blobFileName} -> {fileWithPath}");
 
         }
-        private void uploadToBlob(string fileWithPath, string blobFileName, AccessTier? accessTier = null)
+        private async Task uploadToBlobAsync(string fileWithPath, string blobFileName, AccessTier? accessTier = null)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace WebJobPOC
                 {
                     using (var fileStream = System.IO.File.OpenRead(fileWithPath))
                     {
-                        _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream, accessTier).GetAwaiter().GetResult();
+                        await _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream, accessTier);
                         _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
                     }
                 }
