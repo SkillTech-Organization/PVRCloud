@@ -27,8 +27,10 @@ namespace WebJobPOC
         // on an Azure Queue called queue.
         //    [Singleton]
         [FunctionName("ProcessQueueMessage")]
-        [return: Queue("pmapcalcoutputmsgsdev")]
-        public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgsdev")] CalcRequest req, ILogger logger)
+        //        [return: Queue("pmapcalcoutputmsgsdev")]
+        [return: Queue("pmapcalcoutputmsgs")]
+        //        public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgsdev")] CalcRequest req, ILogger logger)
+        public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgs")] CalcRequest req, ILogger logger)
         {
             var msg = $"Processed queue message:{JsonSerializer.Serialize(req)}";
             var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg };

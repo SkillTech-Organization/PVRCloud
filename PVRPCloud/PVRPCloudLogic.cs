@@ -1,4 +1,5 @@
-﻿using BlobManager;
+﻿using Azure.Storage.Blobs.Models;
+using BlobManager;
 using BlobUtils;
 using GMap.NET;
 using Microsoft.Extensions.Logging;
@@ -257,7 +258,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return routes;
     }
 
-    private async Task UploadToBlobStorage(string content, string fileName)
+    private async Task UploadToBlobStorage(string content, string fileName, AccessTier? accessTier)
     {
         using MemoryStream ms = new();
         using StreamWriter sw = new(ms, Encoding.ASCII);
@@ -266,7 +267,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         await sw.FlushAsync();
         ms.Position = 0;
 
-        await _blobHandler.UploadAsync("calculations", fileName, ms);
+        await _blobHandler.UploadAsync("calculations", fileName, ms, accessTier);
     }
 
     private async Task QueueMessageAsync()

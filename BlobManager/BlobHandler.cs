@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Azure;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using Azure.Storage.Blobs.Specialized;
 
 namespace BlobUtils
 {
@@ -73,7 +73,7 @@ namespace BlobUtils
 
         }
 
-        public async Task UploadToStream (string blobContainerName, string blobName, string localDirectoryPath)
+        public async Task UploadToStream(string blobContainerName, string blobName, string localDirectoryPath)
         {
             BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
 
@@ -103,7 +103,7 @@ namespace BlobUtils
             }
         }
 
-        public async Task<Response<BlobContentInfo>> UploadString (string blobContainerName, string content, string blobName)
+        public async Task<Response<BlobContentInfo>> UploadString(string blobContainerName, string content, string blobName)
         {
             BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
@@ -137,16 +137,23 @@ namespace BlobUtils
             return blobClient.Exists().Value;
         }
 
-        public async Task UploadAsync(string container, string blobName, Stream content, CancellationToken cancellationToken = default)
+        public async Task UploadAsync(string container, string blobName, Stream content, AccessTier? accessTier, CancellationToken cancellationToken = default)
         {
             var containerClient = Client.GetBlobContainerClient(container);
             var blobClient = containerClient.GetBlobClient(blobName);
 
             BlobUploadOptions options = new()
             {
-                AccessTier = AccessTier.Cool,
-            };
+                AccessTier = accessTier != null ? accessTier : AccessTier.Cool,
 
+
+            };
+            /* overwrite
+            BlobRequestConditions conditions = new BlobRequestConditions()
+            {
+                IfNoneMatch = new ETag(Constants.Wildcard)
+            };
+            */
             await blobClient.UploadAsync(content, options, cancellationToken);
         }
     }
