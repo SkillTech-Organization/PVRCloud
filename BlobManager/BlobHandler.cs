@@ -144,7 +144,7 @@ namespace BlobUtils
 
             BlobUploadOptions options = new()
             {
-                AccessTier = accessTier != null ? accessTier : AccessTier.Cool,
+                AccessTier = accessTier != null ? accessTier : AccessTier.Hot,
 
 
             };

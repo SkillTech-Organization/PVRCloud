@@ -151,17 +151,24 @@ namespace WebJobPOC
         }
         private void uploadToBlob(string fileWithPath, string blobFileName, AccessTier? accessTier = null)
         {
-            if (File.Exists(fileWithPath))
+            try
             {
-                using (var fileStream = System.IO.File.OpenRead(fileWithPath))
+                if (File.Exists(fileWithPath))
                 {
-                    _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream, accessTier);
+                    using (var fileStream = System.IO.File.OpenRead(fileWithPath))
+                    {
+                        _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream, accessTier);
+                        _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
+                    }
                 }
-                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
+                else
+                {
+                    _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file not found:{fileWithPath}");
+                }
             }
-            else
+            catch (Exception)
             {
-                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file not found:{fileWithPath}");
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"file has't been uploaded:{fileWithPath} -> {blobFileName}");
             }
         }
 

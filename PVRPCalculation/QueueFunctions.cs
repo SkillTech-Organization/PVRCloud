@@ -14,7 +14,7 @@ namespace WebJobPOC
 
     public class CalcResposne
     {
-        public int Ver { get; set; } = 30;
+        public int Ver { get; set; } = 31;
         public string RequestID { get; set; }
         public string Status { get; set; }
         public string Msg { get; set; }
