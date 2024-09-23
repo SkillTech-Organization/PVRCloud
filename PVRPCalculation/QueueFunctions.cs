@@ -14,7 +14,7 @@ namespace WebJobPOC
 
     public class CalcResposne
     {
-        public int Ver { get; set; } = 31;
+        public int Ver { get; set; } = 32;
         public string RequestID { get; set; }
         public string Status { get; set; }
         public string Msg { get; set; }
@@ -25,7 +25,7 @@ namespace WebJobPOC
     {
         // This function will get triggered/executed when a new message is written 
         // on an Azure Queue called queue.
-        //    [Singleton]
+        [Singleton]
         [FunctionName("ProcessQueueMessage")]
         //        [return: Queue("pmapcalcoutputmsgsdev")]
         [return: Queue("pmapcalcoutputmsgs")]

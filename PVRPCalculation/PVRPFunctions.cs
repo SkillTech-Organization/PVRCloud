@@ -157,7 +157,7 @@ namespace WebJobPOC
                 {
                     using (var fileStream = System.IO.File.OpenRead(fileWithPath))
                     {
-                        _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream, accessTier);
+                        _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream, accessTier).GetAwaiter().GetResult();
                         _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
                     }
                 }
@@ -346,6 +346,8 @@ namespace WebJobPOC
                     exitCode = exeProcess.ExitCode;
                 }
 
+                saveStdOut(stdout.ToString(), stderr.ToString());
+
                 //Megjegyzés: A _logger.LogInformation-ba ne a finishMsg -t küldjük, mert a AppInsightsMsgTemplate-ben lévő named placehldereket használjuk!
                 finishMsg = $"PVRP {_requestID} INFO {PVRP_exe} finished! exit code:{exitCode}";
 
@@ -362,6 +364,7 @@ namespace WebJobPOC
                 finishMsg = $"PVRP {_requestID} EXCEPTION {PVRP_exe} exception happened! {ex.Message}";
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"{PVRP_exe} exception happened! {ex.Message}");
             }
+
 
             var finishFileWithPath = System.IO.Path.Combine(_workDir, _finishFileName);
             using (System.IO.StreamWriter sw = System.IO.File.CreateText(finishFileWithPath))
