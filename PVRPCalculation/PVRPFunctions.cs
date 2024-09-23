@@ -120,9 +120,9 @@ namespace WebJobPOC
                 uploadToBlob(resultFileWithPath, blobResultFileName, AccessTier.Hot);
                 uploadToBlob(stdoutFileWithPath, blobStdOutFileName);
                 uploadToBlob(stderrFileWithPath, blobStdErrFileName);
-                uploadToBlob(okFileWithPath, blobOkFileName);
-                uploadToBlob(errorFileWithPath, blobErrorFileName);
-                uploadToBlob(finishFileWithPath, blobFinishFileName);
+                uploadToBlob(okFileWithPath, blobOkFileName, AccessTier.Hot);
+                uploadToBlob(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
+                uploadToBlob(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"end uploads to blobstore");
             }
             catch (Exception)

@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 using System.Runtime.ExceptionServices;
 using System.Globalization;
 using System.Collections.Frozen;
+using Microsoft.Extensions.Logging;
+using System.Threading;
 
 namespace PMapCore.Route
 {
@@ -25,6 +27,9 @@ namespace PMapCore.Route
     public class RouteData : IRouteData
     {
         private static volatile bool m_Initalized = false;
+
+        private readonly ILogger<RouteData> _logger;
+        private readonly TimeProvider _timeProvider;
 
         public FrozenDictionary<string, boEdge> Edges { get; private set; } = null; //Az útvonalak korlátozás-zónatípusonként
 
@@ -49,10 +54,18 @@ namespace PMapCore.Route
         //Singleton technika...
         static public RouteData Instance { get; private set; }
 
+        public RouteData(ILogger<RouteData> logger, TimeProvider timeProvider)
+        {
+            _logger = logger;
+            _timeProvider = timeProvider;
+        }
 
         public void InitFromFiles(string p_mapStorageConnectionString, bool p_Forced = false)
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
+            _logger.LogInformation("{App} {RequestId}: {Status} {Message}", "API", "init", "Information", $"Init of: {nameof(RouteData)} {nameof(InitFromFiles)}");
+            var startTime = _timeProvider.GetTimestamp();
+
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu-HU");
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
             {
                 if (!m_Initalized || p_Forced)
@@ -105,6 +118,8 @@ namespace PMapCore.Route
                     m_Initalized = true;
                 }
             }
+
+            _logger.LogInformation("{App} {RequestId}: {Status} {Message}", "API", "init", "Information", $"Init of: {nameof(RouteData)} {nameof(InitFromFiles)} duration: {_timeProvider.GetElapsedTime(startTime)}");
         }
 
         private string GetContentFromBlob(BlobUtils.BlobHandler bh, string filename, Encoding enc = null)

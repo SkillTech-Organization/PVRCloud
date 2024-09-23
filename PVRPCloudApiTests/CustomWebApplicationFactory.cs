@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Time.Testing;
 using NSubstitute;
 using PMapCore.Route;
@@ -26,6 +27,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             // var blobHandlerDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IBlobHandler));
             // services.Remove(blobHandlerDescriptor!);
             // services.AddTransient<IBlobHandler, FakeBlobHandler>();
+
+            var applicationInsightsLoggerProviderDescriptor = services.Single(d => d.ImplementationType == typeof(ApplicationInsightsLoggerProvider));
+            services.Remove(applicationInsightsLoggerProviderDescriptor);
 
             var routeDataDescriptior = services.SingleOrDefault(d => d.ServiceType == typeof(IRouteData));
             services.Remove(routeDataDescriptior!);
