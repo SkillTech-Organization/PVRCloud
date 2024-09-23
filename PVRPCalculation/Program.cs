@@ -22,7 +22,13 @@ var builder = new HostBuilder()
     .ConfigureWebJobs(b =>
     {
         b.AddAzureStorageBlobs();
-        b.AddAzureStorageQueues();
+        b.AddAzureStorageQueues(opt =>
+        {
+            opt.BatchSize = 1;
+            opt.NewBatchThreshold = 0;
+            opt.MaxPollingInterval = TimeSpan.FromSeconds(10);
+        }
+        );
     })
     .ConfigureLogging((context, b) =>
     {

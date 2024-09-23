@@ -119,7 +119,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
         _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.Info, "Recalc projects");
 
-        //Projektek �tsz�mol�sa
+        //Projektek átszámolása
         projectRes.Tours.ForEach(tour =>
         {
             var lastETRCODE = "";
