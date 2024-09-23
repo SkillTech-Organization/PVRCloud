@@ -60,7 +60,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
             var startTime = _timeProvider.GetTimestamp();
-            await UploadToBlobStorage(fileContent, problemFileName);
+            await UploadToBlobStorage(fileContent, problemFileName, AccessTier.Cool);
             _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"optimize.dat upload duration: {_timeProvider.GetElapsedTime(startTime)}");
 
             await QueueMessageAsync();
@@ -68,7 +68,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.json";
             string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
             startTime = _timeProvider.GetTimestamp();
-            await UploadToBlobStorage(serializedProject, projectFileName);
+            await UploadToBlobStorage(serializedProject, projectFileName, AccessTier.Cool);
             _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data.json upload duration: {_timeProvider.GetElapsedTime(startTime)}");
         });
 
