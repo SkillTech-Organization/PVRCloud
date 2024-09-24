@@ -91,6 +91,9 @@ public class CalcRouteProcess : BaseLongProcess
                     //és feltöltjuk a ROUTE-ját
                     foreach (PMapRoute ftr in lstFTLR)
                     {
+
+                        RouteCache.Instance.Add(route);
+
                         ftr.route = route;
                     }
 

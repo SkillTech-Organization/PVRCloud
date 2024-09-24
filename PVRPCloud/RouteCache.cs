@@ -5,9 +5,11 @@ namespace PVRPCloud;
 
 public class RouteCache
 {
-    private readonly ConcurrentDictionary<string, boRoute> Items;
 
-    private static readonly Lazy<RouteCache> m_instance = new(() => new RouteCache(), true);
+    private ConcurrentDictionary<string, boRoute> Items = null;
+
+    private static readonly Lazy<RouteCache> m_instance = new Lazy<RouteCache>(() => new RouteCache(), true);
+
 
     static public RouteCache Instance
     {
@@ -21,18 +23,18 @@ public class RouteCache
     {
         Items = new ConcurrentDictionary<string, boRoute>();
     }
-
-    private string GetKey(boRoute p_Route)
+    private string getKey(boRoute p_Route)
     {
         return $"{p_Route.NOD_ID_FROM}_{p_Route.NOD_ID_TO}_{p_Route.RZN_ID_LIST}_{p_Route.DST_MAXWEIGHT}_{p_Route.DST_MAXHEIGHT}_{p_Route.DST_MAXWIDTH}";
     }
 
+
     public void Add(boRoute p_Route)
     {
-        Items.TryAdd(GetKey(p_Route), p_Route);
+        Items.TryAdd(getKey(p_Route), p_Route);
     }
 
-    public boRoute? Get(int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
+    public boRoute Get(int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
     {
         var key = $"{p_NOD_ID_FROM}_{p_NOD_ID_TO}_{p_RZN_ID_LIST}_{p_Weight}_{p_Height}_{p_Width}";
 
@@ -44,4 +46,5 @@ public class RouteCache
 
         return null;
     }
+
 }
