@@ -346,6 +346,14 @@ namespace PMapCore.BLL
                 p_RZN_ID_LIST = "";
 
             boRoute result = null;
+            using (LockForRouteCache lockObj = new LockForRouteCache(RouteCache.Locker))
+            {
+                result = RouteCache.Instance.Items.Where(w => w.NOD_ID_FROM == p_NOD_ID_FROM &&
+                                    w.NOD_ID_TO == p_NOD_ID_TO &&
+                                     w.DST_MAXWEIGHT == p_Weight &&
+                                      w.DST_MAXHEIGHT == p_Height &&
+                                      w.DST_MAXWIDTH == p_Width).FirstOrDefault();
+            }
             if (result == null)
             {
                 string sSql = "select * from DST_DISTANCE (NOLOCK) DST  " + Environment.NewLine +
@@ -419,16 +427,43 @@ namespace PMapCore.BLL
                         }
                     }
                 }
+
+                if (result != null)
+                {
+                    using (LockForRouteCache lockObj = new LockForRouteCache(RouteCache.Locker))
+                    {
+                        RouteCache.Instance.Items.Add(result);
+                    }
+                }
             }
             return result;
         }
 
+
         public MapRoute GetMapRouteFromDB(int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
         {
+
+
+
+
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
 
             MapRoute result = null;
+
+            using (LockForRouteCache lockObj = new LockForRouteCache(RouteCache.Locker))
+            {
+                var boResult = RouteCache.Instance.Items.Where(w => w.NOD_ID_FROM == p_NOD_ID_FROM &&
+                                    w.NOD_ID_TO == p_NOD_ID_TO &&
+                                     w.DST_MAXWEIGHT == p_Weight &&
+                                      w.DST_MAXHEIGHT == p_Height &&
+                                      w.DST_MAXWIDTH == p_Width).FirstOrDefault();
+                if (boResult != null)
+                {
+                    return boResult.Route;
+                }
+            }
+
 
             string sSql = "select * from DST_DISTANCE (NOLOCK) DST  " + Environment.NewLine +
                            "where NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST=? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?";
@@ -596,7 +631,7 @@ namespace PMapCore.BLL
         public List<boRoute> GetDistancelessPlanNodes(int pPLN_ID)
         {
 
-            //I. A
+            //I. A 
 
             string sSQL = "; WITH CTE_TPL as (" + Environment.NewLine +
                      "select distinct " + Environment.NewLine;
@@ -659,7 +694,7 @@ namespace PMapCore.BLL
 
             if (PMapIniParams.Instance.TourRoute)
             {
-                //Egyedi túraútvonalas tervezés (TourRoute) esetén a véglegsített túrákra útvonalszámítás, amelyben figyelembe
+                //Egyedi túraútvonalas tervezés (TourRoute) esetén a véglegsített túrákra útvonalszámítás, amelyben figyelembe 
                 //vesszük a súly- és méretkorlátozásokat
                 sSQL = "; WITH CTE_TPL as ( " + Environment.NewLine +
                         " select distinct " + Environment.NewLine +
@@ -783,7 +818,7 @@ namespace PMapCore.BLL
             DataTable dt = DBA.Query2DataTable(sSql);
 
 
-            //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első
+            //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első 
             //tételnél biztosan kapjanak értéket
             double dLat1 = Util.getFieldValue<double>(dt.Rows[0], "minLat") / Global.LatLngDivider;
             double dLng1 = Util.getFieldValue<double>(dt.Rows[0], "minLng") / Global.LatLngDivider;
@@ -796,7 +831,7 @@ namespace PMapCore.BLL
 
         public static RectLatLng getBoundary(double dLat1, double dLng1, double dLat2, double dLng2)
         {
-            //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első
+            //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első 
             //tételnél biztosan kapjanak értéket
             double dTop = -180;
             double dLeft = 180;
@@ -1184,7 +1219,7 @@ namespace PMapCore.BLL
 
 
             //Extrém esetben előfordulhat, hogy az eredeti közelítéssel (Global.NearestNOD_ID_Approach) nem találunk élt, mert az adott pozíciótol
-            //nagyon messze vannak a végpontok. Ebben az esetben egy újabb lekérdezést indítunk 3 szoros közelítési távolsággal.
+            //nagyon messze vannak a végpontok. Ebben az esetben egy újabb lekérdezést indítunk 3 szoros közelítési távolsággal. 
             //Futásidőre optimalizálás miatt van így megoldva.
             if (dt.Rows.Count == 0)
             {
@@ -1216,9 +1251,9 @@ namespace PMapCore.BLL
         /// <param name="DEP_IMPADDRSTAT">Milyen típusú </param>
         /// <param name="p_onlyFullAddr">Csak teljes címre keresés</param>
         /// <returns></returns>
-        ///
+        /// 
         /// GeocodingByGoogle ini paraméter beállítása esetén, amennyiben nem található meg a cím a címtárban, Google-t is igényve veszi
-        ///
+        /// 
         public bool GeocodingByAddr(string p_addr, out int ZIP_ID, out int NOD_ID, out int EDG_ID, out boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT, bool p_onlyFullAddr = false)
         {
 
@@ -1355,7 +1390,7 @@ namespace PMapCore.BLL
             }
 
 
-
+              
             //Nincs találat, keresés házszám nélkül
             //         sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" ? " where " + sWhereAddr + sWhereZipNum : "");
             sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" ? " where " + sWhereAddr + sWhereZipNum : "");
@@ -1393,7 +1428,7 @@ namespace PMapCore.BLL
                     (sDB_ZIP_NUM.Substring(0, 1) == "1" && sDB_ZIP_NUM.Substring(0, 1) == sZIP_NUM.Substring(0, 1)) ||
                     (sDB_ZIP_NUM.Substring(0, 1) != "1" && sDB_ZIP_NUM.Substring(0, 3) == sZIP_NUM.Substring(0, 3))))
                 {
-                    //Megadott irányítószám esetén csak akkor vesszük megtaláltnak a pontot, ha az átadott és a megtalált pont irányítószáma
+                    //Megadott irányítószám esetén csak akkor vesszük megtaláltnak a pontot, ha az átadott és a megtalált pont irányítószáma 
                     //ugyan abba a körzetbe esik
                     ZIP_ID = Util.getFieldValue<int>(dt3.Rows[0], "ZIP_ID");
                     NOD_ID = Util.getFieldValue<int>(dt3.Rows[0], "NOD_ID");
@@ -1441,7 +1476,7 @@ namespace PMapCore.BLL
             DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
             return false;
         }
-
+    
 
 
         /*****/
@@ -1815,11 +1850,11 @@ namespace PMapCore.BLL
         /// <param name="p_TRK_ETOLLCAT">Jármű útdíjkategória</param>
         /// <param name="p_TRK_ENGINEEURO">Jármű euro besorolás</param>
         /// <param name="p_lastETRCODE">A számolandó útvonal előtti útdíjal elszámolt szakasz azonosítója. A Törvény úgy szól, hogy minden megkezdett szakaszra kell kifizetni az útdíjat.
-        /// Amennyiben a kiszámolandó útszakasz egy olyan útvonal KÖZVETLEN folytatása, amelyre már lett útdíj elszámolva, a p_lastETRCODE-adjuk át a legutolsó útdíjazonosítót (és arra már
+        /// Amennyiben a kiszámolandó útszakasz egy olyan útvonal KÖZVETLEN folytatása, amelyre már lett útdíj elszámolva, a p_lastETRCODE-adjuk át a legutolsó útdíjazonosítót (és arra már 
         /// nem számol díjat). A rutin ezt a paramétert visszadja, hogy amennyiben a következő  számítás evvel az útszakasszal kezdődne, ne számoljunk el arra már díjat.</param>
-        ///
+        /// 
         /// https://nemzetiutdij.hu/hu/hirek/2024-januar-1-jetol-ervenyes-e-utdij-arak
-        ///
+        /// 
         /// külsőköltségdíj-tényező:
         /// Az adott elemi útszakaszban a külvárosi útszakaszok hosszaránya. (Például ha egy elemi útszakasz teljes
         /// hosszában települési összekötő területjellegű, akkor az ahhoz tartozó külsőköltségdíj-tényező 0, ha 50%-ban
@@ -1827,7 +1862,7 @@ namespace PMapCore.BLL
         /// teljes hosszában külvárosi területjellegű, akkor a külsőköltségdíj-tényező 1
 
         /// <returns></returns>
-        ///
+        /// 
         public static double GetToll(List<boEdge> p_Edges, int p_TRK_ETOLLCAT, int p_TRK_ENGINEEURO, ref string p_lastETRCODE)
         {
             double dToll = 0;
@@ -1847,7 +1882,7 @@ namespace PMapCore.BLL
                             var etoll = RouteData.Instance.Etolls[etollKey];
 
                             double roadKm = road.ETR_LEN_M / 1000;
-
+                            
                             //Infrastruktúra díj
                             if (road.ETR_ROADTYPE == 1) //1=gyorsforgalmi, 2=főút
                             {
@@ -1860,8 +1895,8 @@ namespace PMapCore.BLL
 
                             //külsőköltségdíj-tényező
                             //
-
-
+                            
+                            
                             //Külvárosi
                             noiseToll += etoll.ETL_NOISE_CITY * road.ETR_COSTFACTOR * roadKm;
 
@@ -1870,9 +1905,9 @@ namespace PMapCore.BLL
 
                             //Co2
                             coToll += etoll.ETL_CO2 * roadKm;
-
+                            
                         }
-                        //díjkötles szakasz
+                        //díjkötles szakasz       
                         dToll += Math.Round(roadToll) + Math.Round(noiseToll) + Math.Round(coToll);
                         //dToll += Math.Round(roadToll) ;
                     }
