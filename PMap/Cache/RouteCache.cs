@@ -8,7 +8,7 @@ namespace PMapCore.Cache
     {
         public static object Locker = new object();
 
-        public readonly ConcurrentBag<boRoute> Items;
+        public readonly ConcurrentBag<boRoute> Items = [];
 
         private static readonly Lazy<RouteCache> m_instance = new(() => new RouteCache(), true);
 
@@ -20,9 +20,13 @@ namespace PMapCore.Cache
             }
         }
 
-        private RouteCache()
+        public void Add(boRoute route)
         {
-            Items = [];
+        }
+
+        public boRoute Get()
+        {
+            return null;
         }
     }
 }
