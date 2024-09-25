@@ -23,4 +23,19 @@ public class NodePtCache
     {
         Items = new ConcurrentDictionary<string, int>();
     }
+
+    public void Add(string key, int value)
+    {
+
+    }
+
+    public bool Contains(string key)
+    {
+        return false;
+    }
+
+    public int Get(string key)
+    {
+        return Items[key];
+    }
 }
