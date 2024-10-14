@@ -60,7 +60,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
             var startTime = _timeProvider.GetTimestamp();
-            await UploadToBlobStorage(fileContent, problemFileName, AccessTier.Hot);
+            await UploadToBlobStorage(fileContent, problemFileName, Encoding.Latin1, AccessTier.Cool);  //A PVRP.exe Latin1-esben értelmezi a problémafájlt
             _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"optimize.dat upload duration: {_timeProvider.GetElapsedTime(startTime)}");
 
             await QueueMessageAsync();
@@ -68,7 +68,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.json";
             string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
             startTime = _timeProvider.GetTimestamp();
-            await UploadToBlobStorage(serializedProject, projectFileName, AccessTier.Hot);
+            await UploadToBlobStorage(serializedProject, projectFileName, Encoding.UTF8, AccessTier.Cool);
             _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data.json upload duration: {_timeProvider.GetElapsedTime(startTime)}");
         });
 
@@ -258,10 +258,10 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return routes;
     }
 
-    private async Task UploadToBlobStorage(string content, string fileName, AccessTier? accessTier)
+    private async Task UploadToBlobStorage(string content, string fileName, Encoding enc, AccessTier? accessTier)
     {
         using MemoryStream ms = new();
-        using StreamWriter sw = new(ms, Encoding.ASCII);
+        using StreamWriter sw = new(ms, enc);
         await sw.WriteAsync(content);
 
         await sw.FlushAsync();
