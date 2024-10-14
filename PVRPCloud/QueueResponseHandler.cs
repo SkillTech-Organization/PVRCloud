@@ -27,7 +27,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     [GeneratedRegex($"(?<{TruckId}>-?\\d+),(?<{RouteIndex}>-?\\d+),(?<{RouteNodeIndex}>-?\\d+),(-?\\d+),(?<{NodeType}>-?\\d+),(?<{OrderId}>-?\\d+),(?<{ArrTime}>-?\\d+),(?<{DepTime}>-?\\d+),(-?\\d+)", RegexOptions.ExplicitCapture)]
     private static partial Regex GetRouteNodeExeParameters();
 
-    [GeneratedRegex($"(\\d+),(?<{OrderId}>\\d+),(\\d+)", RegexOptions.ExplicitCapture)]
+    [GeneratedRegex($"(\\d+),(?<{OrderId}>\\d+),([+-]?\\d+)", RegexOptions.ExplicitCapture)]
     private static partial Regex GetIgnoredOrderParameters();
 
     private readonly IBlobHandler _blobHandler;
