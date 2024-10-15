@@ -1,5 +1,5 @@
-using System.Text;
 using PVRPCloud.Models;
+using System.Text;
 
 namespace PVRPCloud.ProblemFile;
 
@@ -15,7 +15,7 @@ public sealed class ClientRenderer
 
     public StringBuilder Render(Depot depot, int projectMinTime)
     {
-        CreateClient(depot.DepotName, depot.Lat, depot.Lng, _depotStringBuilder);
+        CreateClient(depot.DepotName.Replace("\"", "'"), depot.Lat, depot.Lng, _depotStringBuilder);
 
         CreateDepot(depot);
 
@@ -36,7 +36,7 @@ public sealed class ClientRenderer
 
     private void CreateDepot(Depot depot)
     {
-        _depotStringBuilder.AppendLine($"""createDepot("{depot.DepotName}", {DepotPVRPId})""");
+        _depotStringBuilder.AppendLine($"""createDepot("{depot.DepotName.Replace("\"", "'")}", {DepotPVRPId})""");
     }
 
     private void SetDepotInformation(Depot depot, int projectMinTime)

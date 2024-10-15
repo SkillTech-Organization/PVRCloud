@@ -6,7 +6,8 @@ public interface IProjectRenderer
 {
     string Render(Project project,
                   List<NodeCombination> clientPairs,
-                  List<PMapRoute> routes);
+                  List<PMapRoute> routes,
+                  string requestID);
 
     PvrpData GetPvrpData();
 }

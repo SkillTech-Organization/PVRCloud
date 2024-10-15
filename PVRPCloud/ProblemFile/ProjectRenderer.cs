@@ -10,7 +10,8 @@ public sealed class ProjectRenderer : IProjectRenderer
 
     public string Render(Project project,
                          List<NodeCombination> clientPairs,
-                         List<PMapRoute> routes)
+                         List<PMapRoute> routes,
+                         string _requestID)
     {
         _sb.AppendLine(new SetCustomerIdRenderer().Render());
 
@@ -41,7 +42,7 @@ public sealed class ProjectRenderer : IProjectRenderer
         _sb.Append(relationsRenderer.Render(routes));
 
         EnginePropertiesRenderer enginePropertiesRenderer = new();
-        _sb.Append(enginePropertiesRenderer.Render(project.ProjectName));
+        _sb.Append(enginePropertiesRenderer.Render(_requestID));
 
         _pvrpData = new()
         {

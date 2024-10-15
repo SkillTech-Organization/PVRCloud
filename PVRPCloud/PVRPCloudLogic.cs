@@ -56,7 +56,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         _ = Task.Run(async () =>
         {
-            string fileContent = _projectRenderer.Render(project, nodeCombinations, routes);
+            string fileContent = _projectRenderer.Render(project, nodeCombinations, routes, _requestID);
             string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
             var startTime = _timeProvider.GetTimestamp();
