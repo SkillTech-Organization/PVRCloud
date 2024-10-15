@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using PMapCore.BLL;
 using PVRPCloud.Models;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -194,7 +195,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.Start, $"{nameof(QueueResponseHandler)} {nameof(GetPvrpData)}");
 
         string fileName = $"REQ_{requestId}/{requestId}_project_data.json";
-        string json = await _blobHandler.DownloadToTextAsync("calculations", fileName);
+        string json = await _blobHandler.DownloadToTextAsync("calculations", fileName, Encoding.ASCII);
         var data = JsonSerializer.Deserialize<PvrpData>(json);
 
         return data;
