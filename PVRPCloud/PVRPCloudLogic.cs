@@ -60,7 +60,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
             var startTime = _timeProvider.GetTimestamp();
-            await UploadToBlobStorage(fileContent, problemFileName, Encoding.Latin1, AccessTier.Cool);  //A PVRP.exe Latin1-esben értelmezi a problémafájlt
+            await UploadToBlobStorage(fileContent, problemFileName, Encoding.GetEncoding("iso-8859-2"), AccessTier.Cool);  //A PVRP.exe iso-8859-2-esben értelmezi a problémafájlt
             _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"optimize.dat upload duration: {_timeProvider.GetElapsedTime(startTime)}");
 
             await QueueMessageAsync();
@@ -68,7 +68,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.json";
             string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
             startTime = _timeProvider.GetTimestamp();
-            await UploadToBlobStorage(serializedProject, projectFileName, Encoding.UTF8, AccessTier.Cool);
+            await UploadToBlobStorage(serializedProject, projectFileName, Encoding.ASCII, AccessTier.Cool);
             _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data.json upload duration: {_timeProvider.GetElapsedTime(startTime)}");
         });
 

@@ -5,6 +5,7 @@ using Azure.Storage.Blobs.Specialized;
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -111,13 +112,24 @@ namespace BlobUtils
             return await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true);
         }
 
-        public async Task<string> DownloadToTextAsync(string blobContainerName, string blobName)
+        public async Task<string> DownloadToTextAsync(string blobContainerName, string blobName, Encoding enc = null)
         {
             BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
 
             BlobDownloadResult downloadResult = await blobClient.DownloadContentAsync();
-            string downloadedData = downloadResult.Content.ToString();
+
+            string downloadedData = "";
+
+            if (enc != null)
+            {
+                downloadedData = enc.GetString(downloadResult.Content);
+
+            }
+            else
+            {
+                downloadedData = downloadResult.Content.ToString();
+            }
 
             return downloadedData;
         }
