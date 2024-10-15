@@ -11,7 +11,7 @@ public class ProjectRendererTest
     [Fact]
     public void Render_ReturnsTheProjectAsTheProblemFile()
     {
-        string result = new ProjectRenderer().Render(Project, ClientPairs, Routes);
+        string result = new ProjectRenderer().Render(Project, ClientPairs, Routes, "12345678");
 
         string expected = $"setCustomerId(2000){Environment.NewLine}" +
         $"createCostProfile(5, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0){Environment.NewLine}" +
