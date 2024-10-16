@@ -29,6 +29,7 @@ namespace WebJobPOC
         private string _iniFileName;
         private string _workDir;
         private string _okFileName;
+        private string _staFileName;
         private string _finishFileName;
         private string _errorFileName;
         private string _resultFileName;
@@ -68,6 +69,7 @@ namespace WebJobPOC
             _errorFileName = $"{_requestID}_error.dat";
             _finishFileName = $"{_requestID}_finish.dat";
             _resultFileName = $"{_requestID}_result.dat";
+            _staFileName = $"{_requestID}_result{_requestID}.sta";  //ilyet készít a PVRP
             _stdOutFileName = $"{_requestID}_stdout.dat";
             _stdErrFileName = $"{_requestID}_stderr.dat";
 
@@ -104,17 +106,21 @@ namespace WebJobPOC
                 var resultFileWithPath = System.IO.Path.Combine(_workDir, _resultFileName);
                 var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
                 var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
+                var staFileWithPath = System.IO.Path.Combine(_workDir, _staFileName);
+                var iniFileWithPath = System.IO.Path.Combine(_workDir, _iniFileName);
 
                 resultWasOk = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath);
 
                 // NOTODO: upload the result files
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"Start upload to blobstore");
-                string blobResultFileName = $"REQ_{_requestID}/{_requestID}_result.dat";
-                string blobStdOutFileName = $"REQ_{_requestID}/{_requestID}_stdout.dat";
-                string blobStdErrFileName = $"REQ_{_requestID}/{_requestID}_stderr.dat";
-                string blobOkFileName = $"REQ_{_requestID}/{_requestID}_ok.dat";
-                string blobErrorFileName = $"REQ_{_requestID}/{_requestID}_error.dat";
-                string blobFinishFileName = $"REQ_{_requestID}/{_requestID}_finish.dat";
+                string blobResultFileName = $"REQ_{_requestID}/{_resultFileName}";
+                string blobStdOutFileName = $"REQ_{_requestID}/{_stdOutFileName}";
+                string blobStdErrFileName = $"REQ_{_requestID}/{_stdErrFileName}";
+                string blobOkFileName = $"REQ_{_requestID}/{_okFileName}";
+                string blobErrorFileName = $"REQ_{_requestID}/{_errorFileName}";
+                string blobFinishFileName = $"REQ_{_requestID}/{_finishFileName}";
+                string blobStaFileName = $"REQ_{_requestID}/result{_staFileName}";
+                string blobIniFileName = $"REQ_{_requestID}/{_iniFileName}";
 
 
                 await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
@@ -123,6 +129,8 @@ namespace WebJobPOC
                 await uploadToBlobAsync(okFileWithPath, blobOkFileName, AccessTier.Hot);
                 await uploadToBlobAsync(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
                 await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
+                await uploadToBlobAsync(staFileWithPath, blobStaFileName, AccessTier.Hot);
+                await uploadToBlobAsync(iniFileWithPath, blobIniFileName, AccessTier.Hot);
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"end uploads to blobstore");
             }
             catch (Exception)
