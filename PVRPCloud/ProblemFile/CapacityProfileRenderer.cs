@@ -1,5 +1,6 @@
-using System.Text;
+using CommonUtils;
 using PVRPCloud.Models;
+using System.Text;
 
 namespace PVRPCloud.ProblemFile;
 
@@ -19,7 +20,9 @@ public sealed class CapacityProfileRenderer
             _profiles.Add(capacityProfile.ID, pvrpId);
             pvrpId++;
 
-            sb.AppendLine($"createCapacityProfile({capacityProfile.Capacity1}, {capacityProfile.Capacity2}, 0, 0, 0)");
+            var calcCapacity1 = Math.Ceiling((double)capacityProfile.Capacity1 * Consts.Quantity1Multiplier);
+
+            sb.AppendLine($"createCapacityProfile({calcCapacity1}, {capacityProfile.Capacity2}, 0, 0, 0)");
         }
 
         return sb;
