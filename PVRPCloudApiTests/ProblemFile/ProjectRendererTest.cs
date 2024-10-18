@@ -249,8 +249,7 @@ public class ProjectRendererTest
         DepotName = "depot name",
         Lat = 12,
         Lng = 13,
-        ServiceFixTime = 10,
-        ServiceVarTime = 15,
+        ServiceFixTime = 10
     };
 
     private Client Client => new()

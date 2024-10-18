@@ -1251,7 +1251,6 @@ public static class PVRPCloudMock
                   DepotMinTime =  240,
                   DepotMaxTime =  1380,
                   ServiceFixTime =  1,
-                  ServiceVarTime =  0
                 },
                 Client =  null,
                 Lat =  47.623782,
@@ -1310,7 +1309,6 @@ public static class PVRPCloudMock
                   DepotMinTime =  240,
                   DepotMaxTime =  1380,
                   ServiceFixTime =  1,
-                  ServiceVarTime =  0
                 },
                 Client =  null,
                 Lat =  47.623782,
@@ -3499,7 +3497,6 @@ public static class PVRPCloudMock
                   DepotMinTime =  240,
                   DepotMaxTime =  1380,
                   ServiceFixTime =  1,
-                  ServiceVarTime =  0
                 },
                 Client =  null,
                 Lat =  47.623782,
@@ -3592,7 +3589,6 @@ public static class PVRPCloudMock
                   DepotMinTime =  240,
                   DepotMaxTime =  1380,
                   ServiceFixTime =  1,
-                  ServiceVarTime =  0
                 },
                 Client =  null,
                 Lat =  47.623782,

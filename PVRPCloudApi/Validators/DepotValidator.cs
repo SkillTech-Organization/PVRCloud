@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using PVRPCloud;
 using PVRPCloud.Models;
 
 namespace PVRPCloudApi.Validators;
@@ -31,10 +30,6 @@ public sealed class DepotValidator : AbstractValidator<Depot>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ServiceFixTime)
-            .GreaterThanOrEqualTo(0)
-            .WithState(GetIdentifiableId);
-
-        RuleFor(x => x.ServiceVarTime)
             .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 

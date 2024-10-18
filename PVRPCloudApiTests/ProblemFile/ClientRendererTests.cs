@@ -1,6 +1,6 @@
 using FluentAssertions;
-using PVRPCloud.ProblemFile;
 using PVRPCloud.Models;
+using PVRPCloud.ProblemFile;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
@@ -51,12 +51,11 @@ public class ClientRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 5,
-            ServiceVarTime = 6
         };
 
         var result = _sut.Render(depot, 2);
 
-        var expected = "setDepotInformation(1, 1, 5, 6, 2, 0, 0, 0, 0)";
+        var expected = "setDepotInformation(1, 1, 5, 0, 2, 0, 0, 0, 0)";
 
         result.ToString().Should().Contain(expected);
     }
@@ -69,13 +68,12 @@ public class ClientRendererTests
             DepotName = "depot name",
             Lat = 12.0,
             Lng = 15.0,
-            ServiceFixTime = 5,
-            ServiceVarTime = 6
+            ServiceFixTime = 5
         };
 
         var result = _sut.Render(depot, 2);
 
-        var expected = $"""createClient("depot name", 12000000, 15000000){Environment.NewLine}createDepot("depot name", 1){Environment.NewLine}setDepotInformation(1, 1, 5, 6, 2, 0, 0, 0, 0)""";
+        var expected = $"""createClient("depot name", 12000000, 15000000){Environment.NewLine}createDepot("depot name", 1){Environment.NewLine}setDepotInformation(1, 1, 5, 0, 2, 0, 0, 0, 0)""";
 
         result.ToString().Should().Contain(expected);
     }
@@ -89,8 +87,7 @@ public class ClientRendererTests
             DepotName = "depot name",
             Lat = 12.0,
             Lng = 15.0,
-            ServiceFixTime = 5,
-            ServiceVarTime = 6
+            ServiceFixTime = 5
         };
 
         _ = _sut.Render(depot, 2);
