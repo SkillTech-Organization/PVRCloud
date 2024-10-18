@@ -1,5 +1,6 @@
-using System.Text;
+using CommonUtils;
 using PVRPCloud.Models;
+using System.Text;
 
 namespace PVRPCloud.ProblemFile;
 
@@ -52,7 +53,9 @@ public sealed class OrderRenderer
 
     private void SetOrderInformation(int pvrpId, Order order)
     {
-        _sb.AppendLine($"setOrderInformation({pvrpId}, {order.Quantity1}, {order.Quantity2}, 0, 0, 0, {order.ReadyTime}, 0, 0, 0, 0, 0)");
+        var calcQuantity1 = Math.Ceiling(order.Quantity1 * Consts.Quantity1Multiplier);
+
+        _sb.AppendLine($"setOrderInformation({pvrpId}, {calcQuantity1}, {order.Quantity2}, 0, 0, 0, {order.ReadyTime}, 0, 0, 0, 0, 0)");
     }
 
     private void SetOrderServiceTime(int pvrpId, Order order)
