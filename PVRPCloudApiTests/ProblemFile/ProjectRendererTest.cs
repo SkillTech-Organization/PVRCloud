@@ -20,9 +20,9 @@ public class ProjectRendererTest
         $"""createTruckType("another truck type;SP1,DP1;8000;300;200"){Environment.NewLine}""" +
         $"""createClient("depot name", 12000000, 13000000){Environment.NewLine}""" +
         $"""createDepot("depot name", 1){Environment.NewLine}""" +
-        $"setDepotInformation(1, 1, 10, 15, 20, 0, 0, 0, 0){Environment.NewLine}" +
-        $"createCapacityProfile(11, 22, 0, 0, 0){Environment.NewLine}" +
-        $"createCapacityProfile(33, 44, 0, 0, 0){Environment.NewLine}" +
+        $"setDepotInformation(1, 1, 10, 0, 20, 0, 0, 0, 0){Environment.NewLine}" +
+        $"createCapacityProfile(11000, 22, 0, 0, 0){Environment.NewLine}" +
+        $"createCapacityProfile(33000, 44, 0, 0, 0){Environment.NewLine}" +
         $"""createTruck(1, "truck name", 1, 1){Environment.NewLine}""" +
         $"setTruckInformation(1, 1, 1, 10000000, 1, 10, 2, 9, 0, 0, 0){Environment.NewLine}" +
         $"""createClient("client name", 19000000, 20000000){Environment.NewLine}""" +
@@ -30,7 +30,7 @@ public class ProjectRendererTest
         $"""createClient("client name 2", 44000000, 86000000){Environment.NewLine}""" +
         $"setClientInformation(3, 19, 0, 0, 0, 0, 0){Environment.NewLine}" +
         $"createOrder(2){Environment.NewLine}" +
-        $"setOrderInformation(1, 10, 20, 0, 0, 0, 12, 0, 0, 0, 0, 0){Environment.NewLine}" +
+        $"setOrderInformation(1, 10000, 20, 0, 0, 0, 12, 0, 0, 0, 0, 0){Environment.NewLine}" +
         $"setOrderServiceTime(1, 16){Environment.NewLine}" +
         $"addOrderTimeWindow(1, 4, 6){Environment.NewLine}" +
         $"addOrderTruck(1, 1){Environment.NewLine}" +
@@ -105,7 +105,8 @@ public class ProjectRendererTest
                 Lat = 44,
                 Lng = 86,
                 ServiceFixTime = 19,
-            }
+                Quantity1SrerviceInSec = 1
+          }
         ],
         Orders = [
             new()
@@ -250,7 +251,6 @@ public class ProjectRendererTest
         Lat = 12,
         Lng = 13,
         ServiceFixTime = 10,
-        ServiceVarTime = 15,
     };
 
     private Client Client => new()
@@ -260,5 +260,6 @@ public class ProjectRendererTest
         Lat = 19,
         Lng = 20,
         ServiceFixTime = 55,
+        Quantity1SrerviceInSec = 2
     };
 }

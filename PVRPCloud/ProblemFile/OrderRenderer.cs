@@ -18,7 +18,7 @@ public sealed class OrderRenderer
         _truckIds = truckIds;
     }
 
-    public StringBuilder Render(IEnumerable<Order> orders)
+    public StringBuilder Render(IEnumerable<Order> orders, IEnumerable<Client> clients)
     {
         int pvrpId = 1;
         foreach (var order in orders)
@@ -27,10 +27,8 @@ public sealed class OrderRenderer
 
             SetOrderInformation(pvrpId, order);
 
-            if (order.OrderServiceTime > 0)
-            {
-                SetOrderServiceTime(pvrpId, order);
-            }
+            var client = clients.Single(c => c.ID == order.ClientID);
+            SetOrderServiceTime(pvrpId, order, client);
 
             AddOrderTimeWindow(pvrpId, order);
 
@@ -58,9 +56,17 @@ public sealed class OrderRenderer
         _sb.AppendLine($"setOrderInformation({pvrpId}, {calcQuantity1}, {order.Quantity2}, 0, 0, 0, {order.ReadyTime}, 0, 0, 0, 0, 0)");
     }
 
-    private void SetOrderServiceTime(int pvrpId, Order order)
+    private void SetOrderServiceTime(int pvrpId, Order order, Client client)
     {
-        _sb.AppendLine($"setOrderServiceTime({pvrpId}, {order.OrderServiceTime})");
+        var orderServiceTime = order.OrderServiceTime;
+        if (orderServiceTime == 0)
+        {
+            orderServiceTime = (int)Math.Ceiling(Math.Abs(order.Quantity1) * client.Quantity1SrerviceInSec / 60);
+        }
+        if (orderServiceTime > 0)
+        {
+            _sb.AppendLine($"setOrderServiceTime({pvrpId}, {orderServiceTime})");
+        }
     }
 
     private void AddOrderTimeWindow(int pvrpId, Order order)

@@ -41,7 +41,7 @@ public sealed class ClientRenderer
 
     private void SetDepotInformation(Depot depot, int projectMinTime)
     {
-        _depotStringBuilder.AppendLine($"setDepotInformation({DepotPVRPId}, 1, {depot.ServiceFixTime}, {depot.ServiceVarTime}, {projectMinTime}, 0, 0, 0, 0)");
+        _depotStringBuilder.AppendLine($"setDepotInformation({DepotPVRPId}, 1, {depot.ServiceFixTime}, 0, {projectMinTime}, 0, 0, 0, 0)");
     }
 
     private void CreateEntry(Depot depot)

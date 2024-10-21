@@ -18,7 +18,6 @@ public class DepotValidatorTests
                 Lat = 0,
                 Lng = 0,
                 ServiceFixTime = 0,
-                ServiceVarTime = 0,
                 DepotMinTime = 0,
                 DepotMaxTime = 0,
             }
@@ -45,7 +44,6 @@ public class DepotValidatorTests
                 Lat = 0,
                 Lng = 0,
                 ServiceFixTime = 0,
-                ServiceVarTime = 0,
                 DepotMinTime = 0,
                 DepotMaxTime = 0,
             }
@@ -72,7 +70,6 @@ public class DepotValidatorTests
                 Lat = 0,
                 Lng = 0,
                 ServiceFixTime = 0,
-                ServiceVarTime = 0,
                 DepotMinTime = 0,
                 DepotMaxTime = 0,
             }
@@ -99,7 +96,6 @@ public class DepotValidatorTests
                 Lat = value,
                 Lng = 0,
                 ServiceFixTime = 0,
-                ServiceVarTime = 0,
                 DepotMinTime = 0,
                 DepotMaxTime = 0,
             }
@@ -126,7 +122,6 @@ public class DepotValidatorTests
                 Lat = 0,
                 Lng = value,
                 ServiceFixTime = 0,
-                ServiceVarTime = 0,
                 DepotMinTime = 0,
                 DepotMaxTime = 0,
             }
@@ -151,7 +146,6 @@ public class DepotValidatorTests
                 Lat = 0,
                 Lng = 0,
                 ServiceFixTime = -1,
-                ServiceVarTime = 0,
                 DepotMinTime = 0,
                 DepotMaxTime = 0,
             }
@@ -164,30 +158,6 @@ public class DepotValidatorTests
         result.IsValid.Should().BeFalse();
     }
 
-    [Fact]
-    public void Validate_ServiceVarTimeIsNegative_ReturnsInvalidResult()
-    {
-        Project project = new()
-        {
-            Depot = new()
-            {
-                ID = "id",
-                DepotName = "name",
-                Lat = 0,
-                Lng = 0,
-                ServiceFixTime = 0,
-                ServiceVarTime = -1,
-                DepotMinTime = 0,
-                DepotMaxTime = 0,
-            }
-        };
-
-        DepotValidator sut = new(project);
-
-        var result = sut.Validate(project.Depot);
-
-        result.IsValid.Should().BeFalse();
-    }
 
     [Fact]
     public void Validate_DepotMinTimeIsLessThanProjectMinTime_ReturnsInvalidResult()
@@ -202,7 +172,6 @@ public class DepotValidatorTests
                 Lat = 0,
                 Lng = 0,
                 ServiceFixTime = 0,
-                ServiceVarTime = 0,
                 DepotMinTime = 1,
                 DepotMaxTime = 0,
             }
@@ -228,7 +197,6 @@ public class DepotValidatorTests
                 Lat = 0,
                 Lng = 0,
                 ServiceFixTime = 0,
-                ServiceVarTime = 0,
                 DepotMinTime = 0,
                 DepotMaxTime = 3,
             }
