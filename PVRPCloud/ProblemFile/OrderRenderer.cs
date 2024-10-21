@@ -1,4 +1,3 @@
-using CommonUtils;
 using PVRPCloud.Models;
 using System.Text;
 
@@ -51,7 +50,7 @@ public sealed class OrderRenderer
 
     private void SetOrderInformation(int pvrpId, Order order)
     {
-        var calcQuantity1 = Math.Ceiling(order.Quantity1 * Consts.Quantity1Multiplier);
+        var calcQuantity1 = Math.Ceiling(order.Quantity1 * CommonUtils.Consts.Quantity1Multiplier);
 
         _sb.AppendLine($"setOrderInformation({pvrpId}, {calcQuantity1}, {order.Quantity2}, 0, 0, 0, {order.ReadyTime}, 0, 0, 0, 0, 0)");
     }
