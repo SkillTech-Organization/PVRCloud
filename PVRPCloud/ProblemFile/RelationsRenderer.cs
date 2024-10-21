@@ -35,15 +35,12 @@ public sealed class RelationsRenderer
                     .Where(x => x.fromNOD_ID == from.NodeId && x.toNOD_ID == to.NodeId && x.TruckTypeId == truckType.ID)
                     .Single();
 
-                if (from.NodeId != to.NodeId && route.route.Edges.Count > 0)
-                {
-                    int fromClientId = _clientIds[from.Identifable.ID];
-                    int toClientId = _clientIds[to.Identifable.ID];
+                int fromClientId = _clientIds[from.Identifable.ID];
+                int toClientId = _clientIds[to.Identifable.ID];
 
-                    int time = route.route!.CalculateTravelTime(truckType);
+                int time = route.route!.CalculateTravelTime(truckType);
 
-                    _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, {route.route?.DST_DISTANCE ?? 0}, {time})");
-                }
+                _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, {route.route?.DST_DISTANCE ?? 0}, {time})");
             }
         }
 
