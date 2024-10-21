@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../PVRPCloudInsightsLogger/PVRPCloudInsightsLogger.csproj" />
+    <ProjectReference Include="..\CommonUtils\CommonUtils.csproj" />
     <ProjectReference Include="..\PMap\PMapCore.csproj" />
   </ItemGroup>
 
