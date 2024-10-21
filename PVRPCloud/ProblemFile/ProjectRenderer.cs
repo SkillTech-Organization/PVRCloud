@@ -33,7 +33,7 @@ public sealed class ProjectRenderer : IProjectRenderer
         _sb.Append(clientRenderer.Render(project.Clients));
 
         OrderRenderer orderRenderer = new(clientRenderer.ClientIds, truckRenderer.TruckIds);
-        _sb.Append(orderRenderer.Render(project.Orders));
+        _sb.Append(orderRenderer.Render(project.Orders, project.Clients));
 
         RelationsRenderer relationsRenderer = new(project.TruckTypes,
                                                   truckTypeRenderer.TruckTypeIds,

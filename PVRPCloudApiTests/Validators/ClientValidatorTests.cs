@@ -19,7 +19,8 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
                 }
             ]
         };
@@ -44,7 +45,8 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
                 }
             ]
         };
@@ -69,8 +71,9 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ]
         };
 
@@ -94,7 +97,8 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
                 },
                 new()
                 {
@@ -102,8 +106,9 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ]
         };
 
@@ -127,8 +132,9 @@ public class ClientValidatorTests
                     ClientName = string.Empty,
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ]
         };
 
@@ -152,8 +158,9 @@ public class ClientValidatorTests
                     ClientName = null!,
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+              }
             ]
         };
 
@@ -180,8 +187,9 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = value,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ]
         };
 
@@ -207,8 +215,9 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = value,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ]
         };
 
@@ -235,7 +244,8 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = value,
-                    ServiceFixTime = 0
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
                 }
             ]
         };
@@ -262,8 +272,9 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = value,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ]
         };
 
@@ -287,8 +298,35 @@ public class ClientValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = -1
+                    ServiceFixTime = -1,
+                    Quantity1SrerviceInSec = 0
                 }
+            ]
+        };
+
+        ClientValidator sut = new(project);
+
+        var result = sut.Validate(project.Clients[0]);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Quantity1SrerviceInSecIsNegative_ReturnsInvalidResult()
+    {
+        Project project = new()
+        {
+            Depot = new() { ID = "depot id" },
+            Clients = [
+                new()
+                {
+                    ID = "valami",
+                    ClientName = "name",
+                    Lat = 0,
+                    Lng = 0,
+                    ServiceFixTime = -1,
+                    Quantity1SrerviceInSec = -1
+             }
             ]
         };
 

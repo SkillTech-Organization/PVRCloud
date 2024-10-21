@@ -1,6 +1,6 @@
 using FluentAssertions;
-using PVRPCloud.ProblemFile;
 using PVRPCloud.Models;
+using PVRPCloud.ProblemFile;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
@@ -8,7 +8,7 @@ public class OrderRendererTests
 {
     private static readonly Dictionary<string, int> clientIds = new()
     {
-        ["client 2"] = 2
+        ["client id"] = 2
     };
 
     private static readonly Dictionary<string, int> truckIds = new()
@@ -25,10 +25,20 @@ public class OrderRendererTests
         Order order = new()
         {
             ID = "order id",
-            ClientID = "client 2",
+            ClientID = "client id",
         };
 
-        var result = _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 2
+        };
+
+        var result = _sut.Render([order], [client]);
 
         result.ToString().Should().Contain("createOrder(2)");
     }
@@ -39,15 +49,25 @@ public class OrderRendererTests
         Order order = new()
         {
             ID = "order id",
-            ClientID = "client 2",
+            ClientID = "client id",
             Quantity1 = 12,
             Quantity2 = 20,
             ReadyTime = 9,
         };
 
-        var result = _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 2
+        };
 
-        result.ToString().Should().Contain("setOrderInformation(1, 12, 20, 0, 0, 0, 9, 0, 0, 0, 0, 0)");
+        var result = _sut.Render([order], [client]);
+
+        result.ToString().Should().Contain("setOrderInformation(1, 12000, 20, 0, 0, 0, 9, 0, 0, 0, 0, 0)");
     }
 
     [Fact]
@@ -56,7 +76,7 @@ public class OrderRendererTests
         Order order = new()
         {
             ID = "order id",
-            ClientID = "client 2",
+            ClientID = "client id",
             Quantity1 = 12,
             Quantity2 = 20,
             ReadyTime = 9,
@@ -64,7 +84,17 @@ public class OrderRendererTests
             OrderMaxTime = 6,
         };
 
-        var result = _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 2
+        };
+
+        var result = _sut.Render([order], [client]);
 
         result.ToString().Should().Contain("addOrderTimeWindow(1, 4, 6)");
     }
@@ -75,7 +105,7 @@ public class OrderRendererTests
         Order order = new()
         {
             ID = "order id",
-            ClientID = "client 2",
+            ClientID = "client id",
             Quantity1 = 12,
             Quantity2 = 20,
             ReadyTime = 9,
@@ -84,18 +114,58 @@ public class OrderRendererTests
             OrderServiceTime = 15,
         };
 
-        var result = _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 2
+        };
+
+        var result = _sut.Render([order], [client]);
 
         result.ToString().Should().Contain("setOrderServiceTime(1, 15)");
     }
 
     [Fact]
-    public void Render_CalledWithOrderServiceTimeIsZero_DoesNotCreateSetOrderServiceTimeSection()
+    public void Render_CalledWithOrderServiceZero_CreateSetOrderServiceTimeSection()
     {
         Order order = new()
         {
             ID = "order id",
-            ClientID = "client 2",
+            ClientID = "client id",
+            Quantity1 = 60,
+            Quantity2 = 12,
+            ReadyTime = 9,
+            OrderMinTime = 4,
+            OrderMaxTime = 6,
+            OrderServiceTime = 0,
+        };
+
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 2
+        };
+
+        var result = _sut.Render([order], [client]);
+
+        result.ToString().Should().Contain("setOrderServiceTime(1, 2)");
+    }
+
+    [Fact]
+    public void Render_CalledWithOrderServiceTimeIsZeroAndQuantity1SrerviceInSecIsZero_DoesNotCreateSetOrderServiceTimeSection()
+    {
+        Order order = new()
+        {
+            ID = "order id",
+            ClientID = "client id",
             Quantity1 = 12,
             Quantity2 = 20,
             ReadyTime = 9,
@@ -104,7 +174,17 @@ public class OrderRendererTests
             OrderServiceTime = 0,
         };
 
-        var result = _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 0
+        };
+
+        var result = _sut.Render([order], [client]);
 
         result.ToString().Should().NotContain("setOrderServiceTime");
     }
@@ -115,10 +195,20 @@ public class OrderRendererTests
         Order order = new()
         {
             TruckIDs = ["truck 1"],
-            ClientID = "client 2"
+            ClientID = "client id"
         };
 
-        var result = _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 0
+        };
+
+        var result = _sut.Render([order], [client]);
 
         result.ToString().Should().Contain("addOrderTruck(1, 1)");
     }
@@ -129,10 +219,19 @@ public class OrderRendererTests
         Order order = new()
         {
             TruckIDs = ["truck 1", "truck 2"],
-            ClientID = "client 2"
+            ClientID = "client id"
         };
 
-        var result = _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 0
+        };
+        var result = _sut.Render([order], [client]);
 
         result.ToString().Should().Contain($"addOrderTruck(1, 1){Environment.NewLine}addOrderTruck(1, 22)");
     }
@@ -143,7 +242,7 @@ public class OrderRendererTests
         Order order = new()
         {
             ID = "order id",
-            ClientID = "client 2",
+            ClientID = "client id",
             Quantity1 = 12,
             Quantity2 = 20,
             ReadyTime = 9,
@@ -153,9 +252,19 @@ public class OrderRendererTests
             TruckIDs = ["truck 1"],
         };
 
-        var result = _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 0
+        };
+        var result = _sut.Render([order], [client]);
 
-        string expected = $"createOrder(2){Environment.NewLine}setOrderInformation(1, 12, 20, 0, 0, 0, 9, 0, 0, 0, 0, 0){Environment.NewLine}setOrderServiceTime(1, 15){Environment.NewLine}addOrderTimeWindow(1, 4, 6){Environment.NewLine}addOrderTruck(1, 1){Environment.NewLine}";
+
+        string expected = $"createOrder(2){Environment.NewLine}setOrderInformation(1, 12000, 20, 0, 0, 0, 9, 0, 0, 0, 0, 0){Environment.NewLine}setOrderServiceTime(1, 15){Environment.NewLine}addOrderTimeWindow(1, 4, 6){Environment.NewLine}addOrderTruck(1, 1){Environment.NewLine}";
 
         result.ToString().Should().Be(expected);
     }
@@ -166,10 +275,20 @@ public class OrderRendererTests
         Order order = new()
         {
             ID = "order id",
-            ClientID = "client 2"
+            ClientID = "client id"
         };
 
-        _sut.Render([order]);
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 0
+        };
+        var result = _sut.Render([order], [client]);
+
 
         _sut.OrderIds.Count.Should().Be(1);
 
@@ -184,15 +303,24 @@ public class OrderRendererTests
         Order order1 = new()
         {
             ID = "order1 id",
-            ClientID = "client 2"
+            ClientID = "client id"
         };
         Order order2 = new()
         {
             ID = "order2 id",
-            ClientID = "client 2"
+            ClientID = "client id"
+        };
+        Client client = new()
+        {
+            ID = "client id",
+            ClientName = "client name",
+            Lat = 12.0,
+            Lng = 15.0,
+            ServiceFixTime = 6,
+            Quantity1SrerviceInSec = 0
         };
 
-        _sut.Render([order1, order2]);
+        _sut.Render([order1, order2], [client]);
 
         _sut.OrderIds.Count.Should().Be(2);
 

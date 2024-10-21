@@ -1,6 +1,6 @@
 using FluentAssertions;
-using PVRPCloud.ProblemFile;
 using PVRPCloud.Models;
+using PVRPCloud.ProblemFile;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
@@ -20,7 +20,7 @@ public class CapacityProfileRendererTests
 
         var result = _sut.Render([cp]);
 
-        result.ToString().Should().Contain("createCapacityProfile(10, 20, 0, 0, 0)");
+        result.ToString().Should().Contain("createCapacityProfile(10000, 20, 0, 0, 0)");
     }
 
     [Fact]

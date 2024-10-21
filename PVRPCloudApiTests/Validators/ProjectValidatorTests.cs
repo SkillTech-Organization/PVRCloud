@@ -83,8 +83,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+              }
             ],
             Orders = [
                 new()
@@ -184,8 +185,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+              }
             ],
             Orders = [
                 new()
@@ -286,8 +288,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ],
             Orders = [
                 new()
@@ -388,8 +391,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ],
             Orders = [
                 new()
@@ -488,8 +492,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+              }
             ],
             Orders = [
                 new()
@@ -586,7 +591,8 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
                 }
             ],
             Orders = [
@@ -676,7 +682,8 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
                 }
             ],
             Orders = [
@@ -855,8 +862,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+              }
             ],
             Orders = [
                 new()
@@ -941,8 +949,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ],
             Orders = [
                 new()
@@ -1032,8 +1041,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ],
             Orders = [
                 new()
@@ -1223,8 +1233,9 @@ public class ProjectValidatorTests
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+               }
             ],
             Orders = []
         };

@@ -1272,7 +1272,8 @@ public static class PVRPCloudMock
                   ClientName = "Clent01",
                   Lat =  47.504811,
                   Lng =  18.986218,
-                  ServiceFixTime = 10
+                  ServiceFixTime = 10,
+                  Quantity1SrerviceInSec = 1
                 },
                 Lat =  47.504811,
                 Lng =  18.986218,
@@ -3517,7 +3518,8 @@ public static class PVRPCloudMock
                   ClientName = "Clent03",
                   Lat =  46.265335,
                   Lng =  20.110305,
-                  ServiceFixTime = 5
+                  ServiceFixTime = 5,
+                  Quantity1SrerviceInSec = 1
                 },
                 Lat =  46.265335,
                 Lng =  20.110305,
@@ -3552,7 +3554,8 @@ public static class PVRPCloudMock
                   ClientName = "Clent02",
                   Lat =  46.913493,
                   Lng =  19.722090,
-                  ServiceFixTime = 15
+                  ServiceFixTime = 15,
+                  Quantity1SrerviceInSec = 1
                 },
                 Lat =  46.913493,
                 Lng =  19.722090,

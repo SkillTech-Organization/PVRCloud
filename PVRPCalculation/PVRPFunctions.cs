@@ -8,10 +8,6 @@ using System.Text;
 
 namespace WebJobPOC
 {
-    public class PVRPTimeOutException : Exception
-    {
-        public PVRPTimeOutException(string message) : base(message) { }
-    }
 
     public class PVRPFunctions
     {
@@ -79,11 +75,29 @@ namespace WebJobPOC
         public async Task<bool> OptimizeAsync()
         {
             bool resultWasOk = false;
+
+            // NOTODO: check  the result file
+            var okFileWithPath = System.IO.Path.Combine(_workDir, _okFileName);
+            var errorFileWithPath = System.IO.Path.Combine(_workDir, _errorFileName);
+            var finishFileWithPath = System.IO.Path.Combine(_workDir, _finishFileName);
+            var resultFileWithPath = System.IO.Path.Combine(_workDir, _resultFileName);
+            var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
+            var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
+            var staFileWithPath = System.IO.Path.Combine(_workDir, _staFileName);
+            var iniFileWithPath = System.IO.Path.Combine(_workDir, _iniFileName);
+
+            string blobResultFileName = $"REQ_{_requestID}/{_resultFileName}";
+            string blobStdOutFileName = $"REQ_{_requestID}/{_stdOutFileName}";
+            string blobStdErrFileName = $"REQ_{_requestID}/{_stdErrFileName}";
+            string blobOkFileName = $"REQ_{_requestID}/{_okFileName}";
+            string blobErrorFileName = $"REQ_{_requestID}/{_errorFileName}";
+            string blobFinishFileName = $"REQ_{_requestID}/{_finishFileName}";
+            string blobStaFileName = $"REQ_{_requestID}/result{_staFileName}";
+            string blobIniFileName = $"REQ_{_requestID}/{_iniFileName}";
+
             try
             {
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"workdir:{_workDir}");
-
-
 
                 // NOTODO: download the optimize.dat file from blob store
                 await downloadFromBlobAsync(System.IO.Path.Combine(_workDir, _optimizefileName), _blobOptimizeFileName);
@@ -99,30 +113,13 @@ namespace WebJobPOC
                 // NOTODO: start the .bat file
                 ExecPVRP(ExecTimeOutMS);
 
-                // NOTODO: check  the result file
-                var okFileWithPath = System.IO.Path.Combine(_workDir, _okFileName);
-                var errorFileWithPath = System.IO.Path.Combine(_workDir, _errorFileName);
-                var finishFileWithPath = System.IO.Path.Combine(_workDir, _finishFileName);
-                var resultFileWithPath = System.IO.Path.Combine(_workDir, _resultFileName);
-                var stdoutFileWithPath = System.IO.Path.Combine(_workDir, _stdOutFileName);
-                var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
-                var staFileWithPath = System.IO.Path.Combine(_workDir, _staFileName);
-                var iniFileWithPath = System.IO.Path.Combine(_workDir, _iniFileName);
 
                 resultWasOk = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath);
 
-                // NOTODO: upload the result files
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"Start upload to blobstore");
-                string blobResultFileName = $"REQ_{_requestID}/{_resultFileName}";
-                string blobStdOutFileName = $"REQ_{_requestID}/{_stdOutFileName}";
-                string blobStdErrFileName = $"REQ_{_requestID}/{_stdErrFileName}";
-                string blobOkFileName = $"REQ_{_requestID}/{_okFileName}";
-                string blobErrorFileName = $"REQ_{_requestID}/{_errorFileName}";
-                string blobFinishFileName = $"REQ_{_requestID}/{_finishFileName}";
-                string blobStaFileName = $"REQ_{_requestID}/result{_staFileName}";
-                string blobIniFileName = $"REQ_{_requestID}/{_iniFileName}";
 
 
+                // NOTODO: upload the result files
                 await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
                 await uploadToBlobAsync(stdoutFileWithPath, blobStdOutFileName);
                 await uploadToBlobAsync(stderrFileWithPath, blobStdErrFileName);
@@ -133,9 +130,17 @@ namespace WebJobPOC
                 await uploadToBlobAsync(iniFileWithPath, blobIniFileName, AccessTier.Hot);
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"end uploads to blobstore");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+
+                var finishMsg = $"PVRP {_requestID} EXCEPTION {PVRP_exe}\nMessage: {ex.Message}\nStack:{ex.StackTrace}";
+                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"{PVRP_exe} exception happened! {ex.Message}\nStack:{ex.StackTrace}");
+
+                using (System.IO.StreamWriter sw = System.IO.File.CreateText(finishFileWithPath))
+                {
+                    sw.WriteLine(finishMsg);
+                }
+                await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
             }
 
 
@@ -316,7 +321,6 @@ namespace WebJobPOC
                 // Start the process with the info we specified.
                 // Call WaitForExit and then the using-statement will close.
 
-
                 var stdout = new StringBuilder();
                 var stderr = new StringBuilder();
                 int exitCode;
@@ -365,20 +369,23 @@ namespace WebJobPOC
                     finishMsg = $"PVRP {_requestID} INFO {PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}";
                     _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"{PVRP_exe} timeout happened! Timeout in ms:{timeoutMS}");
                 }
+
+
+                var finishFileWithPath = System.IO.Path.Combine(_workDir, _finishFileName);
+                using (System.IO.StreamWriter sw = System.IO.File.CreateText(finishFileWithPath))
+                {
+                    sw.WriteLine(finishMsg);
+                }
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error.
-                finishMsg = $"PVRP {_requestID} EXCEPTION {PVRP_exe} exception happened! {ex.Message}";
-                _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"{PVRP_exe} exception happened! {ex.Message}");
+                //nem itt logoljuk az exceptiont... finishMsg = $"PVRP {_requestID} EXCEPTION {PVRP_exe} exception happened! {ex.Message}\nStack:{ex.StackTrace}";
+                //_logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"{PVRP_exe} exception happened! {ex.Message}\nStack:{ex.StackTrace}");
+                throw;
             }
 
-
-            var finishFileWithPath = System.IO.Path.Combine(_workDir, _finishFileName);
-            using (System.IO.StreamWriter sw = System.IO.File.CreateText(finishFileWithPath))
-            {
-                sw.WriteLine(finishMsg);
-            }
         }
 
         private void saveStdOut(string stdout, string stderr)

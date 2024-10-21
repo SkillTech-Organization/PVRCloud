@@ -79,8 +79,9 @@ public static class ProjectFactory
                     ClientName = "client name",
                     Lat = 0.003,
                     Lng = 0.02,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+              }
             ],
             Orders = [
                 new()
@@ -172,8 +173,9 @@ public static class ProjectFactory
                     ClientName = "name",
                     Lat = 0,
                     Lng = 0,
-                    ServiceFixTime = 0
-                }
+                    ServiceFixTime = 0,
+                    Quantity1SrerviceInSec = 0
+              }
             ],
             Orders = [
                 new()

@@ -10,7 +10,7 @@ public sealed class ClientValidator : AbstractValidator<Client>
 {
     public ClientValidator(Project project)
     {
-        string[] ids = [..IdsToArray(project.Clients), project.Depot?.ID ?? string.Empty];
+        string[] ids = [.. IdsToArray(project.Clients), project.Depot?.ID ?? string.Empty];
         RuleFor(x => x.ID)
             .NotEmpty()
             .NotNull()
@@ -33,6 +33,10 @@ public sealed class ClientValidator : AbstractValidator<Client>
             .WithState(GetIdentifiableId);
 
         RuleFor(x => x.ServiceFixTime)
+            .GreaterThanOrEqualTo(0)
+            .WithState(GetIdentifiableId);
+
+        RuleFor(x => x.Quantity1SrerviceInSec)
             .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
     }
