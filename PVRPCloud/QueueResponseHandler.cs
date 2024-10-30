@@ -166,18 +166,18 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                         tour.TourToll += Convert.ToInt32(Math.Round(bllRoute.GetToll(route.route.Edges, tour.Truck.ETollCat, tour.Truck.EnvironmentalClass, ref lastETRCODE)));
                         tour.TourLength += currTourPoint.Distance;
 
-                        //legels� pont
+                        //legelsó pont
                         var startPoint = route.route.Edges.First();
                         tour.RoutePoints.Add(new RoutePoint() { Lat = startPoint.fromLatLng.Lat, Lng = startPoint.fromLatLng.Lng });
 
-                        //t�bbi pont
+                        //többi pont
                         route.route.Edges.ForEach(e =>
                         {
                             tour.RoutePoints.Add(new RoutePoint() { Lat = e.toLatLng.Lat, Lng = e.toLatLng.Lng });
                         });
 
                     }
-                    currTourPoint.ArrTime = prevTourPoint.ArrTime.AddMinutes(currTourPoint.Duration);
+                    currTourPoint.ArrTime = prevTourPoint.DepTime.AddMinutes(currTourPoint.Duration);
                     if (currTourPoint.Order != null)
                     {
                         var clientOpened = data.Project.ProjectDate.AddMinutes(currTourPoint.Order.OrderMinTime);
