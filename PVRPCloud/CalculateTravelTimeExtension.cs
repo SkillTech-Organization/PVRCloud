@@ -9,13 +9,13 @@ public static class CalculateTravelTimeExtension
     {
         ArgumentNullException.ThrowIfNull(route);
 
-        List<int> times = new(route.Edges.Count);
+        List<double> times = new(route.Edges.Count);
         foreach (var edge in route.Edges)
         {
-            int value = (int)Math.Round(edge.EDG_LENGTH / (truckType.SpeedValues[edge.RDT_VALUE] / 3.6 * 60));
+            double value = (double)edge.EDG_LENGTH / (truckType.SpeedValues[edge.RDT_VALUE] / 3.6 * 60);
             times.Add(value);
         }
 
-        return times.Sum();
+        return (int)times.Sum();
     }
 }
