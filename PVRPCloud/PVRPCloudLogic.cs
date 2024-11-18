@@ -52,10 +52,15 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         var clientNodes = GetNodeIdsForDepoAndClients(project.Depot, project.Clients);
 
-        var (nodeCombinations, routes) = Calculate(project, clientNodes);
 
         _ = Task.Run(async () =>
         {
+
+            _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Starting calculate routes");
+            var (nodeCombinations, routes) = Calculate(project, clientNodes);
+            _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Calculate routes finished");
+
+
             string fileContent = _projectRenderer.Render(project, nodeCombinations, routes, _requestID);
             string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
