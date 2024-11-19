@@ -94,14 +94,14 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 using (var memoryStream = new MemoryStream())
                 {
 
-                    using (var brotliStream = new BrotliStream(memoryStream, CompressionLevel.Fastest))
+                    using (var brotliStream = new GZipStream(memoryStream, CompressionLevel.Optimal))
                     {
                         JsonSerializer.Serialize(brotliStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
                         {
                             WriteIndented = false
                         });
                         memoryStream.Position = 0;
-                        using (var fileStream = File.Create($"c:\\local\\Temp\\up_{_requestID}.broti"))
+                        using (var fileStream = File.Create($"c:\\local\\Temp\\up_{_requestID}.gz"))
                         {
                             memoryStream.CopyTo(fileStream);
                         }
@@ -110,9 +110,9 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
                 //https://stackoverflow.com/questions/73626986/truncating-data-in-decompress-using-gzipstream
 
-                using (var filestreamBroti = File.OpenRead($"c:\\local\\Temp\\up_{_requestID}.broti"))
+                using (var filestreamBroti = File.OpenRead($"c:\\local\\Temp\\up_{_requestID}.gz"))
                 {
-                    using (var decompressedStream = new BrotliStream(filestreamBroti, CompressionMode.Decompress))
+                    using (var decompressedStream = new GZipStream(filestreamBroti, CompressionMode.Decompress))
                     {
                         using (var reader = new StreamReader(decompressedStream))
                         {
