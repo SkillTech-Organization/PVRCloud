@@ -91,31 +91,127 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                     }
                 }
                 */
-                using (var memoryStream = new MemoryStream())
-                {
+                /*
+                                using (var memoryStream = new MemoryStream())
+                                {
 
-                    using (var brotliStream = new GZipStream(memoryStream, CompressionLevel.Optimal))
+                                    using (var brotliStream = new GZipStream(memoryStream, CompressionLevel.Optimal, true))
+                                    {
+                                        JsonSerializer.Serialize(brotliStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
+                                        {
+                                            WriteIndented = false
+                                        });
+                                        memoryStream.Position = 0;
+                                        using (var fileStream = File.Create($"c:\\local\\Temp\\up_{_requestID}.gz"))
+                                        {
+                                            // brotliStream.Flush();
+                                            memoryStream.Flush();
+                                            memoryStream.WriteTo(fileStream);
+                                            //   fileStream.Flush();
+                                        }
+                                    }
+                                }
+                */
+                /*
+                                byte[] content = File.ReadAllBytes("project.json"); 
+                                Console.WriteLine("Reading was completed: " + content.Length); 
+                                
+                using MemoryStream ms = new();
+                                    using GZipStream gzip = new(ms, CompressionLevel.Optimal); 
+                gzip.Write(content);
+                                gzip.Close(); using var file = File.Create("compressed.gz"); ms.CopyTo(file);
+                */
+                using (var memStream = new MemoryStream())
+                {
+                    JsonSerializer.Serialize(memStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
                     {
-                        JsonSerializer.Serialize(brotliStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
+                        WriteIndented = false
+                    });
+
+                    memStream.Position = 0;
+                    using (var fileStream = File.Create($"c:\\local\\Temp\\up.{_requestID}.json"))
+                    {
+                        memStream.CopyTo(fileStream);
+                    }
+                }
+
+
+                using (var fileStream = File.Create($"c:\\local\\Temp\\up.{_requestID}.gz"))
+                {
+                    using (var filestreamRead = File.OpenRead($"c:\\local\\Temp\\up.{_requestID}.json"))
+                    {
+                        using (var zipStream = new BrotliStream(fileStream, CompressionLevel.Optimal))
                         {
-                            WriteIndented = false
-                        });
-                        memoryStream.Position = 0;
-                        using (var fileStream = File.Create($"c:\\local\\Temp\\up_{_requestID}.gz"))
-                        {
-                            // brotliStream.Flush();
-                            memoryStream.Flush();
-                            memoryStream.WriteTo(fileStream);
-                            //   fileStream.Flush();
+                            filestreamRead.CopyTo(zipStream);
                         }
                     }
                 }
 
+
+
+                /*
+                using (var memStream = new MemoryStream())
+                {
+                    using (var zipStream = new GZipStream(memStream, CompressionMode.Compress, true))
+                    {
+                        using (var streamWriter = new StreamWriter(zipStream))
+                        {
+                            using (var jsonWriter = new Newtonsoft.Json.JsonTextWriter(streamWriter))
+                            {
+                                var jsonSerializer = new Newtonsoft.Json.JsonSerializer { Formatting = Newtonsoft.Json.Formatting.None };
+
+                                jsonSerializer.Serialize(jsonWriter, _projectRenderer.GetPvrpData());
+                            }
+                            memStream.Position = 0;
+                            using (var fileStream = File.Create($"c:\\local\\Temp\\up.newtonsoft_{_requestID}.gz"))
+                            {
+                                // brotliStream.Flush();
+                                memStream.Flush();
+                                memStream.WriteTo(fileStream);
+                                //   fileStream.Flush();
+                            }
+                        }
+
+                    }
+                }
+                */
+
+
+                /*
+                using (var memStream = new MemoryStream())
+                {
+                    using (var zipStream = new GZipStream(memStream, CompressionMode.Compress, true))
+                    {
+                        using (var streamWriter = new StreamWriter(zipStream))
+                        {
+                            //    using (var jsonWriter = new Utf8JsonWriter(zipStream))
+                            {
+                                var ser = JsonSerializer(new JsonSerializerOptions
+                                {
+                                    WriteIndented = false
+                                });
+
+                                ser.Serialize(streamWriter, _projectRenderer.GetPvrpData());
+
+                                memStream.Position = 0;
+                                using (var fileStream = File.Create($"c:\\local\\Temp\\up2_{_requestID}.gz"))
+                                {
+                                    // brotliStream.Flush();
+                                    memStream.Flush();
+                                    memStream.WriteTo(fileStream);
+                                    //   fileStream.Flush();
+                                }
+                            }
+                        }
+                    }
+                }
+                */
+
                 //https://stackoverflow.com/questions/73626986/truncating-data-in-decompress-using-gzipstream
                 //https://stackoverflow.com/questions/856663/1-or-more-bytes-truncation-with-gzip-round-trip
-                using (var filestreamBroti = File.OpenRead($"c:\\local\\Temp\\up_{_requestID}.gz"))
+                using (var filestreamBroti = File.OpenRead($"c:\\local\\Temp\\up.{_requestID}.gz"))
                 {
-                    using (var decompressedStream = new GZipStream(filestreamBroti, CompressionMode.Decompress))
+                    using (var decompressedStream = new BrotliStream(filestreamBroti, CompressionMode.Decompress))
                     {
 
                         using (var fileStreamCheck = File.Create($"c:\\local\\Temp\\check_{_requestID}.json"))
