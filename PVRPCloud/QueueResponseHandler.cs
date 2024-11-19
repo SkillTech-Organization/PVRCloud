@@ -1,10 +1,11 @@
 using Azure;
 using BlobUtils;
+using CommonUtils;
 using Microsoft.Extensions.Logging;
 using PMapCore.BLL;
 using PVRPCloud.Models;
+using System.IO.Compression;
 using System.Net;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -46,9 +47,11 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
         string finishFile = $"REQ_{requestId}/{requestId}_finish.dat";
         string resFile = $"REQ_{requestId}/{requestId}_result.dat";
+        string projFile = $"REQ_{requestId}/{requestId}_project_data.brotli";
 
-        bool IsFinishExist = _blobHandler.CheckIfBlobExist("calculations", finishFile);
-        bool IsResultExist = _blobHandler.CheckIfBlobExist("calculations", resFile);
+        bool IsFinishExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, finishFile);
+        bool IsResultExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, resFile);
+        bool IsProjectExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, projFile);      //lehet,hogy hosszabb ideig tart a projekt mentése, ezért ellenőrizni kell a meglétét a felolvasás előtt
 
         if (!IsFinishExist && !IsResultExist)
         {
@@ -65,7 +68,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             throw new RequestFailedException((int)HttpStatusCode.UnprocessableContent, $"Termination flag (finish.dat) is missing!");
         }
 
-        if (IsFinishExist && IsResultExist)
+        if (IsFinishExist && IsResultExist && IsProjectExist)
         {
 
 
@@ -215,9 +218,41 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     {
         _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.Start, $"{nameof(QueueResponseHandler)} {nameof(GetPvrpData)}");
 
-        string fileName = $"REQ_{requestId}/{requestId}_project_data.json";
-        string json = await _blobHandler.DownloadToTextAsync("calculations", fileName, Encoding.ASCII);
-        var data = JsonSerializer.Deserialize<PvrpData>(json);
+        string fileName = $"REQ_{requestId}/{requestId}_project_data.brotli";
+        var tempFileName = Path.GetTempFileName();
+
+        PvrpData data = null;
+        using (var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, fileName))
+        {
+            using (var fileStream = File.Create($"c:\\local\\Temp\\down_{requestId}.broti"))
+            {
+                blobStream.CopyTo(fileStream);
+            }
+        }
+
+        using (var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, fileName))
+        {
+            using (var decompressedStream = new BrotliStream(blobStream, CompressionMode.Decompress))
+            {
+
+                using (var fileStream = File.Create($"c:\\local\\Temp\\down_{requestId}.json"))
+                {
+                    decompressedStream.CopyTo(fileStream);
+                }
+            }
+        }
+
+        using (var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, fileName))
+        {
+            using (var decompressedStream = new BrotliStream(blobStream, CompressionMode.Decompress))
+            {
+                using (var reader = new StreamReader(decompressedStream))
+                {
+                    //   decompressedStream.Seek(0, SeekOrigin.Begin);
+                    data = JsonSerializer.Deserialize<PvrpData>(reader.BaseStream);
+                }
+            }
+        }
 
         return data;
     }
@@ -228,7 +263,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
         string fileName = $"REQ_{requestId}/{requestId}_result.dat";
 
-        using Stream stream = await _blobHandler.DownloadFromStreamAsync("calculations", fileName);
+        using Stream stream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, fileName);
         using StreamReader reader = new(stream);
 
         string content = await reader.ReadToEndAsync();

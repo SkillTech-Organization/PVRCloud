@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs.Models;
 using BlobManager;
 using BlobUtils;
+using CommonUtils;
 using GMap.NET;
 using Microsoft.Extensions.Logging;
 using PMapCore.BO;
@@ -9,6 +10,7 @@ using PMapCore.Common.Attrib;
 using PMapCore.Route;
 using PVRPCloud.Models;
 using PVRPCloud.ProblemFile;
+using System.IO.Compression;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -56,25 +58,95 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _ = Task.Run(async () =>
         {
 
-            _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Starting calculate routes");
-            var (nodeCombinations, routes) = Calculate(project, clientNodes);
-            _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Calculate routes finished");
+            try
+            {
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Starting calculate routes");
+                var (nodeCombinations, routes) = Calculate(project, clientNodes);
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Calculate routes finished");
 
 
-            string fileContent = _projectRenderer.Render(project, nodeCombinations, routes, _requestID);
-            string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
+                string fileContent = _projectRenderer.Render(project, nodeCombinations, routes, _requestID);
+                string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
-            var startTime = _timeProvider.GetTimestamp();
-            await UploadToBlobStorage(fileContent, problemFileName, Encoding.GetEncoding("iso-8859-2"), AccessTier.Cool);  //A PVRP.exe iso-8859-2-esben értelmezi a problémafájlt
-            _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"optimize.dat upload duration: {_timeProvider.GetElapsedTime(startTime)}");
+                var startTime = _timeProvider.GetTimestamp();
+                await UploadToBlobStorage(fileContent, problemFileName, Encoding.GetEncoding("iso-8859-2"), AccessTier.Cool);  //A PVRP.exe iso-8859-2-esben értelmezi a problémafájlt
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"optimize.dat upload duration: {_timeProvider.GetElapsedTime(startTime)}");
 
-            await QueueMessageAsync();
+                await QueueMessageAsync();
 
-            string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.json";
-            string serializedProject = JsonSerializer.Serialize(_projectRenderer.GetPvrpData());
-            startTime = _timeProvider.GetTimestamp();
-            await UploadToBlobStorage(serializedProject, projectFileName, Encoding.ASCII, AccessTier.Cool);
-            _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data.json upload duration: {_timeProvider.GetElapsedTime(startTime)}");
+                startTime = _timeProvider.GetTimestamp();
+                string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.brotli";
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    JsonSerializer.Serialize(memoryStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
+                    {
+                        WriteIndented = false
+                    });
+
+                    memoryStream.Position = 0;
+                    using (var fileStream = File.Create($"c:\\local\\Temp\\up_{_requestID}.json"))
+                    {
+                        memoryStream.CopyTo(fileStream);
+                    }
+                }
+
+                using (var memoryStream = new MemoryStream())
+                {
+
+                    using (var brotliStream = new BrotliStream(memoryStream, CompressionLevel.Fastest))
+                    {
+                        JsonSerializer.Serialize(brotliStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
+                        {
+                            WriteIndented = false
+                        });
+                        memoryStream.Position = 0;
+                        using (var fileStream = File.Create($"c:\\local\\Temp\\up_{_requestID}.broti"))
+                        {
+                            memoryStream.CopyTo(fileStream);
+                        }
+                    }
+                }
+
+                //https://stackoverflow.com/questions/73626986/truncating-data-in-decompress-using-gzipstream
+
+                using (var filestreamBroti = File.OpenRead($"c:\\local\\Temp\\up_{_requestID}.broti"))
+                {
+                    using (var decompressedStream = new BrotliStream(filestreamBroti, CompressionMode.Decompress))
+                    {
+                        using (var reader = new StreamReader(decompressedStream))
+                        {
+
+                            using (var fileStreamCheck = File.Create($"c:\\local\\Temp\\check_{_requestID}.json"))
+                            {
+                                reader.BaseStream.CopyTo(fileStreamCheck);
+                            }
+                        }
+                    }
+                }
+
+
+
+                using (var memoryStream = new MemoryStream())
+                {
+
+                    using (var brotliStream = new BrotliStream(memoryStream, CompressionLevel.Optimal))
+                    {
+                        JsonSerializer.Serialize(brotliStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
+                        {
+                            WriteIndented = false
+                        });
+                        memoryStream.Position = 0;
+                        await _blobHandler.UploadAsync(Consts.CalcContainerName, projectFileName, memoryStream, AccessTier.Hot);
+                    }
+                }
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data.json upload duration: {_timeProvider.GetElapsedTime(startTime)}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Exception, ex.Message);
+                throw;
+            }
         });
 
         _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.End, $"PVRP Cloud {nameof(Handle)}");
@@ -272,7 +344,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         await sw.FlushAsync();
         ms.Position = 0;
 
-        await _blobHandler.UploadAsync("calculations", fileName, ms, accessTier);
+        await _blobHandler.UploadAsync(Consts.CalcContainerName, fileName, ms, accessTier);
     }
 
     private async Task QueueMessageAsync()

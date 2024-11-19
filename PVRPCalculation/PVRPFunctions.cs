@@ -14,7 +14,6 @@ namespace WebJobPOC
         public static string AzureWebJobsStorageParName = "ConnectionStrings:AzureWebJobsStorage";
         public static string PVRPParsParName = "PVRPPars";
         public static string ProcessMemoryInMBParName = "ProcessMemoryInMB";
-        public static string CalcContainerName = "calculations";
         public static string PVRP_exe = "PVRP.exe";
 
 
@@ -156,7 +155,7 @@ namespace WebJobPOC
 
             using (var fileStream = System.IO.File.OpenWrite(fileWithPath))
             {
-                var blobStream = await _blobHandler.DownloadFromStreamAsync(CalcContainerName, blobFileName);
+                var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, blobFileName);
                 blobStream.CopyTo(fileStream);
             }
             _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been downloaded:{blobFileName} -> {fileWithPath}");
@@ -170,7 +169,7 @@ namespace WebJobPOC
                 {
                     using (var fileStream = System.IO.File.OpenRead(fileWithPath))
                     {
-                        await _blobHandler.UploadAsync(CalcContainerName, blobFileName, fileStream, accessTier);
+                        await _blobHandler.UploadAsync(Consts.CalcContainerName, blobFileName, fileStream, accessTier);
                         _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
                     }
                 }
