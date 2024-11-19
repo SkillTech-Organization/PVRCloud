@@ -222,25 +222,6 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
         var tempFileName = Path.GetTempFileName();
 
         PvrpData data = null;
-        using (var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, fileName))
-        {
-            using (var fileStream = File.Create($"c:\\local\\Temp\\down_{requestId}.broti"))
-            {
-                blobStream.CopyTo(fileStream);
-            }
-        }
-
-        using (var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, fileName))
-        {
-            using (var decompressedStream = new BrotliStream(blobStream, CompressionMode.Decompress))
-            {
-
-                using (var fileStream = File.Create($"c:\\local\\Temp\\down_{requestId}.json"))
-                {
-                    decompressedStream.CopyTo(fileStream);
-                }
-            }
-        }
 
         using (var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, fileName))
         {
