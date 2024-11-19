@@ -111,7 +111,7 @@ namespace PMapCore.Common
         public async Task ReadParamsAsync(string connectionString, string iniFileName = "PMAP.ini")
         {
             var bh = new BlobHandler(connectionString);
-            using Stream contentStream = await bh.DownloadFromStreamAsync("parameters", iniFileName);
+            using Stream contentStream = await bh.DownloadToStreamAsync("parameters", iniFileName);
 
             IniStreamConfigurationProvider ini = new(new IniStreamConfigurationSource()
             {
