@@ -76,7 +76,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
                 startTime = _timeProvider.GetTimestamp();
                 string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.brotli";
-
+                /*
                 using (var memoryStream = new MemoryStream())
                 {
                     JsonSerializer.Serialize(memoryStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
@@ -90,7 +90,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                         memoryStream.CopyTo(fileStream);
                     }
                 }
-
+                */
                 using (var memoryStream = new MemoryStream())
                 {
 
@@ -103,24 +103,25 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                         memoryStream.Position = 0;
                         using (var fileStream = File.Create($"c:\\local\\Temp\\up_{_requestID}.gz"))
                         {
-                            memoryStream.CopyTo(fileStream);
+                            // brotliStream.Flush();
+                            memoryStream.Flush();
+                            memoryStream.WriteTo(fileStream);
+                            //   fileStream.Flush();
                         }
                     }
                 }
 
                 //https://stackoverflow.com/questions/73626986/truncating-data-in-decompress-using-gzipstream
-
+                //https://stackoverflow.com/questions/856663/1-or-more-bytes-truncation-with-gzip-round-trip
                 using (var filestreamBroti = File.OpenRead($"c:\\local\\Temp\\up_{_requestID}.gz"))
                 {
                     using (var decompressedStream = new GZipStream(filestreamBroti, CompressionMode.Decompress))
                     {
-                        using (var reader = new StreamReader(decompressedStream))
-                        {
 
-                            using (var fileStreamCheck = File.Create($"c:\\local\\Temp\\check_{_requestID}.json"))
-                            {
-                                reader.BaseStream.CopyTo(fileStreamCheck);
-                            }
+                        using (var fileStreamCheck = File.Create($"c:\\local\\Temp\\check_{_requestID}.json"))
+                        {
+                            decompressedStream.Flush();
+                            decompressedStream.CopyTo(fileStreamCheck);
                         }
                     }
                 }
