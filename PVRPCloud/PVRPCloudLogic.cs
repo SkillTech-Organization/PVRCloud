@@ -76,27 +76,23 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
                 await QueueMessageAsync();
 
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data create: {_timeProvider.GetElapsedTime(startTime)}");
+
                 startTime = _timeProvider.GetTimestamp();
                 string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.brotli";
 
 
                 //JSON file készítés
-                using (var memStream = new MemoryStream())
+
+                using (var fileStream = File.Create(tempJsonFileName))
                 {
-                    JsonSerializer.Serialize(memStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
+                    JsonSerializer.Serialize(fileStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
                     {
                         WriteIndented = false
                     });
-
-                    memStream.Position = 0;
-                    using (var fileStream = File.Create(tempJsonFileName))
-                    {
-                        memStream.CopyTo(fileStream);
-                    }
                 }
 
                 //JSON file-ből brotli file készítés
-
                 using (var fileStream = File.Create(tempBlobFileName))
                 {
                     using (var filestreamRead = File.OpenRead(tempJsonFileName))
@@ -115,7 +111,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
                 }
 
-                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data.json upload duration: {_timeProvider.GetElapsedTime(startTime)}");
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data upload duration: {_timeProvider.GetElapsedTime(startTime)}");
             }
             catch (Exception ex)
             {
