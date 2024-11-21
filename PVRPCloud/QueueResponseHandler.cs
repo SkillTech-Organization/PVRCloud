@@ -47,11 +47,18 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
         string finishFile = $"REQ_{requestId}/{requestId}_finish.dat";
         string resFile = $"REQ_{requestId}/{requestId}_result.dat";
+        string excFile = $"REQ_{requestId}/{requestId}_exception.dat";
         string projFile = $"REQ_{requestId}/{requestId}_project_data.brotli";
 
         bool IsFinishExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, finishFile);
         bool IsResultExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, resFile);
+        bool IsExceptionExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, excFile);
         bool IsProjectExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, projFile);      //lehet,hogy hosszabb ideig tart a projekt mentése, ezért ellenőrizni kell a meglétét a felolvasás előtt
+
+        if (IsExceptionExist)
+        {
+            throw new RequestFailedException((int)HttpStatusCode.UnprocessableContent, $"Exception happened!");
+        }
 
         if (!IsFinishExist && !IsResultExist)
         {
@@ -60,7 +67,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
         if (IsFinishExist && !IsResultExist)
         {
-            throw new RequestFailedException((int)HttpStatusCode.GatewayTimeout, $"The calculation terminated with a timeout!");
+            throw new RequestFailedException((int)HttpStatusCode.GatewayTimeout, $"The calculation terminated without result (a timeout happened)!");
         }
 
         if (!IsFinishExist && IsResultExist)
@@ -218,20 +225,69 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     {
         _logger.LogPvrp(requestId, LogPvrpExtension.LogStatus.Start, $"{nameof(QueueResponseHandler)} {nameof(GetPvrpData)}");
 
-        string fileName = $"REQ_{requestId}/{requestId}_project_data.brotli";
-        var tempFileName = Path.GetTempFileName();
-
+        string brotliFileName = $"REQ_{requestId}/{requestId}_project_data.brotli";
+        var brotliTempFileName = Path.GetTempFileName();
+        var jsonTempFileName = Path.GetTempFileName();
         PvrpData data = null;
-
-        using (var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, fileName))
+        try
         {
-            using (var decompressedStream = new BrotliStream(blobStream, CompressionMode.Decompress))
+            //memóriatakarékos 
+
+            //brotli lementése
+            using (var fileStream = File.Create(brotliTempFileName))
             {
-                using (var reader = new StreamReader(decompressedStream))
+                var st = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, brotliFileName);
+                st.Flush();
+                st.Position = 0;
+                st.CopyTo(fileStream);
+            }
+
+            //brotli kibontása json fájlba
+            using (var fileStreamWrite = File.Create(jsonTempFileName))
+            {
+                using (var filestreamRead = File.OpenRead(brotliTempFileName))
                 {
-                    //   decompressedStream.Seek(0, SeekOrigin.Begin);
-                    data = JsonSerializer.Deserialize<PvrpData>(reader.BaseStream);
+                    using (var decompressedStream = new BrotliStream(filestreamRead, CompressionMode.Decompress))
+                    {
+                        decompressedStream.CopyTo(fileStreamWrite);
+                    }
                 }
+            }
+
+            //stream serializálás jsonból
+            using (var filestreamRead = File.OpenRead(jsonTempFileName))
+            {
+                data = JsonSerializer.Deserialize<PvrpData>(filestreamRead);
+            }
+
+
+            /*eredeti megoldás
+            using (var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, brotliFileName))
+            {
+                using (var decompressedStream = new BrotliStream(blobStream, CompressionMode.Decompress))
+                {
+                    using (var reader = new StreamReader(decompressedStream))
+                    {
+                        //   decompressedStream.Seek(0, SeekOrigin.Begin);
+                        data = JsonSerializer.Deserialize<PvrpData>(reader.BaseStream);
+                    }
+                }
+            }
+            */
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            if (File.Exists(brotliTempFileName))
+            {
+                File.Delete(brotliTempFileName);
+            }
+            if (File.Exists(jsonTempFileName))
+            {
+                File.Delete(jsonTempFileName);
             }
         }
 
