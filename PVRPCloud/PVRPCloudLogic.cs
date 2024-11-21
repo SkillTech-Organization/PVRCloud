@@ -82,6 +82,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.brotli";
 
 
+                //memóriatakarékos megoldás
+
                 //JSON file készítés
 
                 using (var fileStream = File.Create(tempJsonFileName))
