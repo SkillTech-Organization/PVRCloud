@@ -115,13 +115,27 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             }
             catch (Exception ex)
             {
-                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Exception, ex.Message);
-                throw;
+
+                //ennél a pontnál már nem tudjuk értesíteni a hívót az exceptionról, ezért egy exception.dat-ot készítünk
+                var exceptionMsg = $"API {_requestID} EXCEPTION\nMessage: {ex.Message}\nStack:{ex.StackTrace}";
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Exception, exceptionMsg);
+                string blobExceptionFileName = $"REQ_{_requestID}/{_requestID}_exception.dat";
+                await UploadToBlobStorage(exceptionMsg, blobExceptionFileName, Encoding.UTF8, AccessTier.Hot);
+
+
+                //              throw;
             }
             finally
             {
-                File.Delete(tempJsonFileName);
-                File.Delete(tempBlobFileName);
+                if (File.Exists(tempJsonFileName))
+                {
+                    File.Delete(tempJsonFileName);
+                }
+
+                if (File.Exists(tempBlobFileName))
+                {
+                    File.Delete(tempBlobFileName);
+                }
             }
         });
 

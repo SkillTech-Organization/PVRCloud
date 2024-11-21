@@ -30,6 +30,7 @@ namespace WebJobPOC
         private string _resultFileName;
         private string _stdOutFileName;
         private string _stdErrFileName;
+        private string _exceptionFileName;
 
         private readonly IBlobHandler _blobHandler;
 
@@ -67,6 +68,7 @@ namespace WebJobPOC
             _staFileName = $"{_requestID}_result{_requestID}.sta";  //ilyet készít a PVRP
             _stdOutFileName = $"{_requestID}_stdout.dat";
             _stdErrFileName = $"{_requestID}_stderr.dat";
+            _exceptionFileName = $"{_requestID}_exception.dat";
 
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
@@ -84,12 +86,14 @@ namespace WebJobPOC
             var stderrFileWithPath = System.IO.Path.Combine(_workDir, _stdErrFileName);
             var staFileWithPath = System.IO.Path.Combine(_workDir, _staFileName);
             var iniFileWithPath = System.IO.Path.Combine(_workDir, _iniFileName);
+            var exceptionFileWithPath = System.IO.Path.Combine(_workDir, _exceptionFileName);
 
             string blobResultFileName = $"REQ_{_requestID}/{_resultFileName}";
             string blobStdOutFileName = $"REQ_{_requestID}/{_stdOutFileName}";
             string blobStdErrFileName = $"REQ_{_requestID}/{_stdErrFileName}";
             string blobOkFileName = $"REQ_{_requestID}/{_okFileName}";
             string blobErrorFileName = $"REQ_{_requestID}/{_errorFileName}";
+            string blobExceptionFileName = $"REQ_{_requestID}/{_exceptionFileName}";
             string blobFinishFileName = $"REQ_{_requestID}/{_finishFileName}";
             string blobStaFileName = $"REQ_{_requestID}/result{_staFileName}";
             string blobIniFileName = $"REQ_{_requestID}/{_iniFileName}";
@@ -132,14 +136,19 @@ namespace WebJobPOC
             catch (Exception ex)
             {
 
-                var finishMsg = $"PVRP {_requestID} EXCEPTION {PVRP_exe}\nMessage: {ex.Message}\nStack:{ex.StackTrace}";
+                var exceptionMsg = $"PVRP {_requestID} EXCEPTION {PVRP_exe}\nMessage: {ex.Message}\nStack:{ex.StackTrace}";
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"{PVRP_exe} exception happened! {ex.Message}\nStack:{ex.StackTrace}");
 
-                using (System.IO.StreamWriter sw = System.IO.File.CreateText(finishFileWithPath))
+                using (System.IO.StreamWriter sw = System.IO.File.CreateText(exceptionFileWithPath))
                 {
-                    sw.WriteLine(finishMsg);
+                    sw.WriteLine(exceptionMsg);
                 }
-                await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
+                await uploadToBlobAsync(exceptionFileWithPath, blobExceptionFileName, AccessTier.Hot);
+
+            }
+            finally
+            {
+                DeleteFilesAndFoldersRecursively(_workDir);
             }
 
 
@@ -417,18 +426,21 @@ namespace WebJobPOC
 
         private void DeleteFilesAndFoldersRecursively(string target_dir)
         {
-            foreach (string file in Directory.GetFiles(target_dir))
+            if (Directory.Exists(target_dir))
             {
-                File.Delete(file);
-            }
+                foreach (string file in Directory.GetFiles(target_dir))
+                {
+                    File.Delete(file);
+                }
 
-            foreach (string subDir in Directory.GetDirectories(target_dir))
-            {
-                DeleteFilesAndFoldersRecursively(subDir);
-            }
+                foreach (string subDir in Directory.GetDirectories(target_dir))
+                {
+                    DeleteFilesAndFoldersRecursively(subDir);
+                }
 
-            Thread.Sleep(1); // This makes the difference between whether it works or not. Sleep(0) is not enough.
-            Directory.Delete(target_dir);
+                Thread.Sleep(1); // This makes the difference between whether it works or not. Sleep(0) is not enough.
+                Directory.Delete(target_dir);
+            }
         }
 
     }

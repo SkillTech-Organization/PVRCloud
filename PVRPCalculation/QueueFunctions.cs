@@ -64,6 +64,7 @@ namespace WebJobPOC
                 resp.Msg += $"\nException:{ex.Message}";
 
                 logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "EXCEPTION", $"eredmény:{JsonSerializer.Serialize(resp)}");
+
             }
             return resp;
         }

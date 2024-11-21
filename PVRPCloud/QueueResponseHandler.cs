@@ -47,11 +47,18 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
         string finishFile = $"REQ_{requestId}/{requestId}_finish.dat";
         string resFile = $"REQ_{requestId}/{requestId}_result.dat";
+        string excFile = $"REQ_{requestId}/{requestId}_exception.dat";
         string projFile = $"REQ_{requestId}/{requestId}_project_data.brotli";
 
         bool IsFinishExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, finishFile);
         bool IsResultExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, resFile);
+        bool IsExceptionExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, excFile);
         bool IsProjectExist = _blobHandler.CheckIfBlobExist(Consts.CalcContainerName, projFile);      //lehet,hogy hosszabb ideig tart a projekt mentése, ezért ellenőrizni kell a meglétét a felolvasás előtt
+
+        if (!IsExceptionExist)
+        {
+            throw new RequestFailedException((int)HttpStatusCode.UnprocessableContent, $"Exception happened!");
+        }
 
         if (!IsFinishExist && !IsResultExist)
         {
@@ -60,7 +67,7 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
         if (IsFinishExist && !IsResultExist)
         {
-            throw new RequestFailedException((int)HttpStatusCode.GatewayTimeout, $"The calculation terminated with a timeout!");
+            throw new RequestFailedException((int)HttpStatusCode.GatewayTimeout, $"The calculation terminated without result (a timeout happened)!");
         }
 
         if (!IsFinishExist && IsResultExist)
