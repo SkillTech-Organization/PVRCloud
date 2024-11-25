@@ -52,7 +52,7 @@ public sealed class OrderRenderer
     {
         var calcQuantity1 = Math.Ceiling(order.Quantity1 * CommonUtils.Consts.Quantity1Multiplier);
 
-        _sb.AppendLine($"setOrderInformation({pvrpId}, {calcQuantity1}, {order.Quantity2}, 0, 0, 0, {order.ReadyTime}, 0, 0, 0, 0, 0)");
+        _sb.AppendLine($"setOrderInformation({pvrpId}, {calcQuantity1}, {(order.Quantity2.HasValue ? order.Quantity2.Value : 0)}, 0, 0, 0, {order.ReadyTime}, 0, 0, 0, 0, 0)");
     }
 
     private void SetOrderServiceTime(int pvrpId, Order order, Client client)
@@ -60,7 +60,8 @@ public sealed class OrderRenderer
         var orderServiceTime = order.OrderServiceTime;
         if (orderServiceTime == 0)
         {
-            orderServiceTime = (int)Math.Ceiling(Math.Abs(order.Quantity1) * client.Quantity1SrerviceInSec / 60);
+            var quantity1SrerviceInSec = (client.Quantity1SrerviceInSec.HasValue ? client.Quantity1SrerviceInSec.Value : 0);
+            orderServiceTime = (int)Math.Ceiling(Math.Abs(order.Quantity1) * quantity1SrerviceInSec / 60);
         }
         if (orderServiceTime > 0)
         {

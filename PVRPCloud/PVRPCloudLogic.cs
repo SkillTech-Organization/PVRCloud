@@ -86,9 +86,20 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
                 //JSON file készítés
 
+                var pvrpData = _projectRenderer.GetPvrpData();
+
+                //feltöltjük a route.EdgeIds a serializáláshoz
+                //
+                pvrpData.Routes.ForEach(r =>
+                {
+                    r.route.EdgeIds = r.route.Edges?.Select(e => e.ID).ToList();
+                    r.route.Edges = null;
+                }
+                );
+
                 using (var fileStream = File.Create(tempJsonFileName))
                 {
-                    JsonSerializer.Serialize(fileStream, _projectRenderer.GetPvrpData(), new JsonSerializerOptions
+                    JsonSerializer.Serialize(fileStream, pvrpData, new JsonSerializerOptions
                     {
                         WriteIndented = false
                     });
@@ -221,7 +232,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         }
         var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - point.Lng) + Math.Abs(o.fromLatLng.Lat - point.Lat)).FirstOrDefault();
 
-        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"GetNearestReachableNOD_ID cnt:{filteredEdg.Count}, Időtartam:{_timeProvider.GetElapsedTime(startTime)}");
+        //ez nem kell... _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"GetNearestReachableNOD_ID cnt:{filteredEdg.Count}, Időtartam:{_timeProvider.GetElapsedTime(startTime)}");
 
         if (nearest is not null)
         {

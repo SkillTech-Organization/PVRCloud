@@ -13,7 +13,7 @@ public class PMapRoute : IEquatable<PMapRoute>
         public double Toll { get; set; }                           //Útdíj
     }
 
-    public int fromNOD_ID { get; init; }
+    public int fromNOD_ID { get; set; }
     public int toNOD_ID { get; init; }
     public string RZN_ID_LIST { get; init; } = string.Empty;
 
@@ -22,9 +22,9 @@ public class PMapRoute : IEquatable<PMapRoute>
     public int Height { get; init; }
     public int Width { get; init; }
 
-    public boRoute? route { get; set; } = null;
+    public boRoute? route { get; set; }
 
-    [JsonIgnore]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
     public string NODEList
     {
         get

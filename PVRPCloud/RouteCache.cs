@@ -27,6 +27,7 @@ public class RouteCache
 
     public void Add(boRoute p_Route)
     {
+        //egyelőre nem cache-olunk
     }
 
     public boRoute? Get(int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
