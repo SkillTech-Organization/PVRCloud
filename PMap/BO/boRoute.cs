@@ -1,8 +1,8 @@
-﻿using System;
+﻿using GMap.NET;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using GMap.NET;
+using System.Text.Json.Serialization;
 
 namespace PMapCore.BO
 {
@@ -34,8 +34,13 @@ namespace PMapCore.BO
                     return 0;
             }
         }
-        public MapRoute Route { get; set; }         //Az útvonal GPS kordinátákkal
-        public List<boEdge> Edges { get; set; }      //Az útvonal élekkel 
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public MapRoute Route { get; set; }                 //Az útvonal GPS kordinátákkal
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public List<boEdge> Edges { get; set; }             //Az útvonal élekkel 
+
+        public List<int> EdgeIds { get; set; } = null;      //Az útvonal élek ID-i. Ezt fogjuk szerializálni
     }
 }

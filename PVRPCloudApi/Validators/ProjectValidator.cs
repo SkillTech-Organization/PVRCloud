@@ -29,7 +29,7 @@ public sealed class ProjectValidator : AbstractValidator<Project>
             .WithState(GetProjectName);
 
         RuleFor(x => x.MaxTourDuration)
-            .GreaterThan(0)
+            .GreaterThanOrEqualTo(0)
             .WithState(GetProjectName);
 
         RuleFor(x => x.DistanceLimit)

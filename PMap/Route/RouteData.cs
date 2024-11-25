@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GMap.NET;
-using System.Data;
-using PMapCore.DB.Base;
-using PMapCore.BO;
-using PMapCore.BLL;
-using PMapCore.Common;
-using System.IO;
-using Newtonsoft.Json;
-using System.Runtime.ExceptionServices;
-using System.Globalization;
-using System.Collections.Frozen;
+﻿using GMap.NET;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using PMapCore.BLL;
+using PMapCore.BO;
+using PMapCore.Common;
+using PMapCore.DB.Base;
+using System;
+using System.Collections.Frozen;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Text;
 using System.Threading;
 
 namespace PMapCore.Route
@@ -31,7 +31,7 @@ namespace PMapCore.Route
         private readonly ILogger<RouteData> _logger;
         private readonly TimeProvider _timeProvider;
 
-        public FrozenDictionary<string, boEdge> Edges { get; private set; } = null; //Az útvonalak korlátozás-zónatípusonként
+        public FrozenDictionary<string, boEdge> Edges { get; private set; } = null; //Az útvonalak korlátozás-zónatípusonként Kulcs: from-to node
 
         public FrozenDictionary<int, PointLatLng> NodePositions { get; private set; } = null;  //Node koordináták
 
@@ -166,7 +166,7 @@ namespace PMapCore.Route
                 else if (sETL_ENGINEEURO == "A0")
                     ETL_ENGINEEURO = 100;
 
-                var ETL_TOLL_SPEEDWAY = Double.Parse( item["Gyorsforgalmi (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_TOLL_SPEEDWAY = Double.Parse(item["Gyorsforgalmi (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
                 var ETL_TOLL_ROAD = Double.Parse(item["Főűt (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
                 var ETL_NOISE_CITY = Double.Parse(item["Külvárosi utak (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
                 var ETL_NOISE_OUTER = Double.Parse(item["Településeket összekötő utak (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));

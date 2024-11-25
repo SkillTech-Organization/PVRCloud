@@ -3,6 +3,8 @@ using BlobUtils;
 using CommonUtils;
 using Microsoft.Extensions.Logging;
 using PMapCore.BLL;
+using PMapCore.BO;
+using PMapCore.Route;
 using PVRPCloud.Models;
 using System.IO.Compression;
 using System.Net;
@@ -34,11 +36,13 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
 
     private readonly IBlobHandler _blobHandler;
     private readonly ILogger<QueueResponseHandler> _logger;
+    private readonly IRouteData _routeData;
 
-    public QueueResponseHandler(IBlobHandler blobHandler, ILogger<QueueResponseHandler> logger)
+    public QueueResponseHandler(IBlobHandler blobHandler, ILogger<QueueResponseHandler> logger, IRouteData routeData)
     {
         _blobHandler = blobHandler;
         _logger = logger;
+        _routeData = routeData;
     }
 
     public async Task<ProjectRes> Handle(string requestId)
@@ -181,10 +185,12 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                         tour.RoutePoints.Add(new RoutePoint() { Lat = startPoint.fromLatLng.Lat, Lng = startPoint.fromLatLng.Lng });
 
                         //többi pont
+                        //többi pont
                         route.route.Edges.ForEach(e =>
                         {
                             tour.RoutePoints.Add(new RoutePoint() { Lat = e.toLatLng.Lat, Lng = e.toLatLng.Lng });
                         });
+
 
                     }
                     currTourPoint.ArrTime = prevTourPoint.DepTime.AddMinutes(currTourPoint.Duration);
@@ -259,6 +265,28 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             {
                 data = JsonSerializer.Deserialize<PvrpData>(filestreamRead);
             }
+
+            //feltöltjük a route-kat
+            var dicEdg = _routeData.Edges.Values
+                  .GroupBy(g => g.ID)
+                  .Select(g => g.First())
+                  .ToDictionary(k => k.ID, v => v);
+            data.Routes.ForEach(r =>
+            {
+                if (r.route != null)
+                {
+                    r.route.Edges = new List<boEdge>();
+                    r.route.EdgeIds.ForEach(e =>
+                    {
+                        boEdge edg = null;
+                        if (dicEdg.TryGetValue(e, out edg))
+                        {
+                            r.route.Edges.Add(edg);
+                        }
+                    });
+                }
+            });
+
 
 
             /*eredeti megoldás

@@ -40,7 +40,6 @@ public class CalcRouteProcess : BaseLongProcess
 
             int itemNo = 0;
             DateTime dtStart = DateTime.Now;
-            TimeSpan tspDiff;
 
             PMapRoutingProvider provider = new PMapRoutingProvider();
 
@@ -93,10 +92,8 @@ public class CalcRouteProcess : BaseLongProcess
                     {
 
                         RouteCache.Instance.Add(route);
-
                         ftr.route = route;
                     }
-
                 }
 
 
