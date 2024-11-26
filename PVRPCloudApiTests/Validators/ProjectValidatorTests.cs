@@ -84,7 +84,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
               }
             ],
             Orders = [
@@ -186,7 +186,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
               }
             ],
             Orders = [
@@ -289,7 +289,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ],
             Orders = [
@@ -392,7 +392,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ],
             Orders = [
@@ -493,7 +493,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
               }
             ],
             Orders = [
@@ -592,7 +592,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                 }
             ],
             Orders = [
@@ -683,7 +683,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                 }
             ],
             Orders = [
@@ -863,7 +863,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
               }
             ],
             Orders = [
@@ -950,7 +950,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ],
             Orders = [
@@ -1042,7 +1042,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ],
             Orders = [
@@ -1234,7 +1234,7 @@ public class ProjectValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ],
             Orders = []

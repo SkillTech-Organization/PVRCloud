@@ -80,7 +80,7 @@ public static class ProjectFactory
                     Lat = 0.003,
                     Lng = 0.02,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
               }
             ],
             Orders = [
@@ -174,7 +174,7 @@ public static class ProjectFactory
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
               }
             ],
             Orders = [

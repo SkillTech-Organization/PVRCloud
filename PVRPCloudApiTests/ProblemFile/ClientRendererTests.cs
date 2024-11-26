@@ -125,7 +125,7 @@ public class ClientRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 2
+            Quantity1ServiceInSec = 2
         };
 
         var result = _sut.Render([client]);
@@ -144,7 +144,7 @@ public class ClientRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 2
+            Quantity1ServiceInSec = 2
         };
 
         var result = _sut.Render([client]);
@@ -164,7 +164,7 @@ public class ClientRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 2
+            Quantity1ServiceInSec = 2
         };
 
         _ = _sut.Render([client]);

@@ -17,13 +17,22 @@ namespace PMapCore.BO
         }
 
         public int ID { get; set; }
+        [JsonPropertyName("NF")]
         public int NOD_ID_FROM { get; set; }
+        [JsonPropertyName("NT")]
         public int NOD_ID_TO { get; set; }
+        [JsonPropertyName("RZN")]
         public string RZN_ID_LIST { get; set; }
+        [JsonPropertyName("WE")]
         public int DST_MAXWEIGHT { get; set; }
+        [JsonPropertyName("HE")]
         public int DST_MAXHEIGHT { get; set; }
+        [JsonPropertyName("WD")]
         public int DST_MAXWIDTH { get; set; }
+        [JsonPropertyName("DST")]
         public int DST_DISTANCE { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public double CalcDistance                  //lehet, hogy nem hasznaljuk
         {
             get
@@ -41,6 +50,7 @@ namespace PMapCore.BO
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public List<boEdge> Edges { get; set; }             //Az útvonal élekkel 
 
-        public List<int> EdgeIds { get; set; } = null;      //Az útvonal élek ID-i. Ezt fogjuk szerializálni
+        [JsonPropertyName("EK")]
+        public List<string> EdgeKeys { get; set; } = null;      //Az útvonal élek dictionary key-ek. Ezt fogjuk szerializálni
     }
 }

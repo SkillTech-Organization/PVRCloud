@@ -35,7 +35,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 2
+            Quantity1ServiceInSec = 2
         };
 
         var result = _sut.Render([order], [client]);
@@ -62,7 +62,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 2
+            Quantity1ServiceInSec = 2
         };
 
         var result = _sut.Render([order], [client]);
@@ -91,7 +91,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 2
+            Quantity1ServiceInSec = 2
         };
 
         var result = _sut.Render([order], [client]);
@@ -121,7 +121,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 2
+            Quantity1ServiceInSec = 2
         };
 
         var result = _sut.Render([order], [client]);
@@ -151,7 +151,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 2
+            Quantity1ServiceInSec = 2
         };
 
         var result = _sut.Render([order], [client]);
@@ -181,7 +181,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 0
+            Quantity1ServiceInSec = 0
         };
 
         var result = _sut.Render([order], [client]);
@@ -205,7 +205,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 0
+            Quantity1ServiceInSec = 0
         };
 
         var result = _sut.Render([order], [client]);
@@ -229,7 +229,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 0
+            Quantity1ServiceInSec = 0
         };
         var result = _sut.Render([order], [client]);
 
@@ -259,7 +259,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 0
+            Quantity1ServiceInSec = 0
         };
         var result = _sut.Render([order], [client]);
 
@@ -285,7 +285,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 0
+            Quantity1ServiceInSec = 0
         };
         var result = _sut.Render([order], [client]);
 
@@ -317,7 +317,7 @@ public class OrderRendererTests
             Lat = 12.0,
             Lng = 15.0,
             ServiceFixTime = 6,
-            Quantity1SrerviceInSec = 0
+            Quantity1ServiceInSec = 0
         };
 
         _sut.Render([order1, order2], [client]);

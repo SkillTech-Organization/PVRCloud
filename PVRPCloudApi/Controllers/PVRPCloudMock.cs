@@ -1273,7 +1273,7 @@ public static class PVRPCloudMock
                   Lat =  47.504811,
                   Lng =  18.986218,
                   ServiceFixTime = 10,
-                  Quantity1SrerviceInSec = 1
+                  Quantity1ServiceInSec = 1
                 },
                 Lat =  47.504811,
                 Lng =  18.986218,
@@ -3519,7 +3519,7 @@ public static class PVRPCloudMock
                   Lat =  46.265335,
                   Lng =  20.110305,
                   ServiceFixTime = 5,
-                  Quantity1SrerviceInSec = 1
+                  Quantity1ServiceInSec = 1
                 },
                 Lat =  46.265335,
                 Lng =  20.110305,
@@ -3555,7 +3555,7 @@ public static class PVRPCloudMock
                   Lat =  46.913493,
                   Lng =  19.722090,
                   ServiceFixTime = 15,
-                  Quantity1SrerviceInSec = 1
+                  Quantity1ServiceInSec = 1
                 },
                 Lat =  46.913493,
                 Lng =  19.722090,
