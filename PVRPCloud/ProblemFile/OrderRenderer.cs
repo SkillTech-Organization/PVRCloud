@@ -60,8 +60,8 @@ public sealed class OrderRenderer
         var orderServiceTime = order.OrderServiceTime;
         if (orderServiceTime == 0)
         {
-            var quantity1SrerviceInSec = (client.Quantity1SrerviceInSec.HasValue ? client.Quantity1SrerviceInSec.Value : 0);
-            orderServiceTime = (int)Math.Ceiling(Math.Abs(order.Quantity1) * quantity1SrerviceInSec / 60);
+            var quantity1ServiceInSec = (client.Quantity1ServiceInSec.HasValue ? client.Quantity1ServiceInSec.Value : 0);
+            orderServiceTime = (int)Math.Ceiling(Math.Abs(order.Quantity1) * quantity1ServiceInSec / 60);
         }
         if (orderServiceTime > 0)
         {

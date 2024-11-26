@@ -36,7 +36,7 @@ public sealed class ClientValidator : AbstractValidator<Client>
             .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
 
-        RuleFor(x => x.Quantity1SrerviceInSec)
+        RuleFor(x => x.Quantity1ServiceInSec)
             .GreaterThanOrEqualTo(0)
             .WithState(GetIdentifiableId);
     }

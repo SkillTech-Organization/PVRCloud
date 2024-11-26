@@ -185,7 +185,6 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
                         tour.RoutePoints.Add(new RoutePoint() { Lat = startPoint.fromLatLng.Lat, Lng = startPoint.fromLatLng.Lng });
 
                         //többi pont
-                        //többi pont
                         route.route.Edges.ForEach(e =>
                         {
                             tour.RoutePoints.Add(new RoutePoint() { Lat = e.toLatLng.Lat, Lng = e.toLatLng.Lng });
@@ -267,19 +266,21 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
             }
 
             //feltöltjük a route-kat
+            /*
             var dicEdg = _routeData.Edges.Values
                   .GroupBy(g => g.ID)
                   .Select(g => g.First())
                   .ToDictionary(k => k.ID, v => v);
+            */
             data.Routes.ForEach(r =>
             {
                 if (r.route != null)
                 {
                     r.route.Edges = new List<boEdge>();
-                    r.route.EdgeIds.ForEach(e =>
+                    r.route.EdgeKeys.ForEach(ek =>
                     {
                         boEdge edg = null;
-                        if (dicEdg.TryGetValue(e, out edg))
+                        if (_routeData.Edges.TryGetValue(ek, out edg))
                         {
                             r.route.Edges.Add(edg);
                         }

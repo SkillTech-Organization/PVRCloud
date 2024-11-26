@@ -105,7 +105,7 @@ public class ProjectRendererTest
                 Lat = 44,
                 Lng = 86,
                 ServiceFixTime = 19,
-                Quantity1SrerviceInSec = 1
+                Quantity1ServiceInSec = 1
           }
         ],
         Orders = [
@@ -260,6 +260,6 @@ public class ProjectRendererTest
         Lat = 19,
         Lng = 20,
         ServiceFixTime = 55,
-        Quantity1SrerviceInSec = 2
+        Quantity1ServiceInSec = 2
     };
 }

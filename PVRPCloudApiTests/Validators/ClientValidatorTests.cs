@@ -20,7 +20,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                 }
             ]
         };
@@ -46,7 +46,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                 }
             ]
         };
@@ -72,7 +72,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ]
         };
@@ -98,7 +98,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                 },
                 new()
                 {
@@ -107,7 +107,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ]
         };
@@ -133,7 +133,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ]
         };
@@ -159,7 +159,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
               }
             ]
         };
@@ -188,7 +188,7 @@ public class ClientValidatorTests
                     Lat = value,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ]
         };
@@ -216,7 +216,7 @@ public class ClientValidatorTests
                     Lat = value,
                     Lng = 0,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ]
         };
@@ -245,7 +245,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = value,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                 }
             ]
         };
@@ -273,7 +273,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = value,
                     ServiceFixTime = 0,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                }
             ]
         };
@@ -299,7 +299,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = -1,
-                    Quantity1SrerviceInSec = 0
+                    Quantity1ServiceInSec = 0
                 }
             ]
         };
@@ -325,7 +325,7 @@ public class ClientValidatorTests
                     Lat = 0,
                     Lng = 0,
                     ServiceFixTime = -1,
-                    Quantity1SrerviceInSec = -1
+                    Quantity1ServiceInSec = -1
              }
             ]
         };

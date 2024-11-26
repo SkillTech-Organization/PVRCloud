@@ -92,7 +92,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 //
                 pvrpData.Routes.ForEach(r =>
                 {
-                    r.route.EdgeIds = r.route.Edges?.Select(e => e.ID).ToList();
+                    r.route.EdgeKeys = r.route.Edges.Select(e => e.NOD_ID_FROM.ToString() + "," + e.NOD_ID_TO.ToString()).ToList();
                     r.route.Edges = null;
                 }
                 );
