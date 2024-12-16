@@ -25,10 +25,11 @@ public sealed partial class QueueResponseHandler : IQueueResponseHandler
     private const string RouteNodeIndex = "routeNodeIndex";
     private const string NodeType = "nodeType";
     private const string ArrTime = "arrTime";
+    private const string ErrCode = "ErrCode";
     private const string OrderId = "ordId";
     private const string DepTime = "depTime";
 
-    [GeneratedRegex($"(?<{TruckId}>-?\\d+),(?<{RouteIndex}>-?\\d+),(?<{RouteNodeIndex}>-?\\d+),(-?\\d+),(?<{NodeType}>-?\\d+),(?<{OrderId}>-?\\d+),(?<{ArrTime}>-?\\d+),(?<{DepTime}>-?\\d+),(-?\\d+)", RegexOptions.ExplicitCapture)]
+    [GeneratedRegex($"(?<{TruckId}>-?\\d+),(?<{RouteIndex}>-?\\d+),(?<{RouteNodeIndex}>-?\\d+),(?<{ErrCode}>-?\\d+),(?<{NodeType}>-?\\d+),(?<{OrderId}>-?\\d+),(?<{ArrTime}>-?\\d+),(?<{DepTime}>-?\\d+),(-?\\d+)", RegexOptions.ExplicitCapture)]
     private static partial Regex GetRouteNodeExeParameters();
 
     [GeneratedRegex($"(\\d+),(?<{OrderId}>\\d+),([+-]?\\d+)", RegexOptions.ExplicitCapture)]

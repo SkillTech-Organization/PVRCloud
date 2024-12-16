@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using PVRPCloud.Models;
 using System.Text;
 
@@ -7,12 +8,15 @@ public sealed class ProjectRenderer : IProjectRenderer
 {
     private readonly StringBuilder _sb = new();
     private PvrpData? _pvrpData;
+    private ILogger<ProjectRenderer> _logger;
 
     public string Render(Project project,
                          List<NodeCombination> clientPairs,
                          List<PMapRoute> routes,
-                         string _requestID)
+                         string _requestID,
+                         ILogger<ProjectRenderer> logger)
     {
+        _logger = logger;
         _sb.AppendLine(new SetCustomerIdRenderer().Render());
 
         CostProfileRenderer costProfileRenderer = new();
@@ -35,10 +39,12 @@ public sealed class ProjectRenderer : IProjectRenderer
         OrderRenderer orderRenderer = new(clientRenderer.ClientIds, truckRenderer.TruckIds);
         _sb.Append(orderRenderer.Render(project.Orders, project.Clients));
 
-        RelationsRenderer relationsRenderer = new(project.TruckTypes,
+        RelationsRenderer relationsRenderer = new(_requestID,
+                                                  project.TruckTypes,
                                                   truckTypeRenderer.TruckTypeIds,
                                                   clientPairs,
-                                                  clientRenderer.ClientIds);
+                                                  clientRenderer.ClientIds,
+                                                  _logger);
         _sb.Append(relationsRenderer.Render(routes));
 
         EnginePropertiesRenderer enginePropertiesRenderer = new();

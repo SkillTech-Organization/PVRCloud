@@ -19,12 +19,14 @@ namespace PVRPCloud;
 
 public sealed class PVRPCloudLogic : IPVRPCloudLogic
 {
-    private readonly ILogger<PVRPCloudLogic> _logger;
     private readonly IBlobHandler _blobHandler;
     private readonly IPmapInputQueue _pmapInputQueue;
     private readonly IProjectRenderer _projectRenderer;
     private readonly IRouteData _routeData;
     private readonly IPMapIniParams _pmapIniParams;
+    private readonly ILogger<PVRPCloudLogic> _logger;
+    private readonly ILogger<ProjectRenderer> _loggerProject;
+
     private readonly TimeProvider _timeProvider;
 
     private readonly string _requestID;
@@ -35,7 +37,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                           TimeProvider timeProvider,
                           IRouteData routeData,
                           IPMapIniParams pmapIniParams,
-                          ILogger<PVRPCloudLogic> logger)
+                          ILogger<PVRPCloudLogic> logger,
+                          ILogger<ProjectRenderer> loggerProject)
     {
         _blobHandler = blobHandler;
         _pmapInputQueue = pmapInputQueue;
@@ -46,6 +49,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _routeData = routeData;
         _pmapIniParams = pmapIniParams;
         _logger = logger;
+        _loggerProject = loggerProject;
     }
 
     public string Handle(Project project)
@@ -67,7 +71,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Calculate routes finished");
 
 
-                string fileContent = _projectRenderer.Render(project, nodeCombinations, routes, _requestID);
+                string fileContent = _projectRenderer.Render(project, nodeCombinations, routes, _requestID, _loggerProject);
                 string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
                 var startTime = _timeProvider.GetTimestamp();
