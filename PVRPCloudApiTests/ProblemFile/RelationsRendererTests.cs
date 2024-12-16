@@ -1,8 +1,9 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using PMapCore.BO;
 using PVRPCloud;
-using PVRPCloud.ProblemFile;
 using PVRPCloud.Models;
+using PVRPCloud.ProblemFile;
 
 namespace PVRPCloudApiTests.ProblemFile;
 
@@ -35,7 +36,7 @@ public class RelationsRendererTests
         ["client"] = 2
     };
 
-    private readonly RelationsRenderer _sut = new(_truckTypes, _truckTypeIds, [clientNodes], _clientIds);
+    private readonly RelationsRenderer _sut = new(_truckTypes, _truckTypeIds, clientNodes, _clientIds, new NullLogger<ProjectRenderer>());
 
     [Fact]
     public void Render_CalledWithRoutes_GeneratesSetRelationAccessSections()

@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using PVRPCloud.Models;
 using System.Text;
 
@@ -11,16 +13,26 @@ public sealed class RelationsRenderer
     private readonly IReadOnlyDictionary<string, int> _truckTypeIds;
     private readonly List<NodeCombination> _clientNodes;
     private readonly IReadOnlyDictionary<string, int> _clientIds;
-
-    public RelationsRenderer(IReadOnlyList<TruckType> truckTypes,
+    private ILogger<ProjectRenderer> _logger;
+    private readonly string _requestId;
+    public RelationsRenderer(string requestId,
+                             IReadOnlyList<TruckType> truckTypes,
                              IReadOnlyDictionary<string, int> truckTypeIds,
                              List<NodeCombination> clientNodes,
-                             IReadOnlyDictionary<string, int> clientIds)
+                             IReadOnlyDictionary<string, int> clientIds,
+                             ILogger<ProjectRenderer> logger)
     {
+        _requestId = requestId;
         _truckTypes = truckTypes;
         _truckTypeIds = truckTypeIds;
         _clientNodes = clientNodes;
         _clientIds = clientIds;
+        _logger = logger;
+
+    }
+
+    public RelationsRenderer(TruckType[] truckTypes, Dictionary<string, int> truckTypeIds, object value, Dictionary<string, int> clientIds, NullLogger<ProjectRenderer> nullLogger)
+    {
     }
 
     public StringBuilder Render(IEnumerable<PMapRoute> routes)
@@ -37,10 +49,16 @@ public sealed class RelationsRenderer
 
                 int fromClientId = _clientIds[from.Identifable.ID];
                 int toClientId = _clientIds[to.Identifable.ID];
+                if (from.NodeId == to.NodeId || route.route.Edges.Count > 0)
+                {
+                    int time = route.route!.CalculateTravelTime(truckType);
 
-                int time = route.route!.CalculateTravelTime(truckType);
-
-                _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, {route.route?.DST_DISTANCE ?? 0}, {time})");
+                    _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, {route.route?.DST_DISTANCE ?? 0}, {time})");
+                }
+                else
+                {
+                    _logger.LogPvrp(_requestId, LogPvrpExtension.LogStatus.Info, $"Hiányzó úvonlal truckType:{truckTypePvrpId}, fromNode:{from.NodeId}, toNode:{to.NodeId}");
+                }
             }
         }
 
