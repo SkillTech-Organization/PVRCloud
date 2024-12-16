@@ -36,7 +36,7 @@ public class RelationsRendererTests
         ["client"] = 2
     };
 
-    private readonly RelationsRenderer _sut = new(_truckTypes, _truckTypeIds, clientNodes, _clientIds, new NullLogger<ProjectRenderer>());
+    private readonly RelationsRenderer _sut = new("12345678", _truckTypes, _truckTypeIds, [clientNodes], _clientIds, new NullLogger<ProjectRenderer>());
 
     [Fact]
     public void Render_CalledWithRoutes_GeneratesSetRelationAccessSections()
