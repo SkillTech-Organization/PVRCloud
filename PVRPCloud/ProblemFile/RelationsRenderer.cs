@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using PVRPCloud.Models;
 using System.Text;
 
@@ -31,9 +30,6 @@ public sealed class RelationsRenderer
 
     }
 
-    public RelationsRenderer(TruckType[] truckTypes, Dictionary<string, int> truckTypeIds, object value, Dictionary<string, int> clientIds, NullLogger<ProjectRenderer> nullLogger)
-    {
-    }
 
     public StringBuilder Render(IEnumerable<PMapRoute> routes)
     {
