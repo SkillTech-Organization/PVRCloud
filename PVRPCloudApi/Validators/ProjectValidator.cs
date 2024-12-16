@@ -28,10 +28,6 @@ public sealed class ProjectValidator : AbstractValidator<Project>
             .GreaterThan(x => x.MinTime)
             .WithState(GetProjectName);
 
-        RuleFor(x => x.MaxTourDuration)
-            .GreaterThanOrEqualTo(0)
-            .WithState(GetProjectName);
-
         RuleFor(x => x.DistanceLimit)
             .GreaterThanOrEqualTo(0)
             .WithState(GetProjectName);

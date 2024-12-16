@@ -6,7 +6,6 @@ public sealed class Project
     public DateTime ProjectDate { get; init; }
     public int MinTime { get; init; }
     public int MaxTime { get; init; }
-    public int MaxTourDuration { get; init; }
     public int DistanceLimit { get; init; }
     public List<CostProfile> CostProfiles { get; init; } = [];
     public List<CapacityProfile> CapacityProfiles { get; init; } = [];
