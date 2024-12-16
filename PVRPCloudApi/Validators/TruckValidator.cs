@@ -32,12 +32,6 @@ public sealed class TruckValidator : AbstractValidator<PVRPCloud.Models.Truck>
             .NotEmpty()
             .WithState(GetIdentifiableId);
 
-        RuleFor(x => x.ArrDepotMaxTime)
-            .GreaterThan(0)
-            .GreaterThanOrEqualTo(project.MinTime)
-            .LessThanOrEqualTo(project.MaxTime)
-            .WithState(GetIdentifiableId);
-
         var capacityProfileIds = IdsToArray(project.CapacityProfiles);
         RuleFor(x => x.CapacityProfileID)
             .NotEmpty()

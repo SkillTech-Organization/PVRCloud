@@ -12,7 +12,6 @@ public static class ProjectFactory
             ProjectDate = DateTime.Parse("2024-05-11"),
             MinTime = 1,
             MaxTime = 4,
-            MaxTourDuration = 5,
             DistanceLimit = 2,
             CostProfiles = [
                 new()
@@ -52,7 +51,6 @@ public static class ProjectFactory
                     ID = "truck id",
                     TruckName = "name",
                     TruckTypeID = "truck type id",
-                    ArrDepotMaxTime = 1,
                     CapacityProfileID = "capacity profile id",
                     CostProfileID = "cost profile ID",
                     MaxWorkTime = 1,
@@ -107,7 +105,6 @@ public static class ProjectFactory
             ProjectName = null!,
             MinTime = 1,
             MaxTime = 4,
-            MaxTourDuration = 5,
             DistanceLimit = 2,
             CostProfiles = [
                 new()
@@ -147,7 +144,6 @@ public static class ProjectFactory
                     ID = "truck id",
                     TruckName = "name",
                     TruckTypeID = "truck type id",
-                    ArrDepotMaxTime = 1,
                     CapacityProfileID = "capacity profile id",
                     MaxWorkTime = 1,
                     EarliestStart = 1,
