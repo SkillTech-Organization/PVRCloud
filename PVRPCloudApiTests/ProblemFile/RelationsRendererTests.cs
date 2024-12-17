@@ -36,7 +36,14 @@ public class RelationsRendererTests
         ["client"] = 2
     };
 
-    private readonly RelationsRenderer _sut = new("12345678", _truckTypes, _truckTypeIds, [clientNodes], _clientIds, new NullLogger<ProjectRenderer>());
+    private static readonly IEnumerable<Client> _clients = new Client[]
+    {
+        new Client() { ID = "1", ClientName = "depot"},
+        new Client() { ID = "2", ClientName = "client"}
+
+    };
+
+    private readonly RelationsRenderer _sut = new("12345678", _truckTypes, _truckTypeIds, [clientNodes], _clientIds, _clients, new NullLogger<ProjectRenderer>());
 
     [Fact]
     public void Render_CalledWithRoutes_GeneratesSetRelationAccessSections()
