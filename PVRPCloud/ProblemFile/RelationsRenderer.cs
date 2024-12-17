@@ -12,13 +12,17 @@ public sealed class RelationsRenderer
     private readonly IReadOnlyDictionary<string, int> _truckTypeIds;
     private readonly List<NodeCombination> _clientNodes;
     private readonly IReadOnlyDictionary<string, int> _clientIds;
-    private ILogger<ProjectRenderer> _logger;
+    private readonly Depot _depot;
+    private readonly IEnumerable<Client> _clients;
+    private readonly ILogger<ProjectRenderer> _logger;
     private readonly string _requestId;
     public RelationsRenderer(string requestId,
                              IReadOnlyList<TruckType> truckTypes,
                              IReadOnlyDictionary<string, int> truckTypeIds,
                              List<NodeCombination> clientNodes,
                              IReadOnlyDictionary<string, int> clientIds,
+                             Depot depot,
+                             IEnumerable<Client> clients,
                              ILogger<ProjectRenderer> logger)
     {
         _requestId = requestId;
@@ -26,6 +30,8 @@ public sealed class RelationsRenderer
         _truckTypeIds = truckTypeIds;
         _clientNodes = clientNodes;
         _clientIds = clientIds;
+        _depot = depot;
+        _clients = clients;
         _logger = logger;
 
     }
@@ -53,7 +59,29 @@ public sealed class RelationsRenderer
                 }
                 else
                 {
-                    _logger.LogPvrp(_requestId, LogPvrpExtension.LogStatus.Info, $"Hiányzó úvonlal truckType:{truckTypePvrpId}, fromNode:{from.NodeId}, toNode:{to.NodeId}");
+                    var fromName = "???";
+                    if (_depot.ID == from.Identifable.ID)
+                    {
+                        fromName = _depot.Name;
+                    }
+                    else
+                    {
+                        fromName = _clients.Single(c => c.ID == from.Identifable.ID)?.ClientName;
+                    }
+
+                    var toName = "???";
+                    if (_depot.ID == to.Identifable.ID)
+                    {
+                        toName = _depot.Name;
+                    }
+                    else
+                    {
+                        toName = _clients.Single(c => c.ID == to.Identifable.ID)?.ClientName;
+                    }
+
+                    _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, 999999999, 2880)");
+
+                    _logger.LogPvrp(_requestId, LogPvrpExtension.LogStatus.Info, $"Missing route! {fromName.Trim()}->{toName.Trim()} truckType:{truckTypePvrpId}, fromNode:{from.NodeId}, toNode:{to.NodeId}");
                 }
             }
         }

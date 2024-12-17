@@ -188,7 +188,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     private void FillClientNodes(ClientBase client, boEdge[] edgesArr, List<ClientNodeIdPair> clientNodes, List<Result> errors)
     {
-        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, "Filling client nodes");
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Placing on map:{client.Name} lat: {client.Lat}, long: {client.Lng}");
 
         int clientNode = PVRPGetNearestNOD_ID(edgesArr, new PointLatLng(client.Lat, client.Lng));
 
@@ -200,7 +200,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         {
             var error = GetValidationError(client,
                                            client.Name,
-                                           $"{client.Name}: Helytelen koordináta: lat: {client.Lat}, long : {client.Lng}.");
+                                           $"{client.Name}: Invalid coordinate: lat: {client.Lat}, long: {client.Lng}.");
 
             errors.Add(error);
         }

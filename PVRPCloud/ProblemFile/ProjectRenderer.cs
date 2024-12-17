@@ -44,6 +44,8 @@ public sealed class ProjectRenderer : IProjectRenderer
                                                   truckTypeRenderer.TruckTypeIds,
                                                   clientPairs,
                                                   clientRenderer.ClientIds,
+                                                  project.Depot,
+                                                  project.Clients,
                                                   _logger);
         _sb.Append(relationsRenderer.Render(routes));
 
