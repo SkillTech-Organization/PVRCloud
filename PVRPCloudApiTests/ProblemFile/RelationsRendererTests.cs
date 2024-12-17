@@ -42,8 +42,9 @@ public class RelationsRendererTests
         new Client() { ID = "2", ClientName = "client"}
 
     };
+    private static readonly Depot _depot = new Depot() { ID = "1", DepotName = "depot" };
 
-    private readonly RelationsRenderer _sut = new("12345678", _truckTypes, _truckTypeIds, [clientNodes], _clientIds, _clients, new NullLogger<ProjectRenderer>());
+    private readonly RelationsRenderer _sut = new("12345678", _truckTypes, _truckTypeIds, [clientNodes], _clientIds, _depot, _clients, new NullLogger<ProjectRenderer>());
 
     [Fact]
     public void Render_CalledWithRoutes_GeneratesSetRelationAccessSections()
