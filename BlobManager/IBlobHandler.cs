@@ -17,7 +17,7 @@ namespace BlobUtils
         Task<string> DownloadToTextAsync(string blobContainerName, string blobName, Encoding enc = null);
         Task<Stream> DownloadToStreamAsync(string blobContainerName, string blobName);
         bool CheckIfBlobExist(string blobContainerName, string blobName);
-        Task UploadAsync(string container, string blobName, Stream content, AccessTier? accessTier, CancellationToken cancellationToken = default);
+        Task<string> UploadAsync(string container, string blobName, Stream content, AccessTier? accessTier, CancellationToken cancellationToken = default);
 
     }
 }

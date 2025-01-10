@@ -6,6 +6,13 @@ using System.Text.Json;
 
 namespace WebJobPOC
 {
+    /*
+     * {
+"requestID" : "8",
+"maxCompTime" : 120080
+}
+
+*/
     public class CalcRequest
     {
         public string RequestID { get; set; }
@@ -14,10 +21,29 @@ namespace WebJobPOC
 
     public class CalcResposne
     {
-        public int Ver { get; set; } = 33;
+        public int Ver { get; set; } = 34;
         public string RequestID { get; set; }
         public string Status { get; set; }
         public string Msg { get; set; }
+
+        public bool TimeoutHappened { get; set; }
+        public bool ExceptionHappened { get; set; } = false;
+        public string StaFileContent { get; set; }
+
+        public DateTime CalcStart { get; set; }
+        public DateTime CalcEnd { get; set; }
+
+        public string ResultFileName { get; set; }
+        public string StdOutFileName { get; set; }
+        public string StdErrFileName { get; set; }
+        public string OkFileName { get; set; }
+        public string ErrorFileName { get; set; }
+        public string FinishFileName { get; set; }
+        public string StaFileName { get; set; }
+        public string IniFileName { get; set; }
+        public string ExceptionFileName { get; set; }
+
+
     }
 
     [StorageAccount("AzureWebJobsStorage")]
@@ -52,9 +78,8 @@ namespace WebJobPOC
 
                 IConfiguration config = confBuilder.Build();
                 var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger);
-                var result = await fn.OptimizeAsync();
+                await fn.OptimizeAsync(resp);
 
-                resp.Status = (result ? "OK" : "ERR");
 
                 logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "END", $"eredmény:{JsonSerializer.Serialize(resp)}");
             }

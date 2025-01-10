@@ -73,9 +73,10 @@ namespace WebJobPOC
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
         }
-        public async Task<bool> OptimizeAsync()
+        public async Task<bool> OptimizeAsync(CalcResposne resp)
         {
             bool resultWasOk = false;
+            resp.CalcStart = DateTime.UtcNow;
 
             // NOTODO: check  the result file
             var okFileWithPath = System.IO.Path.Combine(_workDir, _okFileName);
@@ -114,23 +115,33 @@ namespace WebJobPOC
                 //CreateBatFile(_localPath, batFileName, iniFileName);
 
                 // NOTODO: start the .bat file
-                ExecPVRP(ExecTimeOutMS);
+                resp.TimeoutHappened = ExecPVRP(ExecTimeOutMS);
 
 
-                resultWasOk = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath);
+                resp.Status = CheckResultFiles(resultFileWithPath, okFileWithPath, errorFileWithPath, exceptionFileWithPath) ? "OK" : "ERR";
 
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"Start upload to blobstore");
 
 
                 // NOTODO: upload the result files
-                await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
-                await uploadToBlobAsync(stdoutFileWithPath, blobStdOutFileName);
-                await uploadToBlobAsync(stderrFileWithPath, blobStdErrFileName);
-                await uploadToBlobAsync(okFileWithPath, blobOkFileName, AccessTier.Hot);
-                await uploadToBlobAsync(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
-                await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
-                await uploadToBlobAsync(staFileWithPath, blobStaFileName, AccessTier.Hot);
-                await uploadToBlobAsync(iniFileWithPath, blobIniFileName, AccessTier.Hot);
+                resp.ResultFileName = await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
+                resp.StdOutFileName = await uploadToBlobAsync(stdoutFileWithPath, blobStdOutFileName);
+                resp.StdErrFileName = await uploadToBlobAsync(stderrFileWithPath, blobStdErrFileName);
+                resp.OkFileName = await uploadToBlobAsync(okFileWithPath, blobOkFileName, AccessTier.Hot);
+                resp.ErrorFileName = await uploadToBlobAsync(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
+                resp.FinishFileName = await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
+                resp.StaFileName = await uploadToBlobAsync(staFileWithPath, blobStaFileName, AccessTier.Hot);
+                resp.IniFileName = await uploadToBlobAsync(iniFileWithPath, blobIniFileName, AccessTier.Hot);
+
+                //sta file tartalmát még külön felolvassuk
+                if (File.Exists(staFileWithPath))
+                {
+                    using (var stream = new StreamReader(staFileWithPath, Encoding.ASCII))
+                    {
+                        resp.StaFileContent = stream.ReadToEnd();
+                        resp.StaFileContent = resp.StaFileContent.Replace("\r\n", ",");
+                    }
+                }
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"end uploads to blobstore");
             }
             catch (Exception ex)
@@ -143,12 +154,15 @@ namespace WebJobPOC
                 {
                     sw.WriteLine(exceptionMsg);
                 }
-                await uploadToBlobAsync(exceptionFileWithPath, blobExceptionFileName, AccessTier.Hot);
+                resp.ExceptionFileName = await uploadToBlobAsync(exceptionFileWithPath, blobExceptionFileName, AccessTier.Hot);
+                resp.ExceptionHappened = true;
 
             }
             finally
             {
                 DeleteFilesAndFoldersRecursively(_workDir);
+                resp.CalcEnd = DateTime.UtcNow;
+
             }
 
 
@@ -170,15 +184,17 @@ namespace WebJobPOC
             _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been downloaded:{blobFileName} -> {fileWithPath}");
 
         }
-        private async Task uploadToBlobAsync(string fileWithPath, string blobFileName, AccessTier? accessTier = null)
+        private async Task<string> uploadToBlobAsync(string fileWithPath, string blobFileName, AccessTier? accessTier = null)
         {
+            var ret = "";
             try
             {
                 if (File.Exists(fileWithPath))
                 {
                     using (var fileStream = System.IO.File.OpenRead(fileWithPath))
                     {
-                        await _blobHandler.UploadAsync(Consts.CalcContainerName, blobFileName, fileStream, accessTier);
+                        ret = await _blobHandler.UploadAsync(Consts.CalcContainerName, blobFileName, fileStream, accessTier);
+
                         _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
                     }
                 }
@@ -191,6 +207,7 @@ namespace WebJobPOC
             {
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"file has't been uploaded:{fileWithPath} -> {blobFileName}");
             }
+            return ret;
         }
 
         private void CreateInifile(string iniFileName)
@@ -227,6 +244,7 @@ namespace WebJobPOC
                     //            String s2 = "NOWAIT? := false,";
                     String s2 = "NOWAIT? := true,";
                     String s3 = "MULTITOURS? := false,";
+                    //String s3 = "MULTITOURS? := true,";
                     String s4 = "go(),";
                     String s5 = "exit(1)";
                     String s6 = ")";
@@ -267,8 +285,9 @@ namespace WebJobPOC
         }
 
 
-        private void ExecPVRP(int timeoutMS)
+        private bool ExecPVRP(int timeoutMS)
         {
+            var timeoutHappened = false;
             var finishMsg = "???";
             var iniFileWithPath = System.IO.Path.Combine(_workDir, _iniFileName);
 
@@ -332,7 +351,6 @@ namespace WebJobPOC
                 var stdout = new StringBuilder();
                 var stderr = new StringBuilder();
                 int exitCode;
-                var timeoutHappened = false;
                 using (Process exeProcess = Process.Start(startInfo))
                 {
                     var maxWorkingSet = Int64.Parse("0" + _config[ProcessMemoryInMBParName].Trim()) * 1024 * 1024;
@@ -393,7 +411,7 @@ namespace WebJobPOC
                 //_logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"{PVRP_exe} exception happened! {ex.Message}\nStack:{ex.StackTrace}");
                 throw;
             }
-
+            return timeoutHappened;
         }
 
         private void saveStdOut(string stdout, string stderr)
@@ -412,11 +430,11 @@ namespace WebJobPOC
 
         }
 
-        private bool CheckResultFiles(string resultFileWithPath, string okFileWithPath, string errorFileWithPath)
+        private bool CheckResultFiles(string resultFileWithPath, string okFileWithPath, string errorFileWithPath, string exceptionFileWithPath)
         {
             bool res = false;
 
-            if (System.IO.File.Exists(resultFileWithPath) && System.IO.File.Exists(okFileWithPath) && System.IO.File.Exists(errorFileWithPath))
+            if (System.IO.File.Exists(resultFileWithPath) && System.IO.File.Exists(errorFileWithPath) && !System.IO.File.Exists(exceptionFileWithPath)  /*&& System.IO.File.Exists(okFileWithPath)*/)
             {
                 res = true;
             }
