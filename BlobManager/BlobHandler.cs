@@ -149,8 +149,10 @@ namespace BlobUtils
             return blobClient.Exists().Value;
         }
 
-        public async Task UploadAsync(string container, string blobName, Stream content, AccessTier? accessTier, CancellationToken cancellationToken = default)
+        public async Task<string> UploadAsync(string container, string blobName, Stream content, AccessTier? accessTier, CancellationToken cancellationToken = default)
         {
+            var ret = "";
+
             var containerClient = Client.GetBlobContainerClient(container);
             var blobClient = containerClient.GetBlobClient(blobName);
 
@@ -166,7 +168,10 @@ namespace BlobUtils
                 IfNoneMatch = new ETag(Constants.Wildcard)
             };
             */
+
             await blobClient.UploadAsync(content, options, cancellationToken);
+            ret = blobClient.Uri.ToString();
+            return ret.Trim();
         }
     }
 }

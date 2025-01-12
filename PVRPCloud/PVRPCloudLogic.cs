@@ -78,7 +78,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 await UploadToBlobStorage(fileContent, problemFileName, Encoding.GetEncoding("iso-8859-2"), AccessTier.Cool);  //A PVRP.exe iso-8859-2-esben értelmezi a problémafájlt
                 _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"optimize.dat upload duration: {_timeProvider.GetElapsedTime(startTime)}");
 
-                await QueueMessageAsync();
+                await QueueMessageAsync(project.Trucks.Count, project.Orders.Count, project.Clients.Count);
 
                 _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data create: {_timeProvider.GetElapsedTime(startTime)}");
 
@@ -354,7 +354,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         await _blobHandler.UploadAsync(Consts.CalcContainerName, fileName, ms, accessTier);
     }
 
-    private async Task QueueMessageAsync()
+    private async Task QueueMessageAsync(int TrkCount, int OrdCount, int ClientCount)
     {
         const int MaxCompTime = 60_000;
 
@@ -366,7 +366,10 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         await _pmapInputQueue.SendMessageAsync(new CalcRequest()
         {
             RequestID = _requestID,
-            MaxCompTime = optimizeTimeOutSec
+            MaxCompTime = optimizeTimeOutSec,
+            TrkCount = TrkCount,
+            OrdCount = OrdCount,
+            ClientCount = ClientCount
         });
     }
 }
