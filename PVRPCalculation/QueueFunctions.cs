@@ -1,4 +1,5 @@
-﻿using CommonUtils;
+﻿using BlobManager;
+using CommonUtils;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -13,11 +14,6 @@ namespace WebJobPOC
 }
 
 */
-    public class CalcRequest
-    {
-        public string RequestID { get; set; }
-        public int MaxCompTime { get; set; } = 30000;
-    }
 
     public class CalcResposne
     {
@@ -32,6 +28,9 @@ namespace WebJobPOC
 
         public DateTime CalcStart { get; set; }
         public DateTime CalcEnd { get; set; }
+        public int TrkCount { get; set; }
+        public int OrdCount { get; set; }
+        public int ClientCount { get; set; }
 
         public string ResultFileName { get; set; }
         public string StdOutFileName { get; set; }
@@ -59,7 +58,7 @@ namespace WebJobPOC
         public static async Task<CalcResposne> ProcessQueueMessageAsync([QueueTrigger("pmapcalcinputmsgs")] CalcRequest req, ILogger logger)
         {
             var msg = $"Processed queue message:{JsonSerializer.Serialize(req)}";
-            var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg };
+            var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg, TrkCount = req.TrkCount, OrdCount = req.OrdCount, ClientCount = req.ClientCount };
             try
             {
                 logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "START", msg);
