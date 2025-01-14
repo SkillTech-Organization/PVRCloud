@@ -32,15 +32,15 @@ namespace WebJobPOC
         public int OrdCount { get; set; }
         public int ClientCount { get; set; }
 
-        public string ResultFileName { get; set; }
-        public string StdOutFileName { get; set; }
-        public string StdErrFileName { get; set; }
-        public string OkFileName { get; set; }
-        public string ErrorFileName { get; set; }
-        public string FinishFileName { get; set; }
-        public string StaFileName { get; set; }
-        public string IniFileName { get; set; }
-        public string ExceptionFileName { get; set; }
+        public string ResultLink { get; set; }
+        public string StdOutLink { get; set; }
+        public string StdErrLink { get; set; }
+        public string OkFileLink { get; set; }
+        public string ErrorLink { get; set; }
+        public string FinishLink { get; set; }
+        public string StaLink { get; set; }
+        public string IniLink { get; set; }
+        public string ExceptionLink { get; set; }
 
 
     }
