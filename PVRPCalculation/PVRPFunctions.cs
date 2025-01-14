@@ -14,6 +14,7 @@ namespace WebJobPOC
         public static string AzureWebJobsStorageParName = "ConnectionStrings:AzureWebJobsStorage";
         public static string PVRPParsParName = "PVRPPars";
         public static string ProcessMemoryInMBParName = "ProcessMemoryInMB";
+        public static string BlobLinkParName = "BlobLink";
         public static string PVRP_exe = "PVRP.exe";
 
 
@@ -197,16 +198,25 @@ namespace WebJobPOC
 
                         _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
                     }
+
+                    if (!string.IsNullOrWhiteSpace(_config[BlobLinkParName]))
+                    {
+                        var BlobLink = _config[BlobLinkParName];
+                        ret = BlobLink?.Replace("%%BLOB%%", Consts.CalcContainerName + "%2F" + blobFileName.Replace("/", "%2F"));
+                    }
                 }
                 else
                 {
                     _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file not found:{fileWithPath}");
                 }
+
+
             }
             catch (Exception)
             {
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"file has't been uploaded:{fileWithPath} -> {blobFileName}");
             }
+
             return ret;
         }
 
