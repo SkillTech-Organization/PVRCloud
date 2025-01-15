@@ -14,6 +14,7 @@ namespace WebJobPOC
         public static string AzureWebJobsStorageParName = "ConnectionStrings:AzureWebJobsStorage";
         public static string PVRPParsParName = "PVRPPars";
         public static string ProcessMemoryInMBParName = "ProcessMemoryInMB";
+        public static string BlobLinkParName = "BlobLink";
         public static string PVRP_exe = "PVRP.exe";
 
 
@@ -124,14 +125,14 @@ namespace WebJobPOC
 
 
                 // NOTODO: upload the result files
-                resp.ResultFileName = await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
-                resp.StdOutFileName = await uploadToBlobAsync(stdoutFileWithPath, blobStdOutFileName);
-                resp.StdErrFileName = await uploadToBlobAsync(stderrFileWithPath, blobStdErrFileName);
-                resp.OkFileName = await uploadToBlobAsync(okFileWithPath, blobOkFileName, AccessTier.Hot);
-                resp.ErrorFileName = await uploadToBlobAsync(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
-                resp.FinishFileName = await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
-                resp.StaFileName = await uploadToBlobAsync(staFileWithPath, blobStaFileName, AccessTier.Hot);
-                resp.IniFileName = await uploadToBlobAsync(iniFileWithPath, blobIniFileName, AccessTier.Hot);
+                resp.ResultLink = await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
+                resp.StdOutLink = await uploadToBlobAsync(stdoutFileWithPath, blobStdOutFileName);
+                resp.StdErrLink = await uploadToBlobAsync(stderrFileWithPath, blobStdErrFileName);
+                resp.OkFileLink = await uploadToBlobAsync(okFileWithPath, blobOkFileName, AccessTier.Hot);
+                resp.ErrorLink = await uploadToBlobAsync(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
+                resp.FinishLink = await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
+                resp.StaLink = await uploadToBlobAsync(staFileWithPath, blobStaFileName, AccessTier.Hot);
+                resp.IniLink = await uploadToBlobAsync(iniFileWithPath, blobIniFileName, AccessTier.Hot);
 
                 //sta file tartalmát még külön felolvassuk
                 if (File.Exists(staFileWithPath))
@@ -154,7 +155,7 @@ namespace WebJobPOC
                 {
                     sw.WriteLine(exceptionMsg);
                 }
-                resp.ExceptionFileName = await uploadToBlobAsync(exceptionFileWithPath, blobExceptionFileName, AccessTier.Hot);
+                resp.ExceptionLink = await uploadToBlobAsync(exceptionFileWithPath, blobExceptionFileName, AccessTier.Hot);
                 resp.ExceptionHappened = true;
 
             }
@@ -197,16 +198,25 @@ namespace WebJobPOC
 
                         _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
                     }
+
+                    if (!string.IsNullOrWhiteSpace(_config[BlobLinkParName]))
+                    {
+                        var BlobLink = _config[BlobLinkParName];
+                        ret = BlobLink?.Replace("%%BLOB%%", Consts.CalcContainerName + "%2F" + blobFileName.Replace("/", "%2F"));
+                    }
                 }
                 else
                 {
                     _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file not found:{fileWithPath}");
                 }
+
+
             }
             catch (Exception)
             {
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"file has't been uploaded:{fileWithPath} -> {blobFileName}");
             }
+
             return ret;
         }
 
