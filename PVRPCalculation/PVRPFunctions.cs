@@ -125,14 +125,13 @@ namespace WebJobPOC
 
 
                 // NOTODO: upload the result files
-                resp.ResultLink = await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
-                resp.StdOutLink = await uploadToBlobAsync(stdoutFileWithPath, blobStdOutFileName);
-                resp.StdErrLink = await uploadToBlobAsync(stderrFileWithPath, blobStdErrFileName);
+                resp.StdOutLink = await uploadToBlobAsync(stdoutFileWithPath, blobStdOutFileName, AccessTier.Hot);
+                resp.StdErrLink = await uploadToBlobAsync(stderrFileWithPath, blobStdErrFileName, AccessTier.Hot);
                 resp.OkFileLink = await uploadToBlobAsync(okFileWithPath, blobOkFileName, AccessTier.Hot);
                 resp.ErrorLink = await uploadToBlobAsync(errorFileWithPath, blobErrorFileName, AccessTier.Hot);
-                resp.FinishLink = await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
                 resp.StaLink = await uploadToBlobAsync(staFileWithPath, blobStaFileName, AccessTier.Hot);
                 resp.IniLink = await uploadToBlobAsync(iniFileWithPath, blobIniFileName, AccessTier.Hot);
+                resp.ResultLink = await uploadToBlobAsync(resultFileWithPath, blobResultFileName, AccessTier.Hot);
 
                 //sta file tartalmát még külön felolvassuk
                 if (File.Exists(staFileWithPath))
@@ -161,6 +160,10 @@ namespace WebJobPOC
             }
             finally
             {
+
+                resp.FinishLink = await uploadToBlobAsync(finishFileWithPath, blobFinishFileName, AccessTier.Hot);
+
+
                 DeleteFilesAndFoldersRecursively(_workDir);
                 resp.CalcEnd = DateTime.UtcNow;
 
@@ -188,13 +191,22 @@ namespace WebJobPOC
         private async Task<string> uploadToBlobAsync(string fileWithPath, string blobFileName, AccessTier? accessTier = null)
         {
             var ret = "";
+            var tempFileName = Path.GetTempFileName();
             try
             {
                 if (File.Exists(fileWithPath))
                 {
-                    using (var fileStream = System.IO.File.OpenRead(fileWithPath))
+                    using (var readStream = System.IO.File.OpenRead(fileWithPath))
                     {
-                        ret = await _blobHandler.UploadAsync(Consts.CalcContainerName, blobFileName, fileStream, accessTier);
+                        ret = await _blobHandler.UploadAsync(Consts.CalcContainerName, blobFileName, readStream, accessTier);
+
+                        //read after upload to flush buffers
+                        using (var writeStream = System.IO.File.OpenWrite(tempFileName))
+                        {
+                            var downloadStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, blobFileName);
+                            downloadStream.CopyTo(writeStream);
+                        }
+
 
                         _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been uploaded:{fileWithPath} -> {blobFileName}");
                     }
@@ -215,6 +227,13 @@ namespace WebJobPOC
             catch (Exception)
             {
                 _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "EXCEPTION", $"file has't been uploaded:{fileWithPath} -> {blobFileName}");
+            }
+            finally
+            {
+                if (File.Exists(tempFileName))
+                {
+                    File.Delete(tempFileName);
+                }
             }
 
             return ret;
@@ -369,7 +388,15 @@ namespace WebJobPOC
                         exeProcess.MaxWorkingSet = (nint)Math.Max(maxWorkingSet, exeProcess.MinWorkingSet);
                     }
 
-                    _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
+                    try
+                    {
+                        _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"ProcessMemory setting:{maxWorkingSet}, MaxWorkingSet:{exeProcess.MaxWorkingSet}, WorkingSet64: {exeProcess.WorkingSet64}. MinWorkingSet:{exeProcess.MinWorkingSet} byte");
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
 
                     exeProcess.OutputDataReceived += (sender, eventArgs) =>
                     {
