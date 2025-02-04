@@ -75,7 +75,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 string problemFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
 
                 var startTime = _timeProvider.GetTimestamp();
-                await UploadToBlobStorage(fileContent, problemFileName, Encoding.GetEncoding("iso-8859-2"), AccessTier.Cool);  //A PVRP.exe iso-8859-2-esben értelmezi a problémafájlt
+                await UploadToBlobStorage(fileContent, problemFileName, Encoding.GetEncoding("iso-8859-2"), AccessTier.Hot);  //A PVRP.exe iso-8859-2-esben értelmezi a problémafájlt
                 _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"optimize.dat upload duration: {_timeProvider.GetElapsedTime(startTime)}");
 
                 await QueueMessageAsync(project.Trucks.Count, project.Orders.Count, project.Clients.Count);
