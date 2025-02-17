@@ -22,6 +22,7 @@ public class ProjectRendererTest
         $"""createClient("depot name", 12000000, 13000000){Environment.NewLine}""" +
         $"""createDepot("depot name", 1){Environment.NewLine}""" +
         $"setDepotInformation(1, 1, 10, 0, 20, 0, 0, 0, 0){Environment.NewLine}" +
+        $"addDepotTimeWindow(1, 1, 1439){Environment.NewLine}" +
         $"createCapacityProfile(11000, 22, 0, 0, 0){Environment.NewLine}" +
         $"createCapacityProfile(33000, 44, 0, 0, 0){Environment.NewLine}" +
         $"""createTruck(1, "truck name", 1, 1){Environment.NewLine}""" +
@@ -252,6 +253,8 @@ public class ProjectRendererTest
         Lat = 12,
         Lng = 13,
         ServiceFixTime = 10,
+        DepotMinTime = 1,
+        DepotMaxTime = 1439,
     };
 
     private Client Client => new()

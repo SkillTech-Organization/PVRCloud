@@ -271,7 +271,7 @@ namespace WebJobPOC
                     sw.WriteLine(s_error);
                     String s1 = "MAXCOMPTIME := " + _maxCompTime + ",";
                     //            String s2 = "NOWAIT? := false,";
-                    String s2 = "NOWAIT? := true,";
+                    String s2 = "NOWAIT? := false,";
                     String s3 = "MULTITOURS? := false,";
                     //String s3 = "MULTITOURS? := true,";
                     String s4 = "go(),";

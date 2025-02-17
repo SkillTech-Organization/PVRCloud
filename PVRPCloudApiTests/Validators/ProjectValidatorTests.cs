@@ -15,7 +15,7 @@ public class ProjectValidatorTests
             ProjectName = "name",
             ProjectDate = DateTime.Parse("2024-05-11"),
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 2,
             CostProfiles = [
                 new()
@@ -116,7 +116,7 @@ public class ProjectValidatorTests
             ProjectName = "name",
             // ProjectDate =
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 2,
             CostProfiles = [
                 new()
@@ -217,7 +217,7 @@ public class ProjectValidatorTests
         {
             ProjectName = value!,
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 2,
             CostProfiles = [
                 new()
@@ -417,7 +417,7 @@ public class ProjectValidatorTests
         {
             ProjectName = "project name",
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = -1,
             CostProfiles = [
                 new()
@@ -514,7 +514,7 @@ public class ProjectValidatorTests
         {
             ProjectName = "project name",
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 1,
             CostProfiles = [],
             CapacityProfiles = [
@@ -603,7 +603,7 @@ public class ProjectValidatorTests
         {
             ProjectName = "project name",
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 1,
             CostProfiles = [
                 new()
@@ -694,7 +694,7 @@ public class ProjectValidatorTests
         {
             ProjectName = "project name",
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 1,
             CostProfiles = [
                 new()
@@ -779,7 +779,7 @@ public class ProjectValidatorTests
         {
             ProjectName = "project name",
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 1,
             CostProfiles = [
                 new()
@@ -865,7 +865,7 @@ public class ProjectValidatorTests
         {
             ProjectName = "project name",
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 1,
             CostProfiles = [
                 new()
@@ -955,7 +955,7 @@ public class ProjectValidatorTests
         {
             ProjectName = "project name",
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 1,
             CostProfiles = [
                 new()
@@ -1044,7 +1044,7 @@ public class ProjectValidatorTests
         {
             ProjectName = "project name",
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 1,
             CostProfiles = [
                 new()

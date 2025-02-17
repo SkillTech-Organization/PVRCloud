@@ -11,7 +11,7 @@ public static class ProjectFactory
             ProjectName = "name",
             ProjectDate = DateTime.Parse("2024-05-11"),
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 2,
             CostProfiles = [
                 new()
@@ -68,7 +68,7 @@ public static class ProjectFactory
                 Lng = 0.02,
                 ServiceFixTime = 0,
                 DepotMinTime = 1,
-                DepotMaxTime = 0,
+                DepotMaxTime = 1439,
             },
             Clients = [
                 new()
@@ -104,7 +104,7 @@ public static class ProjectFactory
         {
             ProjectName = null!,
             MinTime = 1,
-            MaxTime = 4,
+            MaxTime = 1440,
             DistanceLimit = 2,
             CostProfiles = [
                 new()
@@ -160,7 +160,7 @@ public static class ProjectFactory
                 Lng = 0,
                 ServiceFixTime = 0,
                 DepotMinTime = 1,
-                DepotMaxTime = 0,
+                DepotMaxTime = 1439,
             },
             Clients = [
                 new()
