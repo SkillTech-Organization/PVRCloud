@@ -143,7 +143,7 @@ public class ProjectRendererTest
             Width = 0,
             route = new boRoute()
             {
-                DST_DISTANCE = 5,
+                DST_DISTANCE = 5000,
                 Edges = [
                     new boEdge()
                     {
@@ -164,7 +164,7 @@ public class ProjectRendererTest
             Width = 0,
             route = new boRoute()
             {
-                DST_DISTANCE = 5,
+                DST_DISTANCE = 5000,
                 Edges = [
                     new boEdge()
                     {
@@ -185,7 +185,7 @@ public class ProjectRendererTest
             Width = 0,
             route = new boRoute()
             {
-                DST_DISTANCE = 5,
+                DST_DISTANCE = 5000,
                 Edges = [
                     new boEdge()
                     {
@@ -206,7 +206,7 @@ public class ProjectRendererTest
             Width = 0,
             route = new boRoute()
             {
-                DST_DISTANCE = 5,
+                DST_DISTANCE = 5000,
                 Edges = [
                     new boEdge()
                     {

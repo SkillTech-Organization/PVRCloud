@@ -3,6 +3,7 @@ using CommonUtils;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 using System.Text.Json;
 
 namespace WebJobPOC
@@ -17,7 +18,7 @@ namespace WebJobPOC
 
     public class CalcResposne
     {
-        public int Ver { get; set; } = 37;
+        public string Ver { get; set; } = $"Version:{Assembly.GetEntryAssembly().GetName().Version}, PVRP 77";
         public string RequestID { get; set; }
         public string Status { get; set; }
         public string Msg { get; set; }

@@ -66,7 +66,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             var tempBlobFileName = Path.GetTempFileName();
             try
             {
-                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Starting calculate routes");
+                _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Calculate routes start");
                 var (nodeCombinations, routes) = Calculate(project, clientNodes);
                 _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Calculate routes finished");
 
@@ -173,28 +173,31 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
         boEdge[] edgesArr = _routeData.Edges.Select(s => s.Value).ToArray();
 
-        FillClientNodes(depot, edgesArr, clientNodes, errors);
+        var placingOnMapMsgs = new StringBuilder();
+
+        placingOnMapMsgs.AppendLine(FillClientNodes(depot, edgesArr, clientNodes, errors));
 
         foreach (var client in clients)
         {
-            FillClientNodes(client, edgesArr, clientNodes, errors);
+            placingOnMapMsgs.AppendLine(FillClientNodes(client, edgesArr, clientNodes, errors));
         }
+        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Placing on map:\n{placingOnMapMsgs}");
 
         if (errors.Count > 0)
             throw new DomainValidationException(errors);
-
         return clientNodes;
     }
 
-    private void FillClientNodes(ClientBase client, boEdge[] edgesArr, List<ClientNodeIdPair> clientNodes, List<Result> errors)
+    private string FillClientNodes(ClientBase client, boEdge[] edgesArr, List<ClientNodeIdPair> clientNodes, List<Result> errors)
     {
-        _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Placing on map:{client.Name} lat: {client.Lat}, long: {client.Lng}");
+        var resultMsg = new StringBuilder($"{client.Name} lat: {client.Lat}, long: {client.Lng},");
 
         int clientNode = PVRPGetNearestNOD_ID(edgesArr, new PointLatLng(client.Lat, client.Lng));
 
         if (clientNode != 0)
         {
             clientNodes.Add(new ClientNodeIdPair(client, clientNode));
+            resultMsg.Append($"nodeID:{clientNode}");
         }
         else
         {
@@ -203,7 +206,9 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                                            $"{client.Name}: Invalid coordinate: lat: {client.Lat}, long: {client.Lng}.");
 
             errors.Add(error);
+            resultMsg.Append($"***Invalid coordinate***");
         }
+        return resultMsg.ToString();
     }
 
     private int PVRPGetNearestNOD_ID(boEdge[] edgesList, PointLatLng point)

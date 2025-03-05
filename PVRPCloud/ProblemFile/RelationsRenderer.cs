@@ -39,6 +39,7 @@ public sealed class RelationsRenderer
 
     public StringBuilder Render(IEnumerable<PMapRoute> routes)
     {
+        var mssingRoutesMsg = new StringBuilder();
         foreach (var (from, to) in _clientNodes)
         {
             foreach (var truckType in _truckTypes)
@@ -55,7 +56,14 @@ public sealed class RelationsRenderer
                 {
                     int time = route.route!.CalculateTravelTime(truckType);
 
-                    _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, {route.route?.DST_DISTANCE ?? 0}, {time})");
+                    //_sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, {route.route?.DST_DISTANCE ?? 0}, {time})");
+                    //_sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, {time}, {time})");
+
+                    var km = (decimal)(route.route?.DST_DISTANCE ?? 0) / 1000;
+                    var clDistance = (long)Math.Ceiling(km);
+
+                    _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, {clDistance}, {time})");
+
                 }
                 else
                 {
@@ -79,11 +87,15 @@ public sealed class RelationsRenderer
                         toName = _clients.Single(c => c.ID == to.Identifable.ID)?.ClientName;
                     }
 
-                    _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, 999999999, 2880)");
+                    //_sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, 999999999, 2880)");
 
-                    _logger.LogPvrp(_requestId, LogPvrpExtension.LogStatus.Info, $"Missing route! {fromName.Trim()}->{toName.Trim()} truckType:{truckTypePvrpId}, fromNode:{from.NodeId}, toNode:{to.NodeId}");
+                    mssingRoutesMsg.AppendLine($"{fromName.Trim()}->{toName.Trim()} truckType:{truckTypePvrpId}, fromNode:{from.NodeId}, toNode:{to.NodeId}");
                 }
             }
+        }
+        if (mssingRoutesMsg.Length > 0)
+        {
+            _logger.LogPvrp(_requestId, LogPvrpExtension.LogStatus.Info, $"Missing routes!\n{mssingRoutesMsg}");
         }
 
         return _sb;

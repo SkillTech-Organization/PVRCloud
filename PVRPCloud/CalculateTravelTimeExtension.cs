@@ -16,6 +16,7 @@ public static class CalculateTravelTimeExtension
             times.Add(value);
         }
 
-        return (int)times.Sum();
+        return (int)Math.Ceiling(times.Sum());
+        //return (int)times.Sum();
     }
 }
