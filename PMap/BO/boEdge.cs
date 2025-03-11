@@ -22,8 +22,9 @@ namespace PMapCore.BO
         public int RST_ID { get; set; }
         public string WZONE { get; set; }
         public string EDG_ETRCODE { get; set; }
-        public float CalcSpeed; //{ get; set; }                      //idealizált sebességprofil sebesség (ez alapján számítjuk a leggyorsabb utat)
-        public float CalcDuration; //{ get; set; }                   //menetidő (idealizált sebességprofil alapján) megj.:futásidő miatt float
+
+        //TODO törölni        public float CalcSpeed; //{ get; set; }                      //idealizált sebességprofil sebesség (ez alapján számítjuk a leggyorsabb utat)
+        //TODO törölni        public float CalcDuration; //{ get; set; }                   //menetidő (idealizált sebességprofil alapján) megj.:futásidő miatt float
 
         public PointLatLng fromLatLng { get; set; }                //LatLng kiemelése, hogy gyors lehessen a térképkivágás útvonalszámításnál
 

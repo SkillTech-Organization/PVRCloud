@@ -1,8 +1,6 @@
 ﻿using PMapCore.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PMapCore.Route
 {
@@ -30,6 +28,9 @@ namespace PMapCore.Route
         public int Weight { get; set; } = 0;
         public int Height { get; set; } = 0;
         public int Width { get; set; } = 0;
+
+        public Dictionary<int, int> DicSpeeds = null;
+
 
         public override string ToString()
         {

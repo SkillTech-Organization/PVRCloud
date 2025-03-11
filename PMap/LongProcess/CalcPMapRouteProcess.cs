@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using GMap.NET;
+using PMapCore.BLL;
+using PMapCore.BO;
+using PMapCore.Common;
+using PMapCore.DB.Base;
 using PMapCore.LongProcess.Base;
 using PMapCore.MapProvider;
 using PMapCore.Route;
-using PMapCore.DB;
-using PMapCore.DB.Base;
-using System.Data.SqlClient;
-using GMap.NET;
-using System.Threading;
-using PMapCore.BO;
-using PMapCore.BLL;
-using PMapCore.Common;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime;
 using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace PMapCore.LongProcess
 {
@@ -65,7 +59,7 @@ namespace PMapCore.LongProcess
                 //              long allocated = (int)(availe / 1024 / 1024) < 40 ? (int)(availe / 1024 / 1024) : 60;
                 //long allocated = (int)(availe / 1024 / 1024) < 40 ? (int)(availe / 1024 / 1024) : 60;
 
-                var msg = $"CalcPMapRouteProcess AVAILABLE:{ (int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K";
+                var msg = $"CalcPMapRouteProcess AVAILABLE:{(int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K";
                 Util.Log2File(msg);
 
 
@@ -82,7 +76,6 @@ namespace PMapCore.LongProcess
 
                     DateTime dtStart = DateTime.Now;
                     TimeSpan tspDiff;
-                    TimeSpan tspFlush;
 
 
                     PMapRoutingProvider provider = new PMapRoutingProvider();
@@ -154,7 +147,7 @@ namespace PMapCore.LongProcess
                             results.AddRange(provider.GetAllRoutes(routePar, calcNode.Key, lstToNodes,
                                                 MapFull,
                                                 PMapIniParams.Instance.CutMapForRouting && MapCut != null ? MapCut : null,
-                                                PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
+                                                PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath, null));
 
                             //Eredmény adatbázisba írása minden csomópont kiszámolása után -- NEM, a BULK insertet használjuk !!!
                             //m_bllRoute.WriteRoutes(results, m_savePoints);
@@ -243,7 +236,7 @@ namespace PMapCore.LongProcess
             }
             catch (InsufficientMemoryException ex)
             {
-                var msg = $"CalcPMapRouteProcess InsufficientMemoryException AVAILABLE:{ (int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K";
+                var msg = $"CalcPMapRouteProcess InsufficientMemoryException AVAILABLE:{(int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K";
                 InsufficientMemoryException retEx = new InsufficientMemoryException(msg, ex);
                 Util.Log2File(msg);
                 ExceptionDispatchInfo.Capture(retEx).Throw();
@@ -251,7 +244,7 @@ namespace PMapCore.LongProcess
             }
             catch (OutOfMemoryException ex)
             {
-                var msg = $"CalcPMapRouteProcess OutOfMemoryException AVAILABLE:{ (int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K";
+                var msg = $"CalcPMapRouteProcess OutOfMemoryException AVAILABLE:{(int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K";
                 OutOfMemoryException retEx = new OutOfMemoryException(msg, ex);
                 Util.Log2File(msg);
                 ExceptionDispatchInfo.Capture(retEx).Throw();

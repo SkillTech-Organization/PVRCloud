@@ -1,21 +1,15 @@
-﻿using System;
+﻿using GMap.NET;
+using PMapCore.BLL;
+using PMapCore.BO;
+using PMapCore.Common;
+using PMapCore.DB.Base;
+using PMapCore.LongProcess.Base;
+using PMapCore.MapProvider;
+using PMapCore.Route;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using PMapCore.LongProcess.Base;
-using PMapCore.DB;
-using GMap.NET;
-using System.Drawing;
-using PMapCore.Route;
-using PMapCore.MapProvider;
 using System.Threading;
-using PMapCore.BO;
-using PMapCore.BLL;
-using PMapCore.DB.Base;
-using PMapCore.Common;
-using PMapCore.Cache;
-using PMapCore.Strings;
-using PMapCore.Common.PPlan;
 
 namespace PMapCore.LongProcess
 {
@@ -75,8 +69,6 @@ namespace PMapCore.LongProcess
         {
             try
             {
-
-                int iErrCnt = 0;
                 NoRoutes = new List<string>();
 
                 //FONTOS !!!
@@ -103,7 +95,7 @@ namespace PMapCore.LongProcess
                     var resRoute = provider.GetAllRoutes(routePar, tourPoint.First().NOD_ID, toNodes,
                                          neighborsFull[routePar.Hash],
                                          PMapIniParams.Instance.CutMapForRouting && neighborsCut != null ? neighborsCut[routePar.Hash] : null,
-                                         PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+                                         PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath, null);
 
 
                     results.AddRange(resRoute);
@@ -137,7 +129,7 @@ namespace PMapCore.LongProcess
             finally
             {
             }
-            return NoRoutes.Count() == 0 ?  eCompleteCode.OK: eCompleteCode.NoRouteOccured;
+            return NoRoutes.Count() == 0 ? eCompleteCode.OK : eCompleteCode.NoRouteOccured;
         }
 
     }

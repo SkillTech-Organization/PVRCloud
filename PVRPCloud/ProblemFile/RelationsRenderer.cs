@@ -87,7 +87,7 @@ public sealed class RelationsRenderer
                         toName = _clients.Single(c => c.ID == to.Identifable.ID)?.ClientName;
                     }
 
-                    //_sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, 999999999, 2880)");
+                    _sb.AppendLine($"setRelationAccess({truckTypePvrpId}, {fromClientId}, {toClientId}, 99999, 2880)");
 
                     mssingRoutesMsg.AppendLine($"{fromName.Trim()}->{toName.Trim()} truckType:{truckTypePvrpId}, fromNode:{from.NodeId}, toNode:{to.NodeId}");
                 }

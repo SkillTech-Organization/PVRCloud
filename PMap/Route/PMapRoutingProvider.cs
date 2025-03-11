@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GMap.NET.MapProviders;
-using GMap.NET;
-using PMapCore.DB.Base;
-using System.Data;
-using PMapCore.Route;
-using System.Data.SqlClient;
-using System.Data.Common;
-using System.Data.Odbc;
-using PMapCore.DB;
+﻿using GMap.NET;
 using PMapCore.BO;
 using PMapCore.Common;
+using PMapCore.Route;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Runtime.ExceptionServices;
 
 namespace PMapCore.MapProvider
@@ -36,6 +29,7 @@ namespace PMapCore.MapProvider
 
 
         private List<int>[] m_computedNeighborsArr = null;              //A sebességprofilhoz tartozó korlátozásokkal figyelembe vett csomópontkapcsolatok
+        private Dictionary<int, int> DicSpeeds = null;
 
 
         private HashSet<int> m_targetNodes;
@@ -46,10 +40,18 @@ namespace PMapCore.MapProvider
         ///
         /// Egy p_NOD_ID_FROM pontból az összes p_ListNOD_ID_TO pontba számított legrövidebb út számítása
         //
-        public List<boRoute> GetAllRoutes(CRoutePars p_RoutePars, int p_NOD_ID_FROM, List<int> p_ListNOD_ID_TO, List<int>[] p_neighborsArrFull, List<int>[] p_neighborsArrCut, ECalcMode p_calcMode)
+        public List<boRoute> GetAllRoutes(CRoutePars p_RoutePars, int p_NOD_ID_FROM, List<int> p_ListNOD_ID_TO, List<int>[] p_neighborsArrFull, List<int>[] p_neighborsArrCut, ECalcMode p_calcMode, Dictionary<int, int> p_DicSpeeds)
         {
+            //ha átadtunk sebességprofilokat, akkor azokat használjuk, ha nem, akkor az ini-ben lévőt használjuk
+            if (p_DicSpeeds != null)
+            {
+                DicSpeeds = p_DicSpeeds;
+            }
+            else
+            {
+                DicSpeeds = PMapIniParams.Instance.DicSpeeds;
+            }
 
- 
             List<boRoute> result = new List<boRoute>();         //útvonal leíró az összes target-re
             DateTime dtStart = DateTime.Now;
             RouteCalculator calcEngine;
@@ -70,7 +72,7 @@ namespace PMapCore.MapProvider
             RouteCalculator.RouteCalcResult optimizedPathsForAllDest = null;
             RouteCalculator.RouteCalcResult optimizedPathsForAllDestNOCUT = null;
 
-            if (PMapIniParams.Instance.CutMapForRouting && p_neighborsArrCut  != null && p_neighborsArrCut.Length > 0)
+            if (PMapIniParams.Instance.CutMapForRouting && p_neighborsArrCut != null && p_neighborsArrCut.Length > 0)
                 m_computedNeighborsArr = p_neighborsArrCut;
             else
                 m_computedNeighborsArr = p_neighborsArrFull;
@@ -104,7 +106,7 @@ namespace PMapCore.MapProvider
 
                 result.Add(getRouteInfo(p_NOD_ID_FROM, NOD_ID_TO, p_RoutePars, optimizedPath));
             }
-         //   Console.WriteLine("GetAllRoutes " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
+            //   Console.WriteLine("GetAllRoutes " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
             return result;
         }
 
@@ -125,9 +127,9 @@ namespace PMapCore.MapProvider
         /// <param name="p_NOD_ID_FROM"></param>
         /// <param name="p_NOD_ID_TO"></param>
         /// <returns></returns>
-        public boRoute GetRoute( int p_NOD_ID_FROM, int p_NOD_ID_TO, CRoutePars p_routePar, List<int>[] p_neighborsArrFull, List<int>[] p_neighborsArrCut, ECalcMode p_calcMode)
+        public boRoute GetRoute(int p_NOD_ID_FROM, int p_NOD_ID_TO, CRoutePars p_routePar, List<int>[] p_neighborsArrFull, List<int>[] p_neighborsArrCut, ECalcMode p_calcMode)
         {
-  
+
             DateTime dtStart = DateTime.Now;
             RouteCalculator calcEngine;
 
@@ -180,9 +182,9 @@ namespace PMapCore.MapProvider
             return new MapRoute(pathPoints, "");
         }
 
-        private boRoute getRouteInfo( int p_NOD_ID_FROM, int p_NOD_ID_TO, CRoutePars p_routePar, int[] p_optimizedPath)
+        private boRoute getRouteInfo(int p_NOD_ID_FROM, int p_NOD_ID_TO, CRoutePars p_routePar, int[] p_optimizedPath)
         {
-   
+
             boRoute routeInfo = new boRoute()
             {
                 NOD_ID_FROM = p_NOD_ID_FROM,
@@ -194,7 +196,7 @@ namespace PMapCore.MapProvider
                 Route = getMapRoute(p_optimizedPath, p_NOD_ID_FROM),
                 Edges = new List<boEdge>()
             };
-            
+
             try
             {
                 // edge-k összevadászása
@@ -234,8 +236,8 @@ namespace PMapCore.MapProvider
                 }
 
                 //Távolság kiszámolása
-                routeInfo.DST_DISTANCE= routeInfo.Edges.Sum(e => (int)e.EDG_LENGTH);
-    
+                routeInfo.DST_DISTANCE = routeInfo.Edges.Sum(e => (int)e.EDG_LENGTH);
+
                 return routeInfo;
             }
             catch (Exception e)
@@ -273,7 +275,8 @@ namespace PMapCore.MapProvider
                 boEdge retval;
                 if (RouteData.Instance.Edges.TryGetValue(sKey, out retval))
                 {
-                    return retval.CalcDuration;
+                    var CalcDuration = (float)(retval.EDG_LENGTH / DicSpeeds[retval.RDT_VALUE] / 3.6 * 60);
+                    return CalcDuration;
                 }
             }
             catch (Exception e)

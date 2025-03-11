@@ -54,8 +54,8 @@ public class CalcRouteProcess : BaseLongProcess
 
             Dictionary<string, List<int>[]> NeighborsArrFull = null;
             Dictionary<string, List<int>[]> NeighborsArrCut = null;
-            List<CRoutePars> routePars = m_lstRoutes.GroupBy(g => new { g.RZN_ID_LIST, g.GVWR, g.Height, g.Width })
-                  .Select(s => new CRoutePars() { RZN_ID_LIST = s.Key.RZN_ID_LIST, Weight = s.Key.GVWR, Height = s.Key.Height, Width = s.Key.Width }).ToList();
+            List<CRoutePars> routePars = m_lstRoutes.GroupBy(g => new { g.RZN_ID_LIST, g.GVWR, g.Height, g.Width, g.DicSpeeds })
+                  .Select(s => new CRoutePars() { RZN_ID_LIST = s.Key.RZN_ID_LIST, Weight = s.Key.GVWR, Height = s.Key.Height, Width = s.Key.Width, DicSpeeds = s.Key.DicSpeeds }).ToList();
 
             _routeData.getNeigboursByBound(routePars, ref NeighborsArrFull, ref NeighborsArrCut, boundary, null);
 
@@ -77,7 +77,7 @@ public class CalcRouteProcess : BaseLongProcess
                 List<boRoute> results = provider.GetAllRoutes(routePar, calcNode.Key.fromNOD_ID, lstToNodes,
                                         NeighborsArrFull[routePar.Hash],
                                         PMapIniParams.Instance.CutMapForRouting && NeighborsArrCut != null ? NeighborsArrCut[routePar.Hash] : null,
-                                        PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+                                        PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath, routePar.DicSpeeds);
                 Random random = new Random(DateTime.UtcNow.Millisecond);
 
                 //A kiszámolt eredmények 'bedolgozása'

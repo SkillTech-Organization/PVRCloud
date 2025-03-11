@@ -80,7 +80,13 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
                 await QueueMessageAsync(project.Trucks.Count, project.Orders.Count, project.Clients.Count);
 
+
                 _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"project_data create: {_timeProvider.GetElapsedTime(startTime)}");
+
+                string requestContent = JsonSerializer.Serialize(project);
+                string requestFileName = $"REQ_{_requestID}/{_requestID}_request.dat";
+                await UploadToBlobStorage(requestContent, requestFileName, Encoding.UTF8, AccessTier.Cool);
+
 
                 startTime = _timeProvider.GetTimestamp();
                 string projectFileName = $"REQ_{_requestID}/{_requestID}_project_data.brotli";
@@ -338,6 +344,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                     GVWR = truckType.Weight,
                     Height = 0,
                     Width = 0,
+                    DicSpeeds = truckType.SpeedValues
+
                 });
             }
         }

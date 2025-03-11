@@ -22,6 +22,9 @@ public class PMapRoute : IEquatable<PMapRoute>
     public int Height { get; init; }
     public int Width { get; init; }
 
+    public Dictionary<int, int> DicSpeeds { get; init; } = null;
+
+
     public boRoute? route { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
