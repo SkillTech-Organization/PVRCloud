@@ -274,13 +274,14 @@ namespace WebJobPOC
                     String s2 = "NOWAIT? := false,";
                     String s3 = "MULTITOURS? := false,";
                     //String s3 = "MULTITOURS? := true,";
+
                     String s4 = "OUTCOSTNUM := 500000,";
                     String s5 = "HSZECHECK  := 1,";
                     String s6 = "MAPCONNECTIVITYCHECK := true,";
-
-                    String s7 = "go(),";
-                    String s8 = "exit(1)";
-                    String s9 = ")";
+                    String s7 = "USETIMEFORDISTANCE:= true,";
+                    String s8 = "go(),";
+                    String s9 = "exit(1)";
+                    String s10 = ")";
                     sw.WriteLine(s1);
                     sw.WriteLine(s2);
                     sw.WriteLine(s3);
@@ -290,6 +291,7 @@ namespace WebJobPOC
                     sw.WriteLine(s7);
                     sw.WriteLine(s8);
                     sw.WriteLine(s9);
+                    sw.WriteLine(s10);
                 }
             }
             string readText = System.IO.File.ReadAllText(iniFileWithPath);

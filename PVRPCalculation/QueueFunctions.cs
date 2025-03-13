@@ -18,7 +18,7 @@ namespace WebJobPOC
 
     public class CalcResposne
     {
-        public string Ver { get; set; } = $"Version:{Assembly.GetEntryAssembly().GetName().Version}, PVRP 79";
+        public string Ver { get; set; } = $"Version:{Assembly.GetEntryAssembly().GetName().Version}, PVRP 80";
         public string RequestID { get; set; }
         public string Status { get; set; }
         public string Msg { get; set; }
