@@ -278,7 +278,7 @@ namespace WebJobPOC
                     String s4 = "OUTCOSTNUM := 500000,";
                     String s5 = "HSZECHECK  := 1,";
                     String s6 = "MAPCONNECTIVITYCHECK := true,";
-                    String s7 = "USETIMEFORDISTANCE:= true,";
+                    String s7 = "USETIMEFORDISTANCE := true,";
                     String s8 = "go(),";
                     String s9 = "exit(1)";
                     String s10 = ")";
