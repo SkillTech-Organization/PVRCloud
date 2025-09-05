@@ -12,9 +12,9 @@ https://github.com/orgs/SkillTech-Organization/projects/3/views/1
 - branch for live environment: *main*
 
 ## Environments and access
-- development: *https://prvcloudwebapitest.azurewebsites.net/*
+- development: 
 - customer test:
-- live:
+- live: *https://prvcloudwebapitest.azurewebsites.net/*
 
 --- 
 
@@ -34,43 +34,48 @@ https://github.com/orgs/SkillTech-Organization/projects/3/views/1
 
 ### Resource Items
 
-| Resource Type     | Resource Name               | Description                    | Tags                     |
-| ----------------- | --------------------------- | ------------------------------ | ------------------------ |
-| Managed Identity  | PRVPCloudWebAPIT-id-ae66    | RBAC role to deployment        | -                        |
-| App Service       | prvpcloudwebapitest         | Application service            | -                        |
-| App Service Plan  | PVRPCloudPlan               | Application service plan       | -                        |
-| Storage Account   | pvrpcloudstoragetest        | Storage account                | -                        |
-| Storage Container | $logs                       | App Insight logs               | -                        |
-| Storage Container | azure-webjobs-dashboard     | Webjob dashboard data          | -                        |
-| Storage Container | calculations                | result data                    | -                        |
-| Storage Container | map                         | map data                       | -                        |
-| Storage Container | parameters                  | parameter set of the app       | -                        |
-| Storage Queue     | pmapcalcinputmsgs           | request, input data            | -                        |
-| Storage Queue     | pmapcalcinputmsgs-poison    | request, input data - DLQ      | -                        |
-| Storage Queue     | pmapcalcinputmsgsdev        | request, input data TEST       | -                        |
-| Storage Queue     | pmapcalcinputmsgsdev-poison | request, input data TEST - DLQ | -                        |
-| Storage Queue     | pmapcalcoutputmsgs          | response, output data          | -                        |
-| Storage Queue     | pmapcalcoutputmsgsdev       | response, output data TEST     | -                        |
+#### Live
+
+| Resource Type       | Resource Name               | Description                    | Tags                     | note      |
+| ------------------- | --------------------------- | ------------------------------ | ------------------------ | --------- |
+| Managed Identity    | PRVPCloudWebAPIT-id-ae66    | RBAC role to deployment        | -                        |           |
+| App Service         | prvpcloudwebapitest         | Application service            | -                        |           |
+| App Service Plan    | PVRPCloudPlan               | Application service plan       | -                        |           |
+| Storage Account     | pvrpcloudstoragetest        | Storage account                | -                        |           |
+| Storage Container   | $logs                       | App Insight logs               | -                        |           |
+| Storage Container   | azure-webjobs-dashboard     | Webjob dashboard data          | -                        |           |
+| Storage Container   | calculations                | result data                    | -                        |           |
+| Storage Container   | map                         | map data                       | -                        |           |
+| Storage Container   | parameters                  | parameter set of the app       | -                        |           |
+| Storage Queue       | pmapcalcinputmsgs           | request, input data            | -                        |           |
+| Storage Queue       | pmapcalcinputmsgs-poison    | request, input data - DLQ      | -                        |           |
+| Storage Queue       | pmapcalcinputmsgsdev        | request, input data TEST       | -                        | Deprecated|
+| Storage Queue       | pmapcalcinputmsgsdev-poison | request, input data TEST - DLQ | -                        | Deprecated|
+| Storage Queue       | pmapcalcoutputmsgs          | response, output data          | -                        |           |
+| Storage Queue       | pmapcalcoutputmsgsdev       | response, output data TEST     | -                        | Deprecated|
+| Application Insights| PVRPCloudAppInsightDev      | trace data                     | -                        |           |
+| Runbook | prvpcloudwebapitest_start_automation_job|scheduled:mon-fri 08:00|-|Move it to PRVPCloudResourceGroup! |
+| Runbook | prvpcloudwebapitest_stop_automation_job|scheduled:mon-fri 20:00|-|Move it to PRVPCloudResourceGroup! |
 
 ---
 
 ## planned resource and components
 ### for test
-sktc-prtx-pvcld-prvpcldapi15-tst-rsgrp-01
-sktc-prtx-pvcld-prvpcldapi15-tst-apsp-01
-sktc-prtx-pvcld-prvpcldapi15-tst-apse-01
-sktc-prtx-pvcld-prvpcldapi15-tst-apis-01
-sktc-prtx-pvcld-prvpcldapi15-tst-mgid-01
-sktc-prtx-pvcld-prvpcldapi15-tst-auac-01
-sktc-prtx-pvcld-prvpcldapi15start-tst-rubo-01
-sktc-prtx-pvcld-prvpcldapi15stop-tst-rubo-01
+sktc-prtx-pvcld-pvrpcldapi15-tst-rsgrp-01
+sktc-prtx-pvcld-pvrpcldapi15-tst-apsp-01
+sktc-prtx-pvcld-pvrpcldapi15-tst-apse-01
+sktc-prtx-pvcld-pvrpcldapi15-tst-apis-01
+sktc-prtx-pvcld-pvrpcldapi15-tst-mgid-01
+sktc-prtx-pvcld-pvrpcldapi15-tst-auac-01
+sktc-prtx-pvcld-pvrpcldapi15start-tst-rubo-01
+sktc-prtx-pvcld-pvrpcldapi15stop-tst-rubo-01
 
 ### for prod
-sktc-prtx-pvcld-prvpcldapi15-prd-rsgrp-01
-sktc-prtx-pvcld-prvpcldapi15-prd-apsp-01
-sktc-prtx-pvcld-prvpcldapi15-prd-apse-01
-sktc-prtx-pvcld-prvpcldapi15-prd-apis-01
-sktc-prtx-pvcld-prvpcldapi15-prd-mgid-01
-sktc-prtx-pvcld-prvpcldapi15-prd-auac-01
-sktc-prtx-pvcld-prvpcldapi15start-prd-rubo-01
-sktc-prtx-pvcld-prvpcldapi15stop-prd-rubo-01
+sktc-prtx-pvcld-pvrpcldapi15-prd-rsgrp-01
+sktc-prtx-pvcld-pvrpcldapi15-prd-apsp-01
+sktc-prtx-pvcld-pvrpcldapi15-prd-apse-01
+sktc-prtx-pvcld-pvrpcldapi15-prd-apis-01
+sktc-prtx-pvcld-pvrpcldapi15-prd-mgid-01
+sktc-prtx-pvcld-pvrpcldapi15-prd-auac-01
+sktc-prtx-pvcld-pvrpcldapi15start-prd-rubo-01
+sktc-prtx-pvcld-pvrpcldapi15stop-prd-rubo-01
