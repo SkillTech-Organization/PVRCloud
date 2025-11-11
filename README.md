@@ -76,9 +76,9 @@ Architecture
 
 
 #### for prod
-- sktc-prtx-pvcld-pvrpcldapi15-prd--rsgrp-01 --> resource group
-- sktc-prtx-pvcld-pvrpcldapi15_api-prd--fapp-01 --> azure function (API)
-- sktc-prtx-pvcld-pvrpcldapi15_wrkr-prd--fapp-01 --> azure function (worker)
-- sktc-prtx-pvcld-pvrpcldapi15-prd--blbstrg-01 --> blob storage
-- sktc-prtx-pvcld-pvrpcldapi15-prd--qstrg-01 --> queue storage
-- sktc-prtx-pvcld-pvrpcldapi15-prd--stac-01 --> storage account
+- sktc-prtx-pvcld-pvrpcldapi15-prd-rsgrp-01 --> resource group
+- sktc-prtx-pvcld-pvrpcldapi15_api-prd-fapp-01 --> azure function (API)
+- sktc-prtx-pvcld-pvrpcldapi15_wrkr-prd-fapp-01 --> azure function (worker)
+- sktc-prtx-pvcld-pvrpcldapi15-prd-blbstrg-01 --> blob storage
+- sktc-prtx-pvcld-pvrpcldapi15-prd-qstrg-01 --> queue storage
+- sktc-prtx-pvcld-pvrpcldapi15-prd-stac-01 --> storage account
