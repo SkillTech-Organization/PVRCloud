@@ -67,21 +67,18 @@ Architecture
 
 ### planned resource and components
 #### for test
-- sktc-prtx-pvcld-pvrpcldapi15-tst-rsgrp-01
-- sktc-prtx-pvcld-pvrpcldapi15-tst-apsp-01
-- sktc-prtx-pvcld-pvrpcldapi15-tst-apse-01
-- sktc-prtx-pvcld-pvrpcldapi15-tst-apis-01
-- sktc-prtx-pvcld-pvrpcldapi15-tst-mgid-01
-- sktc-prtx-pvcld-pvrpcldapi15-tst-auac-01
-- sktc-prtx-pvcld-pvrpcldapi15start-tst-rubo-01
-- sktc-prtx-pvcld-pvrpcldapi15stop-tst-rubo-01
+- sktc-prtx-pvcld-pvrpcldapi15-tst-rsgrp-01 --> resource group
+- sktc-prtx-pvcld-pvrpcldapi15_api-tst-fapp-01 --> azure function (API)
+- sktc-prtx-pvcld-pvrpcldapi15_wrkr-tst-fapp-01 --> azure function (worker)
+- sktc-prtx-pvcld-pvrpcldapi15-tst-blbstrg-01 --> blob storage
+- sktc-prtx-pvcld-pvrpcldapi15-tst-qstrg-01 --> queue storage
+- sktc-prtx-pvcld-pvrpcldapi15-tst-stac-01 --> storage account
+
 
 #### for prod
-- sktc-prtx-pvcld-pvrpcldapi15-prd-rsgrp-01
-- sktc-prtx-pvcld-pvrpcldapi15-prd-apsp-01
-- sktc-prtx-pvcld-pvrpcldapi15-prd-apse-01
-- sktc-prtx-pvcld-pvrpcldapi15-prd-apis-01
-- sktc-prtx-pvcld-pvrpcldapi15-prd-mgid-01
-- sktc-prtx-pvcld-pvrpcldapi15-prd-auac-01
-- sktc-prtx-pvcld-pvrpcldapi15start-prd-rubo-01
-- sktc-prtx-pvcld-pvrpcldapi15stop-prd-rubo-01
+- sktc-prtx-pvcld-pvrpcldapi15-prd--rsgrp-01 --> resource group
+- sktc-prtx-pvcld-pvrpcldapi15_api-prd--fapp-01 --> azure function (API)
+- sktc-prtx-pvcld-pvrpcldapi15_wrkr-prd--fapp-01 --> azure function (worker)
+- sktc-prtx-pvcld-pvrpcldapi15-prd--blbstrg-01 --> blob storage
+- sktc-prtx-pvcld-pvrpcldapi15-prd--qstrg-01 --> queue storage
+- sktc-prtx-pvcld-pvrpcldapi15-prd--stac-01 --> storage account
