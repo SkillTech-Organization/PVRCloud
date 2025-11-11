@@ -59,23 +59,29 @@ https://github.com/orgs/SkillTech-Organization/projects/3/views/1
 
 ---
 
-## planned resource and components
-### for test
-sktc-prtx-pvcld-pvrpcldapi15-tst-rsgrp-01
-sktc-prtx-pvcld-pvrpcldapi15-tst-apsp-01
-sktc-prtx-pvcld-pvrpcldapi15-tst-apse-01
-sktc-prtx-pvcld-pvrpcldapi15-tst-apis-01
-sktc-prtx-pvcld-pvrpcldapi15-tst-mgid-01
-sktc-prtx-pvcld-pvrpcldapi15-tst-auac-01
-sktc-prtx-pvcld-pvrpcldapi15start-tst-rubo-01
-sktc-prtx-pvcld-pvrpcldapi15stop-tst-rubo-01
+## PVRPCLoud 1.5 Project
 
-### for prod
-sktc-prtx-pvcld-pvrpcldapi15-prd-rsgrp-01
-sktc-prtx-pvcld-pvrpcldapi15-prd-apsp-01
-sktc-prtx-pvcld-pvrpcldapi15-prd-apse-01
-sktc-prtx-pvcld-pvrpcldapi15-prd-apis-01
-sktc-prtx-pvcld-pvrpcldapi15-prd-mgid-01
-sktc-prtx-pvcld-pvrpcldapi15-prd-auac-01
-sktc-prtx-pvcld-pvrpcldapi15start-prd-rubo-01
-sktc-prtx-pvcld-pvrpcldapi15stop-prd-rubo-01
+###
+Architecture
+![Architecture diagram](./PVRPCloud15_architecture.drawio.png)
+
+### planned resource and components
+#### for test
+- sktc-prtx-pvcld-pvrpcldapi15-tst-rsgrp-01
+- sktc-prtx-pvcld-pvrpcldapi15-tst-apsp-01
+- sktc-prtx-pvcld-pvrpcldapi15-tst-apse-01
+- sktc-prtx-pvcld-pvrpcldapi15-tst-apis-01
+- sktc-prtx-pvcld-pvrpcldapi15-tst-mgid-01
+- sktc-prtx-pvcld-pvrpcldapi15-tst-auac-01
+- sktc-prtx-pvcld-pvrpcldapi15start-tst-rubo-01
+- sktc-prtx-pvcld-pvrpcldapi15stop-tst-rubo-01
+
+#### for prod
+- sktc-prtx-pvcld-pvrpcldapi15-prd-rsgrp-01
+- sktc-prtx-pvcld-pvrpcldapi15-prd-apsp-01
+- sktc-prtx-pvcld-pvrpcldapi15-prd-apse-01
+- sktc-prtx-pvcld-pvrpcldapi15-prd-apis-01
+- sktc-prtx-pvcld-pvrpcldapi15-prd-mgid-01
+- sktc-prtx-pvcld-pvrpcldapi15-prd-auac-01
+- sktc-prtx-pvcld-pvrpcldapi15start-prd-rubo-01
+- sktc-prtx-pvcld-pvrpcldapi15stop-prd-rubo-01
