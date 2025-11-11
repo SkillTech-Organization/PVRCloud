@@ -73,6 +73,8 @@ Architecture
 - sktc-prtx-pvcld-pvrpcldapi15-tst-blbstrg-01 --> blob storage
 - sktc-prtx-pvcld-pvrpcldapi15-tst-qstrg-01 --> queue storage
 - sktc-prtx-pvcld-pvrpcldapi15-tst-stac-01 --> storage account
+- sktc-prtx-pvcld-pvrpcldapi15_api-tst-appins-01 --> application insights (API)
+- sktc-prtx-pvcld-pvrpcldapi15_wrkr-tst-appins-01 --> application insights (worker)
 
 
 #### for prod
@@ -82,3 +84,5 @@ Architecture
 - sktc-prtx-pvcld-pvrpcldapi15-prd-blbstrg-01 --> blob storage
 - sktc-prtx-pvcld-pvrpcldapi15-prd-qstrg-01 --> queue storage
 - sktc-prtx-pvcld-pvrpcldapi15-prd-stac-01 --> storage account
+- sktc-prtx-pvcld-pvrpcldapi15_api-prd-appins-01 --> application insights (API)
+- sktc-prtx-pvcld-pvrpcldapi15_wrkr-prd-appins-01 --> application insights (worker)
