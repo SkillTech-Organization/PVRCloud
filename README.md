@@ -63,7 +63,7 @@ https://github.com/orgs/SkillTech-Organization/projects/3/views/1
 
 ###
 Architecture
-![Architecture diagram](./PVRPCloud15_architecture.drawio.png)
+![Architecture diagram](./PVRPCloud15_architecture-Redesigned_with_AppService_TOBE.drawio.png)
 
 ### planned resource and components
 #### for test
