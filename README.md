@@ -68,21 +68,32 @@ Architecture
 ### planned resource and components
 #### for test
 - sktc-prtx-pvcld-pvrpcldapi15-tst-rsgrp-01 --> resource group
-- sktc-prtx-pvcld-pvrpcldapi15_api-tst-fapp-01 --> azure function (API)
-- sktc-prtx-pvcld-pvrpcldapi15_wrkr-tst-fapp-01 --> azure function (worker)
-- sktc-prtx-pvcld-pvrpcldapi15-tst-blbstrg-01 --> blob storage
-- sktc-prtx-pvcld-pvrpcldapi15-tst-qstrg-01 --> queue storage
 - sktc-prtx-pvcld-pvrpcldapi15-tst-stac-01 --> storage account
-- sktc-prtx-pvcld-pvrpcldapi15_api-tst-appins-01 --> application insights (API)
-- sktc-prtx-pvcld-pvrpcldapi15_wrkr-tst-appins-01 --> application insights (worker)
+- sktc-prtx-pvcld-pvrpcldapi15-tst-blbstrg-01 --> blob storage
+- sktc-prtx-pvcld-pvrpcldapi15-tst-appins-01 --> application insights (API)
+- sktc-prtx-pvcld-pvrpcldapi15-tst-apse-01 --> app service plan (API)
+- sktc-prtx-pvcld-pvrpcldapi15-tst-apsp-01 --> app service (API)
+- sktc-prtx-pvcld-pvrpcldapi15-tst-auac-01 --> automation account
+- sktc-prtx-pvcld-pvrpcldapi15-tst-rubo-start-01 --> runbook start
+- sktc-prtx-pvcld-pvrpcldapi15-tst-rubo-stop-01 --> runbook stop
 
 
-#### for prod
+### for prod
 - sktc-prtx-pvcld-pvrpcldapi15-prd-rsgrp-01 --> resource group
-- sktc-prtx-pvcld-pvrpcldapi15_api-prd-fapp-01 --> azure function (API)
-- sktc-prtx-pvcld-pvrpcldapi15_wrkr-prd-fapp-01 --> azure function (worker)
-- sktc-prtx-pvcld-pvrpcldapi15-prd-blbstrg-01 --> blob storage
-- sktc-prtx-pvcld-pvrpcldapi15-prd-qstrg-01 --> queue storage
 - sktc-prtx-pvcld-pvrpcldapi15-prd-stac-01 --> storage account
-- sktc-prtx-pvcld-pvrpcldapi15_api-prd-appins-01 --> application insights (API)
-- sktc-prtx-pvcld-pvrpcldapi15_wrkr-prd-appins-01 --> application insights (worker)
+- sktc-prtx-pvcld-pvrpcldapi15-prd-blbstrg-01 --> blob storage
+- sktc-prtx-pvcld-pvrpcldapi15-prd-appins-01 --> application insights (API)
+- sktc-prtx-pvcld-pvrpcldapi15-prd-apse-01 --> app service plan (API)
+- sktc-prtx-pvcld-pvrpcldapi15-prd-apsp-01 --> app service (API)
+- sktc-prtx-pvcld-pvrpcldapi15-prd-auac-01 --> automation account
+- sktc-prtx-pvcld-pvrpcldapi15-prd-rubo-start-01 --> runbook start
+- sktc-prtx-pvcld-pvrpcldapi15-prd-rubo-stop-01 --> runbook stop
+
+### branching strategy
+#### Separated branch for separated Environments
+
+| Environment        | Branch name |
+| ------------------ | ----------- |
+| Test, development  | develop15   |
+| Prod               | main15      |
+
