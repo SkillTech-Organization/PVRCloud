@@ -1,14 +1,14 @@
 # PVRPCloud 1.5-TRoute specifikáció
 
-[**Követelmények:	1**](#követelmények)
+[**Követelmények:    1**](#követelmények)
 
-[**Implementáció:	1**](#implementáció)
+[**Implementáció:    1**](#implementáció)
 
-[Input model, TRouteProject osztály:	1](#input-model,-trouteproject-osztály:)
+[Input model, TRouteProject osztály:    1](#input-model,-trouteproject-osztály:)
 
-[Ouput model, TRouteProjectRes osztály:	2](#ouput-model,-trouteprojectres-osztály:)
+[Ouput model, TRouteProjectRes osztály:    2](#ouput-model,-trouteprojectres-osztály:)
 
-[Flow	2](#flow)
+[Flow    2](#flow)
 
 Feladat: egy jármű megadott túrájára kiszámolja a érkezési/indulási- ill. menetidőket, útvonalakat, és útdíjakat. 
 
@@ -18,14 +18,13 @@ Az API funkció neve : TRoute
 
 * .NET 9 framework használata  
 * A TRoute API bemenő adataira a PVRPCloudRequest API hívás PVRPCloudProject, a kimenő adatokra a PVRPCloudResult API hívás PVRPCloudRes adatszerkezetből származtatott osztályok legyenek használva.  
-* Input paraméteren keresztül megadható legyen, hogy az útvonalszámításoknál a súly-, méret- és  
-* behajtási övezet korlátozások figyelmen kivül legyenek hagyva (WithoutRestrictions paraméter)  
-* A validálási szabályok bővítése:  
+* Input paraméteren keresztül megadható legyen, hogy az útvonalszámításoknál a súly-, méret- és behajtási övezet korlátozások figyelmen kivül legyenek hagyva (WithoutRestrictions paraméter)  
+* A validálási szabályok bővítése a bejövő modelre:  
   * WithoutRestrictions paraméter validálása  
   * csak egy jármű adható át  
   * max 25 túrapont lehetséges  
 * Amennyiben két pont között nem talál útvonalat a program, a hibaüzenetben szerepeljen, hogy súly- ill. behajtási övezet korlátozások, vagy térképszakadás miatt van  
-* A TRoute API-nak a jelenleg működő PVRPCloud 1.0-tól különböző App Service-ben kell futnia.  
+* A TRoute API-nak a jelenleg működő PVRPCloud 1.3-tól különböző App Service-ben kell futnia.  
 * Az éles- és fejlesztői AppService-kre start-stop rendszert kell kiépíteni a FinOps igények miatt.  
 * A rendszert az alábbi terhelésre kell felkészíteni Premium v3 P0V3 konfigurációjú (ebben működik a PVRPCloud 1.0) App service kiépítettség esetén:
 
@@ -41,19 +40,21 @@ Az API funkció neve : TRoute
   * Trucks lista csak egy elemű lehet  
   * Orders lista max 25 elemű lehet
 
-##  Ouput model, TRouteProjectRes osztály: {#ouput-model,-trouteprojectres-osztály:}
+## Ouput model, TRouteProjectRes osztály: {#ouput-model,-trouteprojectres-osztály:}
 
 * ProjectRes \-ből származik  
+
 * Új mezők  
   Teljes túra:  
+  
   * Távolság rakott: Tour.LoadedLength  
   * Távolság üres: TourUnloadedLength (utolsó túrapontból a raktárba vezető út)  
   * Behajtási övezetlista: Tour.RestrictedZones : string lista  
   * Súlykorlátozások útípusonként: Tour.WeigthRestrictions : Dictionary\<int, int\>  
   * Útdíjak útípusonként: Tour.Tolls: Dictionary\<int,int\>
-
+  
   Túraszakaszra (TourPoint) nézve (előző érintett címétől számítva):
-
+  
   * Behajtási övezetlista:TourPoint.RestrictedZones : string lista  
   * Súlykorlátozások útípusonként: TourPoint.WeigthRestrictions : Dictionary\<int,int\>  
   * Útdíjak útípusonként ProjectRes.TourPoint.Tolls: Dictionary\<int,int\>
@@ -79,7 +80,6 @@ PVRPCloudQueueProcessor:
 6. Eredmény JSON formában blob storage-be mentése  
 7. Üzleti hiba, exception esetén az eredmény JSON-ba kerülnek a felmerült hibák  
    1. Hiányzó útvonal esetén meg kell állapítani, hogy gráf-szakadás vagy súlykorlátozás miatt nincs útvonal.  
-      
 
 TRouteResult
 
@@ -88,4 +88,3 @@ TRouteResult
 3. Ha nem található eredmény http 404 kerül visszaadásra
 
 Teszt/dummy adatok
-
