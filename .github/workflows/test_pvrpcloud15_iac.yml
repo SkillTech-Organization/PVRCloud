@@ -1,5 +1,9 @@
 name: Deploy infrastructure of the PVRPCloud 1.5 solution from Azure bicep IaC to Azure
 
+env:
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.PRATIX_AZURE_SUBSCRIPTIONID }}
+  ENVIRONMENT: ${{ github.ref == 'refs/heads/main15' && 'prod' || 'dev' }}
+  
 on:
   push:
     branches:
@@ -7,11 +11,6 @@ on:
     paths:
       - 'infrastructure/test_pvrpcloud15_iac.bicep'
   workflow_dispatch:
-
-
-env:
-  AZURE_SUBSCRIPTION_ID: ${{ secrets.PRATIX_AZURE_SUBSCRIPTIONID }}
-  ENVIRONMENT: ${{ github.ref == 'refs/heads/main15' && 'prod' || 'dev' }}
 
 jobs:
   deploy:
