@@ -3,7 +3,7 @@ name: Deploy infrastructure of the PVRPCloud 1.5 solution from Azure bicep IaC t
 on:
   push:
     branches:
-      - devlop15
+      - develop15
     paths:
       - 'infrastructure/test_pvrpcloud15_iac.bicep'
   workflow_dispatch:
