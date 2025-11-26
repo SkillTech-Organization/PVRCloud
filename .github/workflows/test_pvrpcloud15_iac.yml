@@ -1,32 +1,22 @@
-name: Deploy Azure Infrastructure
+name: Deploy infrastructure of the PVRPCloud 1.5 solution from Azure bicep IaC to Azure
 
 on:
   push:
     branches:
-      - main
+      - devlop15
     paths:
-      - 'infrastructure/**'
+      - 'infrastructure/test_pvrpcloud15_iac.bicep'
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-          - dev
-          - test
-          - prod
+
 
 env:
-  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  RESOURCE_GROUP_NAME: 'rsg-${{ github.event.inputs.environment || 'dev' }}'
-  LOCATION: 'westeurope'
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.PRATIX_AZURE_SUBSCRIPTIONID }}
+  ENVIRONMENT: ${{ github.ref == 'refs/heads/main15' && 'prod' || 'dev' }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment || 'dev' }}
+    environment: ${{ github.ref == 'refs/heads/main15' && 'prod' || 'dev' }}
     
     steps:
     - name: Checkout code
@@ -35,25 +25,38 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.PVRPCLOUD15_IAC_CREDENTIALS }}
 
-    - name: Create Resource Group
-      uses: azure/CLI@v2
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az group create \
-            --name ${{ env.RESOURCE_GROUP_NAME }} \
-            --location ${{ env.LOCATION }}
-      id: createRg
-
-    - name: Display Resource Group Info
+    - name: Get Bicep Parameters
+      id: bicep-params
       run: |
-        echo "Resource Group Name: ${{ env.RESOURCE_GROUP_NAME }}"
-        echo "Location: ${{ env.LOCATION }}"
-        echo "Resource Group created successfully!"
+        # Extract default location from Bicep file
+        LOCATION=$(grep "param location string = " ./infrastructure/test_pvrpcloud15_iac.bicep | sed "s/.*= '\(.*\)'/\1/")
+        echo "location=$LOCATION" >> $GITHUB_OUTPUT
+
+    - name: Deploy Bicep Template
+      uses: azure/arm-deploy@v2
+      with:
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        scope: subscription
+        region: ${{ steps.bicep-params.outputs.location }}
+        template: ./infrastructure/test_pvrpcloud15_iac.bicep
+        parameters: environment=${{ env.ENVIRONMENT }}
+        failOnStdErr: false
+        deploymentName: 'bicep-deployment-${{ github.run_number }}'
+      id: deploy
+
+    - name: Display Deployment Results
+      run: |
+        echo "==================================="
+        echo "Deployment completed successfully!"
+        echo "==================================="
+        echo "Environment: ${{ steps.deploy.outputs.environment }}"
+        echo "Resource Group: ${{ steps.deploy.outputs.resourceGroupName }}"
+        echo "Location: ${{ steps.deploy.outputs.location }}"
+        echo "Resource Group ID: ${{ steps.deploy.outputs.resourceGroupId }}"
+        echo "==================================="
 
     - name: Azure Logout
       if: always()
-      run: |
-        az logout
+      run: az logout
