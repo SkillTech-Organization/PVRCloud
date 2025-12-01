@@ -3,7 +3,7 @@ using Azure;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using PVRPCloud.Models;
+using PVRPCommon.Models;
 using PVRPCloudApi.Handlers;
 
 namespace PVRPCloudApiTests;

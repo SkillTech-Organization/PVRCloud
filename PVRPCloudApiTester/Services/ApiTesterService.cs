@@ -218,7 +218,7 @@ internal class ApiTesterService : IApiTesterService
                                 {
                                     if (x.Status == ResultStatus.RESULT)
                                     {
-                                        x.Data = ((JToken)x.Data).ToObject<List<PVRPCloud.CalcTask>>();
+                                        x.Data = ((JToken)x.Data).ToObject<List<PVRPCommon.CalcTask>>();
                                     }
                                     else
                                     {
@@ -308,7 +308,7 @@ internal class ApiTesterService : IApiTesterService
         TestData data = new TestData();
         data.Request = new Request
         {
-            TaskList = new List<PVRPCloudTask>(),
+            TaskList = new List<PVRPTask>(),
             TruckList = new List<Truck>()
         };
 
@@ -324,7 +324,7 @@ internal class ApiTesterService : IApiTesterService
         var taskPath = Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + fileEnding);
         if (File.Exists(taskPath))
         {
-            var tasks = JsonConvert.DeserializeObject<List<PVRPCloudTask>>(File.ReadAllText(taskPath), isoDateTimeConverter);
+            var tasks = JsonConvert.DeserializeObject<List<PVRPTask>>(File.ReadAllText(taskPath), isoDateTimeConverter);
             data.Request.TaskList = tasks;
         }
         else

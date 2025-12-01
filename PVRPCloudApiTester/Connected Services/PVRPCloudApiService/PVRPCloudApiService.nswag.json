@@ -238,7 +238,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/PVRPCloudTask"
+              "$ref": "#/components/schemas/PVRPTask"
             }
           },
           "truckList": {
@@ -308,7 +308,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/PVRPCloudTask"
+              "$ref": "#/components/schemas/PVRPTask"
             }
           },
           "truckList": {
@@ -320,7 +320,7 @@
           }
         }
       },
-      "PVRPCloudTask": {
+      "PVRPTask": {
         "type": "object",
         "additionalProperties": false,
         "required": [
