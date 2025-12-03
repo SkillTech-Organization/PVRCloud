@@ -8,12 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PVRPCommon" Version="1.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CommonUtils\CommonUtils.csproj" />
-    <ProjectReference Include="..\PMap\PMapCore.csproj" />
+    <PackageReference Include="PVRPCommon" Version="1.0.3" />
   </ItemGroup>
 
 </Project>
