@@ -33,4 +33,8 @@
   <ItemGroup>
     <InternalsVisibleTo Include="PVRPCloudApiTests" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTO\Request\" />
+    <Folder Include="Util\" />
+  </ItemGroup>
 </Project>

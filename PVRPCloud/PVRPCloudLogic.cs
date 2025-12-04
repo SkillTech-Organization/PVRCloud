@@ -175,7 +175,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     private List<ClientNodeIdPair> GetNodeIdsForDepoAndClients(Depot depot, List<Client> clients)
     {
-        List<Result> errors = [];
+        List<Result<Project, ProjectRes>> errors = [];
         List<ClientNodeIdPair> clientNodes = new(clients.Count + 1);
 
         boEdge[] edgesArr = _routeData.Edges.Select(s => s.Value).ToArray();
@@ -195,7 +195,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return clientNodes;
     }
 
-    private string FillClientNodes(ClientBase client, boEdge[] edgesArr, List<ClientNodeIdPair> clientNodes, List<Result> errors)
+    private string FillClientNodes(ClientBase client, boEdge[] edgesArr, List<ClientNodeIdPair> clientNodes, List<Result<Project, ProjectRes>> errors)
     {
         var resultMsg = new StringBuilder($"{client.Name} lat: {client.Lat}, long: {client.Lng},");
 
@@ -261,7 +261,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return retNodID;
     }
 
-    private Result GetValidationError(object obj, string field, string message)
+    private Result<Project, ProjectRes> GetValidationError(object obj, string field, string message)
     {
         ResErrMsg msg = ResErrMsg.ValidationError(field, message);
 
@@ -274,7 +274,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             ? obj.GetType().GetProperty(ItemIDProp.Name)?.GetValue(obj, null)?.ToString() ?? "???"
             : "???";
 
-        Result itemRes = Result.ValidationError(msg, itemId);
+        Result<Project, ProjectRes> itemRes = Result<Project, ProjectRes>.ValidationError(msg, itemId);
 
         _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Error, message);
 
