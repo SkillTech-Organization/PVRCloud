@@ -12,7 +12,7 @@ internal class GetResultResponse
 {
     public QueueResponse Result { get; set; }
 
-    public List<Result> PVRPCloudResults { get; set; }
+    public List<Result<Project, ProjectRes>> PVRPCloudResults { get; set; }
 
     public bool NoMoreMessages { get; set; } = false;
 
