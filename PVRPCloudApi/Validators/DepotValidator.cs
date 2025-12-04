@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PVRPCloud.Models;
+using PVRPCommon.Models;
 
 namespace PVRPCloudApi.Validators;
 

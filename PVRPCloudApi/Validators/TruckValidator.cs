@@ -1,12 +1,12 @@
 using FluentValidation;
-using PVRPCloud;
-using PVRPCloud.Models;
+using PVRPCommon;
+using PVRPCommon.Models;
 
 namespace PVRPCloudApi.Validators;
 
 using static ValidationHelpers;
 
-public sealed class TruckValidator : AbstractValidator<PVRPCloud.Models.Truck>
+public sealed class TruckValidator : AbstractValidator<PVRPCommon.Models.Truck>
 {
     private readonly int[] _eTollCategories = [1, 2, 3, 4, 5, 6];
     private readonly int[] _environmentalClasses = [0, 1, 2, 3, 4, 5, 6, 99, 100];

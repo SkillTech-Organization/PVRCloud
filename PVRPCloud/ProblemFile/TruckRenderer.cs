@@ -1,4 +1,5 @@
 using System.Text;
+using PVRPCommon.Models;
 
 namespace PVRPCloud.ProblemFile;
 
@@ -22,7 +23,7 @@ public sealed class TruckRenderer
         _capacityProfileIds = capacityProfileIds;
     }
 
-    public StringBuilder Render(IEnumerable<Models.Truck> trucks)
+    public StringBuilder Render(IEnumerable<Truck> trucks)
     {
         int pvrpId = 1;
         foreach (var truck in trucks)
@@ -38,14 +39,14 @@ public sealed class TruckRenderer
         return _sb;
     }
 
-    private void CreateTruck(Models.Truck truck)
+    private void CreateTruck(Truck truck)
     {
         int truckTypeId = _truckTypeIds[truck.TruckTypeID];
 
         _sb.AppendLine($"""createTruck({truckTypeId}, "{truck.TruckName}", 1, 1)""");
     }
 
-    private void SetTruckInformation(int pvrpId, Models.Truck truck)
+    private void SetTruckInformation(int pvrpId, Truck truck)
     {
         int costProfileId = _costProfileIds[truck.CostProfileID];
 

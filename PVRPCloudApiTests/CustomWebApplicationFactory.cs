@@ -6,6 +6,7 @@ using Microsoft.Extensions.Time.Testing;
 using NSubstitute;
 using PMapCore.Route;
 using PVRPCloud;
+using PVRPCommon;
 
 namespace PVRPCloudApiTests;
 

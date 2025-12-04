@@ -3,8 +3,8 @@ using Serilog;
 using Microsoft.Extensions.Configuration;
 using CommonUtils;
 using PVRPCloudApiTester.Settings;
-using PVRPCloud;
-using PVRPCloud.Models;
+using PVRPCommon;
+using PVRPCommon.Models;
 
 namespace PVRPCloudApiTester.Util;
 

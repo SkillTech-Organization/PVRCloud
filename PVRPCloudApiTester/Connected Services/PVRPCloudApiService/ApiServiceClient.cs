@@ -549,7 +549,7 @@ public partial class Response
     public string RequestID { get; set; }
 
     [Newtonsoft.Json.JsonProperty("taskList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<PVRPCloudTask> TaskList { get; set; }
+    public System.Collections.Generic.ICollection<PVRPTask> TaskList { get; set; }
 
     [Newtonsoft.Json.JsonProperty("truckList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public System.Collections.Generic.ICollection<Truck> TruckList { get; set; }
@@ -605,7 +605,7 @@ public partial class Request
     public int MaxTruckDistance { get; set; }
 
     [Newtonsoft.Json.JsonProperty("taskList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<PVRPCloudTask> TaskList { get; set; }
+    public System.Collections.Generic.ICollection<PVRPTask> TaskList { get; set; }
 
     [Newtonsoft.Json.JsonProperty("truckList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public System.Collections.Generic.ICollection<Truck> TruckList { get; set; }
@@ -613,7 +613,7 @@ public partial class Request
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
-public partial class PVRPCloudTask
+public partial class PVRPTask
 {
     [Newtonsoft.Json.JsonProperty("taskID", Required = Newtonsoft.Json.Required.Always)]
     [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]

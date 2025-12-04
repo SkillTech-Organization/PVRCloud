@@ -24,7 +24,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../PVRPCloud/PVRPCloud.csproj" />
-    <ProjectReference Include="..\CommonUtils\CommonUtils.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="PMAP.ini">
