@@ -191,7 +191,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Placing on map:\n{placingOnMapMsgs}");
 
         if (errors.Count > 0)
-            throw new DomainValidationException(errors);
+            throw new DomainValidationException<Project, ProjectRes>(errors);
         return clientNodes;
     }
 

@@ -5,8 +5,9 @@ using PMapCore.Common;
 using PMapCore.Route;
 using PVRPCommon;
 using PVRPCloud.ProblemFile;
-using PVRPCloudApi.Handlers;
+using PVRPCommon.Handlers;
 using PVRPCloud;
+using PVRPCommon.Models;
 
 namespace PVRPCloudApi;
 
@@ -18,9 +19,9 @@ public static class AddPvrpServicesExtension
 
         services.AddExceptionHandler(option =>
         {
-            option.ExceptionHandler = GeneralExceptionHandler.HandleAsync;
+            option.ExceptionHandler = GeneralExceptionHandler<Project, ProjectRes>.HandleAsync;
         });
-        services.AddExceptionHandler<ValidationExceptionHandler>();
+        services.AddExceptionHandler<ValidationExceptionHandler<Project, ProjectRes>>();
         services.AddExceptionHandler<BlobNotFoundExceptionHandler>();
 
         services.AddSingleton(TimeProvider.System);

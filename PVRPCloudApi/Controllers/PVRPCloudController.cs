@@ -10,15 +10,15 @@ namespace PVRPCloudApi.Controllers;
 public class PVRPCloudController : ControllerBase
 {
     [HttpPost]
-    [ProducesResponseType<Response>(StatusCodes.Status202Accepted)]
-    [ProducesResponseType<Response>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<Response<Project, ProjectRes>>(StatusCodes.Status202Accepted)]
+    [ProducesResponseType<Response<Project, ProjectRes>>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult PVRPCloudRequest(Project request, IPVRPCloudLogic pvrpCloudLogic)
     {
         string requestId = pvrpCloudLogic.Handle(request);
 
-        return Accepted(new Response
+        return Accepted(new Response<Project, ProjectRes>
         {
             RequestID = requestId,
             Results = [Result<Project, ProjectRes>.Success(request)]

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PVRPCommon" Version="1.0.6" />
+    <PackageReference Include="PVRPCommon" Version="1.0.11" />
   </ItemGroup>
 
 </Project>

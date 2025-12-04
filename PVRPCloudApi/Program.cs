@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using PMapCore.Common;
 using PVRPCloudApi;
 using PVRPCloudApi.DTO.Response;
-using PVRPCloudApi.Util;
+using PVRPCommon.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 
