@@ -43,7 +43,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 
@@ -85,7 +85,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 
@@ -137,7 +137,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 
@@ -181,7 +181,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 
@@ -227,7 +227,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 
@@ -271,7 +271,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 
@@ -315,7 +315,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 
@@ -359,7 +359,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 
@@ -403,7 +403,7 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new(project);
+        OrderValidator sut = new();
 
         var result = sut.Validate(project.Orders[0]);
 

@@ -25,7 +25,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -51,7 +51,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -77,7 +77,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -112,7 +112,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -138,7 +138,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -164,7 +164,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -193,7 +193,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -221,7 +221,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -250,7 +250,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -278,7 +278,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -304,7 +304,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -330,7 +330,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 

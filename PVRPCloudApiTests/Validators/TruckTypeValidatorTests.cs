@@ -28,7 +28,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -59,7 +59,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -101,7 +101,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -132,7 +132,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -161,7 +161,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -190,7 +190,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -219,7 +219,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -250,7 +250,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -279,7 +279,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 
@@ -308,7 +308,7 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new(project);
+        TruckTypeValidator sut = new();
 
         var result = sut.Validate(project.TruckTypes[0]);
 

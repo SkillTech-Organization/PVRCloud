@@ -22,7 +22,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -45,7 +45,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -68,7 +68,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -98,7 +98,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -121,7 +121,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -144,7 +144,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -167,7 +167,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 

@@ -23,7 +23,7 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new(project);
+        DepotValidator sut = new();
 
         var result = sut.Validate(project.Depot);
 
@@ -49,7 +49,7 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new(project);
+        DepotValidator sut = new();
 
         var result = sut.Validate(project.Depot);
 
@@ -75,7 +75,7 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new(project);
+        DepotValidator sut = new();
 
         var result = sut.Validate(project.Depot);
 
@@ -101,7 +101,7 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new(project);
+        DepotValidator sut = new();
 
         var result = sut.Validate(project.Depot);
 
@@ -127,7 +127,7 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new(project);
+        DepotValidator sut = new();
 
         var result = sut.Validate(project.Depot);
 
@@ -151,7 +151,7 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new(project);
+        DepotValidator sut = new();
 
         var result = sut.Validate(project.Depot);
 
@@ -177,7 +177,7 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new(project);
+        DepotValidator sut = new();
 
         var result = sut.Validate(project.Depot);
 
@@ -202,7 +202,7 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new(project);
+        DepotValidator sut = new();
 
         var result = sut.Validate(project.Depot);
 

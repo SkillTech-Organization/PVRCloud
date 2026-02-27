@@ -20,7 +20,7 @@ public class CapacityProfileValidatorTests
                 }
             ]
         };
-        CapacityProfileValidator sut = new(project);
+        CapacityProfileValidator sut = new();
 
         var result = sut.Validate(project.CapacityProfiles[0]);
 
@@ -41,7 +41,7 @@ public class CapacityProfileValidatorTests
                 }
             ]
         };
-        CapacityProfileValidator sut = new(project);
+        CapacityProfileValidator sut = new();
 
         var result = sut.Validate(project.CapacityProfiles[0]);
 
@@ -62,7 +62,7 @@ public class CapacityProfileValidatorTests
                 }
             ]
         };
-        CapacityProfileValidator sut = new(project);
+        CapacityProfileValidator sut = new();
 
         var result = sut.Validate(project.CapacityProfiles[0]);
 
@@ -89,7 +89,7 @@ public class CapacityProfileValidatorTests
                 }
             ]
         };
-        CapacityProfileValidator sut = new(project);
+        CapacityProfileValidator sut = new();
 
         var result = sut.Validate(project.CapacityProfiles[0]);
 

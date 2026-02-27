@@ -48,7 +48,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -92,7 +92,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -138,7 +138,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -182,7 +182,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -224,7 +224,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -268,7 +268,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -310,7 +310,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -352,7 +352,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -394,7 +394,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -436,7 +436,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -480,7 +480,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -522,7 +522,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -573,7 +573,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
@@ -622,7 +622,7 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new(project);
+        TruckValidator sut = new();
 
         var result = sut.Validate(project.Trucks[0]);
 
