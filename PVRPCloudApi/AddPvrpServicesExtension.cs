@@ -3,10 +3,10 @@ using BlobUtils;
 using Microsoft.Extensions.Options;
 using PMapCore.Common;
 using PMapCore.Route;
-using PVRPCommon;
-using PVRPCloud.ProblemFile;
-using PVRPCommon.Handlers;
 using PVRPCloud;
+using PVRPCloud.ProblemFile;
+using PVRPCloud.Queue;
+using PVRPCommon.Handlers;
 using PVRPCommon.Models;
 
 namespace PVRPCloudApi;
@@ -19,9 +19,9 @@ public static class AddPvrpServicesExtension
 
         services.AddExceptionHandler(option =>
         {
-            option.ExceptionHandler = GeneralExceptionHandler<Project, ProjectRes>.HandleAsync;
+            option.ExceptionHandler = GeneralExceptionHandler<Project, ProjectRes<TourPoint>>.HandleAsync;
         });
-        services.AddExceptionHandler<ValidationExceptionHandler<Project, ProjectRes>>();
+        services.AddExceptionHandler<ValidationExceptionHandler<Project, ProjectRes<TourPoint>>>();
         services.AddExceptionHandler<BlobNotFoundExceptionHandler>();
 
         services.AddSingleton(TimeProvider.System);
@@ -31,14 +31,14 @@ public static class AddPvrpServicesExtension
 
         services.AddTransient<IBlobHandler, BlobHandler>(serviceProvider =>
         {
-            var mapStorageConfiguration = serviceProvider.GetRequiredService<IOptions<MapStorage>>();
-            return new BlobHandler(mapStorageConfiguration.Value.AzureStorageConnectionString);
+            var commonSettings = serviceProvider.GetRequiredService<IOptions<CommonSettings>>();
+            return new BlobHandler(commonSettings.Value.AZURE_STORAGE_BLOB_ENDPOINT);
         });
 
         services.AddSingleton<IPmapInputQueue, PmapInputQueue>(serviceProvider =>
         {
-            var mapStorageConfiguration = serviceProvider.GetRequiredService<IOptions<MapStorage>>().Value;
-            return new PmapInputQueue(mapStorageConfiguration.AzureStorageConnectionString, mapStorageConfiguration.InputQueueName);
+            var commonSettings = serviceProvider.GetRequiredService<IOptions<CommonSettings>>();
+            return new PmapInputQueue(commonSettings.Value.AZURE_STORAGE_BLOB_ENDPOINT, commonSettings.Value.INPUT_QUEUE_NAME);
         });
 
         services.AddSingleton(static serviceProvider =>

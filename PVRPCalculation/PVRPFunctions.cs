@@ -3,6 +3,7 @@ using BlobUtils;
 using CommonUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PMapCore.Common;
 using System.Diagnostics;
 using System.Text;
 
@@ -38,17 +39,19 @@ namespace WebJobPOC
 
         private IConfiguration _config;
         private ILogger _logger;
+        private readonly CommonSettings _commonSettings;
 
-        public PVRPFunctions(string requestID, int maxCompTime, IConfiguration config, ILogger logger)
+        public PVRPFunctions(string requestID, int maxCompTime, IConfiguration config, ILogger logger, IBlobHandler blobHandler, CommonSettings commonSettings)
         {
             _requestID = requestID;
             _maxCompTime = maxCompTime;
             _config = config;
             _logger = logger;
+            _commonSettings = commonSettings;
 
 
 
-            _blobHandler = new BlobHandler(_config[AzureWebJobsStorageParName]);
+            _blobHandler = blobHandler;
 
             _optimizefileName = $"{_requestID}_optimize.dat";
             _blobOptimizeFileName = $"REQ_{_requestID}/{_requestID}_optimize.dat";
@@ -182,7 +185,7 @@ namespace WebJobPOC
 
             using (var fileStream = System.IO.File.OpenWrite(fileWithPath))
             {
-                var blobStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, blobFileName);
+                var blobStream = await _blobHandler.DownloadToStreamAsync(_commonSettings.CALC_CONTAINER_NAME, blobFileName);
                 blobStream.CopyTo(fileStream);
             }
             _logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", _requestID, "INFO", $"file has been downloaded:{blobFileName} -> {fileWithPath}");
@@ -198,12 +201,12 @@ namespace WebJobPOC
                 {
                     using (var readStream = System.IO.File.OpenRead(fileWithPath))
                     {
-                        ret = await _blobHandler.UploadAsync(Consts.CalcContainerName, blobFileName, readStream, accessTier);
+                        ret = await _blobHandler.UploadAsync(_commonSettings.CALC_CONTAINER_NAME, blobFileName, readStream, accessTier);
 
                         //read after upload to flush buffers
                         using (var writeStream = System.IO.File.OpenWrite(tempFileName))
                         {
-                            var downloadStream = await _blobHandler.DownloadToStreamAsync(Consts.CalcContainerName, blobFileName);
+                            var downloadStream = await _blobHandler.DownloadToStreamAsync(_commonSettings.CALC_CONTAINER_NAME, blobFileName);
                             downloadStream.CopyTo(writeStream);
                         }
 
@@ -214,7 +217,7 @@ namespace WebJobPOC
                     if (!string.IsNullOrWhiteSpace(_config[BlobLinkParName]))
                     {
                         var BlobLink = _config[BlobLinkParName];
-                        ret = BlobLink?.Replace("%%BLOB%%", Consts.CalcContainerName + "%2F" + blobFileName.Replace("/", "%2F"));
+                        ret = BlobLink?.Replace("%%BLOB%%", _commonSettings.CALC_CONTAINER_NAME + "%2F" + blobFileName.Replace("/", "%2F"));
                     }
                 }
                 else

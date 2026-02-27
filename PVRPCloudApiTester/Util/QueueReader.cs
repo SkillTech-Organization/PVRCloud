@@ -1,10 +1,11 @@
 ﻿using Azure.Storage.Queues;
-using Serilog;
-using Microsoft.Extensions.Configuration;
 using CommonUtils;
+using Microsoft.Extensions.Configuration;
+using PVRPCloud.Queue;
 using PVRPCloudApiTester.Settings;
 using PVRPCommon;
 using PVRPCommon.Models;
+using Serilog;
 
 namespace PVRPCloudApiTester.Util;
 
@@ -12,7 +13,7 @@ internal class GetResultResponse
 {
     public QueueResponse Result { get; set; }
 
-    public List<Result<Project, ProjectRes>> PVRPCloudResults { get; set; }
+    public List<Result<Project, ProjectRes<TourPoint>>> PVRPCloudResults { get; set; }
 
     public bool NoMoreMessages { get; set; } = false;
 

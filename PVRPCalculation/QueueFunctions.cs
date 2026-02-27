@@ -1,8 +1,10 @@
 ﻿using BlobManager;
+using BlobUtils;
 using CommonUtils;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PMapCore.Common;
 using System.Reflection;
 using System.Text.Json;
 
@@ -77,7 +79,13 @@ namespace WebJobPOC
                      .AddUserSecrets<Program>();
 
                 IConfiguration config = confBuilder.Build();
-                var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger);
+                var commonSettings = config
+                    .GetSection("CommonSettings")
+                    .Get<CommonSettings>();
+
+                var bh = new BlobHandler(commonSettings?.AZURE_STORAGE_BLOB_ENDPOINT);
+
+                var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger, bh, commonSettings);
                 await fn.OptimizeAsync(resp);
 
 

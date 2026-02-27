@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+using PMapCore.Common;
 
 var environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
 if (environmentName == null)
@@ -13,11 +14,12 @@ if (environmentName == null)
 
 
 var builder = new HostBuilder()
-    .ConfigureServices(services =>
+    .ConfigureServices((hostContext, services) =>
     {
         services.AddApplicationInsightsTelemetryWorkerService();
-        //        services.ConfigureFunctionsApplicationInsights();
 
+        services.Configure<CommonSettings>(
+            hostContext.Configuration.GetSection("CommonSettings"));
     })
     .ConfigureWebJobs(b =>
     {
@@ -55,6 +57,8 @@ builder.ConfigureAppConfiguration((hostContext, configApp) =>
     }
     configApp.AddEnvironmentVariables();
     configApp.AddUserSecrets<Program>();
+
+
 });
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");

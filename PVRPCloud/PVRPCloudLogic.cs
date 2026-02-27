@@ -1,20 +1,20 @@
 ﻿using Azure.Storage.Blobs.Models;
 using BlobManager;
 using BlobUtils;
-using CommonUtils;
 using GMap.NET;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Common.Attrib;
 using PMapCore.Route;
-using PVRPCommon.Models;
 using PVRPCloud.ProblemFile;
+using PVRPCommon;
+using PVRPCommon.Models;
 using System.IO.Compression;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
-using PVRPCommon;
 
 namespace PVRPCloud;
 
@@ -27,6 +27,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
     private readonly IPMapIniParams _pmapIniParams;
     private readonly ILogger<PVRPCloudLogic> _logger;
     private readonly ILogger<ProjectRenderer> _loggerProject;
+    private readonly IOptions<CommonSettings> _commonSettings;
 
     private readonly TimeProvider _timeProvider;
 
@@ -39,7 +40,8 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                           IRouteData routeData,
                           IPMapIniParams pmapIniParams,
                           ILogger<PVRPCloudLogic> logger,
-                          ILogger<ProjectRenderer> loggerProject)
+                          ILogger<ProjectRenderer> loggerProject,
+                          IOptions<CommonSettings> commonSettings)
     {
         _blobHandler = blobHandler;
         _pmapInputQueue = pmapInputQueue;
@@ -51,6 +53,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _pmapIniParams = pmapIniParams;
         _logger = logger;
         _loggerProject = loggerProject;
+        _commonSettings = commonSettings;
     }
 
     public string Handle(Project project)
@@ -131,7 +134,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
                 //Brotli feltöltés
                 using (var filestreamRead = File.OpenRead(tempBlobFileName))
                 {
-                    await _blobHandler.UploadAsync(Consts.CalcContainerName, projectFileName, filestreamRead, AccessTier.Hot);
+                    await _blobHandler.UploadAsync(_commonSettings.Value.CALC_CONTAINER_NAME, projectFileName, filestreamRead, AccessTier.Hot);
 
                 }
 
@@ -175,7 +178,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
 
     private List<ClientNodeIdPair> GetNodeIdsForDepoAndClients(Depot depot, List<Client> clients)
     {
-        List<Result<Project, ProjectRes>> errors = [];
+        List<Result<Project, ProjectRes<TourPoint>>> errors = [];
         List<ClientNodeIdPair> clientNodes = new(clients.Count + 1);
 
         boEdge[] edgesArr = _routeData.Edges.Select(s => s.Value).ToArray();
@@ -191,11 +194,11 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Info, $"Placing on map:\n{placingOnMapMsgs}");
 
         if (errors.Count > 0)
-            throw new DomainValidationException<Project, ProjectRes>(errors);
+            throw new DomainValidationException<Project, ProjectRes<TourPoint>>(errors);
         return clientNodes;
     }
 
-    private string FillClientNodes(ClientBase client, boEdge[] edgesArr, List<ClientNodeIdPair> clientNodes, List<Result<Project, ProjectRes>> errors)
+    private string FillClientNodes(ClientBase client, boEdge[] edgesArr, List<ClientNodeIdPair> clientNodes, List<Result<Project, ProjectRes<TourPoint>>> errors)
     {
         var resultMsg = new StringBuilder($"{client.Name} lat: {client.Lat}, long: {client.Lng},");
 
@@ -261,7 +264,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         return retNodID;
     }
 
-    private Result<Project, ProjectRes> GetValidationError(object obj, string field, string message)
+    private Result<Project, ProjectRes<TourPoint>> GetValidationError(object obj, string field, string message)
     {
         ResErrMsg msg = ResErrMsg.ValidationError(field, message);
 
@@ -274,7 +277,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
             ? obj.GetType().GetProperty(ItemIDProp.Name)?.GetValue(obj, null)?.ToString() ?? "???"
             : "???";
 
-        Result<Project, ProjectRes> itemRes = Result<Project, ProjectRes>.ValidationError(msg, itemId);
+        Result<Project, ProjectRes<TourPoint>> itemRes = Result<Project, ProjectRes<TourPoint>>.ValidationError(msg, itemId);
 
         _logger.LogPvrp(_requestID, LogPvrpExtension.LogStatus.Error, message);
 
@@ -365,7 +368,7 @@ public sealed class PVRPCloudLogic : IPVRPCloudLogic
         await sw.FlushAsync();
         ms.Position = 0;
 
-        await _blobHandler.UploadAsync(Consts.CalcContainerName, fileName, ms, accessTier);
+        await _blobHandler.UploadAsync(_commonSettings.Value.CALC_CONTAINER_NAME, fileName, ms, accessTier);
     }
 
     private async Task QueueMessageAsync(int TrkCount, int OrdCount, int ClientCount)
