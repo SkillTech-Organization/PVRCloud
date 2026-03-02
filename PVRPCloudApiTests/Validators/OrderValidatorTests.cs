@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using FluentValidation.TestHelper;
+using PVRPCommon;
 using PVRPCommon.Models;
 using PVRPCommon.Validators;
 
@@ -6,6 +8,8 @@ namespace PVRPCloudApiTests.Validators;
 
 public class OrderValidatorTests
 {
+    private readonly ProjectValidator _projectValidator = new();
+
     [Fact]
     public void Validate_ReturnsValidResult()
     {
@@ -136,12 +140,10 @@ public class OrderValidatorTests
                 }
             ]
         };
+        var result = _projectValidator.TestValidate(project);
 
-        OrderValidator sut = new();
-
-        var result = sut.Validate(project.Orders[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(x => x.Orders)
+            .WithErrorMessage(Messages.ERR_ID_UNIQUE.Replace("{PropertyName}", "Orders"));
     }
 
     [Fact]
@@ -181,11 +183,12 @@ public class OrderValidatorTests
             ]
         };
 
-        OrderValidator sut = new();
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.Orders[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor("ClientID[0]")
+            .WithErrorMessage(Messages.ERR_NOT_FOUND
+            .Replace("{PropertyName}", "ClientID")
+            .Replace("{PropertyValue}", project.Orders[0].ClientID.ToString()));
     }
 
     [Theory]

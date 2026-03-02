@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using FluentValidation.TestHelper;
+using PVRPCommon;
 using PVRPCommon.Models;
 using PVRPCommon.Validators;
 
@@ -6,6 +8,7 @@ namespace PVRPCloudApiTests.Validators;
 
 public class TruckValidatorTests
 {
+    private readonly ProjectValidator _projectValidator = new();
     [Fact]
     public void Validate_ReturnsValidResult()
     {
@@ -622,10 +625,11 @@ public class TruckValidatorTests
             ]
         };
 
-        TruckValidator sut = new();
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.Trucks[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor("CostProfileID[0]")
+            .WithErrorMessage(Messages.ERR_NOT_FOUND
+            .Replace("{PropertyName}", "CostProfileID")
+            .Replace("{PropertyValue}", project.Trucks[0].CostProfileID.ToString()));
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation.TestHelper;
 using PVRPCommon.Models;
 using PVRPCommon.Validators;
 
@@ -6,6 +7,8 @@ namespace PVRPCloudApiTests.Validators;
 
 public class TruckTypeValidatorTests
 {
+    private readonly ProjectValidator _projectValidator = new();
+
     [Fact]
     public void Validate_ReturnsValidResult()
     {
@@ -101,11 +104,10 @@ public class TruckTypeValidatorTests
             ]
         };
 
-        TruckTypeValidator sut = new();
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.TruckTypes[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(x => x.TruckTypes)
+            .WithErrorMessage(PVRPCommon.Messages.ERR_ID_UNIQUE.Replace("{PropertyName}", "Truck Types"));
     }
 
     [Theory]

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation.TestHelper;
 using PVRPCommon.Models;
 using PVRPCommon.Validators;
 
@@ -6,6 +7,9 @@ namespace PVRPCloudApiTests.Validators;
 
 public class CapacityProfileValidatorTests
 {
+
+    private readonly ProjectValidator _projectValidator = new();
+
     [Fact]
     public void Validate_ReturnsValidResult()
     {
@@ -41,11 +45,10 @@ public class CapacityProfileValidatorTests
                 }
             ]
         };
-        CapacityProfileValidator sut = new();
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.CapacityProfiles[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor("CapacityProfiles[0].ID")
+            .WithErrorMessage(PVRPCommon.Messages.ERR_EMPTY.Replace("{PropertyName}", "ID"));
     }
 
     [Fact]
@@ -62,11 +65,11 @@ public class CapacityProfileValidatorTests
                 }
             ]
         };
-        CapacityProfileValidator sut = new();
 
-        var result = sut.Validate(project.CapacityProfiles[0]);
+        var result = _projectValidator.TestValidate(project);
 
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor("CapacityProfiles[0].ID")
+            .WithErrorMessage(PVRPCommon.Messages.ERR_MANDATORY.Replace("{PropertyName}", "ID"));
     }
 
     [Fact]
@@ -89,10 +92,11 @@ public class CapacityProfileValidatorTests
                 }
             ]
         };
-        CapacityProfileValidator sut = new();
 
-        var result = sut.Validate(project.CapacityProfiles[0]);
 
-        result.IsValid.Should().BeFalse();
+        var result = _projectValidator.TestValidate(project);
+
+        result.ShouldHaveValidationErrorFor(x => x.CapacityProfiles)
+            .WithErrorMessage(PVRPCommon.Messages.ERR_ID_UNIQUE.Replace("{PropertyName}", "Capacity Profiles"));
     }
 }

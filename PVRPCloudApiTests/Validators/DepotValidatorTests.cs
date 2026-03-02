@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation.TestHelper;
 using PVRPCommon.Models;
 using PVRPCommon.Validators;
 
@@ -6,6 +7,8 @@ namespace PVRPCloudApiTests.Validators;
 
 public class DepotValidatorTests
 {
+    private readonly ProjectValidator _validator = new();
+
     [Fact]
     public void Validate_ReturnsValidResult()
     {
@@ -177,11 +180,14 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new();
+        var result = _validator.TestValidate(project);
 
-        var result = sut.Validate(project.Depot);
+        string expectedMessage = PVRPCommon.Messages.ERR_GREATER_THAN_OR_EQUAL
+            .Replace("{0}", "DepotMinTime")
+            .Replace("{1}", project.MinTime.ToString())
+            .Replace("{2}", project.Depot.DepotMinTime.ToString());
 
-        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.ErrorMessage == expectedMessage);
     }
 
     [Fact]
@@ -202,10 +208,13 @@ public class DepotValidatorTests
             }
         };
 
-        DepotValidator sut = new();
+        var result = _validator.TestValidate(project);
 
-        var result = sut.Validate(project.Depot);
+        string expectedMessage = PVRPCommon.Messages.ERR_LESS_THAN_OR_EQUAL
+            .Replace("{0}", "DepotMaxTime")
+            .Replace("{1}", project.MaxTime.ToString())
+            .Replace("{2}", project.Depot.DepotMaxTime.ToString());
 
-        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.ErrorMessage == expectedMessage);
     }
 }
