@@ -38,7 +38,7 @@ public static class AddPvrpServicesExtension
         services.AddSingleton<IPmapInputQueue, PmapInputQueue>(serviceProvider =>
         {
             var commonSettings = serviceProvider.GetRequiredService<IOptions<CommonSettings>>();
-            return new PmapInputQueue(commonSettings.Value.AZURE_STORAGE_BLOB_ENDPOINT, commonSettings.Value.INPUT_QUEUE_NAME);
+            return new PmapInputQueue(commonSettings.Value.AZURE_STORAGE_QUEUE_ENDPOINT, commonSettings.Value.INPUT_QUEUE_NAME);
         });
 
         services.AddSingleton(static serviceProvider =>

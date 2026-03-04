@@ -4,6 +4,7 @@ using PMapCore.Common;
 using PVRPCloudApi;
 using PVRPCloudApi.DTO.Response;
 using PVRPCommon.Util;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 builder.Services.Configure<CommonSettings>(
