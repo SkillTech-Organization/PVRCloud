@@ -1,10 +1,9 @@
-﻿using System.Net;
-using Azure;
+﻿using Azure;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using PVRPCommon.Models;
-using PVRPCloudApi.Handlers;
+using System.Net;
 
 namespace PVRPCloudApiTests;
 
@@ -17,7 +16,7 @@ public class PVRPCloudResultTests(CustomWebApplicationFactory factory) : IClassF
     [Fact]
     public async Task PVRPCloudResult_ExistingId_ReturnsOk()
     {
-        factory.QueueResponseHandler.Handle(Arg.Any<string>()).Returns(new ProjectRes());
+        factory.QueueResponseHandler.Handle(Arg.Any<string>()).Returns(new ProjectRes<TourPoint>());
 
         string requestId = "12345678";
 

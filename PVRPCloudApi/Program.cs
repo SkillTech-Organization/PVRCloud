@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Logging.ApplicationInsights;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using PMapCore.Common;
 using PVRPCloudApi;
 using PVRPCloudApi.DTO.Response;
-using PVRPCloudApi.Util;
+using PVRPCommon.Util;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +21,12 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+builder.Services.Configure<CommonSettings>(
+    builder.Configuration.GetSection("CommonSettings"));
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -37,40 +42,39 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.Configure<MapStorage>(
-    builder.Configuration.GetSection("MapStorage"));
 
 builder.Services.AddPvrpServices();
 
+var aiConnStr =
+    Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING")
+    ?? builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+
 builder.Logging.AddApplicationInsights(config =>
 {
-    config.ConnectionString =  builder.Configuration.GetSection("ApplicationInsights:ConnectionString").Value;
-}, options => {});
+    config.ConnectionString = aiConnStr;
+}, options => { });
+
 builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(null, LogLevel.Information);
 builder.Logging.AddConsole();
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
 
+
 var app = builder.Build();
 
 // @Workaround
+var commonSettings = builder.Configuration.GetSection("CommonSettings").Get<CommonSettings>();
+
 if (app.Environment.EnvironmentName != "Testing")
 {
-    var options = app.Services.GetRequiredService<IOptions<MapStorage>>().Value;
 
     var pMapIniParams = app.Services.GetRequiredService<PMapIniParams>();
-    await pMapIniParams.ReadParamsAsync(options.AzureStorageConnectionString);
+    await pMapIniParams.ReadParamsAsync(commonSettings.AZURE_STORAGE_PAR_BLOB_ENDPOINT, commonSettings.PAR_CONTAINER_NAME);
 
     var routeData = app.Services.GetRequiredService<PMapCore.Route.RouteData>();
-    routeData.InitFromFiles(options.AzureStorageConnectionString, p_Forced: false);
+    routeData.InitFromFiles(commonSettings.AZURE_STORAGE_MAP_BLOB_ENDPOINT, commonSettings.MAP_CONTAINER_NAME, p_Forced: false);
 }
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
 app.UseSwagger();
 app.UseSwaggerUI();
 

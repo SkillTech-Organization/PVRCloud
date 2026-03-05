@@ -1,10 +1,18 @@
-﻿using BlobManager;
+﻿using Azure.Identity;
+using Azure.Storage.Blobs;
+using Azure.Storage.Queues;
+using Azure.Storage.Queues.Models;
+using BlobManager;
+using BlobUtils;
 using CommonUtils;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PMapCore.Common;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
+
 
 namespace WebJobPOC
 {
@@ -45,53 +53,98 @@ namespace WebJobPOC
 
 
     }
-
-    [StorageAccount("AzureWebJobsStorage")]
     public class QueueFunctions
     {
-        // This function will get triggered/executed when a new message is written 
-        // on an Azure Queue called queue.
-        [Singleton]
-        [FunctionName("ProcessQueueMessage")]
-        //        [return: Queue("pmapcalcoutputmsgsdev")]
-        [return: Queue("pmapcalcoutputmsgs")]
-        //        public static CalcResposne ProcessQueueMessage([QueueTrigger("pmapcalcinputmsgsdev")] CalcRequest req, ILogger logger)
-        public static async Task<CalcResposne> ProcessQueueMessageAsync([QueueTrigger("pmapcalcinputmsgs")] CalcRequest req, ILogger logger)
+        private readonly IConfiguration _config;
+        private readonly QueueClient _inputQueue;
+        private readonly QueueClient _outputQueue;
+        private readonly BlobServiceClient _blobService;
+        private readonly string _containerName;
+
+        public QueueFunctions(IConfiguration config)
         {
-            var msg = $"Processed queue message:{JsonSerializer.Serialize(req)}";
-            var resp = new CalcResposne() { RequestID = req.RequestID, Msg = msg, TrkCount = req.TrkCount, OrdCount = req.OrdCount, ClientCount = req.ClientCount };
+            _config = config;
+
+            var commonSettings = config
+                .GetSection("CommonSettings")
+                .Get<CommonSettings>();
+
+            var credential = new DefaultAzureCredential();
+
+            // Blob
+            _blobService = new BlobServiceClient(
+                new Uri(commonSettings.AZURE_STORAGE_BLOB_ENDPOINT),
+                credential);
+
+            _containerName = commonSettings.CALC_CONTAINER_NAME;
+
+            // Queue service
+            var queueService = new QueueServiceClient(
+                new Uri(commonSettings.AZURE_STORAGE_QUEUE_ENDPOINT),
+                credential);
+
+            _inputQueue = queueService.GetQueueClient(commonSettings.INPUT_QUEUE_NAME);
+            _outputQueue = queueService.GetQueueClient(commonSettings.OUTPUT_QUEUE_NAME);
+        }
+
+        [Singleton]     //egzsyerre csak 1 db!
+        [FunctionName("ProcessQueueMessage")]
+        public async Task RunAsync(
+            [TimerTrigger("*/2 * * * * *")] TimerInfo timer,   // RBAC használata esetén kézzel kell pollozni a queue-t!
+            ILogger logger)
+        {
+            QueueMessage[] messages = (await _inputQueue.ReceiveMessagesAsync(maxMessages: 1)).Value;
+
+            if (messages.Length == 0)
+                return;
+
+            var msg = messages[0];
+            var msgJson = Encoding.UTF8.GetString(Convert.FromBase64String(msg.MessageText));
+
+            var req = JsonSerializer.Deserialize<CalcRequest>(msgJson);
+
+            var resp = new CalcResposne()
+            {
+                RequestID = req.RequestID,
+                TrkCount = req.TrkCount,
+                OrdCount = req.OrdCount,
+                ClientCount = req.ClientCount
+            };
+
             try
             {
-                logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "START", msg);
+                logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "START", msgJson);
 
-                var environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-                if (environmentName == null)
-                {
-                    environmentName = "";
-                }
-                var confBuilder = new ConfigurationBuilder()
-                     .SetBasePath(Directory.GetCurrentDirectory())
-                     .AddJsonFile("appsettings.json", optional: false)
-                     .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
-                     .AddEnvironmentVariables()                        //https://stackoverflow.com/questions/56045191/azure-webjobs-does-not-override-appsettings-json-with-azure-application-settings
-                     .AddUserSecrets<Program>();
+                var bh = new BlobHandler(_config["CommonSettings:AZURE_STORAGE_BLOB_ENDPOINT"]);
 
-                IConfiguration config = confBuilder.Build();
-                var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, config, logger);
+                var fn = new PVRPFunctions(req.RequestID, req.MaxCompTime, _config, logger, bh,
+                    _config.GetSection("CommonSettings").Get<CommonSettings>());
+
                 await fn.OptimizeAsync(resp);
 
-
-                logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "END", $"eredmény:{JsonSerializer.Serialize(resp)}");
+                logger.LogInformation(Consts.AppInsightsMsgTemplate,
+                    "PVRP",
+                    req.RequestID,
+                    "END",
+                    $"eredmény:{JsonSerializer.Serialize(resp)}");
             }
             catch (Exception ex)
             {
                 resp.Status = "EXCEPTION";
                 resp.Msg += $"\nException:{ex.Message}";
 
-                logger.LogInformation(Consts.AppInsightsMsgTemplate, "PVRP", req.RequestID, "EXCEPTION", $"eredmény:{JsonSerializer.Serialize(resp)}");
-
+                logger.LogInformation(Consts.AppInsightsMsgTemplate,
+                    "PVRP",
+                    req.RequestID,
+                    "EXCEPTION",
+                    $"eredmény:{JsonSerializer.Serialize(resp)}");
             }
-            return resp;
+
+            // output queue
+            await _outputQueue.SendMessageAsync(JsonSerializer.Serialize(resp));
+
+            // delete processed message
+            await _inputQueue.DeleteMessageAsync(msg.MessageId, msg.PopReceipt);
         }
     }
 }

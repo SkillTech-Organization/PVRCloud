@@ -1,11 +1,15 @@
 ﻿using FluentAssertions;
+using FluentValidation.TestHelper;
+using PVRPCommon;
 using PVRPCommon.Models;
-using PVRPCloudApi.Validators;
+using PVRPCommon.Validators;
 
 namespace PVRPCloudApiTests.Validators;
 
 public class CostProfileValidatorTests
 {
+    private readonly ProjectValidator _projectValidator = new();
+
     [Fact]
     public void Validate_ReturnsValidResult()
     {
@@ -22,7 +26,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -45,11 +49,11 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.CostProfiles[0]);
+        result.ShouldHaveValidationErrorFor("CostProfiles[0].ID")
+            .WithErrorMessage(Messages.ERR_MANDATORY.Replace("{PropertyName}", "ID"));
 
-        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -68,11 +72,11 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.CostProfiles[0]);
+        result.ShouldHaveValidationErrorFor("CostProfiles[0].ID")
+            .WithErrorMessage(Messages.ERR_MANDATORY.Replace("{PropertyName}", "ID"));
 
-        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -98,11 +102,10 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.CostProfiles[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(x => x.CostProfiles)
+            .WithErrorMessage(Messages.ERR_ID_UNIQUE.Replace("{PropertyName}", "Cost Profiles"));
     }
 
     [Fact]
@@ -121,7 +124,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -144,7 +147,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 
@@ -167,7 +170,7 @@ public class CostProfileValidatorTests
             ]
         };
 
-        CostProfileValidator sut = new(project);
+        CostProfileValidator sut = new();
 
         var result = sut.Validate(project.CostProfiles[0]);
 

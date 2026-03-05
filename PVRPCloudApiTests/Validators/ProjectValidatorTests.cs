@@ -1,12 +1,13 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using PVRPCommon.Models;
-using PVRPCloudApi.Validators;
+using PVRPCommon.Validators;
 
 namespace PVRPCloudApiTests.Validators;
 
 public class ProjectValidatorTests
 {
+    private readonly ProjectValidator _projectValidator = new();
+
     [Fact]
     public void Validate_Project_ResturnsValidResult()
     {
@@ -201,11 +202,9 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
@@ -302,11 +301,9 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
@@ -403,11 +400,9 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -500,11 +495,9 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -589,11 +582,9 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -679,12 +670,8 @@ public class ProjectValidatorTests
                 }
             ]
         };
-
-        ProjectValidator sut = new();
-
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        var result = _projectValidator.Validate(project);
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -765,11 +752,9 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -851,11 +836,9 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -941,11 +924,9 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -1030,11 +1011,8 @@ public class ProjectValidatorTests
             ]
         };
 
-        ProjectValidator sut = new();
-
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        var result = _projectValidator.Validate(project);
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -1116,10 +1094,8 @@ public class ProjectValidatorTests
             Orders = []
         };
 
-        ProjectValidator sut = new();
+        var result = _projectValidator.Validate(project);
 
-        var act = () => sut.Validate(project);
-
-        act.Should().Throw<ValidationException>();
+        result.IsValid.Should().BeFalse();
     }
 }

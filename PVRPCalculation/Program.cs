@@ -1,9 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Azure.Identity;
+using Azure.Storage.Queues;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+using PMapCore.Common;
 
 var environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
 if (environmentName == null)
@@ -13,22 +16,32 @@ if (environmentName == null)
 
 
 var builder = new HostBuilder()
-    .ConfigureServices(services =>
+    .ConfigureServices((hostContext, services) =>
     {
         services.AddApplicationInsightsTelemetryWorkerService();
-        //        services.ConfigureFunctionsApplicationInsights();
 
+        services.Configure<CommonSettings>(
+            hostContext.Configuration.GetSection("CommonSettings"));
     })
-    .ConfigureWebJobs(b =>
+     .ConfigureWebJobs(b =>
+     {
+         b.AddAzureStorageBlobs();
+
+         b.AddAzureStorageQueues(opt =>
+         {
+             opt.BatchSize = 1;
+             opt.NewBatchThreshold = 0;
+             opt.MaxPollingInterval = TimeSpan.FromSeconds(10);
+         });
+         b.AddTimers();   // EZ KELL!!!
+     })
+    .ConfigureServices((context, services) =>
     {
-        b.AddAzureStorageBlobs();
-        b.AddAzureStorageQueues(opt =>
-        {
-            opt.BatchSize = 1;
-            opt.NewBatchThreshold = 0;
-            opt.MaxPollingInterval = TimeSpan.FromSeconds(10);
-        }
-        );
+        var queueEndpoint = context.Configuration["CommonSettings:AZURE_STORAGE_QUEUE_ENDPOINT"];
+
+        services.AddSingleton(new QueueServiceClient(
+            new Uri(queueEndpoint),
+            new DefaultAzureCredential()));
     })
     .ConfigureLogging((context, b) =>
     {
@@ -55,6 +68,8 @@ builder.ConfigureAppConfiguration((hostContext, configApp) =>
     }
     configApp.AddEnvironmentVariables();
     configApp.AddUserSecrets<Program>();
+
+
 });
 
 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");

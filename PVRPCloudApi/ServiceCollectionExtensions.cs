@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using PVRPCommon.Models;
-using PVRPCloudApi.Validators;
+using PVRPCommon.Validators;
 
 namespace PVRPCloudApi;
 

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Time.Testing;
 using NSubstitute;
 using PMapCore.Route;
 using PVRPCloud;
-using PVRPCommon;
+using PVRPCloud.Queue;
 
 namespace PVRPCloudApiTests;
 
@@ -22,7 +22,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.UseEnvironment("Testing");
 
-        builder.ConfigureServices(services => {
+        builder.ConfigureServices(services =>
+        {
             services.AddTransient<TimeProvider, FakeTimeProvider>();
 
             // var blobHandlerDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IBlobHandler));

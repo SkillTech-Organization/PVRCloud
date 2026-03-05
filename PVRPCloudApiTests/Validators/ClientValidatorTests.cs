@@ -1,11 +1,16 @@
 ﻿using FluentAssertions;
+using FluentValidation.TestHelper;
+using PVRPCommon;
 using PVRPCommon.Models;
-using PVRPCloudApi.Validators;
+using PVRPCommon.Validators;
 
 namespace PVRPCloudApiTests.Validators;
 
+
 public class ClientValidatorTests
 {
+    private readonly ProjectValidator _projectValidator = new();
+
     [Fact]
     public void Validate_ReturnsValidResult()
     {
@@ -25,7 +30,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -51,11 +56,10 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.Clients[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor("Clients[0].ID")
+            .WithErrorMessage(Messages.ERR_EMPTY.Replace("{PropertyName}", "ID"));
     }
 
     [Fact]
@@ -77,11 +81,10 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        var result = _projectValidator.TestValidate(project);
 
-        var result = sut.Validate(project.Clients[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor("Clients[0].ID")
+            .WithErrorMessage(Messages.ERR_MANDATORY.Replace("{PropertyName}", "ID"));
     }
 
     [Fact]
@@ -111,12 +114,10 @@ public class ClientValidatorTests
                }
             ]
         };
+        var result = _projectValidator.TestValidate(project);
 
-        ClientValidator sut = new(project);
-
-        var result = sut.Validate(project.Clients[0]);
-
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(x => x.Clients)
+                    .WithErrorMessage(Messages.ERR_ID_UNIQUE.Replace("{PropertyName}", "Clients"));
     }
 
     [Fact]
@@ -138,7 +139,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -164,7 +165,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -193,7 +194,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -221,7 +222,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -250,7 +251,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -278,7 +279,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -304,7 +305,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
@@ -330,7 +331,7 @@ public class ClientValidatorTests
             ]
         };
 
-        ClientValidator sut = new(project);
+        ClientValidator sut = new();
 
         var result = sut.Validate(project.Clients[0]);
 
